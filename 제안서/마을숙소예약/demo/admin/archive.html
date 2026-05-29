@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아카이브 관리 · 달내마을 ADMIN</title>
+<meta name="description" content="달내마을 통합 포털 관리자 — 유물·기록 자료 분류 체계 등록·수정·정렬(A-05)">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+</head>
+<body>
+
+<div class="adm">
+
+  <!-- ░░ Sidebar ░░ -->
+  <aside class="side">
+    <div class="side-brand">
+      <span class="m">月</span>
+      <span>
+        <b>달내마을</b>
+        <small>ADMIN</small>
+      </span>
+    </div>
+
+    <div class="side-group">현황</div>
+    <a class="item" href="index.html"> 대시보드</a>
+    <a class="item" href="stats.html"> 통계·리포트</a>
+
+    <div class="side-group">콘텐츠</div>
+    <a class="item" href="banner.html"> 메인·배너</a>
+    <a class="item" href="content.html"> 콘텐츠 관리</a>
+    <a class="item active" href="archive.html"> 아카이브 관리</a>
+    <a class="item" href="map.html"> 지도 관리</a>
+    <a class="item" href="event.html"> 이벤트 관리</a>
+
+    <div class="side-group">예약·운영</div>
+    <a class="item" href="stays.html"> 숙박업체 관리 <span class="cnt">12</span></a>
+    <a class="item" href="reservations.html"> 예약 관리 <span class="cnt">8</span></a>
+    <a class="item" href="shops.html"> 상점 관리</a>
+    <a class="item" href="members.html"> 회원 관리</a>
+
+    <div class="side-group">사이트</div>
+    <a class="item" href="board.html"> 게시판·공지</a>
+    <a class="item" href="popup.html"> 팝업 관리</a>
+    <a class="item" href="sns.html"> SNS 연동</a>
+    <a class="item" href="settings.html"> 환경설정·권한</a>
+  </aside>
+
+  <!-- ░░ Main ░░ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar-adm">
+      <div class="search">
+        <input type="text" placeholder="유물·자료·유물번호 검색…">
+      </div>
+      <div class="acts">
+        
+        <div class="who">
+          <span class="av">관</span>
+          <span>
+            <b>마을운영자</b>
+            <small>최고관리자</small>
+          </span>
+        </div>
+        <a href="../index.html" class="abtn abtn-line">사이트 보기</a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- 1. Page title -->
+      <div class="page-title">
+        <div>
+          <h1>아카이브 관리</h1>
+          <p>유물·기록 자료를 분류 체계에 따라 등록·수정·정렬합니다</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <a href="#" class="abtn abtn-line">분류체계 관리</a>
+          <a href="#" class="abtn abtn-primary">+ 유물 등록</a>
+        </div>
+      </div>
+
+      <!-- 2. KPIs -->
+      <div class="kpis">
+        <div class="kpi">
+          <div class="lbl"> 전체 유물</div>
+          <div class="num">500</div>
+          <div class="delta up">▲ 이번 달 +18</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 공개</div>
+          <div class="num">478</div>
+          <div class="delta up">▲ +12</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 비공개</div>
+          <div class="num">22</div>
+          <div class="delta down">▼ -3</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 분류 카테고리</div>
+          <div class="num">14</div>
+          <div class="delta up">▲ +1</div>
+        </div>
+      </div>
+
+      <!-- 3. Main layout -->
+      <div class="cols cols-2-1">
+
+        <!-- Left column -->
+        <div style="display:flex;flex-direction:column;gap:18px">
+
+          <!-- Left top: 분류 체계 트리 -->
+          <div class="panel">
+            <div class="panel-head">
+              <h3>분류 체계 (트리)</h3>
+              <small style="color:var(--adm-muted)">2단계 · 카테고리 14</small>
+            </div>
+            <div class="panel-body" style="font-size:.9rem">
+
+              <!-- 문서/기록 -->
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-red)"></span>
+                <b>문서·기록</b>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">142</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>고문서</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">86</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>토지대장</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">56</span>
+              </div>
+
+              <!-- 생활/민속 -->
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-blue)"></span>
+                <b>생활·민속</b>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">168</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>농기구</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">94</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>생활용품</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">74</span>
+              </div>
+
+              <!-- 사진/영상 -->
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-gold)"></span>
+                <b>사진·영상</b>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">156</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>근대사진</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">98</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>마을행사</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">58</span>
+              </div>
+
+              <!-- 건축 -->
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px dashed var(--adm-line)">
+                <span style="color:var(--adm-ok)"></span>
+                <b>건축</b>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">34</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 6px 8px 30px">
+                <span style="color:var(--adm-muted)">└</span>
+                <span>한옥도면</span>
+                <span style="margin-left:auto;color:var(--adm-muted);font-size:.8rem">34</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Left bottom: 유물 목록 -->
+          <div class="panel">
+            <div class="panel-head">
+              <h3>유물 목록</h3>
+              <small style="color:var(--adm-muted)">총 500점 · 7점 표시</small>
+            </div>
+            <div class="panel-body">
+
+              <!-- toolbar -->
+              <div class="toolbar">
+                <div class="seg">
+                  <button class="active">전체</button>
+                  <button>공개</button>
+                  <button>비공개</button>
+                </div>
+                <div class="grow"></div>
+                <input type="text" placeholder="명칭·유물번호 검색" style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;min-width:180px;">
+                <select style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;">
+                  <option>정렬 · 등록순</option>
+                  <option>명칭 가나다순</option>
+                  <option>시대순</option>
+                  <option>정렬순서순</option>
+                </select>
+              </div>
+
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th style="width:34px"><input type="checkbox"></th>
+                    <th>유물</th>
+                    <th>분류</th>
+                    <th>시대</th>
+                    <th>등록일</th>
+                    <th>공개여부</th>
+                    <th style="text-align:right">관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 1 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-gomunseo/200/200" alt="달내역 고문서">
+                        <span class="twoline"><b>달내역 고문서</b><small>DN-A-0142</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">고문서</span></td>
+                    <td>조선후기</td>
+                    <td>2026.05.21</td>
+                    <td><span class="st st-ok">공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 2 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-tojidaejang/200/200" alt="종갓집 토지대장">
+                        <span class="twoline"><b>종갓집 토지대장</b><small>DN-A-0098</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">토지대장</span></td>
+                    <td>일제강점기</td>
+                    <td>2026.05.18</td>
+                    <td><span class="st st-ok">공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 3 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-gamasot/200/200" alt="무쇠 가마솥">
+                        <span class="twoline"><b>무쇠 가마솥</b><small>DN-B-0231</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">생활용품</span></td>
+                    <td>근대</td>
+                    <td>2026.05.14</td>
+                    <td><span class="st st-ok">공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 4 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-betl/200/200" alt="베틀">
+                        <span class="twoline"><b>베틀</b><small>DN-B-0187</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">농기구</span></td>
+                    <td>근대</td>
+                    <td>2026.05.09</td>
+                    <td><span class="st st-wait">비공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 5 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-jeongyeong/200/200" alt="1960년대 마을 전경 사진">
+                        <span class="twoline"><b>1960년대 마을 전경 사진</b><small>DN-C-0312</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">근대사진</span></td>
+                    <td>현대</td>
+                    <td>2026.05.05</td>
+                    <td><span class="st st-ok">공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 6 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-domyeon/200/200" alt="달내정 건축도면">
+                        <span class="twoline"><b>달내정 건축도면</b><small>DN-D-0045</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">한옥도면</span></td>
+                    <td>근대</td>
+                    <td>2026.04.28</td>
+                    <td><span class="st st-wait">비공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                  <!-- 7 -->
+                  <tr>
+                    <td><input type="checkbox"></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <img class="cellimg" src="https://picsum.photos/seed/dalnae-jerye/200/200" alt="마을 제례 영상">
+                        <span class="twoline"><b>마을 제례 영상</b><small>DN-C-0356</small></span>
+                      </div>
+                    </td>
+                    <td><span class="st st-info">마을행사</span></td>
+                    <td>현대</td>
+                    <td>2026.04.22</td>
+                    <td><span class="st st-ok">공개</span></td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <a href="#" class="abtn abtn-line">수정</a>
+                      <a href="#" class="abtn abtn-ghost">삭제</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- pagination -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0 0;margin-top:6px;border-top:1px solid var(--adm-line)">
+                <small style="color:var(--adm-muted)">1–7 / 500점</small>
+                <div style="display:flex;gap:6px">
+                  <a href="#" class="abtn abtn-line" style="padding:7px 12px">‹</a>
+                  <a href="#" class="abtn abtn-primary" style="padding:7px 13px">1</a>
+                  <a href="#" class="abtn abtn-line" style="padding:7px 13px">2</a>
+                  <a href="#" class="abtn abtn-line" style="padding:7px 13px">3</a>
+                  <a href="#" class="abtn abtn-line" style="padding:7px 12px">›</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right column: 유물 등록·수정 -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>유물 등록·수정</h3>
+            <span class="st st-info">DN-A-0142</span>
+          </div>
+          <div class="panel-body">
+
+            <div class="afield">
+              <label>명칭</label>
+              <input type="text" value="달내역 고문서">
+            </div>
+
+            <div class="afield-row">
+              <div class="afield">
+                <label>유물번호</label>
+                <input type="text" value="DN-A-0142">
+              </div>
+              <div class="afield">
+                <label>분류</label>
+                <select>
+                  <option>고문서</option>
+                  <option>토지대장</option>
+                  <option>농기구</option>
+                  <option>생활용품</option>
+                  <option>근대사진</option>
+                  <option>마을행사</option>
+                  <option>한옥도면</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="afield-row">
+              <div class="afield">
+                <label>시대</label>
+                <select>
+                  <option>조선후기</option>
+                  <option>일제강점기</option>
+                  <option>근대</option>
+                  <option>현대</option>
+                </select>
+              </div>
+              <div class="afield">
+                <label>재질</label>
+                <input type="text" value="한지·먹">
+              </div>
+            </div>
+
+            <div class="afield">
+              <label>설명</label>
+              <textarea rows="4">달내역 일대의 토지 거래 및 행정 기록을 담은 고문서로, 조선 후기 마을 생활상을 보여주는 귀중한 자료입니다.</textarea>
+            </div>
+
+            <div class="afield">
+              <label>대표 이미지</label>
+              <div style="border:2px dashed var(--adm-line);border-radius:10px;padding:18px;text-align:center;background:var(--adm-bg)">
+                <img src="https://picsum.photos/seed/dalnae-gomunseo/200/200" alt="대표 이미지 썸네일" style="width:88px;height:88px;border-radius:8px;object-fit:cover;margin-bottom:10px">
+                <div style="color:var(--adm-muted);font-size:.82rem">이미지를 드래그하거나 클릭하여 업로드<br><small>JPG·PNG · 최대 10MB</small></div>
+              </div>
+            </div>
+
+            <div class="afield-row">
+              <div class="afield">
+                <label>공개여부</label>
+                <select>
+                  <option>공개</option>
+                  <option>비공개</option>
+                </select>
+              </div>
+              <div class="afield">
+                <label>정렬순서</label>
+                <input type="number" value="1">
+              </div>
+            </div>
+
+            <div class="afield">
+              <label>출처</label>
+              <input type="text" value="달내마을 향토자료 기증 (2024)">
+            </div>
+
+            <div class="afield">
+              <label>소장처</label>
+              <input type="text" value="달내마을 향토사료관">
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:20px">
+              <a href="#" class="abtn abtn-primary" style="flex:1;justify-content:center">저장</a>
+              <a href="#" class="abtn abtn-line" style="flex:1;justify-content:center">삭제</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>숙박업체 관리 · 달내마을 ADMIN</title>
+<meta name="description" content="달내마을 통합 포털 관리자 — 숙박업체·객실·요금·재고 관리(A-08)">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+</head>
+<body>
+
+<div class="adm">
+
+  <!-- ░░ Sidebar ░░ -->
+  <aside class="side">
+    <div class="side-brand">
+      <span class="m">月</span>
+      <span>
+        <b>달내마을</b>
+        <small>ADMIN</small>
+      </span>
+    </div>
+
+    <div class="side-group">현황</div>
+    <a class="item" href="index.html"> 대시보드</a>
+    <a class="item" href="stats.html"> 통계·리포트</a>
+
+    <div class="side-group">콘텐츠</div>
+    <a class="item" href="banner.html"> 메인·배너</a>
+    <a class="item" href="content.html"> 콘텐츠 관리</a>
+    <a class="item" href="archive.html"> 아카이브 관리</a>
+    <a class="item" href="map.html"> 지도 관리</a>
+    <a class="item" href="event.html"> 이벤트 관리</a>
+
+    <div class="side-group">예약·운영</div>
+    <a class="item active" href="stays.html"> 숙박업체 관리 <span class="cnt">12</span></a>
+    <a class="item" href="reservations.html"> 예약 관리 <span class="cnt">8</span></a>
+    <a class="item" href="shops.html"> 상점 관리</a>
+    <a class="item" href="members.html"> 회원 관리</a>
+
+    <div class="side-group">사이트</div>
+    <a class="item" href="board.html"> 게시판·공지</a>
+    <a class="item" href="popup.html"> 팝업 관리</a>
+    <a class="item" href="sns.html"> SNS 연동</a>
+    <a class="item" href="settings.html"> 환경설정·권한</a>
+  </aside>
+
+  <!-- ░░ Main ░░ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar-adm">
+      <div class="search">
+        <input type="text" placeholder="숙소·객실·예약번호 검색…">
+      </div>
+      <div class="acts">
+        
+        <div class="who">
+          <span class="av">관</span>
+          <span>
+            <b>마을운영자</b>
+            <small>최고관리자</small>
+          </span>
+        </div>
+        <a href="../index.html" class="abtn abtn-line">사이트 보기</a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- 1. Page title -->
+      <div class="page-title">
+        <div>
+          <h1>숙박업체 관리</h1>
+          <p>마을 내 숙박업체·객실·요금·재고를 등록하고 관리합니다</p>
+        </div>
+        <a href="#" class="abtn abtn-primary">+ 숙박업체 등록</a>
+      </div>
+
+      <!-- 2. KPIs -->
+      <div class="kpis">
+        <div class="kpi">
+          <div class="lbl"> 등록 숙소</div>
+          <div class="num">12</div>
+          <div class="delta up">▲ 이번 달 +2</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 운영중 객실</div>
+          <div class="num">64</div>
+          <div class="delta up">▲ +4</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 오늘 체크인</div>
+          <div class="num">9</div>
+          <div class="delta up">▲ 전일 대비 +3</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 평균 점유율</div>
+          <div class="num">78%</div>
+          <div class="delta up">▲ 1.4%p</div>
+        </div>
+      </div>
+
+      <!-- 3. Toolbar -->
+      <div class="toolbar">
+        <div class="seg">
+          <button class="active">전체</button>
+          <button>한옥고택</button>
+          <button>독채펜션</button>
+          <button>게스트하우스</button>
+          <button>민박</button>
+        </div>
+        <div class="grow"></div>
+        <input type="text" placeholder="숙소명 검색" style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;min-width:180px;">
+        <select style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;">
+          <option>정렬 · 등록순</option>
+          <option>요금 높은순</option>
+          <option>요금 낮은순</option>
+          <option>점유율 높은순</option>
+          <option>이름 가나다순</option>
+        </select>
+        <a href="#" class="abtn abtn-line"> 엑셀</a>
+      </div>
+
+      <!-- 4 + 5 layout -->
+      <div class="cols cols-2-1">
+
+        <!-- 4. Stays list -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>숙박업체 목록</h3>
+            <small style="color:var(--adm-muted)">총 12개 · 8개 표시</small>
+          </div>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width:34px"><input type="checkbox"></th>
+                <th>숙소</th>
+                <th>유형</th>
+                <th>객실수</th>
+                <th>기본요금</th>
+                <th>점유율</th>
+                <th>상태</th>
+                <th style="text-align:right">관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 1 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/soljaegotaek/200/200" alt="솔재고택">
+                    <span class="twoline"><b>솔재고택</b><small>윗마을 · 객실 6</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">한옥고택</span></td>
+                <td>6</td>
+                <td><b>₩180,000</b></td>
+                <td>82%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 2 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/dalbitchae/200/200" alt="달빛채">
+                    <span class="twoline"><b>달빛채</b><small>천변 · 객실 4</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">독채펜션</span></td>
+                <td>4</td>
+                <td><b>₩240,000</b></td>
+                <td>91%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 3 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/baramgol/200/200" alt="바람골">
+                    <span class="twoline"><b>바람골</b><small>아랫마을 · 객실 10</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">게스트하우스</span></td>
+                <td>10</td>
+                <td><b>₩65,000</b></td>
+                <td>74%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 4 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/marujae/200/200" alt="마루재">
+                    <span class="twoline"><b>마루재</b><small>윗마을 · 객실 5</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">한옥고택</span></td>
+                <td>5</td>
+                <td><b>₩150,000</b></td>
+                <td>68%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 5 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/cheoniljeong/200/200" alt="천일정">
+                    <span class="twoline"><b>천일정</b><small>천변 · 객실 3</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">독채펜션</span></td>
+                <td>3</td>
+                <td><b>₩200,000</b></td>
+                <td>85%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 6 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/doldamjip/200/200" alt="돌담집">
+                    <span class="twoline"><b>돌담집</b><small>아랫마을 · 객실 4</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">민박</span></td>
+                <td>4</td>
+                <td><b>₩55,000</b></td>
+                <td>63%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 7 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/solbaramchae/200/200" alt="솔바람채">
+                    <span class="twoline"><b>솔바람채</b><small>윗마을 · 객실 5</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">한옥고택</span></td>
+                <td>5</td>
+                <td><b>₩170,000</b></td>
+                <td>—</td>
+                <td><span class="st st-wait">점검중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+              <!-- 8 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <img class="cellimg" src="https://picsum.photos/seed/gangnaru/200/200" alt="강나루">
+                    <span class="twoline"><b>강나루</b><small>천변 · 객실 4</small></span>
+                  </div>
+                </td>
+                <td><span class="st st-info">독채펜션</span></td>
+                <td>4</td>
+                <td><b>₩210,000</b></td>
+                <td>88%</td>
+                <td><span class="st st-ok">운영중</span></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <a href="#" class="abtn abtn-line">수정</a>
+                  <a href="#" class="abtn abtn-ghost">객실</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- pagination -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid var(--adm-line)">
+            <small style="color:var(--adm-muted)">1–8 / 12개</small>
+            <div style="display:flex;gap:6px">
+              <a href="#" class="abtn abtn-line" style="padding:7px 12px">‹</a>
+              <a href="#" class="abtn abtn-primary" style="padding:7px 13px">1</a>
+              <a href="#" class="abtn abtn-line" style="padding:7px 13px">2</a>
+              <a href="#" class="abtn abtn-line" style="padding:7px 12px">›</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Room / rate preview -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>객실·요금 관리</h3>
+            <span class="st st-info">솔재고택</span>
+          </div>
+          <div class="panel-body">
+
+            <table class="tbl" style="font-size:.85rem">
+              <thead>
+                <tr>
+                  <th>객실</th>
+                  <th>인원</th>
+                  <th>요금</th>
+                  <th style="text-align:center">재고</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>사랑채</b></td>
+                  <td>2인</td>
+                  <td>₩180,000</td>
+                  <td style="text-align:center"><span class="st st-ok">3</span></td>
+                </tr>
+                <tr>
+                  <td><b>별채</b></td>
+                  <td>4인</td>
+                  <td>₩260,000</td>
+                  <td style="text-align:center"><span class="st st-wait">2</span></td>
+                </tr>
+                <tr>
+                  <td><b>행랑채</b></td>
+                  <td>2인</td>
+                  <td>₩150,000</td>
+                  <td style="text-align:center"><span class="st st-ok">4</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <a href="#" class="abtn abtn-line" style="width:100%;justify-content:center;margin-top:16px">+ 객실 추가</a>
+
+            <!-- 재고 캘린더 그리드 -->
+            <div style="margin-top:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <b style="font-family:var(--serif);font-size:1rem">사랑채 · 6월 재고</b>
+                <small style="color:var(--adm-muted)">‹ 2026.06 ›</small>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:.72rem;color:var(--adm-muted);margin-bottom:6px">
+                <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+                <!-- 14칸: 일부 마감 -->
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">1</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">2</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#f7e2e0;color:var(--adm-danger)"><span style="font-size:.66rem;font-weight:700">3<br>마감</span></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">4</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">5</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#f7e2e0;color:var(--adm-danger)"><span style="font-size:.66rem;font-weight:700">6<br>마감</span></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#f7e2e0;color:var(--adm-danger)"><span style="font-size:.66rem;font-weight:700">7<br>마감</span></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">8</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">9</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">10</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">11</b></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fbf0db;color:var(--adm-warn)"><span style="font-size:.66rem;font-weight:700">12<br>1실</span></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#f7e2e0;color:var(--adm-danger)"><span style="font-size:.66rem;font-weight:700">13<br>마감</span></div>
+                <div style="aspect-ratio:1;border:1px solid var(--adm-line);border-radius:8px;display:grid;place-items:center;background:#fff"><b style="font-size:.85rem">14</b></div>
+              </div>
+              <div class="legend" style="margin-top:12px">
+                <span><i style="background:#fff;border:1px solid var(--adm-line)"></i>여유</span>
+                <span><i style="background:#fbf0db"></i>잔여 1실</span>
+                <span><i style="background:#f7e2e0"></i>마감</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

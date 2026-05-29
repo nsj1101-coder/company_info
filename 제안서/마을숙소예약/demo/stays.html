@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>숙박 예약 · 달내마을 月川</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="bg-hanji">
+
+<div class="topbar"><div class="wrap"><div>달내마을 통합 포털 · 月川 Village Portal</div><div class="util"><a href="#">로그인</a><a href="#">회원가입</a><a href="#">고객센터 1668-0000</a><a href="#">KOR · ENG</a></div></div></div>
+<header class="header"><div class="wrap">
+  <a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name">달내마을<small>DALNAE · 月川 VILLAGE</small></span></a>
+  <nav><ul class="gnb">
+    <li class="gnb-wrap"><a href="village.html">마을 소개</a></li>
+    <li class="gnb-wrap"><a href="map.html">마을 지도</a></li>
+    <li class="gnb-wrap"><a href="archive.html">콘텐츠·아카이브</a></li>
+    <li class="gnb-wrap active"><a href="stays.html">숙박 예약</a></li>
+    <li class="gnb-wrap"><a href="shops.html">상점·체험</a></li>
+    <li class="gnb-wrap"><a href="#">소식</a></li>
+  </ul></nav>
+  <div class="header-cta"><a href="stays.html" class="btn btn-primary btn-sm">실시간 예약</a><button class="hamburger"><span></span><span></span><span></span></button></div>
+</div></header>
+
+<!-- 검색 요약 바 -->
+<section style="background:var(--ink);color:#fff;padding:22px 0;">
+  <div class="wrap">
+    <form class="search-bar" style="margin:0;box-shadow:none;" onsubmit="return false;">
+      <div class="search-field"><label>달내마을</label><div class="val">전체 숙소 12곳</div></div>
+      <div class="search-field"><label>체크인 · 체크아웃</label><div class="val">6.14 — 6.15 · 1박</div></div>
+      <div class="search-field"><label>인원</label><div class="val">성인 2명</div></div>
+      <button class="btn btn-primary btn-lg" type="submit">🔍 검색</button>
+    </form>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="wrap">
+    <div class="split" style="grid-template-columns:260px 1fr;gap:36px;align-items:start;">
+      <!-- 필터 -->
+      <aside class="reveal" style="background:#fff;border:1px solid var(--line-soft);border-radius:var(--radius);padding:24px;position:sticky;top:100px;">
+        <h3 style="font-size:1.15rem;margin-bottom:16px;">필터</h3>
+        <div class="field"><label>숙소 유형</label>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:.92rem;">
+            <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" checked style="width:auto;"> 한옥고택</label>
+            <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" style="width:auto;"> 독채펜션</label>
+            <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" style="width:auto;"> 게스트하우스</label>
+            <label style="display:flex;gap:8px;align-items:center;"><input type="checkbox" style="width:auto;"> 민박</label>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field"><label>가격대 (1박)</label>
+          <input type="range" min="0" max="300000" value="200000" style="padding:0;border:none;">
+          <div class="muted" style="font-size:.85rem;">~ 200,000원</div>
+        </div>
+        <div class="divider"></div>
+        <div class="field"><label>편의시설</label>
+          <div class="tag-row">
+            <span class="chip" style="font-size:.78rem;padding:6px 11px;">온돌</span>
+            <span class="chip" style="font-size:.78rem;padding:6px 11px;">노천탕</span>
+            <span class="chip" style="font-size:.78rem;padding:6px 11px;">주차</span>
+            <span class="chip" style="font-size:.78rem;padding:6px 11px;">조식</span>
+            <span class="chip" style="font-size:.78rem;padding:6px 11px;">반려동물</span>
+          </div>
+        </div>
+        <button class="btn btn-outline" style="width:100%;margin-top:18px;">필터 적용</button>
+      </aside>
+
+      <!-- 목록 -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <p class="muted">총 <b style="color:var(--ink)">12곳</b>의 숙소</p>
+          <select style="padding:9px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-weight:600;">
+            <option>추천순</option><option>가격 낮은순</option><option>평점 높은순</option><option>후기 많은순</option>
+          </select>
+        </div>
+
+        <div class="grid grid-3 reveal">
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-soljae/800/600"><span class="badge media-badge">한옥고택</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">윗마을</div><h3 class="card-title">솔재고택</h3><p class="card-desc">200년 종갓집 · 아궁이 온돌</p><div class="card-foot"><span class="rating"><span class="stars">★★★★★</span> <b>4.9</b></span><span class="price">180,000<small>원~</small></span></div></div></a>
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-dalbit/800/600"><span class="badge media-badge">독채펜션</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">천변</div><h3 class="card-title">달빛채</h3><p class="card-desc">통창 독채 · 프라이빗 노천탕</p><div class="card-foot"><span class="rating"><span class="stars">★★★★★</span> <b>4.8</b></span><span class="price">240,000<small>원~</small></span></div></div></a>
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-baram/800/600"><span class="badge media-badge">게스트하우스</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">아랫마을</div><h3 class="card-title">바람골</h3><p class="card-desc">조식 제공 · 마을 투어 연계</p><div class="card-foot"><span class="rating"><span class="stars">★★★★☆</span> <b>4.6</b></span><span class="price">65,000<small>원~</small></span></div></div></a>
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-maru/800/600"><span class="badge media-badge">한옥고택</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">윗마을</div><h3 class="card-title">마루재</h3><p class="card-desc">너른 대청마루 · 가족 단위</p><div class="card-foot"><span class="rating"><span class="stars">★★★★★</span> <b>4.7</b></span><span class="price">150,000<small>원~</small></span></div></div></a>
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-cheon/800/600"><span class="badge media-badge">독채펜션</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">천변</div><h3 class="card-title">천일정</h3><p class="card-desc">정원 딸린 독채 · 바비큐</p><div class="card-foot"><span class="rating"><span class="stars">★★★★☆</span> <b>4.5</b></span><span class="price">200,000<small>원~</small></span></div></div></a>
+          <a class="card" href="stay-detail.html"><div class="card-media"><img src="https://picsum.photos/seed/stay-doldam/800/600"><span class="badge media-badge">민박</span><button class="like-btn">♡</button></div><div class="card-body"><div class="card-tagline">아랫마을</div><h3 class="card-title">돌담집</h3><p class="card-desc">주민이 직접 운영하는 정겨운 민박</p><div class="card-foot"><span class="rating"><span class="stars">★★★★☆</span> <b>4.4</b></span><span class="price">55,000<small>원~</small></span></div></div></a>
+        </div>
+
+        <div class="center mt-40">
+          <div style="display:inline-flex;gap:6px;">
+            <button class="chip active">1</button><button class="chip">2</button><button class="chip">3</button><button class="chip">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap">
+  <div class="top">
+    <div><a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name" style="color:#fff">달내마을<small style="color:var(--gold-2)">DALNAE · 月川 VILLAGE</small></span></a><p class="desc">천 년을 머무는 마을, 달내마을 통합 소개·숙박예약 플랫폼.</p></div>
+    <div><h4>둘러보기</h4><ul><li><a href="village.html">마을 소개</a></li><li><a href="map.html">마을 지도</a></li><li><a href="archive.html">아카이브</a></li><li><a href="shops.html">상점·체험</a></li></ul></div>
+    <div><h4>예약·이용</h4><ul><li><a href="stays.html">숙박 예약</a></li><li><a href="#">예약 내역</a></li><li><a href="#">취소·환불 안내</a></li><li><a href="#">FAQ</a></li></ul></div>
+    <div><h4>고객센터</h4><ul><li><a href="#">1668-0000</a></li><li><a href="#">평일 09:00 – 18:00</a></li><li><a href="admin/index.html">관리자 로그인</a></li></ul></div>
+  </div>
+  <div class="bottom"><div>© 2026 달내마을 통합 포털. 제안용 데모.</div><div style="display:flex;gap:18px;"><a href="#">이용약관</a><a href="#">개인정보처리방침</a></div></div>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

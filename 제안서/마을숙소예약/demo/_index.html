@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>달내마을 플랫폼 · 화면 설계 데모 인덱스</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .demo-hero { background:var(--ink); color:#fff; padding:80px 0 70px; }
+  .pcard { display:block; background:#fff; border:1px solid var(--line-soft); border-radius:var(--radius); overflow:hidden; transition:.25s; }
+  .pcard:hover { transform:translateY(-5px); box-shadow:var(--shadow); border-color:var(--line); }
+  .pcard .thumb { aspect-ratio:16/10; background:linear-gradient(135deg,#e9e0cd,#dccfb4); position:relative; overflow:hidden; }
+  .pcard .thumb iframe { width:1440px; height:900px; transform:scale(.26); transform-origin:top left; border:0; pointer-events:none; }
+  .pcard .pb { padding:16px 18px; }
+  .pcard .code { font-size:.75rem; font-weight:700; color:var(--dan-red); letter-spacing:.04em; }
+  .pcard h4 { font-family:var(--sans); font-size:1.02rem; margin:3px 0 2px; }
+  .pcard p { font-size:.84rem; color:var(--muted); }
+</style>
+</head>
+<body class="bg-hanji">
+
+<section class="demo-hero">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--gold-2)">Proposal Demo · UI Prototype</span>
+    <h1 style="font-size:clamp(2rem,4vw,3rem);margin:14px 0 14px;">달내마을 통합 포털 · 화면 설계 데모</h1>
+    <p style="color:rgba(255,255,255,.75);max-width:680px;">마을 통합 소개·숙박예약 플랫폼의 사용자(프론트) 화면과 관리자(CMS) 화면을 한옥 프리미엄 톤으로 구현한 제안용 프로토타입입니다. 아래 카드를 눌러 각 화면을 확인하세요. <b style="color:var(--gold-2)">(이미지는 임시 플레이스홀더 — 촬영 후 교체)</b></p>
+    <div class="hero-actions" style="margin-top:24px;">
+      <a href="index.html" class="btn btn-gold btn-lg">실제 메인 화면 열기 →</a>
+      <a href="admin/index.html" class="btn btn-ghost btn-lg">관리자 대시보드 →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">User Front</span>
+    <h2 style="font-size:2rem;margin:12px 0 8px;">사용자 페이지</h2>
+    <p class="muted" style="margin-bottom:32px;">마을 소개부터 예약 완료까지 끊김 없는 단일 동선 · 핵심 11화면</p>
+    <div class="grid grid-3">
+      <a class="pcard" href="index.html"><div class="thumb"><iframe src="index.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-01</div><h4>메인 홈페이지</h4><p>히어로 슬라이더 · 통합 예약 검색 · 추천 숙소</p></div></a>
+      <a class="pcard" href="village.html"><div class="thumb"><iframe src="village.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-02</div><h4>마을 소개</h4><p>역사 타임라인 · 마을 스토리 · 통계</p></div></a>
+      <a class="pcard" href="map.html"><div class="thumb"><iframe src="map.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-03</div><h4>인터랙티브 마을 지도</h4><p>마커 ↔ 리스트 연동 · 카테고리 필터</p></div></a>
+      <a class="pcard" href="archive.html"><div class="thumb"><iframe src="archive.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-06</div><h4>콘텐츠·아카이브</h4><p>분류 체계 · 유물 그리드 · 기획 스토리</p></div></a>
+      <a class="pcard" href="stays.html"><div class="thumb"><iframe src="stays.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-08</div><h4>숙박업체 목록</h4><p>필터 사이드바 · 카드 비교 · 정렬</p></div></a>
+      <a class="pcard" href="stay-detail.html"><div class="thumb"><iframe src="stay-detail.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-09</div><h4>숙박업체 상세</h4><p>갤러리 · 객실 선택 · 스티키 예약 박스</p></div></a>
+      <a class="pcard" href="booking.html"><div class="thumb"><iframe src="booking.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-10·11</div><h4>예약·결제</h4><p>진행 단계 · 결제 수단 · 금액 요약</p></div></a>
+      <a class="pcard" href="booking-done.html"><div class="thumb"><iframe src="booking-done.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-12</div><h4>예약 완료</h4><p>확정 안내 · 예약 내역 요약</p></div></a>
+      <a class="pcard" href="shops.html"><div class="thumb"><iframe src="shops.html" scrolling="no"></iframe></div><div class="pb"><div class="code">F-13</div><h4>상점·체험</h4><p>카테고리 필터 · 상점 카드</p></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper-2)">
+  <div class="wrap">
+    <span class="eyebrow">Admin CMS</span>
+    <h2 style="font-size:2rem;margin:12px 0 8px;">관리자 페이지</h2>
+    <p class="muted" style="margin-bottom:32px;">코드 수정 없이 콘텐츠·예약·통계를 직접 운영하는 CMS 백오피스 · 핵심 5화면</p>
+    <div class="grid grid-3">
+      <a class="pcard" href="admin/index.html"><div class="thumb"><iframe src="admin/index.html" scrolling="no"></iframe></div><div class="pb"><div class="code">A-01</div><h4>대시보드</h4><p>KPI · 예약·매출 차트 · 채널 비중</p></div></a>
+      <a class="pcard" href="admin/stays.html"><div class="thumb"><iframe src="admin/stays.html" scrolling="no"></iframe></div><div class="pb"><div class="code">A-08</div><h4>숙박업체 관리</h4><p>숙소·객실·요금·재고 캘린더</p></div></a>
+      <a class="pcard" href="admin/reservations.html"><div class="thumb"><iframe src="admin/reservations.html" scrolling="no"></iframe></div><div class="pb"><div class="code">A-09</div><h4>예약 관리</h4><p>승인·취소·환불 · 상태별 현황</p></div></a>
+      <a class="pcard" href="admin/content.html"><div class="thumb"><iframe src="admin/content.html" scrolling="no"></iframe></div><div class="pb"><div class="code">A-04</div><h4>콘텐츠 관리(CMS)</h4><p>에디터 · 발행 설정 · SEO</p></div></a>
+      <a class="pcard" href="admin/archive.html"><div class="thumb"><iframe src="admin/archive.html" scrolling="no"></iframe></div><div class="pb"><div class="code">A-05</div><h4>아카이브 관리</h4><p>분류 트리 · 유물 등록·정렬</p></div></a>
+    </div>
+    <p class="muted mt-24" style="font-size:.9rem;">※ 사이드바에는 A-02 통계, A-03 메인·배너, A-06 지도, A-07 이벤트, A-10 상점, A-11 회원, A-12 게시판, A-13 팝업, A-14 SNS, A-15 환경설정까지 전체 15종 메뉴가 잡혀 있으며, 위 5종은 대표 화면으로 우선 구현했습니다.</p>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap">
+  <div class="bottom" style="border:none;padding-top:0;"><div>© 2026 달내마을 통합 포털 · 제안용 UI 프로토타입. 디자인 톤: 한옥 프리미엄. 이미지: 임시 플레이스홀더(교체 예정).</div></div>
+</div></footer>
+</body>
+</html>

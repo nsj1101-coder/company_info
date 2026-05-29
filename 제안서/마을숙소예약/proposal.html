@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>마을 통합 소개·숙박예약 플랫폼 구축 제안서</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --ink: #111317;
+    --paper: #ffffff;
+    --gray-50: #fafafa;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #1E7A5E;
+    --accent-deep: #114A38;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  @page { size: 1600px 900px; margin: 0; }
+
+  html { font-size: 13px; }
+  html, body { background: #fafafa; }
+
+  .deck { width: 100%; }
+
+  .slide {
+    width: 1600px;
+    height: 900px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 44px 80px;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  .slide.dark  { background: #fff; color: var(--ink); }
+  .slide.light { background: #ffffff; color: #111317; }
+  .slide.gray  { background: #f3f4f6; color: #111317; }
+  .slide.ink   { background: #0d1117; color: var(--ink); }
+
+  /* ─── Editorial Markers ─── */
+  .section-mark {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-size:1.488rem;
+    font-weight: 400;
+    color: currentColor;
+    opacity: 0.55;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .section-mark::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.22;
+  }
+  .section-mark .acc { color: var(--accent); opacity: 1; font-weight: 500; }
+
+  /* ─── Editorial Titles ─── */
+  h2.ed-title {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size:6.251rem;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  h2.ed-title em { font-style: italic; font-weight: 500; color: var(--accent); }
+  .slide.dark h2.ed-title em, .slide.ink h2.ed-title em { color: var(--accent); }
+
+  /* ─── Lede paragraph ─── */
+  p.lede {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size:1.964rem;
+    line-height: 1.55;
+    color: #333;
+    max-width: 920px;
+    margin-bottom: 26px;
+    border-top: 3px solid currentColor;
+    padding-top: 16px;
+  }
+  .slide.dark p.lede, .slide.ink p.lede { color: var(--ink-2, #262626); border-top-color: var(--ink); }
+  p.lede strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Body text ─── */
+  p.ed-body {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.459rem;
+    line-height: 1.85;
+    font-weight: 400;
+    color: #2a2a2a;
+    max-width: 720px;
+  }
+  .slide.dark p.ed-body, .slide.ink p.ed-body { color: var(--ink-2, #262626); }
+
+  /* ─── Layout helpers ─── */
+  .ed-two-col { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; margin-top: 24px; align-items: start; }
+  .ed-two-col.even { grid-template-columns: 1fr 1fr; }
+  .ed-three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 28px; }
+  .ed-four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 28px; }
+
+  /* ─── Stat strip ─── */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    margin: 22px 0; border-top: 3px solid currentColor; border-bottom: 1px solid currentColor;
+  }
+  .stat-strip > div { padding: 22px 26px; border-right: 1px solid currentColor; }
+  .stat-strip > div:last-child { border-right: none; }
+  .stat-strip .ss-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic; font-weight: 600; font-size:4.465rem; line-height: 1;
+    letter-spacing: -0.02em; margin-bottom: 6px;
+  }
+  .stat-strip .ss-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.042rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.6;
+  }
+
+  /* ─── Persona cards ─── */
+  .persona-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 22px; }
+  .persona-card { padding: 24px 22px; background: #f3f4f6; border: 1px solid rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+  .persona-card.featured { background: #fff; color: var(--ink); border-left: 4px solid var(--accent); }
+  .persona-card.acc { background: var(--accent); color: #fff; }
+  .persona-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #888; margin-bottom: 10px;
+  }
+  .persona-card.acc .persona-tag { color: rgba(255,255,255,0.8); }
+  .persona-card h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500; font-size:1.563rem; line-height: 1.3; letter-spacing: -0.005em; margin-bottom: 12px;
+  }
+  .persona-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .persona-meta span {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem; font-weight: 500; letter-spacing: 0.06em; padding: 3px 8px; border: 1px solid currentColor; opacity: 0.7;
+  }
+  .persona-section { margin-bottom: 12px; }
+  .persona-section .ps-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.804rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.55; margin-bottom: 6px;
+  }
+  .persona-card ul {
+    list-style: none; font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.131rem; font-weight: 400; line-height: 1.7;
+  }
+  .persona-card ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Phase columns ─── */
+  .phase-col { border-top: 4px solid currentColor; padding-top: 16px; }
+  .phase-col .pc-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 10px; opacity: 0.6;
+  }
+  .phase-col h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500; font-size:2.158rem; line-height: 1.2; margin-bottom: 12px;
+  }
+  .phase-col ul {
+    list-style: none; font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.31rem; line-height: 1.95; opacity: 0.85;
+  }
+  .phase-col ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Reference table ─── */
+  .ref-table { width: 100%; border-collapse: collapse; margin-top: 22px; font-family: 'Pretendard Variable', 'Pretendard', sans-serif; }
+  .ref-table th {
+    text-align: left; font-size:0.982rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 12px 18px; border-bottom: 2px solid #000; opacity: 0.6;
+  }
+  .ref-table td {
+    padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.08); font-size:1.369rem; font-weight: 400; color: #333; vertical-align: top;
+  }
+  .ref-table td.name { font-weight: 600; color: #000; }
+  .ref-table .badge {
+    display: inline-block; font-size:0.922rem; font-weight: 600; letter-spacing: 0.1em;
+    padding: 3px 8px; background: var(--accent); color: #fff; margin-right: 6px;
+  }
+
+  /* ─── Pull quote ─── */
+  .pull-quote {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic; font-weight: 500; font-size:2.977rem; line-height: 1.3; color: currentColor;
+    padding: 14px 0 14px 32px; border-left: 4px solid var(--accent); margin: 22px 0; max-width: 1080px;
+  }
+  .pull-quote strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Feature matrix ─── */
+  .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(0,0,0,0.1); margin-top: 22px; }
+  .feat-cell { background: #fff; padding: 22px 22px 20px; display: flex; flex-direction: column; min-height: 175px; }
+  .feat-cell .feat-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic; font-weight: 600; font-size:2.084rem; color: var(--accent); margin-bottom: 8px;
+  }
+  .feat-cell h5 { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 600; font-size:1.459rem; margin-bottom: 8px; }
+  .feat-cell ul { list-style: none; font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.161rem; line-height: 1.75; opacity: 0.82; }
+  .feat-cell ul li::before { content: '— '; opacity: 0.4; }
+  .feat-cell.dark-cell { background: #fff; color: var(--ink); border: 1px solid #e5e7eb; }
+  .feat-cell.acc-cell { background: #f1f9f5; color: var(--ink); border: 1px solid var(--accent); }
+
+  /* ─── Flow diagram ─── */
+  .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; margin-top: 22px; }
+  .flow-step { padding: 22px 22px; background: #fff; color: #000; border: 1px solid rgba(0,0,0,0.08); min-height: 130px; display: flex; flex-direction: column; justify-content: center; }
+  .flow-step.start { background: #e5e7eb; }
+  .flow-step.core { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .flow-step.end { background: #f1f9f5; color: var(--ink); border: 2px solid var(--accent); }
+  .flow-step .fs-tag { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:0.833rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+  .flow-step h5 { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.369rem; font-weight: 500; line-height: 1.4; }
+  .flow-step p { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.102rem; line-height: 1.55; opacity: 0.78; margin-top: 6px; }
+  .flow-arrow { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 300; font-size:2.381rem; color: rgba(0,0,0,0.45); text-align:center; }
+
+  /* ─── Cost ─── */
+  .cost-block { padding: 28px 30px; background: #f3f4f6; }
+  .cost-block.dark { background: #fafafa; color: var(--ink); border: 1px solid #e5e7eb; }
+  .cost-block h4 { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-weight: 500; font-size:1.563rem; margin-bottom: 18px; letter-spacing: -0.005em; }
+  .cost-list { display: flex; flex-direction: column; gap: 0; }
+  .cost-list .cl-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.08); font-family: 'Pretendard Variable', 'Pretendard', sans-serif; }
+  .cost-list .cl-item:last-child { border-bottom: none; }
+  .cl-item .cl-name { font-size:1.24rem; font-weight: 400; color: #333; }
+  .cl-item .cl-value { font-size:1.34rem; font-weight: 500; color: #000; }
+  .cost-list .cl-total { padding-top: 14px; margin-top: 8px; border-top: 2px solid #000; }
+  .cl-total .cl-name { font-weight: 700; }
+  .cl-total .cl-value { font-weight: 300; font-size:2.084rem; }
+
+  /* ─── Tech compare table ─── */
+  .tech-compare { display: grid; grid-template-columns: 1.1fr 1fr 1fr; margin-top: 24px; border-top: 2px solid currentColor; }
+  .tc-cell { padding: 14px 18px; font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.28rem; line-height: 1.55; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .tc-cell.hdr { font-size:0.953rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 18px; border-bottom: 2px solid currentColor; opacity: 0.7; }
+  .tc-cell.label { font-weight: 600; }
+  .tc-cell.acc { background: rgba(30,122,94,0.08); }
+
+  .slide.dense { justify-content: flex-start; padding-top: 36px; }
+  .slide.dense h2.ed-title { font-size: 4.4rem; margin-bottom: 12px; }
+  .slide.dense p.lede { font-size: 1.55rem; margin-bottom: 10px; }
+  .slide.dense .tech-compare { margin-top: 14px; }
+  .slide.dense .tc-cell { padding: 8px 14px; font-size: 1.05rem; line-height: 1.4; }
+  .slide.dense .tc-cell.hdr { padding: 8px 14px; font-size: 0.85rem; }
+
+  /* ─── Cover / nameplate ─── */
+  .nameplate {
+    border-top: 6px solid currentColor; border-bottom: 1px solid currentColor; padding: 12px 0;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.013rem; letter-spacing: 0.24em; text-transform: uppercase; font-weight: 600;
+  }
+
+  .slide-num { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:0.982rem; font-weight: 500; letter-spacing: 0.2em; opacity: 0.35; position: absolute; bottom: 32px; left: 100px; }
+
+  .mi-logo-row { display: flex; align-items: center; gap: 14px; font-family: 'Pretendard Variable', 'Pretendard', sans-serif; color: var(--ink-2, #262626); }
+  .mi-logo-row img { height: 38px; opacity: 0.9; }
+  .mi-divider { width: 1px; height: 26px; background: rgba(0,0,0,0.12); }
+  .mi-text { font-size:0.982rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink-4, #6b7280); line-height: 1.6; }
+
+  /* ─── Page-map list ─── */
+  .pagemap { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; margin-top: 18px; }
+  .pm-col h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.071rem; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); padding-bottom: 8px; border-bottom: 2px solid var(--accent); margin-bottom: 6px;
+  }
+  .pm-row { display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.07); font-family: 'Pretendard Variable', 'Pretendard', sans-serif; align-items: baseline; }
+  .pm-row .pm-no { font-style: italic; font-weight: 700; color: var(--accent); font-size:1.071rem; min-width: 42px; }
+  .pm-row .pm-name { font-size:1.131rem; font-weight: 500; color: #111; min-width: 150px; }
+  .pm-row .pm-desc { font-size:1.012rem; color: #666; line-height: 1.4; }
+
+  /* ─── Save / highlight box ─── */
+  .save-box { background: var(--accent); color: #fff; padding: 22px 28px; display: flex; gap: 24px; align-items: center; margin-top: 14px; }
+  .save-box .sb-num { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-style: italic; font-weight: 600; font-size:3.2rem; line-height: 1; min-width: 130px; }
+  .save-box .sb-text { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.34rem; line-height: 1.55; }
+
+  .end-strap { padding-top: 22px; border-top: 6px solid #000; display: flex; justify-content: space-between; align-items: flex-end; }
+
+  /* ─── Roadmap ─── */
+  .roadmap-list { display: flex; flex-direction: column; gap: 1px; background: rgba(0,0,0,0.12); }
+  .roadmap-list .rl { background: #fff; padding: 14px 22px; display: flex; gap: 20px; align-items: center; }
+  .roadmap-list .rl .rn { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-style: italic; font-weight: 600; font-size:2.0rem; color: var(--accent); min-width: 40px; }
+  .roadmap-list .rl .rt { font-family: 'Pretendard Variable', 'Pretendard', sans-serif; font-size:1.34rem; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 01 COVER -->
+  <div class="slide light" style="padding:50px 100px; justify-content:space-between; background:#fff;">
+    <div class="nameplate" style="border-color:var(--ink); color:var(--ink);">
+      <span>VILLAGE PLATFORM · PROPOSAL</span>
+      <span>VOL.01 — PROPOSAL · 2026 / 05</span>
+      <span>FOR · 준공공기관 담당자님</span>
+    </div>
+
+    <div>
+      <div class="mi-logo-row" style="margin-bottom:36px; display:flex; align-items:center; gap:28px;">
+        <img src="assets/maximpact_logo.png" alt="MaxImpact" style="height:64px; width:auto;">
+        <div class="mi-divider" style="width:2px; height:54px; background:var(--ink);"></div>
+        <div class="mi-text" style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.488rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-2, #262626); line-height:1.6; font-weight:600;">Proposal · 마을 통합 플랫폼<br><span style="font-weight:400; color:var(--ink-4, #6b7280);">2026 · 소개 · 콘텐츠 · 통합 숙박예약</span></div>
+      </div>
+      <h1 style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:7.4rem; line-height:0.98; letter-spacing:-0.03em; margin:0 0 26px; color:var(--ink);">
+        한 마을,<br><em style="font-style:italic; font-weight:500; color:var(--accent);">하나의 사이트.</em>
+      </h1>
+      <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:400; font-size:1.935rem; line-height:1.55; color:var(--ink-3, #525252); max-width:980px; padding-top:16px; border-top:3px solid var(--ink);">
+        마을의 역사와 이야기를 담고, 여러 숙박업체를 한 곳에서 예약하며, 관리자가 직접 운영하는 — <strong style="font-style:normal; font-weight:600;">마을 통합 소개·숙박예약 플랫폼</strong> 구축안. <strong style="font-style:normal; font-weight:600;">(촬영 전문업체 컨소시엄 포함)</strong>
+      </p>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.042rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-4, #6b7280); line-height:2;">
+        제안 · MAXIMPACT (주관) + 촬영 전문업체 컨소시엄
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.488rem; color:var(--ink-4, #6b7280);">
+        "마을을 담고, 예약까지 한 흐름으로."
+      </div>
+    </div>
+
+    <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.982rem; letter-spacing:0.2em; opacity:0.4; color:var(--ink);">01 / 18</div>
+  </div>
+
+  <!-- 02 STRATEGY -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 01</span> The Strategy</div>
+    <h2 class="ed-title">단순 "숙박 예약 사이트"가<br><em>아닙니다. 마을 그 자체를 담습니다.</em></h2>
+    <p class="lede">하나의 마을 안에 여러 숙박업체와 상점이 있고, 방문객은 <strong>마을 소개 → 숙소·상점 탐색 → 예약·결제</strong>까지 한 사이트에서 끊김 없이 이용합니다. 참고 사이트(전주한옥마을·고령몰·서울한옥)보다 <strong>더 높은 디자인 퀄리티와 인터랙티브 마을 지도</strong>를 핵심 차별점으로 둡니다.</p>
+
+    <div class="ed-three-col" style="margin-top:28px;">
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">Layer 1 — 마을을 담다</div>
+        <h4>마을 소개 · 콘텐츠 ·<br>디지털 아카이브</h4>
+        <ul>
+          <li>마을 소개·역사·이야기</li>
+          <li>아키페스타(이벤트) 운영</li>
+          <li>유물 자료 분류·아카이브</li>
+          <li>인터랙티브 마을 지도</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">Layer 2 — 예약을 잇다</div>
+        <h4>다수 숙박업체<br>통합 예약 시스템</h4>
+        <ul>
+          <li>숙박·상점 소개 재정비</li>
+          <li>한 사이트 통합 예약</li>
+          <li>날짜·객실·결제(PG)</li>
+          <li>예약 내역·취소·환불</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">Layer 3 — 운영을 맡다</div>
+        <h4>관리자 CMS ·<br>교육 · 운영 지원</h4>
+        <ul>
+          <li>콘텐츠 직접 관리(CMS)</li>
+          <li>통계·SNS연동·팝업·공유</li>
+          <li>서버 세팅·안정화</li>
+          <li>관리자 교육·매뉴얼북</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:30px; padding:18px 28px; background:#fafafa; border-left:4px solid var(--accent); color:var(--ink); display:inline-flex; gap:22px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.488rem; opacity:0.55;">핵심</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.488rem; font-weight:500;">"마을 포털 + 통합 예약 + 운영 CMS" — 사업 종료 후에도 기관이 직접 운영·확장할 수 있는 구조로 설계합니다.</span>
+    </div>
+
+    <div class="slide-num">02 / 18</div>
+  </div>
+
+  <!-- 03 USERS -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 02</span> The Users</div>
+    <h2 class="ed-title">사용자는 4 주체,<br><em>각자의 화면이 다릅니다.</em></h2>
+    <p class="lede" style="margin-bottom:18px;">하나의 플랫폼이지만, 방문·예약객 · 숙박업체 · 마을 상점 · 기관 관리자가 보는 정보와 권한은 다릅니다. 블럭팡은 이를 명확한 역할별 인터페이스로 분리 설계합니다.</p>
+
+    <div class="persona-row" style="margin-top:18px;">
+      <div class="persona-card acc">
+        <div class="persona-tag">주체 01 · 방문·예약객</div>
+        <h4>관광객 / 예약자<br>"마을을 즐기러 온 사람"</h4>
+        <div class="persona-meta"><span>모바일 다수</span><span>비회원·회원</span></div>
+        <div class="persona-section"><div class="ps-label">기대</div><ul><li>마을을 한눈에 둘러보기</li><li>여러 숙소를 한곳에서 비교·예약</li></ul></div>
+        <div class="persona-section"><div class="ps-label">제공</div><ul><li><strong style="color:#fff;">인터랙티브 지도·콘텐츠</strong></li><li>통합 예약·결제·알림</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">주체 02 · 숙박업체</div>
+        <h4>마을 내 숙소<br>"객실을 파는 사람"</h4>
+        <div class="persona-meta"><span>다수 업체</span><span>일부 권한</span></div>
+        <div class="persona-section"><div class="ps-label">기대</div><ul><li>내 숙소 소개·사진 노출</li><li>예약·객실 현황 관리</li></ul></div>
+        <div class="persona-section"><div class="ps-label">제공</div><ul><li>업체별 예약·객실 관리</li><li>예약 알림·정산 내역</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">주체 03 · 마을 상점</div>
+        <h4>먹거리·체험·상점<br>"마을을 채우는 사람"</h4>
+        <div class="persona-meta"><span>소개 중심</span><span>지도 연동</span></div>
+        <div class="persona-section"><div class="ps-label">기대</div><ul><li>상점 소개·위치 노출</li><li>방문객 유입</li></ul></div>
+        <div class="persona-section"><div class="ps-label">제공</div><ul><li>상점 상세·지도 마커</li><li>콘텐츠 연계 노출</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">주체 04 · 기관 관리자</div>
+        <h4>준공공기관<br>"마을을 운영하는 주체"</h4>
+        <div class="persona-meta"><span>운영 총괄</span><span>전체 권한</span></div>
+        <div class="persona-section"><div class="ps-label">기대</div><ul><li>콘텐츠 직접 등록·수정</li><li>방문·예약 통계 파악</li></ul></div>
+        <div class="persona-section"><div class="ps-label">제공</div><ul><li>CMS · 통계 대시보드</li><li>팝업·SNS·공지 일괄 운영</li></ul></div>
+      </div>
+    </div>
+
+    <div class="slide-num">03 / 18</div>
+  </div>
+
+  <!-- 04 REFERENCE -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 03</span> The Reference</div>
+    <h2 class="ed-title">레퍼런스는 있지만,<br><em>"더 예쁘게, 지도까지."</em></h2>
+
+    <div class="ed-two-col" style="margin-top:22px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:20px;">전주한옥마을 · 고령몰 · 서울한옥 stay 는 검증된 참고 사례입니다. 다만 발주처의 요청은 명확합니다 — <strong>"조금 더 퀄리티 있고 예쁘게, 마을 지도까지."</strong> 본 제안은 레퍼런스의 기능을 충족하면서, <strong>디자인 완성도와 인터랙티브 마을 지도</strong>로 한 단계 끌어올립니다.</p>
+
+        <div class="stat-strip">
+          <div><div class="ss-num">19</div><div class="ss-label">사용자 페이지</div></div>
+          <div><div class="ss-num">15</div><div class="ss-label">관리자 페이지</div></div>
+          <div><div class="ss-num">4<span style="font-size:1.935rem;">대</span></div><div class="ss-label">사업 영역</div></div>
+        </div>
+
+        <p class="ed-body" style="margin-top:16px;">단순 페이지 나열이 아니라 <strong>마을 소개부터 예약 완료까지 하나의 동선</strong>으로 설계합니다. 마을 지도는 본 플랫폼의 얼굴이 되는 핵심 비주얼 요소입니다.</p>
+      </div>
+
+      <div>
+        <table class="ref-table">
+          <thead><tr><th>레퍼런스 요소</th><th>일반 사이트</th><th>본 제안</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="name">마을 소개·콘텐츠<br><span style="font-size:0.967rem; color:#888; font-weight:400;">역사·이야기·이벤트</span></td>
+              <td>정적 페이지</td>
+              <td><span class="badge">CMS</span> 직접 운영</td>
+            </tr>
+            <tr>
+              <td class="name">마을 지도<br><span style="font-size:0.967rem; color:#888; font-weight:400;">숙소·상점·관광지</span></td>
+              <td>이미지 한 장</td>
+              <td><span class="badge">인터랙티브</span> 클릭→상세</td>
+            </tr>
+            <tr>
+              <td class="name">숙박 예약<br><span style="font-size:0.967rem; color:#888; font-weight:400;">다수 업체 통합</span></td>
+              <td>업체별 분산</td>
+              <td><span class="badge">통합</span> 한 사이트</td>
+            </tr>
+            <tr>
+              <td class="name">디지털 아카이브<br><span style="font-size:0.967rem; color:#888; font-weight:400;">유물·자료 분류</span></td>
+              <td>없음/게시판</td>
+              <td><span class="badge">YES</span> 분류 체계</td>
+            </tr>
+            <tr>
+              <td class="name">전문 사진·드론 촬영<br><span style="font-size:0.967rem; color:#888; font-weight:400;">메인 비주얼</span></td>
+              <td>제공 자료</td>
+              <td><span class="badge">컨소시엄</span> 전문 촬영</td>
+            </tr>
+            <tr>
+              <td class="name">디자인 완성도<br><span style="font-size:0.967rem; color:#888; font-weight:400;">UI/UX·반응형</span></td>
+              <td>표준 템플릿</td>
+              <td><span class="badge">리뉴얼</span> 맞춤 디자인</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide-num">04 / 18</div>
+  </div>
+
+  <!-- 13 TEAM & TRACK RECORD -->
+  <div class="slide light" style="padding:40px 80px; justify-content:flex-start;">
+    <div class="section-mark"><span class="acc">§ 04</span> The Team & Track Record</div>
+    <h2 class="ed-title" style="font-size:4.0rem; margin-bottom:14px;">우리는 이미,<br><em>공공의 웹을 만들어 왔습니다.</em></h2>
+
+    <!-- PM credential band (dark, for white logo) -->
+    <div style="background:#0d1117; color:#fff; padding:20px 30px; display:flex; align-items:center; justify-content:space-between; gap:30px;">
+      <div style="display:flex; align-items:center; gap:24px;">
+        <div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.86rem; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:6px;">투입 인력 · PROJECT MANAGER</div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:2.2rem; font-weight:600; line-height:1.1;">노성준 <span style="font-size:1.4rem; font-weight:400; color:rgba(255,255,255,0.7);">PM</span></div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.16rem; color:rgba(255,255,255,0.72); margin-top:6px; line-height:1.5;">공공·지자체 웹 구축 다수 수행 — <strong style="color:#fff; font-weight:600;">기획 · 디자인 · 개발 총괄</strong> 경험</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.92rem; letter-spacing:0.16em; color:rgba(255,255,255,0.55); line-height:1.6;">수행 재직<br><span style="color:#fff; font-weight:600; letter-spacing:0.05em; font-size:1.05rem;">한신정보기술</span></div>
+        <div style="width:1px; height:48px; background:rgba(255,255,255,0.2);"></div>
+        <img src="hanshin_logo.png" alt="한신정보기술" style="height:46px; width:auto;">
+      </div>
+    </div>
+
+    <!-- 4 project cards -->
+    <div class="feature-grid" style="margin-top:18px;">
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">01</div>
+        <h5>연천군 시티투어</h5>
+        <ul>
+          <li>시티투어 <strong style="color:var(--accent);">예약 시스템</strong> + 코스·소개 페이지 제작</li>
+          <li>기획 · 디자인 · 개발 <strong>전부 총괄</strong></li>
+          <li style="opacity:0.6;"><a href="https://www.yeoncheon.go.kr/citytour/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.yeoncheon.go.kr/citytour/index.do</a></li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">02</div>
+        <h5>한국교원대학교 리뉴얼</h5>
+        <ul>
+          <li><strong style="color:var(--accent);">대량 콘텐츠</strong> 페이지 기획·제작</li>
+          <li>예약 시스템 · 관리자 · <strong style="color:var(--accent);">아카이브</strong> 구축</li>
+          <li>기획 · 디자인 · 개발 <strong>전부 총괄</strong></li>
+          <li style="opacity:0.6;"><a href="https://www.knue.ac.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.knue.ac.kr/www/index.do</a></li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">03</div>
+        <h5>군포시청</h5>
+        <ul>
+          <li>대형 공공 사이트 <strong style="color:var(--accent);">1년 유지·하자보수</strong></li>
+          <li>민원 예약 시스템 구축</li>
+          <li>기획 · 디자인 · 개발 <strong>전부 총괄</strong></li>
+          <li style="opacity:0.6;"><a href="https://www.gunpo.go.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.gunpo.go.kr/www/index.do</a></li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">04</div>
+        <h5>가평군 열린군수실</h5>
+        <ul>
+          <li><strong style="color:var(--accent);">지자체 소개 홈페이지</strong> 구축</li>
+          <li>콘텐츠 기획 · <strong style="color:var(--accent);">촬영</strong> · 디자인 총괄</li>
+          <li>기획 · 개발 <strong>전부 총괄</strong></li>
+          <li style="opacity:0.6;"><a href="https://gp.go.kr/governor/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://gp.go.kr/governor/index.do</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- mapping callout -->
+    <div style="margin-top:18px; padding:18px 28px; background:var(--accent); color:#fff; display:flex; gap:22px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.5rem; opacity:0.85; white-space:nowrap;">결론</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; font-weight:500; line-height:1.5;">본 사업이 요구하는 모든 역량 — <strong>예약 시스템 · 대량 콘텐츠 · 아카이브 · 지자체 소개 · 전문 촬영 · 장기 유지보수</strong> — 을 이미 공공 현장에서 직접 수행했습니다. 같은 손으로, 이 마을을 더 잘 만들어 드립니다.</span>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:14px; opacity:0.4;">05 / 18</div>
+  </div>
+
+  <!-- SHOWCASE 연천군 시티투어 -->
+  <div class="slide light" style="padding:34px 80px; justify-content:flex-start;">
+    <div class="section-mark"><span class="acc">CASE 01</span> 수행 사례 · 연천군 시티투어</div>
+    <h2 class="ed-title" style="font-size:2.9rem; margin-bottom:8px;">연천군 시티투어</h2>
+    <div style="display:grid; grid-template-columns:500px 1fr; gap:48px; margin-top:10px; align-items:start;">
+      <div style="border-radius:10px; overflow:hidden; box-shadow:0 14px 34px rgba(0,0,0,0.14); border:1px solid #e2e2e2; background:#fff;">
+        <div style="height:30px; background:#f3f4f6; display:flex; align-items:center; gap:6px; padding:0 12px; border-bottom:1px solid #e5e7eb;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:10px; font-family:'Pretendard Variable',sans-serif; font-size:0.78rem; color:#888; background:#fff; border:1px solid #e5e7eb; border-radius:5px; padding:2px 12px;"><a href="https://www.yeoncheon.go.kr/citytour/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.yeoncheon.go.kr/citytour/index.do</a></span>
+        </div>
+        <div style="height:678px; background:#fff; display:flex; justify-content:center; align-items:flex-start; overflow:hidden;">
+          <img src="assets/shots/full_yeoncheon.png" style="height:100%; width:auto; display:block;">
+        </div>
+      </div>
+      <div>
+        <p style="font-family:'Pretendard Variable',sans-serif; font-style:italic; font-size:1.62rem; line-height:1.5; color:#1d2b25; border-top:3px solid var(--ink); padding-top:14px; margin-bottom:20px;">연천군의 시티투어 버스 노선·코스 소개부터 온라인 예약까지, 지역 관광을 하나의 사이트로 묶은 통합 시티투어 플랫폼입니다. 기획·디자인·개발 전 과정을 직접 총괄했습니다.</p>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">수행 역할</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;"><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">기획 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">디자인 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">개발 총괄</span></div>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; margin-top:22px;">주요 수행 내용</div>
+        <ul style="list-style:none; font-family:'Pretendard Variable',sans-serif; font-size:1.24rem; line-height:1.62; color:#2a2a2a;"><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>시티투어 <strong>예약 시스템</strong> 구축 (노선·일정·인원 예약·확인)</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>코스·관광지 소개 콘텐츠 페이지 기획·제작</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>지역·마을 소개 및 <strong>지도형 안내</strong> 구성</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>반응형 웹 디자인 + 관리자 운영 페이지</li></ul>
+        <div style="margin-top:22px; padding:16px 24px; background:#f1f9f5; border-left:4px solid var(--accent); font-family:'Pretendard Variable',sans-serif; font-size:1.26rem; line-height:1.55; color:#1d2b25;"><strong style="color:var(--accent);">본 사업과의 연결</strong><br>마을 소개와 <strong>예약</strong>을 한 사이트에서 잇는 구조 — 본 사업이 요구하는 “마을 소개 → 숙박 예약” 단일 동선과 정확히 동일한 경험입니다.</div>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:14px; font-family:'Pretendard Variable',sans-serif; font-size:1.08rem; color:#555;">
+          <span style="font-weight:600; color:#111;">PM 노성준</span><span style="color:#bbb;">|</span><span>한신정보기술 수행</span><span style="color:#bbb;">|</span><span style="color:var(--accent); font-weight:600;"><a href="https://www.yeoncheon.go.kr/citytour/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.yeoncheon.go.kr/citytour/index.do</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:12px; opacity:0.4;">06 / 18</div>
+  </div>
+
+  <!-- SHOWCASE 한국교원대학교 리뉴얼 -->
+  <div class="slide light" style="padding:34px 80px; justify-content:flex-start;">
+    <div class="section-mark"><span class="acc">CASE 02</span> 수행 사례 · 한국교원대학교 리뉴얼</div>
+    <h2 class="ed-title" style="font-size:2.9rem; margin-bottom:8px;">한국교원대학교 리뉴얼</h2>
+    <div style="display:grid; grid-template-columns:500px 1fr; gap:48px; margin-top:10px; align-items:start;">
+      <div style="border-radius:10px; overflow:hidden; box-shadow:0 14px 34px rgba(0,0,0,0.14); border:1px solid #e2e2e2; background:#fff;">
+        <div style="height:30px; background:#f3f4f6; display:flex; align-items:center; gap:6px; padding:0 12px; border-bottom:1px solid #e5e7eb;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:10px; font-family:'Pretendard Variable',sans-serif; font-size:0.78rem; color:#888; background:#fff; border:1px solid #e5e7eb; border-radius:5px; padding:2px 12px;"><a href="https://www.knue.ac.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.knue.ac.kr/www/index.do</a></span>
+        </div>
+        <div style="height:678px; background:#fff; display:flex; justify-content:center; align-items:flex-start; overflow:hidden;">
+          <img src="assets/shots/full_knue.png" style="height:100%; width:auto; display:block;">
+        </div>
+      </div>
+      <div>
+        <p style="font-family:'Pretendard Variable',sans-serif; font-style:italic; font-size:1.62rem; line-height:1.5; color:#1d2b25; border-top:3px solid var(--ink); padding-top:14px; margin-bottom:20px;">한국교원대학교 공식 홈페이지 전면 리뉴얼. 방대한 학사·소식·소개 콘텐츠와 다양한 서비스를 통합한 대형 기관 사이트를 기획·디자인·개발까지 총괄했습니다.</p>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">수행 역할</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;"><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">기획 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">디자인 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">개발 총괄</span></div>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; margin-top:22px;">주요 수행 내용</div>
+        <ul style="list-style:none; font-family:'Pretendard Variable',sans-serif; font-size:1.24rem; line-height:1.62; color:#2a2a2a;"><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span><strong>대량 콘텐츠 페이지</strong> 기획·제작 (학사·소식·청람동정 등)</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>예약 시스템 구축</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>관리자(CMS) 페이지 구축</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>자료 <strong>아카이브</strong> 구축</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>통합일정·소식 등 동적 모듈 개발</li></ul>
+        <div style="margin-top:22px; padding:16px 24px; background:#f1f9f5; border-left:4px solid var(--accent); font-family:'Pretendard Variable',sans-serif; font-size:1.26rem; line-height:1.55; color:#1d2b25;"><strong style="color:var(--accent);">본 사업과의 연결</strong><br><strong>대량 콘텐츠 · 아카이브 · CMS · 예약</strong> — 본 사업의 핵심 요구를 모두 포함한, 규모까지 큰 대표 레퍼런스입니다.</div>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:14px; font-family:'Pretendard Variable',sans-serif; font-size:1.08rem; color:#555;">
+          <span style="font-weight:600; color:#111;">PM 노성준</span><span style="color:#bbb;">|</span><span>한신정보기술 수행</span><span style="color:#bbb;">|</span><span style="color:var(--accent); font-weight:600;"><a href="https://www.knue.ac.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.knue.ac.kr/www/index.do</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:12px; opacity:0.4;">07 / 18</div>
+  </div>
+
+  <!-- SHOWCASE 군포시청 -->
+  <div class="slide light" style="padding:34px 80px; justify-content:flex-start;">
+    <div class="section-mark"><span class="acc">CASE 03</span> 수행 사례 · 군포시청</div>
+    <h2 class="ed-title" style="font-size:2.9rem; margin-bottom:8px;">군포시청</h2>
+    <div style="display:grid; grid-template-columns:500px 1fr; gap:48px; margin-top:10px; align-items:start;">
+      <div style="border-radius:10px; overflow:hidden; box-shadow:0 14px 34px rgba(0,0,0,0.14); border:1px solid #e2e2e2; background:#fff;">
+        <div style="height:30px; background:#f3f4f6; display:flex; align-items:center; gap:6px; padding:0 12px; border-bottom:1px solid #e5e7eb;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:10px; font-family:'Pretendard Variable',sans-serif; font-size:0.78rem; color:#888; background:#fff; border:1px solid #e5e7eb; border-radius:5px; padding:2px 12px;"><a href="https://www.gunpo.go.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.gunpo.go.kr/www/index.do</a></span>
+        </div>
+        <div style="height:678px; background:#fff; display:flex; justify-content:center; align-items:flex-start; overflow:hidden;">
+          <img src="assets/shots/full_gunpo.png" style="height:100%; width:auto; display:block;">
+        </div>
+      </div>
+      <div>
+        <p style="font-family:'Pretendard Variable',sans-serif; font-style:italic; font-size:1.62rem; line-height:1.5; color:#1d2b25; border-top:3px solid var(--ink); padding-top:14px; margin-bottom:20px;">군포시청 공식 포털. 방대한 서비스와 콘텐츠를 갖춘 대형 지자체 홈페이지를 1년간 총괄 유지·하자보수하며 안정적으로 운영하고, 민원 예약 시스템을 구축했습니다.</p>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">수행 역할</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;"><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">기획 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">디자인 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">개발 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">유지보수 총괄</span></div>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; margin-top:22px;">주요 수행 내용</div>
+        <ul style="list-style:none; font-family:'Pretendard Variable',sans-serif; font-size:1.24rem; line-height:1.62; color:#2a2a2a;"><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>대형 공공 포털 <strong>1년 유지·하자보수</strong> 총괄</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span><strong>민원 예약 시스템</strong> 구축</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>다수 서비스·콘텐츠 운영 및 개선</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>사이트 디자인 전면 총괄</li></ul>
+        <div style="margin-top:22px; padding:16px 24px; background:#f1f9f5; border-left:4px solid var(--accent); font-family:'Pretendard Variable',sans-serif; font-size:1.26rem; line-height:1.55; color:#1d2b25;"><strong style="color:var(--accent);">본 사업과의 연결</strong><br>오픈 이후 <strong>장기 안정 운영·유지보수</strong>까지 책임질 수 있음을 입증 — 준공공기관이 가장 중요하게 보는 “사업 종료 후 운영” 역량입니다.</div>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:14px; font-family:'Pretendard Variable',sans-serif; font-size:1.08rem; color:#555;">
+          <span style="font-weight:600; color:#111;">PM 노성준</span><span style="color:#bbb;">|</span><span>한신정보기술 수행</span><span style="color:#bbb;">|</span><span style="color:var(--accent); font-weight:600;"><a href="https://www.gunpo.go.kr/www/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://www.gunpo.go.kr/www/index.do</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:12px; opacity:0.4;">08 / 18</div>
+  </div>
+
+  <!-- SHOWCASE 가평군 열린군수실 -->
+  <div class="slide light" style="padding:34px 80px; justify-content:flex-start;">
+    <div class="section-mark"><span class="acc">CASE 04</span> 수행 사례 · 가평군 열린군수실</div>
+    <h2 class="ed-title" style="font-size:2.9rem; margin-bottom:8px;">가평군 열린군수실</h2>
+    <div style="display:grid; grid-template-columns:500px 1fr; gap:48px; margin-top:10px; align-items:start;">
+      <div style="border-radius:10px; overflow:hidden; box-shadow:0 14px 34px rgba(0,0,0,0.14); border:1px solid #e2e2e2; background:#fff;">
+        <div style="height:30px; background:#f3f4f6; display:flex; align-items:center; gap:6px; padding:0 12px; border-bottom:1px solid #e5e7eb;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#28c840;"></span>
+          <span style="margin-left:10px; font-family:'Pretendard Variable',sans-serif; font-size:0.78rem; color:#888; background:#fff; border:1px solid #e5e7eb; border-radius:5px; padding:2px 12px;"><a href="https://gp.go.kr/governor/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://gp.go.kr/governor/index.do</a></span>
+        </div>
+        <div style="height:678px; background:#fff; display:flex; justify-content:center; align-items:flex-start; overflow:hidden;">
+          <img src="assets/shots/full_gapyeong.png" style="height:100%; width:auto; display:block;">
+        </div>
+      </div>
+      <div>
+        <p style="font-family:'Pretendard Variable',sans-serif; font-style:italic; font-size:1.62rem; line-height:1.5; color:#1d2b25; border-top:3px solid var(--ink); padding-top:14px; margin-bottom:20px;">가평군 ‘열린군수실’. 지자체를 알리고 군민과 소통하는 소개형 홈페이지를 콘텐츠 기획·현장 촬영·디자인까지 직접 총괄해 비주얼 중심으로 완성했습니다.</p>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">수행 역할</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;"><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">콘텐츠·촬영 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">디자인 총괄</span><span style="font-family:'Pretendard Variable',sans-serif; font-size:1.0rem; font-weight:600; padding:4px 12px; background:var(--accent); color:#fff;">개발 총괄</span></div>
+        <div style="font-family:'Pretendard Variable',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; margin-top:22px;">주요 수행 내용</div>
+        <ul style="list-style:none; font-family:'Pretendard Variable',sans-serif; font-size:1.24rem; line-height:1.62; color:#2a2a2a;"><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span><strong>지자체 소개 홈페이지</strong> 기획·구축</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>콘텐츠 기획 + <strong>현장 촬영</strong></li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>비주얼·브랜드 중심 디자인 총괄</li><li style="margin-bottom:6px; padding-left:18px; text-indent:-18px;"><span style="color:var(--accent); font-weight:700;">— </span>반응형 웹 구성</li></ul>
+        <div style="margin-top:22px; padding:16px 24px; background:#f1f9f5; border-left:4px solid var(--accent); font-family:'Pretendard Variable',sans-serif; font-size:1.26rem; line-height:1.55; color:#1d2b25;"><strong style="color:var(--accent);">본 사업과의 연결</strong><br><strong>마을(지역) 소개 + 전문 촬영</strong> — 본 사업에서 컨소시엄으로 진행할 촬영·소개 영역을 이미 직접 수행한 실적입니다.</div>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:14px; font-family:'Pretendard Variable',sans-serif; font-size:1.08rem; color:#555;">
+          <span style="font-weight:600; color:#111;">PM 노성준</span><span style="color:#bbb;">|</span><span>한신정보기술 수행</span><span style="color:#bbb;">|</span><span style="color:var(--accent); font-weight:600;"><a href="https://gp.go.kr/governor/index.do" style="color:inherit; text-decoration:none; word-break:break-all;">https://gp.go.kr/governor/index.do</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:12px; opacity:0.4;">09 / 18</div>
+  </div>
+
+  <!-- 05 FEATURE MAP (4대 영역) -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 05</span> The Scope</div>
+    <h2 class="ed-title" style="color:var(--ink);">발주처 요청 4대 영역,<br><em>그대로 담았습니다.</em></h2>
+
+    <div class="feature-grid">
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">01</div>
+        <h5>콘텐츠 기획 및 제작</h5>
+        <ul>
+          <li>아카이브 구조 설계·유물 분류</li>
+          <li>신규 콘텐츠 페이지 기획</li>
+          <li>마을 아키페스타 운영</li>
+          <li>숙박·상점 콘텐츠 재정비·제작</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">02</div>
+        <h5>촬영 및 디자인 제작</h5>
+        <ul>
+          <li>전문 사진·드론 촬영 <strong style="color:var(--accent);">(컨소시엄)</strong></li>
+          <li>메인·서브 디자인 리뉴얼</li>
+          <li>UI/UX 개선·반응형 최적화</li>
+          <li>지도 표기 개선</li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">03</div>
+        <h5>시스템 개발 및 기능 개선 ★</h5>
+        <ul>
+          <li>아카이브 페이지 구축</li>
+          <li>관리자 통계 시스템 연동</li>
+          <li>SNS 연동·팝업·공유 기능</li>
+          <li>서버 세팅·안정화</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">04</div>
+        <h5>교육 및 운영 지원</h5>
+        <ul>
+          <li>관리자 교육 진행</li>
+          <li>운영 매뉴얼북 제작</li>
+          <li>사업 결과보고서 제작</li>
+          <li>오픈 후 운영 지원</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; padding:16px 24px; background:#fff; color:#000; display:inline-flex; gap:20px; align-items:center; border:1px solid #e5e7eb;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.414rem;">★ 표시</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.369rem; font-weight:500;">가장 무겁고 핵심이 되는 영역 — 통합 예약 시스템과 디지털 아카이브를 포함하는 시스템 개발.</span>
+    </div>
+
+    <div class="slide-num">10 / 18</div>
+  </div>
+
+  <!-- 06 PAGE MAP -->
+  <div class="slide light" style="padding:40px 80px; justify-content:flex-start; padding-top:40px;">
+    <div class="section-mark"><span class="acc">§ 06</span> The Page Map</div>
+    <h2 class="ed-title" style="font-size:4.2rem; margin-bottom:6px;">사용자 19 페이지 · <em>관리자 15 페이지</em></h2>
+    <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; color:#525252; margin-bottom:10px;">아래 페이지 단위로 기획·디자인·개발을 진행합니다. (견적 산정 기준 페이지)</p>
+
+    <div class="pagemap">
+      <div class="pm-col">
+        <h5>사용자(프론트) 페이지 · 19</h5>
+        <div class="pm-row"><span class="pm-no">F-01</span><span class="pm-name">메인 홈페이지</span><span class="pm-desc">대표 비주얼·콘텐츠·예약 진입 통합 첫화면</span></div>
+        <div class="pm-row"><span class="pm-no">F-02</span><span class="pm-name">마을 소개</span><span class="pm-desc">역사·유래·특징 브랜드 페이지</span></div>
+        <div class="pm-row"><span class="pm-no">F-03</span><span class="pm-name">인터랙티브 마을 지도</span><span class="pm-desc">숙소·상점·관광지 마커→상세 연결</span></div>
+        <div class="pm-row"><span class="pm-no">F-04</span><span class="pm-name">콘텐츠/스토리</span><span class="pm-desc">테마별 마을 이야기 기획형 페이지</span></div>
+        <div class="pm-row"><span class="pm-no">F-05</span><span class="pm-name">아키페스타(이벤트)</span><span class="pm-desc">행사·축제·프로그램 안내</span></div>
+        <div class="pm-row"><span class="pm-no">F-06</span><span class="pm-name">아카이브 목록</span><span class="pm-desc">유물·자료 분류 체계 아카이브 메인</span></div>
+        <div class="pm-row"><span class="pm-no">F-07</span><span class="pm-name">아카이브 상세</span><span class="pm-desc">개별 자료 사진·설명·메타정보</span></div>
+        <div class="pm-row"><span class="pm-no">F-08</span><span class="pm-name">숙박업체 목록</span><span class="pm-desc">다수 숙소 비교·탐색 리스트</span></div>
+        <div class="pm-row"><span class="pm-no">F-09</span><span class="pm-name">숙박업체 상세</span><span class="pm-desc">소개·사진·객실·요금·예약 진입</span></div>
+        <div class="pm-row"><span class="pm-no">F-10</span><span class="pm-name">객실/날짜 예약</span><span class="pm-desc">날짜·인원·객실 선택, 예약가능 확인</span></div>
+        <div class="pm-row"><span class="pm-no">F-11</span><span class="pm-name">예약 확인/결제</span><span class="pm-desc">예약정보 확인·PG 결제</span></div>
+        <div class="pm-row"><span class="pm-no">F-12</span><span class="pm-name">예약 완료/내역</span><span class="pm-desc">완료 안내·예약 내역 확인</span></div>
+        <div class="pm-row"><span class="pm-no">F-13</span><span class="pm-name">상점 소개 목록</span><span class="pm-desc">먹거리·체험·상점 리스트</span></div>
+        <div class="pm-row"><span class="pm-no">F-14</span><span class="pm-name">상점 상세</span><span class="pm-desc">소개·사진·위치·연락처</span></div>
+        <div class="pm-row"><span class="pm-no">F-15</span><span class="pm-name">공지사항/소식</span><span class="pm-desc">공지·뉴스·보도자료 게시판</span></div>
+        <div class="pm-row"><span class="pm-no">F-16</span><span class="pm-name">갤러리</span><span class="pm-desc">전문 촬영·드론 사진·영상</span></div>
+        <div class="pm-row"><span class="pm-no">F-17</span><span class="pm-name">로그인/회원가입</span><span class="pm-desc">회원·소셜(SNS) 로그인</span></div>
+        <div class="pm-row"><span class="pm-no">F-18</span><span class="pm-name">마이페이지</span><span class="pm-desc">정보·예약내역·취소·문의</span></div>
+        <div class="pm-row"><span class="pm-no">F-19</span><span class="pm-name">고객센터/FAQ</span><span class="pm-desc">자주묻는질문·이용안내·문의접수</span></div>
+      </div>
+      <div class="pm-col">
+        <h5>관리자(CMS) 페이지 · 15</h5>
+        <div class="pm-row"><span class="pm-no">A-01</span><span class="pm-name">대시보드</span><span class="pm-desc">방문·예약·매출 핵심 지표 통계 메인</span></div>
+        <div class="pm-row"><span class="pm-no">A-02</span><span class="pm-name">통계/리포트</span><span class="pm-desc">기간별 분석·내보내기</span></div>
+        <div class="pm-row"><span class="pm-no">A-03</span><span class="pm-name">메인/배너 관리</span><span class="pm-desc">메인 비주얼·배너·노출 편집</span></div>
+        <div class="pm-row"><span class="pm-no">A-04</span><span class="pm-name">콘텐츠 관리(CMS)</span><span class="pm-desc">소개·스토리·콘텐츠 등록·수정</span></div>
+        <div class="pm-row"><span class="pm-no">A-05</span><span class="pm-name">아카이브 관리</span><span class="pm-desc">유물·자료 분류 등록·정렬</span></div>
+        <div class="pm-row"><span class="pm-no">A-06</span><span class="pm-name">지도 관리</span><span class="pm-desc">지도 마커·정보 등록·편집</span></div>
+        <div class="pm-row"><span class="pm-no">A-07</span><span class="pm-name">이벤트 관리</span><span class="pm-desc">아키페스타 일정·내용 관리</span></div>
+        <div class="pm-row"><span class="pm-no">A-08</span><span class="pm-name">숙박업체 관리</span><span class="pm-desc">업체·객실·요금·재고 등록</span></div>
+        <div class="pm-row"><span class="pm-no">A-09</span><span class="pm-name">예약 관리</span><span class="pm-desc">예약 조회·승인·취소·환불</span></div>
+        <div class="pm-row"><span class="pm-no">A-10</span><span class="pm-name">상점 관리</span><span class="pm-desc">상점 정보·사진·노출 관리</span></div>
+        <div class="pm-row"><span class="pm-no">A-11</span><span class="pm-name">회원 관리</span><span class="pm-desc">회원 조회·등급·탈퇴 관리</span></div>
+        <div class="pm-row"><span class="pm-no">A-12</span><span class="pm-name">게시판/공지 관리</span><span class="pm-desc">공지·소식·FAQ 작성·관리</span></div>
+        <div class="pm-row"><span class="pm-no">A-13</span><span class="pm-name">팝업 관리</span><span class="pm-desc">메인·공지 팝업 등록·노출기간</span></div>
+        <div class="pm-row"><span class="pm-no">A-14</span><span class="pm-name">SNS 연동 관리</span><span class="pm-desc">인스타·페북 연동·공유 설정</span></div>
+        <div class="pm-row"><span class="pm-no">A-15</span><span class="pm-name">환경설정/권한</span><span class="pm-desc">기본설정·관리자 계정·접근권한</span></div>
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:10px; opacity:0.4;">11 / 18</div>
+  </div>
+
+  <!-- 07 RESERVATION ENGINE -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 07</span> The Reservation Engine</div>
+    <h2 class="ed-title" style="color:var(--ink);">여러 숙소를,<br><em>한 사이트에서 예약합니다.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:18px;">
+      <div>
+        <p class="ed-body">이 플랫폼의 심장은 <strong style="color:var(--ink);">통합 숙박 예약 시스템</strong>입니다. 마을 안의 여러 숙박업체를 하나의 사이트에서 날짜·객실 단위로 검색·예약·결제할 수 있게 합니다.<br><br>방문객은 업체마다 따로 전화하거나 흩어진 사이트를 찾을 필요 없이, 마을 지도나 숙소 목록에서 바로 예약까지 진행합니다. 관리자와 각 업체는 예약 현황을 실시간으로 확인합니다.</p>
+
+        <div class="pull-quote" style="color:var(--ink); border-left-color:var(--accent);">
+          "흩어진 숙소를, 하나의 예약 흐름으로."
+        </div>
+      </div>
+
+      <div>
+        <div style="background:#fff; color:#000; padding:24px 26px; border:1px solid #e5e7eb;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.922rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#888; margin-bottom:14px;">예약 흐름 — SAMPLE</div>
+          <table style="width:100%; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.161rem; border-collapse:collapse;">
+            <thead><tr style="border-bottom:1px solid #000;">
+              <td style="padding:6px; font-weight:700;">단계</td>
+              <td style="padding:6px; font-weight:700;">행동</td>
+              <td style="padding:6px; font-weight:700; text-align:right;">처리</td>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">탐색</td><td style="padding:6px;">지도/목록에서 숙소 선택</td><td style="padding:6px; text-align:right; color:var(--accent);">필터</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">날짜</td><td style="padding:6px;">날짜·인원·객실 선택</td><td style="padding:6px; text-align:right; color:var(--accent);">재고 확인</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">결제</td><td style="padding:6px;">PG 결제창 호출</td><td style="padding:6px; text-align:right; color:var(--accent);">예약 확정</td></tr>
+              <tr><td style="padding:6px;">알림</td><td style="padding:6px;">예약자·업체에 자동 통보</td><td style="padding:6px; text-align:right; color:var(--accent);">완료</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.071rem; color:#666; line-height:1.6;">중복 예약 방지를 위해 객실 재고를 실시간으로 잠금 처리하고, 취소·환불 규정을 업체별로 설정할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow" style="margin-top:24px;">
+      <div class="flow-step start"><div class="fs-tag">STEP 01</div><h5>숙소 탐색</h5><p>지도·목록·필터</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="fs-tag">STEP 02</div><h5>날짜·객실 선택</h5><p>실시간 재고 확인</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step core"><div class="fs-tag" style="color:rgba(255,255,255,0.8);">STEP 03 · 핵심</div><h5>예약·결제</h5><p style="color:#fff;">PG 연동·확정</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step end"><div class="fs-tag">STEP 04</div><h5>알림·내역</h5><p>예약자·업체 통보</p></div>
+    </div>
+
+    <div class="slide-num">12 / 18</div>
+  </div>
+
+  <!-- 08 CONTENT · ARCHIVE · MAP -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 08</span> The Content & Map</div>
+    <h2 class="ed-title">지도는 얼굴이 되고,<br><em>아카이브는 마을의 기억이 됩니다.</em></h2>
+    <p class="lede">발주처가 특히 강조한 <strong>인터랙티브 마을 지도</strong>와 <strong>디지털 아카이브</strong>를 차별화 포인트로 둡니다. 지도 위 마커로 숙소·상점·관광지를 잇고, 유물 자료는 분류 체계에 따라 디지털 아카이브로 보존·검색되며, 모든 콘텐츠는 관리자 CMS로 직접 운영됩니다.</p>
+
+    <div class="ed-three-col" style="margin-top:24px;">
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">A · 인터랙티브 지도</div>
+        <h4>마을 지도</h4>
+        <ul>
+          <li>숙소·상점·관광지 마커</li>
+          <li>마커 클릭 → 상세·예약 연결</li>
+          <li>카테고리·테마별 필터</li>
+          <li>관리자 마커 직접 등록</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">B · 디지털 아카이브</div>
+        <h4>유물·자료 아카이브</h4>
+        <ul>
+          <li>유물 자료 분류 체계 설계</li>
+          <li>사진·설명·메타정보 등록</li>
+          <li>검색·필터·연표</li>
+          <li>마을 콘텐츠와 연계</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">C · 콘텐츠 CMS</div>
+        <h4>운영 자동화</h4>
+        <ul>
+          <li>코드 수정 없이 콘텐츠 편집</li>
+          <li>SNS 연동·공유 기능</li>
+          <li>팝업·배너·공지 관리</li>
+          <li>통계 대시보드 연동</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slide-num">13 / 18</div>
+  </div>
+
+  <!-- 09 BUILD & ROADMAP -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 09</span> The Build</div>
+    <h2 class="ed-title">통합 계약,<br><em>5단계 순차 구축.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:24px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:18px;">전체 범위를 <strong>한 번의 계약</strong>으로 묶어 일관된 일정으로 진행합니다. 촬영(컨소시엄)은 초기에 병행하여 디자인·콘텐츠에 실제 사진을 반영합니다.</p>
+
+        <div style="background:#fafafa; border:1px solid #e5e7eb; color:var(--ink); padding:22px 26px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.34rem; opacity:0.55; margin-bottom:10px;">구축 통합 범위</div>
+          <ul style="list-style:none; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.28rem; line-height:1.85; color:var(--ink-2, #262626);">
+            <li>— 마을 소개·콘텐츠·아키페스타 페이지</li>
+            <li>— 인터랙티브 마을 지도</li>
+            <li>— 유물 디지털 아카이브</li>
+            <li>— 다수 숙박업체 통합 예약·결제(PG)</li>
+            <li>— 상점 소개 페이지</li>
+            <li>— 관리자 CMS·통계·SNS·팝업·공유</li>
+            <li>— 전문 사진·드론 촬영 (컨소시엄)</li>
+            <li>— 디자인 리뉴얼·UI/UX·반응형</li>
+            <li>— 서버 세팅·안정화</li>
+            <li>— 관리자 교육·매뉴얼북·결과보고서</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; opacity:0.6; margin-bottom:12px; font-size:1.414rem;">단계별 구축 로드맵</div>
+        <div class="roadmap-list">
+          <div class="rl"><span class="rn">1.</span><span class="rt">요구사항 확정 · 콘텐츠 기획 · 아카이브 구조 설계</span></div>
+          <div class="rl"><span class="rn">2.</span><span class="rt">전문 촬영(컨소시엄) · 디자인 리뉴얼 · UI/UX</span></div>
+          <div class="rl"><span class="rn">3.</span><span class="rt">콘텐츠·지도·아카이브 페이지 + CMS 개발</span></div>
+          <div class="rl"><span class="rn">4.</span><span class="rt">통합 예약·결제 시스템 + 통계·SNS·팝업</span></div>
+          <div class="rl"><span class="rn">5.</span><span class="rt">QA·서버 안정화 · 정식 오픈 · 교육·인수인계</span></div>
+        </div>
+
+        <div style="margin-top:18px; padding:18px 24px; background:var(--accent); color:#fff; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; line-height:1.55;">
+          오픈 후 <strong>무상 유지보수</strong> 포함 — 버그 수정·콘텐츠 운영 지원·관리자 안정화 지원.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">14 / 18</div>
+  </div>
+
+  <!-- 10 WBS 16 WEEK -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 10</span> The Launch · 16주 일정</div>
+    <h2 class="ed-title" style="font-size:5.061rem;">계약 후 <em>약 16주(4개월)</em> 구축.</h2>
+
+    <div style="margin-top:18px; background:#f7f7f8; padding:24px 28px;">
+      <div style="display:grid; grid-template-columns:200px repeat(8, 1fr); gap:4px; align-items:center; font-family:'Pretendard Variable','Pretendard',sans-serif;">
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.16em; color:#888; text-transform:uppercase; padding:8px 0;">작업 / 격주</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W1-2</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W3-4</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W5-6</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W7-8</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W9-10</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W11-12</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W13-14</div>
+        <div style="font-size:0.893rem; font-weight:700; color:#888; text-align:center; padding:8px 0;">W15-16</div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">요구사항·콘텐츠 기획·아카이브 설계</div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">전문 사진·드론 촬영 (컨소시엄)</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#114A38; margin:6px 0;"></div>
+        <div style="height:16px; background:#114A38; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">디자인 리뉴얼·UI/UX·반응형</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">콘텐츠·지도·아카이브 + CMS</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">통합 예약·결제 시스템 ★</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#1E7A5E; margin:6px 0;"></div>
+        <div style="height:16px; background:#1E7A5E; margin:6px 0;"></div>
+        <div style="height:16px; background:#1E7A5E; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">통계·SNS연동·팝업·공유</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">서버 세팅·안정화·QA</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.16rem; font-weight:500; padding:8px 0;">정식 오픈·교육·매뉴얼·보고서</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; outline:3px solid #000; margin:6px 0;"></div>
+      </div>
+
+      <div style="display:flex; gap:24px; margin-top:18px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.071rem; color:#666;">
+        <span><span style="display:inline-block; width:12px; height:12px; background:#6b7280; vertical-align:middle; margin-right:8px;"></span>핵심 작업</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#1E7A5E; vertical-align:middle; margin-right:8px;"></span>통합 예약 (핵심 차별점)</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#114A38; vertical-align:middle; margin-right:8px;"></span>촬영 (컨소시엄)</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#444; vertical-align:middle; margin-right:8px;"></span>디자인 / QA</span>
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px; opacity:0.4;">15 / 18</div>
+  </div>
+
+  <!-- 11 COST -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 11</span> The Cost</div>
+    <h2 class="ed-title" style="color:var(--ink); font-size:5.4rem;">총 견적<br><em>₩ 47,000,000 (VAT 포함)</em></h2>
+    <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; color:var(--ink-3, #525252); margin-top:-6px; margin-bottom:6px;">※ 발주 예산(4,600~4,700만) 범위 내 산정. 전문 촬영(컨소시엄) 비용 포함. 요구사항 확정에 따라 <strong style="color:var(--accent);">항목·범위 조정 가능</strong>합니다.</p>
+
+    <div class="ed-two-col" style="margin-top:18px;">
+      <div>
+        <div class="cost-block dark" style="padding:24px 30px;">
+          <h4 style="margin-bottom:14px;">영역별 비용 구성</h4>
+          <div class="cost-list">
+            <div class="cl-item"><span class="cl-name">① 기획·PM·콘텐츠 기획 (아카이브 구조 설계 포함)</span><span class="cl-value">₩ 6,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">② 전문 사진·드론 촬영 <strong style="color:var(--accent);">(컨소시엄)</strong></span><span class="cl-value">₩ 6,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">③ 디자인 리뉴얼·UI/UX·반응형·지도 디자인</span><span class="cl-value">₩ 7,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">④ 마을 소개·콘텐츠·아카이브 개발 + CMS</span><span class="cl-value">₩ 8,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">⑤ 통합 숙박 예약 시스템 (예약엔진·PG) ★</span><span class="cl-value">₩ 10,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">⑥ 관리자·통계·SNS연동·팝업·공유 기능</span><span class="cl-value">₩ 6,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">⑦ 서버 세팅·안정화·교육·매뉴얼·결과보고서</span><span class="cl-value">₩ 4,000,000</span></div>
+            <div class="cl-item cl-total"><span class="cl-name">합계 (VAT 포함)</span><span class="cl-value">₩ 47,000,000</span></div>
+          </div>
+        </div>
+
+        <div class="save-box">
+          <span class="sb-num">4,700</span>
+          <span class="sb-text"><strong>발주 예산 범위 내 산정.</strong> 항목별 가중치는 미팅 시 발주처 우선순위에 맞춰 재조정 가능하며, 범위 축소 시 비용 절감도 가능합니다.</span>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.815rem; line-height:1.55; color:var(--ink-2, #262626); border-top:3px solid var(--ink); padding-top:16px; margin-bottom:22px;">
+          마을 플랫폼은 한 번 잘 만들면 콘텐츠가 쌓일수록 가치가 커집니다. CMS 기반으로 만들어 사업 종료 후에도 기관이 직접 운영·확장할 수 있게 합니다.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.1);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.2rem; line-height:1; color:var(--ink); min-width:150px;">16<span style="font-size:1.6rem;">주</span></span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; color:var(--ink-3, #525252); line-height:1.5;">계약 후 정식 오픈까지 (약 4개월)</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.1);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.2rem; line-height:1; color:var(--ink); min-width:150px;">컨소시엄</span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; color:var(--ink-3, #525252); line-height:1.5;">전문 사진·드론 촬영 업체 포함 (예산 내)</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px;">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.2rem; line-height:1; color:var(--ink); min-width:150px;">+α</span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; color:var(--ink-3, #525252); line-height:1.5;">오픈 후 무상 유지보수 포함 · 월 운영 계약 별도 협의</span>
+          </div>
+        </div>
+
+        <div style="margin-top:18px; padding:16px 22px; background:#fff; color:#000; border:1px solid #e5e7eb; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.2rem; line-height:1.6;">
+          ※ PG 결제 수수료, 서버·도메인 사용료, 지도 API 등 외부 서비스 비용은 발주처 부담(실비) 권장. 별도 협의.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">16 / 18</div>
+  </div>
+
+  <!-- 12 TECH -->
+  <div class="slide light dense">
+    <div class="section-mark"><span class="acc">§ 12</span> The Tech</div>
+    <h2 class="ed-title">안정성과 운영 편의를<br><em>모두 갖춘 구성.</em></h2>
+    <p class="lede" style="margin-bottom:14px;">준공공기관 운영 환경에 맞춰 <strong>안정적인 호스팅·관리 편의·보안</strong>을 우선합니다. 콘텐츠 운영이 잦은 특성상 관리자 CMS를 중심에 두고, 예약·결제는 검증된 국내 PG로 연동합니다.</p>
+
+    <div class="tech-compare">
+      <div class="tc-cell hdr">항목</div>
+      <div class="tc-cell hdr acc">권장 구성</div>
+      <div class="tc-cell hdr">비고</div>
+
+      <div class="tc-cell label">웹 프론트엔드</div>
+      <div class="tc-cell acc">Next.js · React · 반응형(PC·모바일·태블릿)</div>
+      <div class="tc-cell">SEO·속도 최적화</div>
+
+      <div class="tc-cell label">백엔드 · CMS</div>
+      <div class="tc-cell acc">관리자 CMS · REST API</div>
+      <div class="tc-cell">코드 수정 없이 콘텐츠 운영</div>
+
+      <div class="tc-cell label">데이터베이스</div>
+      <div class="tc-cell acc">PostgreSQL / MySQL</div>
+      <div class="tc-cell">예약·콘텐츠·아카이브</div>
+
+      <div class="tc-cell label">예약·결제</div>
+      <div class="tc-cell acc">통합 예약 엔진 + 국내 PG(토스/KG 등)</div>
+      <div class="tc-cell">실시간 재고·환불</div>
+
+      <div class="tc-cell label">지도</div>
+      <div class="tc-cell acc">네이버/카카오 지도 API · 커스텀 마커</div>
+      <div class="tc-cell">인터랙티브 마을 지도</div>
+
+      <div class="tc-cell label">SNS · 공유</div>
+      <div class="tc-cell acc">인스타·페북 연동 · OG 공유 · 팝업</div>
+      <div class="tc-cell">마케팅·확산</div>
+
+      <div class="tc-cell label">호스팅</div>
+      <div class="tc-cell acc">국내 클라우드(NCP/AWS) · SSL · 백업</div>
+      <div class="tc-cell">공공 운영 안정성</div>
+
+      <div class="tc-cell label" style="border-bottom:none;">통계</div>
+      <div class="tc-cell acc" style="border-bottom:none;">관리자 통계 대시보드 · GA 연동</div>
+      <div class="tc-cell" style="border-bottom:none;">방문·예약·매출</div>
+    </div>
+
+    <div style="margin-top:16px; padding:14px 22px; background:var(--accent); color:#fff; display:inline-flex; gap:18px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.414rem;">권고</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem;">콘텐츠 운영이 핵심인 공공 플랫폼 특성상 <strong>관리자 CMS + 국내 클라우드 + 검증된 PG</strong> 구성이 가장 안전합니다.</span>
+    </div>
+
+    <div class="slide-num">17 / 18</div>
+  </div>
+
+  <!-- 14 CONCLUSION -->
+  <div class="slide light" style="padding:50px 100px; justify-content:space-between;">
+    <div>
+      <div class="section-mark"><span class="acc">§ 13</span> In Conclusion</div>
+      <h2 class="ed-title" style="font-size:5.4rem;">마을을 담고,<br><em>예약까지 한 흐름으로 잇습니다.</em></h2>
+      <p class="lede" style="font-size:1.815rem;">단순 숙박 예약 사이트가 아니라, <strong>마을의 이야기·콘텐츠·아카이브와 여러 숙소의 통합 예약을 하나로 잇는 마을 포털</strong>입니다. 레퍼런스보다 더 높은 디자인 완성도와 인터랙티브 지도로, 사업 종료 후에도 기관이 직접 운영·확장할 수 있는 플랫폼을 약 16주에 구축합니다.</p>
+    </div>
+
+    <div class="ed-three-col" style="margin-top:0;">
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">범위</div>
+        <h4 style="font-size:1.86rem;">사용자 19 · 관리자 15<br>페이지 통합 구축</h4>
+        <ul><li>마을 소개·콘텐츠·아카이브</li><li>통합 예약 + CMS 운영</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">차별점</div>
+        <h4 style="font-size:1.86rem;">인터랙티브 지도 +<br>디자인 완성도</h4>
+        <ul><li>전문 촬영(컨소시엄) 반영</li><li>디지털 아카이브 보존</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">조건</div>
+        <h4 style="font-size:1.86rem;">₩ 47,000,000 · 16주<br>+ 무상 유지보수</h4>
+        <ul><li>발주 예산 범위 내</li><li>요구사항 확정 후 조정 가능</li></ul>
+      </div>
+    </div>
+
+    <div class="end-strap">
+      <div style="display:flex; align-items:center; gap:20px;">
+        <img src="assets/maximpact_logo.png" alt="MaxImpact" style="height:48px; width:auto;">
+        <div style="width:2px; height:42px; background:var(--ink);"></div>
+        <div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:2.0rem; line-height:1; color:var(--ink); letter-spacing:0.05em;">VILLAGE PLATFORM · PROPOSAL</div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.5rem; color:#666; margin-top:8px;">한 마을, 하나의 사이트 — 소개부터 예약까지</div>
+        </div>
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.28rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-3); line-height:2; font-weight:600;">
+        제안 · MAXIMPACT + 촬영 컨소시엄<br>NEXT STEP — 요구사항 확정 미팅
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px;">18 / 18</div>
+  </div>
+
+</div>
+
+</body>
+</html>

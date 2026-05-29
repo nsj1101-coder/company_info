@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘텐츠 관리 (CMS) · 달내마을 ADMIN</title>
+<meta name="description" content="달내마을 통합 포털 관리자 — 마을 소개·스토리·콘텐츠 페이지 등록·수정(A-04)">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+</head>
+<body>
+
+<div class="adm">
+
+  <!-- ░░ Sidebar ░░ -->
+  <aside class="side">
+    <div class="side-brand">
+      <span class="m">月</span>
+      <span>
+        <b>달내마을</b>
+        <small>ADMIN</small>
+      </span>
+    </div>
+
+    <div class="side-group">현황</div>
+    <a class="item" href="index.html"> 대시보드</a>
+    <a class="item" href="stats.html"> 통계·리포트</a>
+
+    <div class="side-group">콘텐츠</div>
+    <a class="item" href="banner.html"> 메인·배너</a>
+    <a class="item active" href="content.html"> 콘텐츠 관리</a>
+    <a class="item" href="archive.html"> 아카이브 관리</a>
+    <a class="item" href="map.html"> 지도 관리</a>
+    <a class="item" href="event.html"> 이벤트 관리</a>
+
+    <div class="side-group">예약·운영</div>
+    <a class="item" href="stays.html"> 숙박업체 관리 <span class="cnt">12</span></a>
+    <a class="item" href="reservations.html"> 예약 관리 <span class="cnt">8</span></a>
+    <a class="item" href="shops.html"> 상점 관리</a>
+    <a class="item" href="members.html"> 회원 관리</a>
+
+    <div class="side-group">사이트</div>
+    <a class="item" href="board.html"> 게시판·공지</a>
+    <a class="item" href="popup.html"> 팝업 관리</a>
+    <a class="item" href="sns.html"> SNS 연동</a>
+    <a class="item" href="settings.html"> 환경설정·권한</a>
+  </aside>
+
+  <!-- ░░ Main ░░ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar-adm">
+      <div class="search">
+        <input type="text" placeholder="콘텐츠·페이지·태그 검색…">
+      </div>
+      <div class="acts">
+        
+        <div class="who">
+          <span class="av">관</span>
+          <span>
+            <b>마을운영자</b>
+            <small>최고관리자</small>
+          </span>
+        </div>
+        <a href="../index.html" class="abtn abtn-line">사이트 보기</a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- 1. Page title -->
+      <div class="page-title">
+        <div>
+          <h1>콘텐츠 관리 (CMS)</h1>
+          <p>마을 소개·스토리·콘텐츠 페이지를 직접 등록·수정합니다</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <a href="#" class="abtn abtn-line">미리보기</a>
+          <a href="#" class="abtn abtn-primary">발행</a>
+        </div>
+      </div>
+
+      <!-- 2. Toolbar -->
+      <div class="toolbar">
+        <div class="seg">
+          <button class="active">전체</button>
+          <button>발행됨</button>
+          <button>임시저장</button>
+          <button>예약발행</button>
+        </div>
+        <div class="grow"></div>
+        <input type="text" placeholder="콘텐츠 제목 검색" style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;min-width:200px;">
+        <a href="#" class="abtn abtn-primary">+ 새 콘텐츠</a>
+      </div>
+
+      <!-- 3. Editor + side panels -->
+      <div class="cols cols-2-1">
+
+        <!-- 좌: 콘텐츠 편집기 -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>콘텐츠 편집기</h3>
+            <span class="st st-wait">임시저장 · 3분 전</span>
+          </div>
+          <div class="panel-body">
+
+            <div class="afield">
+              <label>제목</label>
+              <input type="text" value="달이 머무는 천변, 천 년의 이야기">
+            </div>
+
+            <div class="afield-row">
+              <div class="afield">
+                <label>카테고리</label>
+                <select>
+                  <option>마을소개</option>
+                  <option>스토리</option>
+                  <option>문화</option>
+                </select>
+              </div>
+              <div class="afield">
+                <label>슬러그 (URL)</label>
+                <input type="text" value="dalnae-story">
+              </div>
+            </div>
+
+            <!-- 에디터 툴바 -->
+            <div class="afield">
+              <label>본문</label>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;border:1px solid var(--adm-line);border-bottom:none;border-radius:9px 9px 0 0;padding:8px 10px;background:var(--adm-bg)">
+                <button class="abtn abtn-ghost" style="padding:6px 11px;font-weight:700"><b>B</b></button>
+                <button class="abtn abtn-ghost" style="padding:6px 11px;font-style:italic">I</button>
+                <button class="abtn abtn-ghost" style="padding:6px 11px;text-decoration:underline">U</button>
+                <span style="width:1px;background:var(--adm-line);margin:2px 5px"></span>
+                <button class="abtn abtn-ghost" style="padding:6px 11px">제목 H</button>
+                <button class="abtn abtn-ghost" style="padding:6px 11px"> 인용</button>
+                <span style="width:1px;background:var(--adm-line);margin:2px 5px"></span>
+                <button class="abtn abtn-ghost" style="padding:6px 11px"> 이미지</button>
+                <button class="abtn abtn-ghost" style="padding:6px 11px"> 링크</button>
+              </div>
+              <textarea rows="11" style="border-radius:0 0 9px 9px;line-height:1.7;font-size:.92rem">달내마을은 굽이쳐 흐르는 달내천을 따라 천 년의 세월을 품어온 한옥 마을입니다. 달빛이 천변에 머문다 하여 '달내'라 불리었고, 그 이름처럼 밤이면 물 위로 은은한 달빛이 내려앉습니다.
+
+마을 어귀의 솔숲을 지나면 돌담을 따라 굽이굽이 이어지는 고택들이 손님을 맞이합니다. 수백 년을 이어온 기와지붕과 마당의 장독대, 그리고 사철 다른 빛으로 물드는 천변 풍경은 그 자체로 한 폭의 그림이 됩니다.
+
+이곳에서는 전통주를 빚는 양조장, 손으로 짓는 가마솥 밥상, 그리고 마을 어르신들이 들려주는 옛이야기를 함께 만날 수 있습니다. 달내마을의 하루는 느리지만, 그 느림 속에 천 년의 깊이가 담겨 있습니다.</textarea>
+            </div>
+
+            <!-- 대표 이미지 업로드 -->
+            <div class="afield">
+              <label>대표 이미지</label>
+              <div style="display:flex;gap:16px;align-items:stretch">
+                <div style="flex:1;border:2px dashed var(--adm-line);border-radius:12px;padding:22px;text-align:center;color:var(--adm-muted);display:flex;flex-direction:column;justify-content:center;gap:6px">
+                  <div style="font-size:1.6rem"></div>
+                  <div style="font-size:.86rem;font-weight:600;color:var(--adm-ink)">이미지를 끌어다 놓거나 클릭하여 업로드</div>
+                  <small>JPG·PNG·WEBP · 권장 1600×900 · 최대 5MB</small>
+                </div>
+                <div style="position:relative;width:150px;flex-shrink:0">
+                  <img src="https://picsum.photos/seed/dalnaecover/400/300" alt="대표 이미지" style="width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid var(--adm-line)">
+                  <span style="position:absolute;top:7px;right:7px;background:var(--adm-red);color:#fff;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px">대표</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 태그 -->
+            <div class="afield">
+              <label>태그</label>
+              <input type="text" value="한옥, 달내천, 마을소개, 전통, 스토리">
+            </div>
+
+            <!-- 하단 버튼 -->
+            <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--adm-line);padding-top:18px;margin-top:4px">
+              <a href="#" class="abtn abtn-line">임시저장</a>
+              <a href="#" class="abtn abtn-primary">발행</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 우: 사이드 패널들 -->
+        <div style="display:flex;flex-direction:column;gap:18px">
+
+          <!-- 발행 설정 -->
+          <div class="panel">
+            <div class="panel-head"><h3>발행 설정</h3></div>
+            <div class="panel-body">
+              <div class="afield">
+                <label>상태</label>
+                <select>
+                  <option>발행됨</option>
+                  <option>임시저장</option>
+                  <option>예약발행</option>
+                  <option>비공개</option>
+                </select>
+              </div>
+              <div class="afield">
+                <label>발행일</label>
+                <input type="date" value="2026-05-29">
+              </div>
+              <div class="afield">
+                <label>공개범위</label>
+                <select>
+                  <option>전체 공개</option>
+                  <option>회원 전용</option>
+                  <option>관리자 전용</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:6px">
+                <label style="font-size:.82rem;font-weight:700">메뉴 노출</label>
+                <span style="position:relative;width:46px;height:26px;background:var(--adm-ok);border-radius:999px;display:inline-block">
+                  <span style="position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEO 설정 -->
+          <div class="panel">
+            <div class="panel-head"><h3>SEO 설정</h3></div>
+            <div class="panel-body">
+              <div class="afield">
+                <label>메타 제목</label>
+                <input type="text" value="달내마을 소개 — 천 년의 한옥 이야기">
+              </div>
+              <div class="afield" style="margin-bottom:0">
+                <label>메타 설명</label>
+                <input type="text" value="달내천을 따라 흐르는 천 년의 한옥 마을, 달내마을을 소개합니다.">
+              </div>
+            </div>
+          </div>
+
+          <!-- 변경 이력 -->
+          <div class="panel">
+            <div class="panel-head"><h3>변경 이력</h3></div>
+            <div class="panel-body">
+              <ul class="act-list">
+                <li>
+                  
+                  <span><b>본문 수정</b> · 마을운영자<br><small>2026.05.29 14:02</small></span>
+                </li>
+                <li>
+                  
+                  <span><b>대표 이미지 교체</b> · 마을운영자<br><small>2026.05.29 11:40</small></span>
+                </li>
+                <li>
+                  
+                  <span><b>발행</b> · 콘텐츠담당<br><small>2026.05.27 09:18</small></span>
+                </li>
+                <li style="border-bottom:none">
+                  <span class="ic" style="background:#f7e2e0;color:var(--adm-red)">＋</span>
+                  <span><b>최초 작성</b> · 콘텐츠담당<br><small>2026.05.25 16:55</small></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 4. 전체 콘텐츠 목록 -->
+      <div class="panel" style="margin-top:24px">
+        <div class="panel-head">
+          <h3>전체 콘텐츠 목록</h3>
+          <small style="color:var(--adm-muted)">총 24개 · 6개 표시</small>
+        </div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>제목</th>
+              <th>카테고리</th>
+              <th>작성자</th>
+              <th>상태</th>
+              <th style="text-align:right">조회수</th>
+              <th>수정일</th>
+              <th style="text-align:right">관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>마을 소개</b></td>
+              <td><span class="st st-info">마을소개</span></td>
+              <td>마을운영자</td>
+              <td><span class="st st-ok">발행</span></td>
+              <td style="text-align:right">12,840</td>
+              <td>2026.05.29</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+            <tr>
+              <td><b>달내천 이야기</b></td>
+              <td><span class="st st-info">스토리</span></td>
+              <td>콘텐츠담당</td>
+              <td><span class="st st-ok">발행</span></td>
+              <td style="text-align:right">8,215</td>
+              <td>2026.05.24</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+            <tr>
+              <td><b>돌담길 산책 코스</b></td>
+              <td><span class="st st-info">스토리</span></td>
+              <td>콘텐츠담당</td>
+              <td><span class="st st-wait">임시저장</span></td>
+              <td style="text-align:right">—</td>
+              <td>2026.05.28</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+            <tr>
+              <td><b>전통주 양조 문화</b></td>
+              <td><span class="st st-info">문화</span></td>
+              <td>마을운영자</td>
+              <td><span class="st st-ok">발행</span></td>
+              <td style="text-align:right">5,602</td>
+              <td>2026.05.20</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+            <tr>
+              <td><b>아키페스타 소개</b></td>
+              <td><span class="st st-info">문화</span></td>
+              <td>이벤트팀</td>
+              <td><span class="st st-info">예약</span></td>
+              <td style="text-align:right">—</td>
+              <td>2026.06.01 예정</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+            <tr>
+              <td><b>마을 사람들 인터뷰</b></td>
+              <td><span class="st st-info">스토리</span></td>
+              <td>콘텐츠담당</td>
+              <td><span class="st st-ok">발행</span></td>
+              <td style="text-align:right">3,471</td>
+              <td>2026.05.15</td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">수정</a>
+                <a href="#" class="abtn abtn-ghost">삭제</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- pagination -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid var(--adm-line)">
+          <small style="color:var(--adm-muted)">1–6 / 24개</small>
+          <div style="display:flex;gap:6px">
+            <a href="#" class="abtn abtn-line" style="padding:7px 12px">‹</a>
+            <a href="#" class="abtn abtn-primary" style="padding:7px 13px">1</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 13px">2</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 13px">3</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 12px">›</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

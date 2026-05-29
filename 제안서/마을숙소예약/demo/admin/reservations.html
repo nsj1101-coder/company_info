@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약 관리 · 달내마을 ADMIN</title>
+<meta name="description" content="달내마을 통합 포털 관리자 — 예약 조회·승인·취소·환불 처리(A-09)">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+</head>
+<body>
+
+<div class="adm">
+
+  <!-- ░░ Sidebar ░░ -->
+  <aside class="side">
+    <div class="side-brand">
+      <span class="m">月</span>
+      <span>
+        <b>달내마을</b>
+        <small>ADMIN</small>
+      </span>
+    </div>
+
+    <div class="side-group">현황</div>
+    <a class="item" href="index.html"> 대시보드</a>
+    <a class="item" href="stats.html"> 통계·리포트</a>
+
+    <div class="side-group">콘텐츠</div>
+    <a class="item" href="banner.html"> 메인·배너</a>
+    <a class="item" href="content.html"> 콘텐츠 관리</a>
+    <a class="item" href="archive.html"> 아카이브 관리</a>
+    <a class="item" href="map.html"> 지도 관리</a>
+    <a class="item" href="event.html"> 이벤트 관리</a>
+
+    <div class="side-group">예약·운영</div>
+    <a class="item" href="stays.html"> 숙박업체 관리 <span class="cnt">12</span></a>
+    <a class="item active" href="reservations.html"> 예약 관리 <span class="cnt">8</span></a>
+    <a class="item" href="shops.html"> 상점 관리</a>
+    <a class="item" href="members.html"> 회원 관리</a>
+
+    <div class="side-group">사이트</div>
+    <a class="item" href="board.html"> 게시판·공지</a>
+    <a class="item" href="popup.html"> 팝업 관리</a>
+    <a class="item" href="sns.html"> SNS 연동</a>
+    <a class="item" href="settings.html"> 환경설정·권한</a>
+  </aside>
+
+  <!-- ░░ Main ░░ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar-adm">
+      <div class="search">
+        <input type="text" placeholder="숙소·객실·예약번호 검색…">
+      </div>
+      <div class="acts">
+        
+        <div class="who">
+          <span class="av">관</span>
+          <span>
+            <b>마을운영자</b>
+            <small>최고관리자</small>
+          </span>
+        </div>
+        <a href="../index.html" class="abtn abtn-line">사이트 보기</a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- 1. Page title -->
+      <div class="page-title">
+        <div>
+          <h1>예약 관리</h1>
+          <p>들어온 예약을 조회·승인·취소·환불 처리합니다</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <a href="#" class="abtn abtn-line"> 예약 내보내기</a>
+          <a href="#" class="abtn abtn-primary">+ 수기 예약 등록</a>
+        </div>
+      </div>
+
+      <!-- 2. KPIs -->
+      <div class="kpis">
+        <div class="kpi">
+          <div class="lbl"> 신규(승인대기)</div>
+          <div class="num">8</div>
+          <div class="delta up">▲ 전일 대비 +3</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 오늘 체크인</div>
+          <div class="num">9</div>
+          <div class="delta up">▲ +2</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 오늘 체크아웃</div>
+          <div class="num">5</div>
+          <div class="delta down">▼ -1</div>
+        </div>
+        <div class="kpi">
+          <div class="lbl"> 이번 달 취소·환불</div>
+          <div class="num">3</div>
+          <div class="delta down">▼ 전월 대비 -2</div>
+        </div>
+      </div>
+
+      <!-- 3. Toolbar -->
+      <div class="toolbar">
+        <div class="seg">
+          <button class="active">전체</button>
+          <button>승인대기</button>
+          <button>확정</button>
+          <button>이용완료</button>
+          <button>취소·환불</button>
+        </div>
+        <div class="grow"></div>
+        <select style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;">
+          <option>기간 · 최근 7일</option>
+          <option>오늘</option>
+          <option>이번 주</option>
+          <option>이번 달</option>
+          <option>직접 지정</option>
+        </select>
+        <input type="text" placeholder="예약자·예약번호 검색" style="padding:8px 14px;border:1px solid var(--adm-line);border-radius:9px;background:#fff;font-size:.85rem;min-width:200px;">
+      </div>
+
+      <!-- 4. Reservation list -->
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-head">
+          <h3>예약 목록</h3>
+          <small style="color:var(--adm-muted)">총 36건 · 9건 표시</small>
+        </div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th style="width:34px"><input type="checkbox"></th>
+              <th>예약번호</th>
+              <th>예약자</th>
+              <th>숙소·객실</th>
+              <th>체크인~체크아웃</th>
+              <th style="text-align:center">인원</th>
+              <th>결제금액</th>
+              <th>상태</th>
+              <th style="text-align:right">관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 1 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260529-001</b></td>
+              <td><span class="twoline"><b>김도윤</b><small>010-2841-5520</small></span></td>
+              <td><span class="twoline"><b>솔재고택</b><small>사랑채</small></span></td>
+              <td><span class="twoline"><b>06.02 ~ 06.03</b><small>1박</small></span></td>
+              <td style="text-align:center">2</td>
+              <td><b>₩180,000</b></td>
+              <td><span class="st st-wait">승인대기</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-primary">승인</a>
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 2 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260529-002</b></td>
+              <td><span class="twoline"><b>이서연</b><small>010-7193-2284</small></span></td>
+              <td><span class="twoline"><b>달빛채</b><small>독채 전체</small></span></td>
+              <td><span class="twoline"><b>06.05 ~ 06.07</b><small>2박</small></span></td>
+              <td style="text-align:center">4</td>
+              <td><b>₩480,000</b></td>
+              <td><span class="st st-wait">승인대기</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-primary">승인</a>
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 3 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260528-014</b></td>
+              <td><span class="twoline"><b>박준호</b><small>010-3357-8810</small></span></td>
+              <td><span class="twoline"><b>바람골</b><small>2층 도미토리</small></span></td>
+              <td><span class="twoline"><b>05.29 ~ 05.30</b><small>1박</small></span></td>
+              <td style="text-align:center">2</td>
+              <td><b>₩130,000</b></td>
+              <td><span class="st st-ok">확정</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 4 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260528-009</b></td>
+              <td><span class="twoline"><b>최은비</b><small>010-9924-1167</small></span></td>
+              <td><span class="twoline"><b>마루재</b><small>행랑채</small></span></td>
+              <td><span class="twoline"><b>05.31 ~ 06.02</b><small>2박</small></span></td>
+              <td style="text-align:center">3</td>
+              <td><b>₩300,000</b></td>
+              <td><span class="st st-ok">확정</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 5 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260527-021</b></td>
+              <td><span class="twoline"><b>정민재</b><small>010-4408-6633</small></span></td>
+              <td><span class="twoline"><b>천일정</b><small>독채 전체</small></span></td>
+              <td><span class="twoline"><b>06.10 ~ 06.11</b><small>1박</small></span></td>
+              <td style="text-align:center">2</td>
+              <td><b>₩200,000</b></td>
+              <td><span class="st st-wait">승인대기</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-primary">승인</a>
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 6 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260526-007</b></td>
+              <td><span class="twoline"><b>한지우</b><small>010-2270-9941</small></span></td>
+              <td><span class="twoline"><b>돌담집</b><small>안채</small></span></td>
+              <td><span class="twoline"><b>05.24 ~ 05.26</b><small>2박</small></span></td>
+              <td style="text-align:center">4</td>
+              <td><b>₩110,000</b></td>
+              <td><span class="st st-info">이용완료</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 7 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260526-003</b></td>
+              <td><span class="twoline"><b>오세훈</b><small>010-6612-3389</small></span></td>
+              <td><span class="twoline"><b>강나루</b><small>독채 전체</small></span></td>
+              <td><span class="twoline"><b>05.22 ~ 05.23</b><small>1박</small></span></td>
+              <td style="text-align:center">2</td>
+              <td><b>₩210,000</b></td>
+              <td><span class="st st-info">이용완료</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 8 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260525-018</b></td>
+              <td><span class="twoline"><b>윤하늘</b><small>010-5538-2204</small></span></td>
+              <td><span class="twoline"><b>솔재고택</b><small>별채</small></span></td>
+              <td><span class="twoline"><b>06.14 ~ 06.16</b><small>2박</small></span></td>
+              <td style="text-align:center">4</td>
+              <td><b>₩520,000</b></td>
+              <td><span class="st st-cancel">취소</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+            <!-- 9 -->
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><b>DN-20260524-011</b></td>
+              <td><span class="twoline"><b>강수진</b><small>010-8801-7752</small></span></td>
+              <td><span class="twoline"><b>바람골</b><small>1층 가족실</small></span></td>
+              <td><span class="twoline"><b>06.20 ~ 06.21</b><small>1박</small></span></td>
+              <td style="text-align:center">3</td>
+              <td><b>₩95,000</b></td>
+              <td><span class="st st-ok">확정</span></td>
+              <td style="text-align:right;white-space:nowrap">
+                <a href="#" class="abtn abtn-line">상세</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- pagination -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-top:1px solid var(--adm-line)">
+          <small style="color:var(--adm-muted)">1–9 / 36건</small>
+          <div style="display:flex;gap:6px">
+            <a href="#" class="abtn abtn-line" style="padding:7px 12px">‹</a>
+            <a href="#" class="abtn abtn-primary" style="padding:7px 13px">1</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 13px">2</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 13px">3</a>
+            <a href="#" class="abtn abtn-line" style="padding:7px 12px">›</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Detail + status -->
+      <div class="cols cols-2-1">
+
+        <!-- 5a. Reservation detail -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>예약 상세</h3>
+            <span class="st st-wait">승인대기</span>
+          </div>
+          <div class="panel-body">
+
+            <div style="display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px dashed var(--adm-line);margin-bottom:18px">
+              <span class="who" style="gap:12px">
+                <span class="av" style="width:44px;height:44px;font-size:1rem">김</span>
+              </span>
+              <div>
+                <b style="font-family:var(--serif);font-size:1.2rem;display:block">DN-20260529-001</b>
+                <small style="color:var(--adm-muted)">접수 2026.05.29 09:24 · 온라인 예약</small>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:.9rem">
+              <div style="grid-column:1/-1;font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--adm-muted);text-transform:uppercase;margin-bottom:2px">예약자 정보</div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">이름</span><b>김도윤</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">연락처</span><b>010-2841-5520</b></div>
+              <div style="display:flex;justify-content:space-between;grid-column:1/-1"><span style="color:var(--adm-muted)">이메일</span><b>doyun.kim@example.com</b></div>
+
+              <div style="grid-column:1/-1;font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--adm-muted);text-transform:uppercase;margin:14px 0 2px">숙소·일정</div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">숙소</span><b>솔재고택</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">객실</span><b>사랑채 (2인)</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">체크인</span><b>2026.06.02 (화) 15:00</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">체크아웃</span><b>2026.06.03 (수) 11:00</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">숙박</span><b>1박 · 성인 2명</b></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--adm-muted)">요청사항</span><b>늦은 체크인 예정</b></div>
+            </div>
+
+            <!-- 결제 내역 summary -->
+            <div style="background:var(--adm-bg);border:1px solid var(--adm-line);border-radius:12px;padding:16px 18px;margin-top:18px;font-size:.9rem">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--adm-muted);text-transform:uppercase;margin-bottom:10px">결제 내역</div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--adm-muted)">객실요금 (1박)</span><span>₩180,000</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--adm-muted)">청소비</span><span>₩20,000</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--adm-muted)">마을상품권 할인</span><span style="color:var(--adm-danger)">-₩20,000</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0 2px;border-top:1px solid var(--adm-line);margin-top:6px"><b>총 결제금액</b><b style="font-family:var(--serif);font-size:1.15rem;color:var(--adm-red)">₩180,000</b></div>
+              <small style="color:var(--adm-muted)">카드 결제 · 입금 대기</small>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:18px">
+              <a href="#" class="abtn abtn-primary" style="flex:1;justify-content:center">승인</a>
+              <a href="#" class="abtn abtn-line" style="flex:1;justify-content:center">취소·환불</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 5b. Status overview -->
+        <div class="panel">
+          <div class="panel-head">
+            <h3>상태별 현황</h3>
+            <small style="color:var(--adm-muted)">이번 달</small>
+          </div>
+          <div class="panel-body">
+
+            <div class="donut">
+              <div class="mid">
+                <b>36</b>
+                <small style="color:var(--adm-muted)">총 예약</small>
+              </div>
+            </div>
+
+            <div class="legend" style="flex-direction:column;gap:10px;margin-top:22px">
+              <span style="display:flex;align-items:center;justify-content:space-between;width:100%"><span><i style="background:var(--adm-red)"></i>확정</span><b style="color:var(--adm-ink)">16건 · 45%</b></span>
+              <span style="display:flex;align-items:center;justify-content:space-between;width:100%"><span><i style="background:var(--adm-blue)"></i>승인대기</span><b style="color:var(--adm-ink)">8건 · 22%</b></span>
+              <span style="display:flex;align-items:center;justify-content:space-between;width:100%"><span><i style="background:var(--adm-gold)"></i>이용완료</span><b style="color:var(--adm-ink)">9건 · 25%</b></span>
+              <span style="display:flex;align-items:center;justify-content:space-between;width:100%"><span><i style="background:#d8cbb3"></i>취소·환불</span><b style="color:var(--adm-ink)">3건 · 8%</b></span>
+            </div>
+
+            <!-- 환불 처리 대기 -->
+            <div style="margin-top:24px">
+              <b style="font-family:var(--serif);font-size:1rem;display:block;margin-bottom:10px">환불 처리 대기 <span class="st st-cancel" style="font-size:.7rem">3</span></b>
+              <ul class="act-list">
+                <li>
+                  
+                  <span style="flex:1">
+                    <b>윤하늘 · 솔재고택</b><br>
+                    <small>DN-20260525-018 · ₩520,000</small>
+                  </span>
+                  <a href="#" class="abtn abtn-line" style="padding:6px 11px;font-size:.78rem">환불</a>
+                </li>
+                <li>
+                  
+                  <span style="flex:1">
+                    <b>임가은 · 달빛채</b><br>
+                    <small>DN-20260523-006 · ₩240,000</small>
+                  </span>
+                  <a href="#" class="abtn abtn-line" style="padding:6px 11px;font-size:.78rem">환불</a>
+                </li>
+                <li style="border-bottom:none">
+                  
+                  <span style="flex:1">
+                    <b>서태경 · 천일정</b><br>
+                    <small>DN-20260521-002 · ₩200,000</small>
+                  </span>
+                  <a href="#" class="abtn abtn-line" style="padding:6px 11px;font-size:.78rem">환불</a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

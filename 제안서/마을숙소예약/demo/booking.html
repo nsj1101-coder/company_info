@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약·결제 · 달내마을 月川</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="bg-hanji">
+
+<div class="topbar"><div class="wrap"><div>달내마을 통합 포털 · 月川 Village Portal</div><div class="util"><a href="#">로그인</a><a href="#">회원가입</a><a href="#">고객센터 1668-0000</a><a href="#">KOR · ENG</a></div></div></div>
+<header class="header"><div class="wrap">
+  <a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name">달내마을<small>DALNAE · 月川 VILLAGE</small></span></a>
+  <nav><ul class="gnb">
+    <li class="gnb-wrap"><a href="village.html">마을 소개</a></li>
+    <li class="gnb-wrap"><a href="map.html">마을 지도</a></li>
+    <li class="gnb-wrap"><a href="archive.html">콘텐츠·아카이브</a></li>
+    <li class="gnb-wrap active"><a href="stays.html">숙박 예약</a></li>
+    <li class="gnb-wrap"><a href="shops.html">상점·체험</a></li>
+    <li class="gnb-wrap"><a href="#">소식</a></li>
+  </ul></nav>
+  <div class="header-cta"><a href="stays.html" class="btn btn-primary btn-sm">실시간 예약</a><button class="hamburger"><span></span><span></span><span></span></button></div>
+</div></header>
+
+<section class="section-sm">
+  <div class="wrap" style="max-width:1000px;">
+    <h1 class="center" style="font-size:1.9rem;margin-bottom:8px;">예약 정보 확인 및 결제</h1>
+    <!-- steps -->
+    <div class="steps">
+      <div class="step"><span class="n">✓</span> 객실 선택</div>
+      <div class="bar"></div>
+      <div class="step active"><span class="n">2</span> 정보 입력·결제</div>
+      <div class="bar"></div>
+      <div class="step"><span class="n">3</span> 예약 완료</div>
+    </div>
+
+    <div class="split" style="grid-template-columns:1fr 360px;">
+      <!-- 입력 폼 -->
+      <div>
+        <div style="background:#fff;border:1px solid var(--line-soft);border-radius:var(--radius);padding:26px;margin-bottom:20px;">
+          <h3 style="font-size:1.2rem;margin-bottom:18px;">예약자 정보</h3>
+          <div class="field-row"><div class="field"><label>예약자 이름</label><input type="text" placeholder="홍길동"></div><div class="field"><label>휴대폰 번호</label><input type="tel" placeholder="010-0000-0000"></div></div>
+          <div class="field"><label>이메일</label><input type="email" placeholder="example@dalnae.kr"></div>
+          <div class="field"><label>요청사항 (선택)</label><textarea rows="3" placeholder="예: 아궁이 온돌 미리 데워주세요"></textarea></div>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--line-soft);border-radius:var(--radius);padding:26px;margin-bottom:20px;">
+          <h3 style="font-size:1.2rem;margin-bottom:18px;">결제 수단</h3>
+          <div class="tag-row" style="gap:10px;">
+            <button class="chip active">💳 신용·체크카드</button>
+            <button class="chip">🏦 계좌이체</button>
+            <button class="chip">📱 카카오페이</button>
+            <button class="chip">N 네이버페이</button>
+          </div>
+          <p class="muted mt-16" style="font-size:.88rem;">결제는 PG사(토스페이먼츠/KG이니시스 등) 연동으로 안전하게 처리됩니다.</p>
+        </div>
+
+        <div style="background:var(--paper-2);border-radius:var(--radius);padding:20px 24px;">
+          <label style="display:flex;gap:10px;align-items:flex-start;font-size:.92rem;"><input type="checkbox" checked style="width:auto;margin-top:4px;"> <span>예약 규정 및 취소·환불 정책에 동의합니다. <a href="#" style="color:var(--dan-red);text-decoration:underline;">전문 보기</a></span></label>
+        </div>
+      </div>
+
+      <!-- 요약 -->
+      <aside>
+        <div class="booking-box">
+          <div style="display:flex;gap:14px;align-items:center;margin-bottom:16px;">
+            <img src="https://picsum.photos/seed/soljae-1/200/200" style="width:64px;height:64px;border-radius:12px;object-fit:cover;" alt="">
+            <div><span class="badge badge-red" style="font-size:.7rem;">한옥고택</span><h4 style="font-family:var(--serif);margin-top:4px;">솔재고택 · 사랑채</h4></div>
+          </div>
+          <div class="summary">
+            <div class="row"><span>체크인</span><b>2026.06.14 (토) 15:00</b></div>
+            <div class="row"><span>체크아웃</span><b>2026.06.15 (일) 11:00</b></div>
+            <div class="row"><span>인원</span><b>성인 2명</b></div>
+            <div class="row"><span>객실요금 (1박)</span><span>180,000원</span></div>
+            <div class="row"><span>청소비</span><span>20,000원</span></div>
+            <div class="row"><span>마을 기금</span><span>2,000원</span></div>
+            <div class="row total"><span>총 결제금액</span><span style="color:var(--dan-red)">202,000원</span></div>
+          </div>
+          <a href="booking-done.html" class="btn btn-primary btn-lg" style="width:100%;margin-top:18px;">202,000원 결제하기</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap">
+  <div class="top">
+    <div><a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name" style="color:#fff">달내마을<small style="color:var(--gold-2)">DALNAE · 月川 VILLAGE</small></span></a><p class="desc">천 년을 머무는 마을, 달내마을 통합 소개·숙박예약 플랫폼.</p></div>
+    <div><h4>둘러보기</h4><ul><li><a href="village.html">마을 소개</a></li><li><a href="map.html">마을 지도</a></li><li><a href="archive.html">아카이브</a></li><li><a href="shops.html">상점·체험</a></li></ul></div>
+    <div><h4>예약·이용</h4><ul><li><a href="stays.html">숙박 예약</a></li><li><a href="#">예약 내역</a></li><li><a href="#">취소·환불 안내</a></li><li><a href="#">FAQ</a></li></ul></div>
+    <div><h4>고객센터</h4><ul><li><a href="#">1668-0000</a></li><li><a href="#">평일 09:00 – 18:00</a></li><li><a href="admin/index.html">관리자 로그인</a></li></ul></div>
+  </div>
+  <div class="bottom"><div>© 2026 달내마을 통합 포털. 제안용 데모.</div><div style="display:flex;gap:18px;"><a href="#">이용약관</a><a href="#">개인정보처리방침</a></div></div>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

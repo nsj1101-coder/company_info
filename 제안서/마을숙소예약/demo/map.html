@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인터랙티브 마을 지도 · 달내마을 月川</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="bg-hanji">
+
+<div class="topbar"><div class="wrap"><div>달내마을 통합 포털 · 月川 Village Portal</div><div class="util"><a href="#">로그인</a><a href="#">회원가입</a><a href="#">고객센터 1668-0000</a><a href="#">KOR · ENG</a></div></div></div>
+<header class="header"><div class="wrap">
+  <a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name">달내마을<small>DALNAE · 月川 VILLAGE</small></span></a>
+  <nav><ul class="gnb">
+    <li class="gnb-wrap"><a href="village.html">마을 소개</a></li>
+    <li class="gnb-wrap active"><a href="map.html">마을 지도</a></li>
+    <li class="gnb-wrap"><a href="archive.html">콘텐츠·아카이브</a></li>
+    <li class="gnb-wrap"><a href="stays.html">숙박 예약</a></li>
+    <li class="gnb-wrap"><a href="shops.html">상점·체험</a></li>
+    <li class="gnb-wrap"><a href="#">소식</a></li>
+  </ul></nav>
+  <div class="header-cta"><a href="stays.html" class="btn btn-primary btn-sm">실시간 예약</a><button class="hamburger"><span></span><span></span><span></span></button></div>
+</div></header>
+
+<section class="section-sm">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:32px;text-align:left;max-width:none;">
+      <span class="eyebrow">Interactive Map</span>
+      <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);">마을 지도에서 바로 찾기</h2>
+      <p>지도 위의 마커를 누르면 숙소·상점·관광지 정보로 바로 연결됩니다.</p>
+    </div>
+
+    <div class="map-layout reveal">
+      <!-- side list -->
+      <aside class="map-side">
+        <div class="map-filters">
+          <button class="chip active" data-cat="all">전체</button>
+          <button class="chip stay" data-cat="stay">🛏️ 숙소</button>
+          <button class="chip shop" data-cat="shop">🍲 상점</button>
+          <button class="chip spot" data-cat="spot">📷 관광지</button>
+        </div>
+        <a class="poi" data-id="m1" data-cat="stay" href="stay-detail.html"><img src="https://picsum.photos/seed/stay-soljae/200/200" alt=""><div><span class="badge badge-red" style="font-size:.68rem;">숙소</span><h4>솔재고택</h4><p>200년 종갓집 한옥 · 4.9★</p></div></a>
+        <a class="poi" data-id="m2" data-cat="stay" href="stay-detail.html"><img src="https://picsum.photos/seed/stay-dalbit/200/200" alt=""><div><span class="badge badge-red" style="font-size:.68rem;">숙소</span><h4>달빛채</h4><p>천변 독채 노천탕 · 4.8★</p></div></a>
+        <a class="poi" data-id="m3" data-cat="spot" href="#"><img src="https://picsum.photos/seed/spot-jeongja/200/200" alt=""><div><span class="badge badge-blue" style="font-size:.68rem;">관광지</span><h4>달내정(亭)</h4><p>천변을 굽어보는 옛 정자</p></div></a>
+        <a class="poi" data-id="m4" data-cat="shop" href="shops.html"><img src="https://picsum.photos/seed/shop-bakery/200/200" alt=""><div><span class="badge badge-gold" style="font-size:.68rem;">상점</span><h4>달내 양조장</h4><p>마을 전통주 · 시음 체험</p></div></a>
+        <a class="poi" data-id="m5" data-cat="spot" href="#"><img src="https://picsum.photos/seed/spot-museum/200/200" alt=""><div><span class="badge badge-blue" style="font-size:.68rem;">관광지</span><h4>마을 역사관</h4><p>아카이브 유물 상설 전시</p></div></a>
+        <a class="poi" data-id="m6" data-cat="shop" href="shops.html"><img src="https://picsum.photos/seed/shop-tea/200/200" alt=""><div><span class="badge badge-gold" style="font-size:.68rem;">상점</span><h4>돌담 찻집</h4><p>한옥 마당 카페</p></div></a>
+      </aside>
+
+      <!-- map canvas -->
+      <div class="map-canvas">
+        <div class="topo"></div>
+        <div class="map-river"></div>
+        <!-- markers (좌표는 %) -->
+        <div class="marker stay" data-id="m1" style="left:28%;top:34%;"><div class="pin"><span>🛏</span></div><div class="tip">솔재고택</div></div>
+        <div class="marker stay" data-id="m2" style="left:62%;top:52%;"><div class="pin"><span>🛏</span></div><div class="tip">달빛채</div></div>
+        <div class="marker spot" data-id="m3" style="left:46%;top:28%;"><div class="pin"><span>📷</span></div><div class="tip">달내정</div></div>
+        <div class="marker shop" data-id="m4" style="left:38%;top:62%;"><div class="pin"><span>🍶</span></div><div class="tip">달내 양조장</div></div>
+        <div class="marker spot" data-id="m5" style="left:70%;top:30%;"><div class="pin"><span>🏛</span></div><div class="tip">마을 역사관</div></div>
+        <div class="marker shop" data-id="m6" style="left:54%;top:70%;"><div class="pin"><span>🍵</span></div><div class="tip">돌담 찻집</div></div>
+
+        <!-- legend -->
+        <div style="position:absolute;left:20px;bottom:20px;background:rgba(255,255,255,.92);padding:14px 18px;border-radius:12px;box-shadow:var(--shadow);font-size:.85rem;">
+          <div style="font-weight:700;margin-bottom:8px;">범례</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <span><i style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--dan-red);margin-right:5px;"></i>숙소</span>
+            <span><i style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--gold);margin-right:5px;"></i>상점</span>
+            <span><i style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--dan-blue);margin-right:5px;"></i>관광지</span>
+          </div>
+        </div>
+        <!-- compass -->
+        <div style="position:absolute;right:20px;top:20px;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:var(--shadow);display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--dan-red);">N</div>
+      </div>
+    </div>
+    <p class="muted center mt-24" style="font-size:.9rem;">※ 실제 구축 시 카카오맵/네이버지도 API 또는 마을 일러스트 지도 위 좌표 마킹으로 구현됩니다. (마커 클릭 → 상세·예약 연결)</p>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap">
+  <div class="top">
+    <div><a class="brand" href="index.html"><span class="brand-mark">月</span><span class="brand-name" style="color:#fff">달내마을<small style="color:var(--gold-2)">DALNAE · 月川 VILLAGE</small></span></a><p class="desc">천 년을 머무는 마을, 달내마을 통합 소개·숙박예약 플랫폼.</p></div>
+    <div><h4>둘러보기</h4><ul><li><a href="village.html">마을 소개</a></li><li><a href="map.html">마을 지도</a></li><li><a href="archive.html">아카이브</a></li><li><a href="shops.html">상점·체험</a></li></ul></div>
+    <div><h4>예약·이용</h4><ul><li><a href="stays.html">숙박 예약</a></li><li><a href="#">예약 내역</a></li><li><a href="#">취소·환불 안내</a></li><li><a href="#">FAQ</a></li></ul></div>
+    <div><h4>고객센터</h4><ul><li><a href="#">1668-0000</a></li><li><a href="#">평일 09:00 – 18:00</a></li><li><a href="admin/index.html">관리자 로그인</a></li></ul></div>
+  </div>
+  <div class="bottom"><div>© 2026 달내마을 통합 포털. 제안용 데모.</div><div style="display:flex;gap:18px;"><a href="#">이용약관</a><a href="#">개인정보처리방침</a></div></div>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>
