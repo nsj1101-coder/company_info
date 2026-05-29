@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@page { size: A4 landscape; margin: 0; }
+body { font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.page { width: 297mm; height: 210mm; position: relative; overflow: hidden; page-break-after: always; }
+
+/* ═══ PAGE 1 — COVER (Blue + Dark split) ═══ */
+.cover { display: grid; grid-template-columns: 112mm 1fr; height: 210mm; }
+.cov-l {
+  background: #2563EB; padding: 12mm 12mm;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.cov-l-bg {
+  position: absolute; right: -12mm; bottom: -10mm;
+  font-family: "Bebas Neue", sans-serif; font-size: 200pt;
+  color: rgba(0,0,0,0.07); line-height: 1; pointer-events: none;
+}
+.cov-logo { height: 24mm; width: auto; object-fit: contain; display: block; position: relative; z-index:1; }
+.cov-l-mid { position: relative; z-index:1; }
+.cov-l-en {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 9pt; letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); margin-bottom: 3mm;
+}
+.cov-l-kr { font-size: 12pt; font-weight: 700; color: #ffffff; line-height: 1.6; }
+.cov-l-bot { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; position: relative; z-index:1; }
+.cov-r {
+  background: #030303; padding: 12mm 14mm;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.cov-r-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(244,244,244,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(244,244,244,0.03) 1px, transparent 1px);
+  background-size: 14mm 14mm;
+}
+.cov-r-watermark {
+  position: absolute; right: -10mm; top: 50%; transform: translateY(-55%);
+  font-family: "Bebas Neue", sans-serif; font-size: 210pt;
+  color: rgba(255,255,255,0.03); line-height: 1; pointer-events: none;
+}
+.cov-headline {
+  font-size: 82pt; font-weight: 900; color: #F4F4F4;
+  line-height: 0.92; letter-spacing: -2px; position: relative; z-index:1;
+  margin-bottom: 6mm;
+}
+.cov-headline em { color: #2563EB; font-style: normal; }
+.cov-rule { width: 14mm; height: 2.5px; background: #2563EB; margin-bottom: 6mm; position: relative; z-index:1; }
+.cov-tagline { font-size: 12pt; color: rgba(244,244,244,0.55); position: relative; z-index:1; font-weight: 300; line-height: 1.6; }
+.cov-r-bot {
+  position: absolute; bottom: 10mm; right: 14mm;
+  font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; text-align: right;
+  color: rgba(244,244,244,0.25); letter-spacing: 0.1em; text-transform: uppercase;
+  line-height: 1.7; z-index: 2;
+}
+
+/* ═══ PAGE 2 — CONTENTS ═══ */
+.contents-page { display: grid; grid-template-columns: 90mm 1fr; height: 210mm; }
+.ct-left {
+  background: #030303; padding: 12mm;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.ct-logo { height: 22mm; width: auto; object-fit: contain; display: block; }
+.ct-title { font-family: "Bebas Neue", sans-serif; font-size: 52pt; color: #F4F4F4; line-height: 0.9; letter-spacing: 1px; }
+.ct-sub { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(244,244,244,0.3); margin-top: 3mm; }
+.ct-right { padding: 12mm 14mm; display: flex; flex-direction: column; justify-content: center; background: #F4F4F4; }
+.ct-item { display: flex; align-items: flex-start; gap: 6mm; padding: 7mm 0; border-bottom: 1px solid rgba(3,3,3,0.1); }
+.ct-item:first-child { padding-top: 0; }
+.ct-item:last-child { border-bottom: none; padding-bottom: 0; }
+.ct-num { font-family: "Bebas Neue", sans-serif; font-size: 30pt; color: rgba(3,3,3,0.1); line-height: 1; min-width: 14mm; }
+.ct-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7pt; letter-spacing: 0.3em; text-transform: uppercase; color: #2563EB; margin-bottom: 1.5mm; }
+.ct-tit { font-size: 16pt; font-weight: 700; color: #030303; }
+.ct-dsc { font-size: 8.5pt; color: rgba(3,3,3,0.45); margin-top: 1mm; }
+
+/* ═══ SECTION DIVIDER ═══ */
+.sdiv { background: #030303; display: flex; flex-direction: column; justify-content: center; padding: 12mm 16mm; position: relative; overflow: hidden; height: 210mm; }
+.sdiv-bg { position: absolute; right: -15mm; top: 50%; transform: translateY(-55%); font-family: "Bebas Neue", sans-serif; font-size: 230pt; color: rgba(244,244,244,0.04); line-height: 1; letter-spacing: -8px; }
+.sdiv-meta { font-family: "Barlow Condensed", sans-serif; font-size: 8pt; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(244,244,244,0.4); margin-bottom: 4mm; position: relative; z-index:1; }
+.sdiv-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 9pt; letter-spacing: 0.45em; text-transform: uppercase; color: #2563EB; margin-bottom: 5mm; position: relative; z-index:1; }
+.sdiv-bar { width: 10mm; height: 2px; background: #2563EB; margin-bottom: 5mm; position: relative; z-index:1; }
+.sdiv-title { font-size: 40pt; font-weight: 900; color: #F4F4F4; line-height: 1.15; letter-spacing: -1px; position: relative; z-index:1; }
+.sdiv-title em { color: #2563EB; font-style: normal; }
+
+/* ═══ PAGE 4 — OVERVIEW (Split) ═══ */
+.ov-page { display: grid; grid-template-columns: 108mm 1fr; height: 210mm; }
+.ov-l { background: #030303; padding: 12mm; display: flex; flex-direction: column; justify-content: space-between; }
+.ov-l-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(244,244,244,0.4); }
+.ov-stat { }
+.ov-stat-num { font-family: "Bebas Neue", sans-serif; font-size: 86pt; color: #F4F4F4; line-height: 0.88; letter-spacing: 1px; }
+.ov-stat-num .bl { color: #2563EB; }
+.ov-stat-lbl { font-size: 9pt; color: rgba(244,244,244,0.6); margin-top: 2mm; line-height: 1.5; }
+.ov-div { width: 100%; height: 1px; background: rgba(244,244,244,0.1); }
+.ov-r { background: #F4F4F4; padding: 12mm 14mm; display: flex; flex-direction: column; justify-content: center; }
+.ov-r-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: #2563EB; margin-bottom: 3mm; }
+.ov-r-title { font-size: 22pt; font-weight: 900; color: #030303; margin-bottom: 2mm; letter-spacing: -0.5px; line-height: 1.2; }
+.ov-r-sub { font-size: 9.5pt; color: rgba(3,3,3,0.55); margin-bottom: 7mm; line-height: 1.65; }
+.ov-r-div { width: 100%; height: 1px; background: rgba(3,3,3,0.1); margin-bottom: 7mm; }
+.ov-feat { display: flex; align-items: flex-start; gap: 4mm; padding: 5.5mm 0; border-bottom: 1px solid rgba(3,3,3,0.07); }
+.ov-feat:last-child { border-bottom: none; padding-bottom: 0; }
+.ov-feat-ic { width: 9mm; height: 9mm; min-width: 9mm; background: #2563EB; border-radius: 1.5mm; display: flex; align-items: center; justify-content: center; }
+.ov-feat-ic svg { width: 5mm; height: 5mm; }
+.ov-feat-title { font-size: 11.5pt; font-weight: 700; color: #030303; margin-bottom: 2mm; }
+.ov-feat-body { font-size: 8.5pt; color: rgba(3,3,3,0.6); line-height: 1.6; }
+
+/* ═══ PAGE 6 — SERVICES (2×4 full grid) ═══ */
+.svc-page { background: #FFFFFF; padding: 10mm 14mm; display: flex; flex-direction: column; height: 210mm; }
+.svc-head { margin-bottom: 4mm; }
+.svc-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: #2563EB; margin-bottom: 1.5mm; }
+.svc-tit { font-size: 21pt; font-weight: 900; color: #030303; letter-spacing: -0.5px; }
+.svc-sub { font-size: 9pt; color: rgba(3,3,3,0.45); margin-top: 1mm; }
+.svc-rule { width: 100%; height: 1px; background: #e5e5e5; margin-bottom: 5mm; }
+.svc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3.5mm; flex: 1; }
+.svc-card { border: 1.5px solid #e5e5e5; border-radius: 2.5mm; padding: 6mm; display: flex; flex-direction: column; }
+.svc-card.feat { border-color: #030303; background: #030303; }
+.svc-ctag { font-family: "Barlow Condensed", sans-serif; font-size: 6.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: #2563EB; margin-bottom: 2mm; font-weight: 700; }
+.svc-card.feat .svc-ctag { color: rgba(37,99,235,0.8); }
+.svc-ctit { font-size: 12pt; font-weight: 700; color: #030303; margin-bottom: 3mm; }
+.svc-card.feat .svc-ctit { color: #F4F4F4; }
+.svc-cbody { font-size: 8.5pt; color: rgba(3,3,3,0.6); line-height: 1.6; flex: 1; }
+.svc-card.feat .svc-cbody { color: rgba(244,244,244,0.65); }
+.svc-cpill { display: inline-block; background: #F4F4F4; color: rgba(3,3,3,0.55); font-size: 7pt; padding: 1mm 3mm; border-radius: 1mm; margin-top: 4mm; font-family: "Barlow Condensed", sans-serif; letter-spacing: 0.05em; }
+.svc-card.feat .svc-cpill { background: rgba(37,99,235,0.25); color: rgba(244,244,244,0.7); }
+
+/* ═══ PAGE 7 — TECH / AI ═══ */
+.tech-page { background: #030303; padding: 10mm 14mm; display: flex; flex-direction: column; height: 210mm; }
+.tech-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(244,244,244,0.55); margin-bottom: 1.5mm; }
+.tech-tit { font-size: 21pt; font-weight: 900; color: #F4F4F4; letter-spacing: -0.5px; }
+.tech-sub { font-size: 9pt; color: rgba(244,244,244,0.6); margin-top: 1mm; margin-bottom: 4mm; }
+.tech-rule { width: 100%; height: 1px; background: rgba(244,244,244,0.12); margin-bottom: 5mm; }
+.tech-ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; flex: 1; min-height: 0; margin-bottom: 5mm; }
+.tech-ai-card { border: 1px solid rgba(244,244,244,0.15); border-radius: 2.5mm; padding: 8mm; background: rgba(244,244,244,0.05); display: flex; flex-direction: column; }
+.tech-ai-tit { font-size: 14pt; font-weight: 700; color: #F4F4F4; margin-bottom: 4mm; }
+.tech-ai-body { font-size: 9.5pt; color: rgba(244,244,244,0.8); line-height: 1.7; flex: 1; }
+.tech-ai-tag { display: inline-block; background: rgba(37,99,235,0.3); color: #93C5FD; font-size: 7.5pt; padding: 2mm 3.5mm; border-radius: 1mm; margin-top: 6mm; font-family: "Barlow Condensed", sans-serif; font-weight: 700; letter-spacing: 0.1em; }
+.stack-head { font-family: "Barlow Condensed", sans-serif; font-size: 7pt; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(244,244,244,0.5); margin-bottom: 3mm; }
+.stack-grid { display: grid; grid-template-columns: repeat(8, 1fr); grid-auto-rows: 25mm; gap: 3mm; }
+.stack-item { border: 1px solid rgba(244,244,244,0.12); border-radius: 2mm; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4mm 2mm; background: rgba(244,244,244,0.04); }
+.stack-name { font-size: 9.5pt; font-weight: 700; color: #F4F4F4; text-align: center; padding: 0 2mm; }
+.stack-role { font-size: 7.5pt; color: rgba(244,244,244,0.6); margin-top: 2mm; text-align: center; }
+
+/* ═══ PAGE 9 — PROCESS ═══ */
+.proc-page { background: #FFFFFF; padding: 10mm 14mm; display: flex; flex-direction: column; height: 210mm; }
+.proc-head { margin-bottom: 4mm; }
+.proc-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: #2563EB; margin-bottom: 1.5mm; }
+.proc-tit { font-size: 21pt; font-weight: 900; color: #030303; letter-spacing: -0.5px; }
+.proc-sub { font-size: 9pt; color: rgba(3,3,3,0.45); margin-top: 1mm; }
+.proc-rule { width: 100%; height: 1px; background: #e5e5e5; margin-bottom: 5mm; }
+.proc-steps { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4mm; flex: 1; min-height: 0; }
+.proc-step { border-top: 3px solid #e5e5e5; padding: 5mm 5mm 5mm 5mm; display: flex; flex-direction: column; background: #F8F8F8; border-radius: 0 0 2.5mm 2.5mm; }
+.proc-step.hi { border-top-color: #2563EB; background: #EFF6FF; }
+.proc-num { font-family: "Bebas Neue", sans-serif; font-size: 36pt; color: rgba(3,3,3,0.1); line-height: 1; margin-bottom: 2mm; }
+.proc-step.hi .proc-num { color: rgba(37,99,235,0.2); }
+.proc-stit { font-size: 14pt; font-weight: 700; color: #030303; margin-bottom: 4mm; }
+.proc-list { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.proc-list li { font-size: 9pt; color: rgba(3,3,3,0.7); padding: 0 0 0 5mm; position: relative; line-height: 1.5; }
+.proc-list li::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 2mm; height: 2mm; border-radius: 50%; background: #d0d0d0; }
+.proc-step.hi .proc-list li::before { background: #2563EB; }
+.proc-bot { margin-top: 4mm; padding: 3.5mm 6mm; background: #F4F4F4; border-radius: 2mm; display: flex; align-items: center; gap: 4mm; }
+.proc-bot-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 8pt; font-weight: 700; color: #2563EB; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+.proc-bot-txt { font-size: 9pt; color: rgba(3,3,3,0.6); }
+
+/* ═══ PAGE 10 — WBS ═══ */
+.wbs-page { background: #030303; padding: 10mm 14mm; display: flex; flex-direction: column; height: 210mm; }
+.wbs-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(244,244,244,0.55); margin-bottom: 1.5mm; }
+.wbs-tit { font-size: 21pt; font-weight: 900; color: #F4F4F4; letter-spacing: -0.5px; }
+.wbs-sub { font-size: 9pt; color: rgba(244,244,244,0.6); margin-top: 1mm; margin-bottom: 4mm; }
+.wbs-rule { width: 100%; height: 1px; background: rgba(244,244,244,0.12); margin-bottom: 5mm; }
+.wbs-wrap { flex: 1; display: flex; flex-direction: column; }
+.wbs-table { width: 100%; border-collapse: collapse; flex: 1; }
+.wbs-table th { font-family: "Barlow Condensed", sans-serif; font-size: 8.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,244,244,0.65); font-weight: 700; padding: 3mm 2mm; text-align: center; border-bottom: 1px solid rgba(244,244,244,0.15); }
+.wbs-table th.ph { text-align: left; width: 52mm; }
+.wbs-table th.nt { text-align: left; width: 30mm; }
+.wbs-cell { border-bottom: 1px solid rgba(244,244,244,0.07); position: relative; }
+.wbs-table tr:last-child .wbs-cell { border-bottom: none; }
+.wbs-table tr:last-child .ph-name { border-bottom: none; }
+.ph-name { font-size: 9.5pt; color: rgba(244,244,244,0.85); font-weight: 600; border-bottom: 1px solid rgba(244,244,244,0.07); vertical-align: middle; padding-left: 2mm; }
+.note-cell { font-size: 8pt; color: rgba(244,244,244,0.6); border-bottom: 1px solid rgba(244,244,244,0.07); vertical-align: middle; padding-left: 3mm; }
+.wbs-bar { display: block; height: 9mm; border-radius: 2mm; position: absolute; top: 50%; transform: translateY(-50%); }
+.b-plan   { background: rgba(37,99,235,0.85); }
+.b-design { background: rgba(99,102,241,0.85); }
+.b-front  { background: rgba(16,185,129,0.85); }
+.b-back   { background: rgba(245,158,11,0.85); }
+.b-qa     { background: rgba(239,68,68,0.85); }
+.b-dep    { background: rgba(168,85,247,0.85); }
+.wbs-leg { display: flex; gap: 6mm; margin-top: 5mm; }
+.wbs-leg-i { display: flex; align-items: center; gap: 2.5mm; }
+.wbs-leg-dot { width: 4mm; height: 4mm; border-radius: 1mm; }
+.wbs-leg-txt { font-size: 8.5pt; color: rgba(244,244,244,0.75); font-family: "Barlow Condensed", sans-serif; font-weight: 600; letter-spacing: 0.05em; }
+.wbs-note { font-size: 8pt; color: rgba(244,244,244,0.5); margin-top: 3mm; font-style: italic; }
+
+/* ═══ PAGE 12 — PRICING ═══ */
+.price-page { background: #FFFFFF; padding: 10mm 14mm; display: flex; flex-direction: column; height: 210mm; }
+.price-head { margin-bottom: 4mm; }
+.price-lbl { font-family: "Barlow Condensed", sans-serif; font-size: 7.5pt; letter-spacing: 0.35em; text-transform: uppercase; color: #2563EB; margin-bottom: 1.5mm; }
+.price-tit { font-size: 21pt; font-weight: 900; color: #030303; letter-spacing: -0.5px; }
+.price-sub { font-size: 9pt; color: rgba(3,3,3,0.45); margin-top: 1mm; }
+.price-rule { width: 100%; height: 1px; background: #e5e5e5; margin-bottom: 5mm; }
+.price-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 4mm; flex: 1; }
+.p-card { border: 1.5px solid #e5e5e5; border-radius: 2.5mm; padding: 7mm 6mm; display: flex; flex-direction: column; }
+.p-card.star { border-color: #030303; background: #030303; }
+.p-tier { font-family: "Barlow Condensed", sans-serif; font-size: 7pt; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(3,3,3,0.4); margin-bottom: 2mm; font-weight: 700; }
+.p-card.star .p-tier { color: rgba(244,244,244,0.45); }
+.p-name { font-size: 16pt; font-weight: 900; color: #030303; margin-bottom: 3mm; }
+.p-card.star .p-name { color: #F4F4F4; }
+.p-amt { font-family: "Bebas Neue", sans-serif; font-size: 38pt; color: #2563EB; line-height: 1; margin-bottom: 1mm; }
+.p-unit { font-size: 8.5pt; color: rgba(3,3,3,0.4); margin-bottom: 5mm; }
+.p-card.star .p-unit { color: rgba(244,244,244,0.4); }
+.p-div { height: 1px; background: #e5e5e5; margin-bottom: 5mm; }
+.p-card.star .p-div { background: rgba(244,244,244,0.12); }
+.p-list { list-style: none; flex: 1; }
+.p-list li { font-size: 8.5pt; color: rgba(3,3,3,0.65); padding: 2.5mm 0 2.5mm 4.5mm; border-bottom: 1px solid #f0f0f0; position: relative; line-height: 1.4; }
+.p-card.star .p-list li { color: rgba(244,244,244,0.65); border-bottom-color: rgba(244,244,244,0.08); }
+.p-list li:last-child { border-bottom: none; }
+.p-list li::before { content: "✓"; position: absolute; left: 0; color: #2563EB; font-size: 8pt; font-weight: 700; }
+.price-bot { margin-top: 5mm; padding: 4mm 6mm; background: #F4F4F4; border-radius: 2mm; font-size: 8.5pt; color: rgba(3,3,3,0.55); line-height: 1.6; }
+.price-bot strong { color: #030303; font-weight: 700; }
+
+/* ═══ PAGE 13 — THANK YOU ═══ */
+.ty { background: #030303; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 14mm; position: relative; overflow: hidden; height: 210mm; }
+.ty-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(244,244,244,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(244,244,244,0.025) 1px, transparent 1px); background-size: 15mm 15mm; }
+.ty-logo { height: 20mm; width: auto; object-fit: contain; margin-bottom: 8mm; position: relative; z-index:1; }
+.ty-h1 { font-family: "Bebas Neue", sans-serif; font-size: 78pt; color: #F4F4F4; line-height: 0.9; letter-spacing: 3px; position: relative; z-index:1; margin-bottom: 8mm; }
+.ty-line { width: 14mm; height: 2px; background: #2563EB; margin-bottom: 8mm; position: relative; z-index:1; }
+.ty-contacts { position: relative; z-index:1; display: flex; flex-direction: column; gap: 3mm; }
+.ty-item { font-size: 10pt; color: rgba(244,244,244,0.5); }
+.ty-item strong { color: rgba(244,244,244,0.8); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — COVER (Blue left / Dark right)
+════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cov-l">
+    <div class="cov-l-bg">MI</div>
+    <img class="cov-logo" src="./maximpact_logo.png" alt="MAX IMPACT">
+    <div class="cov-l-mid">
+      <div class="cov-l-en">AI · Web Development Team</div>
+      <div class="cov-l-kr">기획 · 디자인<br>프론트엔드 · 백엔드<br>배포 · 운영</div>
+    </div>
+    <div class="cov-l-bot">© 2026 MAX IMPACT<br>서비스 소개서 · Rev.01</div>
+  </div>
+  <div class="cov-r">
+    <div class="cov-r-grid"></div>
+    <div class="cov-r-watermark">결과</div>
+    <div class="cov-headline">결과로<br><em>증명합니다.</em></div>
+    <div class="cov-rule"></div>
+    <div class="cov-tagline">
+      아이디어만 있으면 됩니다.<br>
+      기획부터 배포까지, MAX IMPACT가 완성합니다.
+    </div>
+    <div class="cov-r-bot">서비스 소개서<br>2026 · Rev.01</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — CONTENTS
+════════════════════════════════════════ -->
+<div class="page contents-page">
+  <div class="ct-left">
+    <img class="ct-logo" src="./maximpact_logo.png" alt="MAX IMPACT">
+    <div>
+      <div class="ct-title">Con-<br>tents.</div>
+      <div class="ct-sub">MAXIMPACT SERVICE GUIDE · 2026</div>
+    </div>
+  </div>
+  <div class="ct-right">
+    <div class="ct-item">
+      <div class="ct-num">01</div>
+      <div><div class="ct-lbl">Overview</div><div class="ct-tit">MAX IMPACT 소개</div><div class="ct-dsc">각 분야 전문가 · 맞춤 팀 구성 · 차별점</div></div>
+    </div>
+    <div class="ct-item">
+      <div class="ct-num">02</div>
+      <div><div class="ct-lbl">Services</div><div class="ct-tit">서비스 영역</div><div class="ct-dsc">커머스 · 플랫폼 · AI 연동 · 기술 스택</div></div>
+    </div>
+    <div class="ct-item">
+      <div class="ct-num">03</div>
+      <div><div class="ct-lbl">Process</div><div class="ct-tit">진행 방식 & 일정</div><div class="ct-dsc">4단계 프로세스 · WBS 예시 일정표</div></div>
+    </div>
+    <div class="ct-item">
+      <div class="ct-num">04</div>
+      <div><div class="ct-lbl">Pricing</div><div class="ct-tit">요금 안내</div><div class="ct-dsc">99만원 · 200만원 · 500만원 · 협의</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — SECTION 01
+════════════════════════════════════════ -->
+<div class="page sdiv">
+  <div class="sdiv-bg">01</div>
+  <div class="sdiv-meta">SECTION 01 — OVERVIEW</div>
+  <div class="sdiv-lbl">Who We Are</div>
+  <div class="sdiv-bar"></div>
+  <div class="sdiv-title">MAX IMPACT란<br>어떤 팀인가요?</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — OVERVIEW
+════════════════════════════════════════ -->
+<div class="page ov-page">
+  <div class="ov-l">
+    <div class="ov-l-lbl">01 · OVERVIEW — CREDENTIALS</div>
+    <div class="ov-stat">
+      <div class="ov-stat-num" style="font-size:38pt; line-height:1.1;">각 분야<br><span class="bl">전문가</span></div>
+      <div class="ov-stat-lbl">6년 이상 경력의 검증된 전문가들이<br>프로젝트에 최적화된 조합으로 투입됩니다</div>
+    </div>
+    <div class="ov-div"></div>
+    <div class="ov-stat">
+      <div class="ov-stat-num">50<span class="bl">+</span></div>
+      <div class="ov-stat-lbl">완료 프로젝트<br>납기 준수율 100%</div>
+    </div>
+    <div class="ov-div"></div>
+    <div class="ov-stat">
+      <div class="ov-stat-num" style="font-size:56pt;">1<span style="font-size:36pt;">개월</span></div>
+      <div class="ov-stat-lbl">무상 유지보수 기본 제공</div>
+    </div>
+  </div>
+  <div class="ov-r">
+    <div class="ov-r-lbl">01 · Overview — Value Proposition</div>
+    <div class="ov-r-title">아이디어만 있으면 됩니다.</div>
+    <div class="ov-r-sub">기획이 불완전해도 괜찮습니다. 누락된 부분을 파악하고,<br>더 뛰어난 결과물로 완성해 드립니다.</div>
+    <div class="ov-r-div"></div>
+    <div class="ov-feat">
+      <div class="ov-feat-ic"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div>
+        <div class="ov-feat-title">기획 단계부터 함께합니다</div>
+        <div class="ov-feat-body">아이디어 수준의 요청도 구체적인 화면설계서와 기능 명세로 완성합니다. 누락된 기획을 사전에 발견하고 보완해 더 뛰어난 결과물을 제공합니다.</div>
+      </div>
+    </div>
+    <div class="ov-feat">
+      <div class="ov-feat-ic"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="1" stroke="#fff" stroke-width="1.8"/><path d="M5 4V3a3 3 0 016 0v1" stroke="#fff" stroke-width="1.8"/></svg></div>
+      <div>
+        <div class="ov-feat-title">프로젝트 맞춤 팀 구성 — 최적의 조합으로</div>
+        <div class="ov-feat-body">고정 팀이 아닙니다. 기획·디자인·프론트·백엔드 전문가가 프로젝트 성격에 맞게 정확히 투입됩니다. 필요한 전문성이 필요한 자리에.</div>
+      </div>
+    </div>
+    <div class="ov-feat">
+      <div class="ov-feat-ic"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div>
+        <div class="ov-feat-title">결과물로 신뢰를 증명합니다</div>
+        <div class="ov-feat-body">AI 자동화 도구를 개발 파이프라인에 내재화해 더 빠르고 정밀하게 완성합니다. 납품 후 1개월 무상 A/S로 완성도를 보장합니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 5 — SECTION 02
+════════════════════════════════════════ -->
+<div class="page sdiv">
+  <div class="sdiv-bg">02</div>
+  <div class="sdiv-meta">SECTION 02 — SERVICES</div>
+  <div class="sdiv-lbl">What We Build</div>
+  <div class="sdiv-bar"></div>
+  <div class="sdiv-title">무엇을<br>만들어 드리나요?</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 6 — SERVICES (2×4 full grid)
+════════════════════════════════════════ -->
+<div class="page svc-page">
+  <div class="svc-head">
+    <div class="svc-lbl">02 · Services — 웹 서비스 & 플랫폼</div>
+    <div class="svc-tit">어떤 프로젝트든 완성합니다.</div>
+    <div class="svc-sub">단순 소개 사이트부터 대형 커머스까지, 요구에 맞게 설계·개발합니다.</div>
+  </div>
+  <div class="svc-rule"></div>
+  <div class="svc-grid">
+    <!-- Row 1 -->
+    <div class="svc-card feat">
+      <div class="svc-ctag">쇼핑몰 & 커머스</div>
+      <div class="svc-ctit">종합 커머스 / 쇼핑몰</div>
+      <div class="svc-cbody">상품 등록·결제·배송 추적·리뷰·쿠폰까지 완성형 쇼핑몰. 카페24 커스텀부터 풀 커스텀 커머스까지 전부 대응합니다.</div>
+      <div class="svc-cpill">PG 연동 · 재고 관리 · 정산</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">구독 & SaaS</div>
+      <div class="svc-ctit">구독 사이트 / SaaS 플랫폼</div>
+      <div class="svc-cbody">반복 매출 구조를 만드는 구독 서비스. 요금제 관리, 사용량 추적, 자동 결제까지 완성된 SaaS를 구축합니다.</div>
+      <div class="svc-cpill">Stripe · 정기결제 · 멤버십</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">결제 & 핀테크</div>
+      <div class="svc-ctit">결제 전용 / 정산 시스템</div>
+      <div class="svc-cbody">PG사 연동, 카드·계좌이체·가상계좌 결제, 정산 내역 관리, 세금계산서 자동 발행까지 처리합니다.</div>
+      <div class="svc-cpill">토스 · KG이니시스 · 정산 자동화</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">중계 & 마켓플레이스</div>
+      <div class="svc-ctit">중계 사이트 / 마켓플레이스</div>
+      <div class="svc-cbody">판매자·구매자 양방향 거래, 수수료 정산, 분쟁 관리, 리뷰 시스템까지 완성형 중계 플랫폼을 구축합니다.</div>
+      <div class="svc-cpill">매칭 · 수수료 · 정산 자동화</div>
+    </div>
+    <!-- Row 2 -->
+    <div class="svc-card">
+      <div class="svc-ctag">세무 & 전문직</div>
+      <div class="svc-ctit">세무 / 회계 전용 사이트</div>
+      <div class="svc-cbody">세무·회계 사무소 전용 고객 관리 CRM, 신고 현황 대시보드, 세금계산서·계약서 자동화 시스템을 개발합니다.</div>
+      <div class="svc-cpill">CRM · 문서 자동화 · 신고 관리</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">예약 & 매칭</div>
+      <div class="svc-ctit">예약 시스템 / 매칭 플랫폼</div>
+      <div class="svc-cbody">병원·학원·서비스업용 예약 관리, 전문가-고객 매칭, 캘린더 연동, SMS·카카오 알림 자동 발송을 구축합니다.</div>
+      <div class="svc-cpill">캘린더 · SMS · 알림 자동화</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">관리자 & 대시보드</div>
+      <div class="svc-ctit">관리자 패널 / 어드민</div>
+      <div class="svc-cbody">실시간 데이터 시각화, 사용자 권한 관리, 통계 리포트를 포함한 운영자 전용 대시보드를 개발합니다.</div>
+      <div class="svc-cpill">Chart.js · 실시간 · 권한 관리</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-ctag">소개 & 랜딩</div>
+      <div class="svc-ctit">기업 소개 / 단순 사이트</div>
+      <div class="svc-cbody">반응형 기업 홈페이지, 제품 랜딩 페이지, 이벤트 페이지까지. 빠른 제작과 SEO 최적화가 장점입니다.</div>
+      <div class="svc-cpill">반응형 · SEO 최적화 · 빠른 납기</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 7 — TECH / AI (fill screen)
+════════════════════════════════════════ -->
+<div class="page tech-page">
+  <div class="tech-lbl">02 · Services — AI 연동 & 기술 스택</div>
+  <div class="tech-tit">최신 기술로 경쟁 우위를 만듭니다.</div>
+  <div class="tech-sub">AI를 단순 활용이 아닌, 제품 핵심 기능으로 내재화합니다.</div>
+  <div class="tech-rule"></div>
+  <div class="tech-ai-grid">
+    <div class="tech-ai-card">
+      <div class="tech-ai-tit">AI 챗봇 & 자동 응답 시스템</div>
+      <div class="tech-ai-body">OpenAI · Claude API를 연결해 고객 상담 자동화, FAQ 응답, 맞춤 상품 추천 기능을 제품에 내장합니다. 24시간 자동 응대로 운영 비용을 줄이고, 고객 만족도를 높입니다. 기존 시스템에 API 방식으로 연동 가능합니다.</div>
+      <div class="tech-ai-tag">GPT-4o · Claude 3.7 · Gemini</div>
+    </div>
+    <div class="tech-ai-card">
+      <div class="tech-ai-tit">문서 · 리포트 자동 생성</div>
+      <div class="tech-ai-body">계약서·견적서·세금계산서·통계 리포트를 AI로 자동 생성합니다. 반복 업무를 자동화해 인건비와 실수를 동시에 줄입니다. PDF 자동 발행, 이메일 자동 발송까지 완전 자동화합니다.</div>
+      <div class="tech-ai-tag">AI Automation · PDF Gen · 이메일 발송</div>
+    </div>
+  </div>
+  <div class="stack-head">TECH STACK — 주요 기술 스택</div>
+  <div class="stack-grid">
+    <div class="stack-item"><div class="stack-name">Next.js 15</div><div class="stack-role">Frontend</div></div>
+    <div class="stack-item"><div class="stack-name">React 19</div><div class="stack-role">UI Library</div></div>
+    <div class="stack-item"><div class="stack-name">TypeScript</div><div class="stack-role">Type Safety</div></div>
+    <div class="stack-item"><div class="stack-name">Tailwind 4</div><div class="stack-role">Styling</div></div>
+    <div class="stack-item"><div class="stack-name">PHP 8.5</div><div class="stack-role">Backend</div></div>
+    <div class="stack-item"><div class="stack-name">MySQL / MariaDB</div><div class="stack-role">Database</div></div>
+    <div class="stack-item"><div class="stack-name">Prisma 7</div><div class="stack-role">ORM</div></div>
+    <div class="stack-item"><div class="stack-name">Vercel / AWS</div><div class="stack-role">Deploy</div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 8 — SECTION 03
+════════════════════════════════════════ -->
+<div class="page sdiv">
+  <div class="sdiv-bg">03</div>
+  <div class="sdiv-meta">SECTION 03 — PROCESS</div>
+  <div class="sdiv-lbl">How We Work</div>
+  <div class="sdiv-bar"></div>
+  <div class="sdiv-title">어떻게<br>진행되나요?</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 9 — PROCESS (fill screen)
+════════════════════════════════════════ -->
+<div class="page proc-page">
+  <div class="proc-head">
+    <div class="proc-lbl">03 · Process</div>
+    <div class="proc-tit">체계적인 4단계 프로세스</div>
+    <div class="proc-sub">처음 미팅부터 납품·운영까지 매 단계를 투명하게 공유합니다.</div>
+  </div>
+  <div class="proc-rule"></div>
+  <div class="proc-steps">
+    <div class="proc-step">
+      <div class="proc-num">01</div>
+      <div class="proc-stit">기획 & 설계</div>
+      <ul class="proc-list">
+        <li>요구사항 인터뷰 & 정리</li>
+        <li>누락 기획 파악 및 보완</li>
+        <li>화면 설계서 (와이어프레임)</li>
+        <li>DB 구조 설계</li>
+        <li>개발 범위·일정 확정</li>
+        <li>견적서 · 계약서 작성</li>
+        <li>착수금 50% 결제 후 시작</li>
+      </ul>
+    </div>
+    <div class="proc-step hi">
+      <div class="proc-num">02</div>
+      <div class="proc-stit">UI / UX 디자인</div>
+      <ul class="proc-list">
+        <li>브랜드 컬러 · 타이포 설정</li>
+        <li>Figma 시안 제작</li>
+        <li>모바일 · PC 반응형 설계</li>
+        <li>클라이언트 피드백 반영</li>
+        <li>디자인 시스템 구축</li>
+        <li>인터랙션 · 애니메이션 기획</li>
+        <li>시안 확정 후 개발 착수</li>
+      </ul>
+    </div>
+    <div class="proc-step">
+      <div class="proc-num">03</div>
+      <div class="proc-stit">개발 & 테스트</div>
+      <ul class="proc-list">
+        <li>프론트엔드 퍼블리싱</li>
+        <li>백엔드 API 개발</li>
+        <li>DB 연동 · 인증 구현</li>
+        <li>결제 · 외부 API 연동</li>
+        <li>AI 기능 내장 (선택)</li>
+        <li>QA 테스트 · 버그 수정</li>
+        <li>중간 결제 30% 진행</li>
+      </ul>
+    </div>
+    <div class="proc-step">
+      <div class="proc-num">04</div>
+      <div class="proc-stit">배포 & 운영</div>
+      <ul class="proc-list">
+        <li>서버 세팅 · 도메인 연결</li>
+        <li>SSL · 보안 설정</li>
+        <li>성능 최적화 · CDN 설정</li>
+        <li>사용 가이드 전달</li>
+        <li>1개월 무상 유지보수</li>
+        <li>잔금 20% 결제 완료</li>
+        <li>장기 운영 계약 연장 가능</li>
+      </ul>
+    </div>
+  </div>
+  <div class="proc-bot">
+    <div class="proc-bot-lbl">소통 채널</div>
+    <div style="width:1px;height:4mm;background:#e5e5e5;"></div>
+    <div class="proc-bot-txt">카카오톡 오픈채팅 · 노션 워크스페이스 · 구글 드라이브 파일 공유 · 화상 미팅 (필요 시)</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 10 — WBS SCHEDULE (fill screen)
+════════════════════════════════════════ -->
+<div class="page wbs-page">
+  <div class="wbs-lbl">03 · Process — Example Schedule</div>
+  <div class="wbs-tit">WBS 예시 일정표</div>
+  <div class="wbs-sub">중규모 웹 서비스(표준형·200만원) 기준 8주 예시 일정입니다. 프로젝트 규모에 따라 조정됩니다.</div>
+  <div class="wbs-rule"></div>
+  <div class="wbs-wrap">
+    <table class="wbs-table">
+      <thead>
+        <tr>
+          <th class="ph">단계 / Phase</th>
+          <th>W1</th><th>W2</th><th>W3</th><th>W4</th>
+          <th>W5</th><th>W6</th><th>W7</th><th>W8</th>
+          <th class="nt">담당</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="height:17mm;">
+          <td class="ph-name">① 기획 & 요구사항 분석</td>
+          <td class="wbs-cell"><span class="wbs-bar b-plan" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-plan" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="note-cell">PM · 기획자</td>
+        </tr>
+        <tr style="height:17mm;">
+          <td class="ph-name">② UI/UX 디자인 & 시안 확정</td>
+          <td class="wbs-cell"></td>
+          <td class="wbs-cell"><span class="wbs-bar b-design" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-design" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-design" style="left:5%;width:50%;"></span></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="note-cell">디자이너</td>
+        </tr>
+        <tr style="height:17mm;">
+          <td class="ph-name">③ 프론트엔드 개발</td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"><span class="wbs-bar b-front" style="left:50%;width:50%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-front" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-front" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-front" style="left:5%;width:55%;"></span></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="note-cell">프론트 개발자</td>
+        </tr>
+        <tr style="height:17mm;">
+          <td class="ph-name">④ 백엔드 개발 & API</td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"><span class="wbs-bar b-back" style="left:50%;width:50%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-back" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-back" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-back" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="note-cell">백엔드 개발자</td>
+        </tr>
+        <tr style="height:17mm;">
+          <td class="ph-name">⑤ 통합 테스트 & QA</td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td><td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"></td>
+          <td class="wbs-cell"><span class="wbs-bar b-qa" style="left:55%;width:45%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-qa" style="left:5%;width:90%;"></span></td>
+          <td class="wbs-cell"></td>
+          <td class="note-cell">전원</td>
+        </tr>
+        <tr style="height:17mm;">
+          <td class="ph-name">⑥ 배포 & 최종 검수</td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td><td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"></td><td class="wbs-cell"></td>
+          <td class="wbs-cell"><span class="wbs-bar b-dep" style="left:55%;width:45%;"></span></td>
+          <td class="wbs-cell"><span class="wbs-bar b-dep" style="left:5%;width:90%;"></span></td>
+          <td class="note-cell">PM · DevOps</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="wbs-leg">
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(37,99,235,0.85);"></div><div class="wbs-leg-txt">기획</div></div>
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(99,102,241,0.85);"></div><div class="wbs-leg-txt">디자인</div></div>
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(16,185,129,0.85);"></div><div class="wbs-leg-txt">프론트엔드</div></div>
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(245,158,11,0.85);"></div><div class="wbs-leg-txt">백엔드</div></div>
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(239,68,68,0.85);"></div><div class="wbs-leg-txt">QA 테스트</div></div>
+      <div class="wbs-leg-i"><div class="wbs-leg-dot" style="background:rgba(168,85,247,0.85);"></div><div class="wbs-leg-txt">배포</div></div>
+    </div>
+    <div class="wbs-note">* 위 일정은 표준형(200만원) 패키지 기준 예시입니다. 실제 일정은 프로젝트 범위 협의 후 확정됩니다.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 11 — SECTION 04
+════════════════════════════════════════ -->
+<div class="page sdiv">
+  <div class="sdiv-bg">04</div>
+  <div class="sdiv-meta">SECTION 04 — PRICING</div>
+  <div class="sdiv-lbl">Investment</div>
+  <div class="sdiv-bar"></div>
+  <div class="sdiv-title">비용이<br>어떻게 되나요?</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 12 — PRICING
+════════════════════════════════════════ -->
+<div class="page price-page">
+  <div class="price-head">
+    <div class="price-lbl">04 · Pricing</div>
+    <div class="price-tit">프로젝트 규모에 맞는 패키지</div>
+    <div class="price-sub">모든 금액은 VAT 별도이며, 무료 상담 후 정확한 견적을 제공합니다.</div>
+  </div>
+  <div class="price-rule"></div>
+  <div class="price-grid">
+    <div class="p-card">
+      <div class="p-tier">Basic</div>
+      <div class="p-name">기본형</div>
+      <div class="p-amt">99</div>
+      <div class="p-unit">만원~ (VAT 별도)</div>
+      <div class="p-div"></div>
+      <ul class="p-list">
+        <li>랜딩 페이지 · 기업 소개</li>
+        <li>반응형 웹 디자인</li>
+        <li>기본 CMS 연동</li>
+        <li>문의 폼 · 이메일 연동</li>
+        <li>배포 · SSL 설정</li>
+        <li>2주 무상 A/S</li>
+      </ul>
+    </div>
+    <div class="p-card star">
+      <div class="p-tier">Standard ★ 인기</div>
+      <div class="p-name">표준형</div>
+      <div class="p-amt">200</div>
+      <div class="p-unit">만원~ (VAT 별도)</div>
+      <div class="p-div"></div>
+      <ul class="p-list">
+        <li>회원가입 · 로그인 · 권한 관리</li>
+        <li>관리자 대시보드</li>
+        <li>결제 연동 (카드·계좌)</li>
+        <li>예약 · 매칭 시스템</li>
+        <li>알림 발송 (이메일·SMS)</li>
+        <li>1개월 무상 A/S</li>
+      </ul>
+    </div>
+    <div class="p-card">
+      <div class="p-tier">Premium</div>
+      <div class="p-name">고급형</div>
+      <div class="p-amt">500</div>
+      <div class="p-unit">만원~ (VAT 별도)</div>
+      <div class="p-div"></div>
+      <ul class="p-list">
+        <li>대규모 플랫폼 / SaaS</li>
+        <li>AI 기능 내장</li>
+        <li>멀티테넌트 아키텍처</li>
+        <li>외부 API 다중 연동</li>
+        <li>성능 최적화 · 보안 강화</li>
+        <li>1개월 무상 A/S</li>
+      </ul>
+    </div>
+    <div class="p-card">
+      <div class="p-tier">Enterprise</div>
+      <div class="p-name">대형 / 협의</div>
+      <div class="p-amt" style="font-size:26pt;line-height:1.3;">협의</div>
+      <div class="p-unit">규모에 따라 별도 산정</div>
+      <div class="p-div"></div>
+      <ul class="p-list">
+        <li>대용량 데이터 처리</li>
+        <li>MSA / 마이크로서비스</li>
+        <li>전사 시스템 연동 (ERP·CRM)</li>
+        <li>전담 개발팀 운영</li>
+        <li>SLA 기반 장기 계약</li>
+        <li>맞춤 A/S 계약</li>
+      </ul>
+    </div>
+  </div>
+  <div class="price-bot">
+    <strong>계약 구조:</strong> 착수금 50% → 중간 확인 후 30% → 납품 완료 후 20% &nbsp;·&nbsp;
+    <strong>유지보수:</strong> 월 30만원~(기능 추가·버그 수정 포함) &nbsp;·&nbsp;
+    <strong>무료 상담 :</strong> 010-9951-9539
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 13 — THANK YOU
+════════════════════════════════════════ -->
+<div class="page ty">
+  <div class="ty-grid"></div>
+  <img class="ty-logo" src="./maximpact_logo.png" alt="MAX IMPACT">
+  <div class="ty-h1">Thank you.</div>
+  <div class="ty-line"></div>
+  <div class="ty-contacts">
+    <div class="ty-item"><strong>전화</strong> &nbsp; 010-9951-9539</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>블럭팡 | 레고 매장 통합 운영 시스템 구축 제안서</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --ink: #111317;
+    --paper: #ffffff;
+    --gray-50: #fafafa;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #F57C00;
+    --accent-deep: #E65100;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  @page { size: 1600px 900px; margin: 0; }
+
+  html { font-size: 13px; }
+  html, body { background: #fafafa; }
+
+  .deck { width: 100%; }
+
+  .slide {
+    width: 1600px;
+    height: 900px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 44px 80px;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  .slide.dark  { background: #fff; color: var(--ink); }
+  .slide.light { background: #ffffff; color: #111317; }
+  .slide.gray  { background: #f3f4f6; color: #111317; }
+  .slide.ink   { background: #0d1117; color: var(--ink); }
+
+  /* ─── Editorial Markers ─── */
+
+  .section-mark {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-size:1.488rem;
+    font-weight: 400;
+    color: currentColor;
+    opacity: 0.55;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .section-mark::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.22;
+  }
+  .section-mark .acc {
+    color: var(--accent);
+    opacity: 1;
+    font-weight: 500;
+  }
+
+  /* ─── Editorial Titles ─── */
+
+  h2.ed-title {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size:6.251rem;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  h2.ed-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .slide.dark h2.ed-title em,
+  .slide.ink h2.ed-title em { color: var(--accent); }
+
+  /* ─── Lede paragraph ─── */
+  p.lede {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size:1.964rem;
+    line-height: 1.55;
+    color: #333;
+    max-width: 920px;
+    margin-bottom: 26px;
+    border-top: 3px solid currentColor;
+    padding-top: 16px;
+  }
+  .slide.dark p.lede, .slide.ink p.lede {
+    color: var(--ink-2, #262626);
+    border-top-color: var(--ink);
+  }
+  p.lede strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Body text ─── */
+  p.ed-body {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.459rem;
+    line-height: 1.85;
+    font-weight: 400;
+    color: #2a2a2a;
+    max-width: 720px;
+  }
+  .slide.dark p.ed-body, .slide.ink p.ed-body {
+    color: var(--ink-2, #262626);
+  }
+
+  /* ─── Layout helpers ─── */
+
+  .ed-two-col {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    margin-top: 24px;
+    align-items: start;
+  }
+  .ed-two-col.even { grid-template-columns: 1fr 1fr; }
+  .ed-three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 28px;
+  }
+  .ed-four-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 28px;
+  }
+
+  /* ─── Stat circles ─── */
+  .circle-row { display: flex; gap: 22px; align-items: center; margin-top: 24px; flex-wrap: wrap; }
+  .stat-circle {
+    width: 168px; height: 168px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 18px;
+    flex-shrink: 0;
+  }
+  .stat-circle.solid { background: #fff; color: var(--ink); border: 1px solid var(--ink); }
+  .stat-circle.solid-acc { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .stat-circle.solid-light { background: #fff; color: #000; border-color: #000; }
+  .stat-circle .sc-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:4.019rem;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .stat-circle .sc-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.922rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    line-height: 1.4;
+  }
+
+  /* ─── Stat strip ─── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: 22px 0;
+    border-top: 3px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+  .stat-strip > div { padding: 22px 26px; border-right: 1px solid currentColor; }
+  .stat-strip > div:last-child { border-right: none; }
+  .stat-strip .ss-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:4.465rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat-strip .ss-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.042rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* ─── Card strip ─── */
+  .card-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,0,0,0.1);
+    margin-top: 24px;
+  }
+  .slide.dark .card-strip, .slide.ink .card-strip { background: rgba(0,0,0,0.08); }
+  .card-strip .cs-cell { background: #fff; padding: 22px 24px; }
+  .slide.dark .card-strip .cs-cell, .slide.ink .card-strip .cs-cell { background: #fafafa; }
+  .cs-cell .cs-icon {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:2.828rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .cs-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size:1.414rem;
+    margin-bottom: 6px;
+  }
+  .cs-cell p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.191rem;
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+
+  /* ─── Persona cards ─── */
+  .persona-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 22px;
+  }
+  .persona-card {
+    padding: 24px 22px;
+    background: #f3f4f6;
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+  }
+  .persona-card.featured { background: #fff; color: var(--ink); border-left: 4px solid var(--accent); }
+  .persona-card.acc { background: var(--accent); color: var(--ink); }
+  .persona-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .persona-card.featured .persona-tag,
+  .persona-card.acc .persona-tag { color: var(--ink-4, #6b7280); }
+  .persona-card h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size:1.563rem;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin-bottom: 12px;
+  }
+  .persona-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .persona-meta span {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+  }
+  .persona-section { margin-bottom: 12px; }
+  .persona-section .ps-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.804rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .persona-card ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.131rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .persona-card ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Phase columns ─── */
+  .phase-col {
+    border-top: 4px solid currentColor;
+    padding-top: 16px;
+  }
+  .phase-col .pc-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+  .phase-col h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size:2.158rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .phase-col ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.31rem;
+    line-height: 1.95;
+    opacity: 0.85;
+  }
+  .phase-col ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Reference table ─── */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 22px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+  .ref-table th {
+    text-align: left;
+    font-size:0.982rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+    border-bottom: 2px solid #000;
+    opacity: 0.6;
+  }
+  .ref-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-size:1.369rem;
+    font-weight: 400;
+    color: #333;
+    vertical-align: top;
+  }
+  .ref-table td.name { font-weight: 600; color: #000; }
+  .ref-table .badge {
+    display: inline-block;
+    font-size:0.922rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    background: var(--accent);
+    color: var(--ink);
+    margin-right: 6px;
+  }
+
+  /* ─── Pull quote ─── */
+  .pull-quote {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size:2.977rem;
+    line-height: 1.3;
+    color: currentColor;
+    padding: 14px 0 14px 32px;
+    border-left: 4px solid var(--accent);
+    margin: 22px 0;
+    max-width: 1080px;
+  }
+  .pull-quote strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Feature matrix ─── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,0,0,0.1);
+    margin-top: 22px;
+  }
+  .slide.dark .feature-grid, .slide.ink .feature-grid { background: rgba(255,255,255,0.12); }
+  .feat-cell {
+    background: #fff;
+    padding: 22px 22px 20px;
+    display: flex; flex-direction: column;
+    min-height: 175px;
+  }
+  .slide.dark .feat-cell, .slide.ink .feat-cell { background: #fff; }
+  .feat-cell .feat-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:2.084rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .feat-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size:1.459rem;
+    margin-bottom: 8px;
+  }
+  .feat-cell ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.161rem;
+    line-height: 1.75;
+    opacity: 0.82;
+  }
+  .feat-cell ul li::before { content: '— '; opacity: 0.4; }
+  .feat-cell.dark-cell { background: #fff; color: var(--ink); border: 1px solid #e5e7eb; }
+  .feat-cell.dark-cell .feat-num { color: var(--accent); }
+  .feat-cell.acc-cell { background: #fff8f0; color: var(--ink); border: 1px solid var(--accent); }
+  .feat-cell.acc-cell .feat-num { color: var(--accent); }
+
+  /* ─── Flow diagram ─── */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .flow-step {
+    padding: 22px 22px;
+    background: #fff;
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.08);
+    min-height: 130px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .flow-step.start { background: #e5e7eb; }
+  .flow-step.core { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .flow-step.end { background: #fff8f0; color: var(--ink); border: 2px solid var(--accent); }
+  .flow-step .fs-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.833rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 8px;
+  }
+  .flow-step h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.369rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .flow-step p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.102rem;
+    line-height: 1.55;
+    opacity: 0.78;
+    margin-top: 6px;
+  }
+  .flow-arrow {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 300;
+    font-size:2.381rem;
+    color: rgba(0,0,0,0.45);
+  }
+
+  /* ─── Cost ─── */
+  .cost-block {
+    padding: 28px 30px;
+    background: #f3f4f6;
+  }
+  .cost-block.dark { background: #fafafa; color: var(--ink); border: 1px solid #e5e7eb; }
+  .cost-block.acc { background: var(--accent); color: var(--ink); }
+  .cost-block h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size:1.563rem;
+    margin-bottom: 18px;
+    letter-spacing: -0.005em;
+  }
+  .cost-list { display: flex; flex-direction: column; gap: 0; }
+  .cost-list .cl-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+  .cost-block.dark .cl-item, .cost-block.acc .cl-item { border-bottom-color: rgba(255,255,255,0.12); }
+  .cost-list .cl-item:last-child { border-bottom: none; }
+  .cl-item .cl-name { font-size:1.34rem; font-weight: 400; color: #333; }
+  .cost-block.dark .cl-name, .cost-block.acc .cl-name { color: var(--ink-2, #262626); }
+  .cl-item .cl-value { font-size:1.429rem; font-weight: 500; color: #000; }
+  .cost-block.dark .cl-value, .cost-block.acc .cl-value { color: var(--ink); }
+  .cost-list .cl-total { padding-top: 14px; margin-top: 8px; border-top: 2px solid #000; }
+  .cost-block.dark .cl-total, .cost-block.acc .cl-total { border-top-color: var(--ink-5, #9ca3af); }
+  .cl-total .cl-name { font-weight: 700; }
+  .cl-total .cl-value { font-weight: 300; font-size:2.084rem; }
+
+  /* ─── Tech compare table ─── */
+  .tech-compare {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    margin-top: 24px;
+    border-top: 2px solid currentColor;
+  }
+  .tc-row { display: contents; }
+  .tc-cell {
+    padding: 14px 18px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.28rem;
+    line-height: 1.55;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .slide.dark .tc-cell, .slide.ink .tc-cell { border-bottom-color: rgba(255,255,255,0.12); }
+  .tc-cell.hdr {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.953rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    border-bottom: 2px solid currentColor;
+    opacity: 0.7;
+  }
+  .tc-cell.label { font-weight: 600; }
+  .tc-cell.acc { background: rgba(37,99,235,0.08); }
+  .tc-cell.gold {
+    background: var(--accent); color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Slides with extra-dense content (e.g. tech compare table) */
+  .slide.dense { justify-content: flex-start; padding-top: 36px; }
+  .slide.dense h2.ed-title { font-size: 4.4rem; margin-bottom: 12px; }
+  .slide.dense p.lede { font-size: 1.55rem; margin-bottom: 10px; }
+  .slide.dense .tech-compare { margin-top: 14px; }
+  .slide.dense .tc-cell { padding: 8px 14px; font-size: 1.05rem; line-height: 1.4; }
+  .slide.dense .tc-cell.hdr { padding: 8px 14px; font-size: 0.85rem; }
+
+  /* ─── Cover specific ─── */
+  .nameplate {
+    border-top: 6px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.013rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ─── Slide num ─── */
+  .slide-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.982rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    position: absolute;
+    bottom: 32px;
+    left: 100px;
+  }
+  .slide.dark .slide-num, .slide.ink .slide-num { color: var(--ink); opacity: 0.4; }
+
+  /* ─── Brand corner (MaxImpact) ─── */
+  .brand-corner {
+    position: absolute;
+    bottom: 28px;
+    right: 100px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.893rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  .brand-corner .bar { width: 28px; height: 1px; background: currentColor; }
+
+  /* ─── Big figure ─── */
+  .big-figure {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .big-figure .bf-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size:8.93rem;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: currentColor;
+  }
+  .big-figure .bf-text {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.429rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: currentColor;
+    opacity: 0.85;
+    max-width: 320px;
+  }
+
+  /* ─── Bulk highlight (slide 07) ─── */
+  .bulk-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    margin-top: 24px;
+    background: rgba(0,0,0,0.08);
+  }
+  .bulk-cell {
+    background: #0d1117;
+    padding: 24px 22px;
+    color: var(--ink);
+  }
+  .bulk-cell .bn {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:3.572rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .bulk-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size:1.369rem;
+    margin-bottom: 6px;
+  }
+  .bulk-cell p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.131rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ─── Admin/User preview grid (no real images — use color tiles) ─── */
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+    height: 540px;
+  }
+  .preview-card {
+    position: relative;
+    background: #141414;
+    border: 1px solid rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  .preview-card.main-card { grid-row: span 2; }
+  .preview-card .pc-mock {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 6px;
+  }
+  .preview-card .pc-bar {
+    height: 8px;
+    background: rgba(0,0,0,0.06);
+  }
+  .preview-card .pc-bar.acc { background: var(--accent); opacity: 0.6; width: 28%; }
+  .preview-card .pc-bar.wide { width: 70%; }
+  .preview-card .pc-bar.mid { width: 50%; }
+  .preview-card .pc-bar.short { width: 30%; }
+  .preview-card .pc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    flex: 1;
+    margin-top: 6px;
+  }
+  .preview-card .pc-grid > div {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+  }
+  .preview-card .preview-label {
+    position: absolute;
+    top: 12px; left: 12px;
+    padding: 5px 11px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:0.922rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    text-transform: uppercase;
+    z-index: 3;
+  }
+  .preview-card .preview-title {
+    position: relative;
+    z-index: 2;
+    padding: 14px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.191rem;
+    font-weight: 500;
+    color: var(--ink);
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    width: 100%;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-list {
+    display: flex; flex-direction: column;
+    gap: 1px; background: rgba(0,0,0,0.12);
+  }
+  .roadmap-list .rl {
+    background: #fff;
+    padding: 16px 22px;
+    display: flex; gap: 20px; align-items: center;
+  }
+  .roadmap-list .rl .rn {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:2.233rem;
+    color: var(--accent);
+    min-width: 40px;
+  }
+  .roadmap-list .rl .rt {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.414rem;
+  }
+
+  /* ─── Conclusion box ─── */
+  .end-strap {
+    padding-top: 22px;
+    border-top: 6px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  /* ─── Logo block (top-left of cover) ─── */
+  .mi-logo-row {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    color: var(--ink-2, #262626);
+  }
+  .mi-logo-row img { height: 38px; opacity: 0.9; }
+  .mi-logo-row .mi-divider { width: 1px; height: 26px; background: rgba(0,0,0,0.12); }
+  .mi-logo-row .mi-text {
+    font-size:0.982rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-4, #6b7280);
+    line-height: 1.6;
+  }
+
+  /* ─── Cost saving block ─── */
+  .save-box {
+    background: var(--accent);
+    color: var(--ink);
+    padding: 24px 28px;
+    display: flex; gap: 24px; align-items: center;
+    margin-top: 14px;
+  }
+  .save-box .sb-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size:3.87rem;
+    line-height: 1;
+    min-width: 160px;
+  }
+  .save-box .sb-text {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size:1.414rem;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 01 COVER -->
+  <div class="slide light" style="padding:50px 100px; justify-content:space-between; background:#fff;">
+    <div class="nameplate" style="border-color:var(--ink); color:var(--ink);">
+      <span>BLOCKPANG · PROPOSAL</span>
+      <span>VOL.01 — PROPOSAL · 2026 / 05</span>
+      <span>FOR · 블럭팡 남정일 담당자님</span>
+    </div>
+
+    <div>
+      <div class="mi-logo-row" style="margin-bottom:36px; display:flex; align-items:center; gap:28px;">
+        <img src="assets/blockpang_logo.png" alt="블럭팡" style="height:88px; width:auto;">
+        <div class="mi-divider" style="width:2px; height:54px; background:var(--ink);"></div>
+        <div class="mi-text" style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.488rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-2, #262626); line-height:1.6; font-weight:600;">Proposal for 블럭팡<br><span style="font-weight:400; color:var(--ink-4, #6b7280);">2026 · 가맹 운영 통합 시스템</span></div>
+      </div>
+      <h1 style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:9.228rem; line-height:0.96; letter-spacing:-0.03em; margin:0 0 26px; color:var(--ink);">
+        The <em style="font-style:italic; font-weight:500; color:var(--accent);">Blockpang</em><br>Operating System.
+      </h1>
+      <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:400; font-size:1.935rem; line-height:1.55; color:var(--ink-3, #525252); max-width:880px; padding-top:16px; border-top:3px solid var(--ink);">
+        본사가 가맹점을 들여다보고, 점주가 태블릿 한 대로 매장을 운영하며, 손님은 자동으로 안내받는 — <strong style="font-style:normal; font-weight:600;">블럭팡 가맹 전용 통합 운영 SaaS</strong>를 위한 12주 구축안.
+      </p>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.042rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-4, #6b7280); line-height:2;">
+        FOR · 블럭팡 남정일 담당자님
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.488rem; color:var(--ink-4, #6b7280);">
+        "점주의 일을 절반으로, 본사의 통제는 두 배로."
+      </div>
+    </div>
+
+    <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.982rem; letter-spacing:0.2em; opacity:0.4; color:var(--ink);">01 / 12</div>
+  </div>
+
+  <!-- 02 STRATEGY -->
+
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 01</span> The Strategy</div>
+    <h2 class="ed-title">"전부 한 번에"는 함정입니다.<br><em>대신, 단위별로 나눠서 안전하게.</em></h2>
+    <p class="lede">레퍼런스(플레이온) 는 11년 누적 결과물입니다. 이를 3개월에 1:1로 따라가면 마감 직전에 무너집니다. 블럭팡은 <strong>핵심 도메인부터 12주 안에 안정 오픈</strong>하고, 부가 영역은 우선순위에 맞춰 <strong>단위별로 순차 개발</strong>하는 단계적 출시 전략을 권장합니다.</p>
+
+    <div class="ed-three-col" style="margin-top:28px;">
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">Unit 1 — 1차 단위</div>
+        <h4>핵심 운영 SaaS<br>(12주 / ₩ 20M)</h4>
+        <ul>
+          <li>회원·입퇴실·대여반납</li>
+          <li>요금제 3종 + 자동 연체료</li>
+          <li>PG 결제 + 알림톡 5종</li>
+          <li>AI 인사이트 5항목</li>
+          <li>웹 + 태블릿 앱 + 본사·점주 어드민</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">Unit 2 — 확장 단위</div>
+        <h4>부가 영역<br>(2차 순차 개발)</h4>
+        <ul>
+          <li>요금제 추가 3종 (월정액·선불·포인트)</li>
+          <li>외부 레고 DB 자동 동기화</li>
+          <li>AI 인사이트 21항목 풀세트</li>
+          <li>매장용품 쇼핑몰</li>
+          <li>그룹회원·등급별 초과요금</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--ink);">
+        <div class="pc-tag" style="color:var(--ink);">Unit 3 — 운영 단위</div>
+        <h4>유지보수 & 신규 가맹점 온보딩</h4>
+        <ul>
+          <li>월 정액 유지보수</li>
+          <li>신규 매장 셋업 표준화</li>
+          <li>알림톡·AI 토큰 관리</li>
+          <li>본사 통계 리포트 자동화</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:30px; padding:20px 28px; background:#fafafa; border-left:4px solid var(--accent); color:var(--ink); display:inline-flex; gap:22px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.488rem; opacity:0.55;">결론</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.488rem; font-weight:500;">"기능 다 욱여넣지 않습니다." 12주에 무리한 풀세트보다, 1년 쓸 수 있는 안정 코어 + 단위별 순차 개발이 더 빠른 결과입니다.</span>
+    </div>
+
+    <div class="slide-num">02 / 12</div>
+  </div>
+
+  <!-- 04 CUSTOMER PERSONAS -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 02</span> The Users</div>
+    <h2 class="ed-title">레고 매장의 사용자는<br><em>4명이고, 화면은 4개입니다.</em></h2>
+    <p class="lede" style="margin-bottom:18px;">하나의 시스템이지만 화면은 역할별로 분리됩니다. 본사·점주·직원·손님 — 각자가 보는 정보의 양과 권한이 다르고, 블럭팡은 이를 명확히 4개 인터페이스로 분리 설계합니다.</p>
+
+    <div class="persona-row" style="margin-top:18px;">
+      <div class="persona-card acc">
+        <div class="persona-tag">Persona 01 · 본사</div>
+        <h4>본사 관리자<br>"가맹 통제자"</h4>
+        <div class="persona-meta"><span>본사 사무직</span><span>전체 대시보드</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>가맹점별 매출 비교</li><li>표준 요금정책 일괄 적용</li></ul></div>
+        <div class="persona-section"><div class="ps-label">블럭팡</div><ul><li><strong style="color:var(--ink);">멀티테넌트 대시보드</strong></li><li>본사 일괄 정책 배포</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">Persona 02 · 가맹</div>
+        <h4>가맹점주<br>"태블릿 한 손 운영"</h4>
+        <div class="persona-meta"><span>1인 운영</span><span>카운터 근무</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>요금/연체료 손계산 피곤</li><li>매출·이용시간 파악 어려움</li></ul></div>
+        <div class="persona-section"><div class="ps-label">블럭팡</div><ul><li>태블릿 앱 전용 화면</li><li>자동 요금·연체료·문자</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">Persona 03 · 직원</div>
+        <h4>매장 직원 / 파트<br>"한정 권한"</h4>
+        <div class="persona-meta"><span>아르바이트</span><span>일부 권한</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>요금제·정책 헷갈림</li><li>실수 시 환불 절차 복잡</li></ul></div>
+        <div class="persona-section"><div class="ps-label">블럭팡</div><ul><li>역할별 권한 매트릭스</li><li>실수 방지 가이드 UI</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">Persona 04 · 고객</div>
+        <h4>매장 손님 (보호자)<br>"문자 수신자"</h4>
+        <div class="persona-meta"><span>학부모</span><span>매장 비대면</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>아이의 이용내역 모름</li><li>잔여시간·반납일 까먹음</li></ul></div>
+        <div class="persona-section"><div class="ps-label">블럭팡</div><ul><li>알림톡 5종 자동 발송</li><li>상세한 입퇴실·대여 안내</li></ul></div>
+      </div>
+    </div>
+
+    <div class="slide-num">03 / 12</div>
+  </div>
+
+  <!-- 05 MARKET & REFERENCES -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 03</span> The Reference</div>
+    <h2 class="ed-title">플레이온은 11년이지만,<br><em>블럭팡은 12주에 코어만.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:22px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:20px;">플레이온은 "레고 매장 운영 SaaS" 카테고리의 사실상 유일한 레퍼런스입니다. 11년·18만줄·88테이블의 누적이지만, 블럭팡은 그중 <strong>가장 자주 쓰는 코어 40%만 12주에 안정 구현</strong>합니다. POS·키오스크·자체 단말기는 제외하고 점주의 태블릿 한 대로 통합합니다.</p>
+
+        <div class="stat-strip">
+          <div><div class="ss-num">40<span style="font-size:1.935rem;">%</span></div><div class="ss-label">초기 커버 범위</div></div>
+          <div><div class="ss-num">2</div><div class="ss-label">앱 · 웹 / 태블릿</div></div>
+          <div><div class="ss-num">3<span style="font-size:1.935rem;">개월</span></div><div class="ss-label">무상 유지보수</div></div>
+        </div>
+
+        <p class="ed-body" style="margin-top:16px;">"기능 수"가 아니라 <strong>"점주가 매일 쓰는 동선"</strong>에 집중합니다. 자동 요금·연체료 계산 엔진, 알림톡 5종, AI 인사이트, 본사-점주 채팅, 멀티테넌트 대시보드 — 이 5가지가 12주 안에 안정적으로 살아 움직이도록.</p>
+      </div>
+
+      <div>
+        <table class="ref-table">
+          <thead><tr><th>플레이온 기능</th><th>본사 자랑</th><th>블럭팡 1차</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="name">요금제 6종<br><span style="font-size:0.967rem; color:#888; font-weight:400;">시간/정액/횟수/월정액/선불/포인트</span></td>
+              <td>전 매장 통합 정책</td>
+              <td><span class="badge">3종</span> 시간/정액/횟수</td>
+            </tr>
+            <tr>
+              <td class="name">자동 문자 7종<br><span style="font-size:0.967rem; color:#888; font-weight:400;">상황별 동적 템플릿</span></td>
+              <td>SMS 발송</td>
+              <td><span class="badge">5종</span> 카카오 알림톡</td>
+            </tr>
+            <tr>
+              <td class="name">AI 매장 분석 21항목<br><span style="font-size:0.967rem; color:#888; font-weight:400;">GPT-4o-mini</span></td>
+              <td>실시간 분석</td>
+              <td><span class="badge">5항목</span> Claude/GPT</td>
+            </tr>
+            <tr>
+              <td class="name">본사 ↔ 점주 채팅<br><span style="font-size:0.967rem; color:#888; font-weight:400;">자체 메신저</span></td>
+              <td>카카오톡 유사</td>
+              <td><span class="badge">YES</span> 채널톡 임베드</td>
+            </tr>
+            <tr>
+              <td class="name">매장 대시보드<br><span style="font-size:0.967rem; color:#888; font-weight:400;">매출·회원·이용시간</span></td>
+              <td>본사·점주 분리</td>
+              <td><span class="badge">YES</span> 멀티테넌트</td>
+            </tr>
+            <tr>
+              <td class="name">외부 레고 DB 자동 수집<br><span style="font-size:0.967rem; color:#888; font-weight:400;">매일 새벽 3시</span></td>
+              <td>1,000건 일괄 입고</td>
+              <td><span class="badge" style="background:#888;">P2</span> 수동 입고 → 자동화</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide-num">04 / 12</div>
+  </div>
+
+  <!-- 06 FEATURE MAP -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 04</span> The Feature Map</div>
+    <h2 class="ed-title" style="color:var(--ink);">8개 영역,<br><em>한 번의 통합 계약.</em></h2>
+
+    <div class="feature-grid">
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">01</div>
+        <h5>회원 · 권한</h5>
+        <ul>
+          <li>4단 역할 (본사·점주·직원·손님)</li>
+          <li>본인인증 · 보호자 정보</li>
+          <li>회원 등급 · 비회원 입실</li>
+          <li>CRM 메모</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">02</div>
+        <h5>입퇴실 · 홀드</h5>
+        <ul>
+          <li>입퇴실 자동 시간 카운트</li>
+          <li>홀드(일시정지)</li>
+          <li>상품판매 연동</li>
+          <li>이용 레고 자동 매칭</li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">03</div>
+        <h5>요금 계산 엔진 ★</h5>
+        <ul>
+          <li>요금제 3종 (시간·정액·횟수)</li>
+          <li>등급별 초과요금 자동</li>
+          <li>자동 연체료 (일수×단가)</li>
+          <li>포인트 적립/사용</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">04</div>
+        <h5>대여 · 반납</h5>
+        <ul>
+          <li>대여 신청 · 반납 처리</li>
+          <li>1회 대여 (비회원 가능)</li>
+          <li>중복 대여 허용</li>
+          <li>레고 등급·사이즈 관리</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">05</div>
+        <h5>결제 · PG</h5>
+        <ul>
+          <li>토스페이먼츠 연동</li>
+          <li>요금충전 · 상품판매</li>
+          <li>연체료 결제</li>
+          <li>환불 · 부분 환불</li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">06</div>
+        <h5>AI 인사이트 ★</h5>
+        <ul>
+          <li>Claude / GPT API 연동</li>
+          <li>5개 항목 자동 분석</li>
+          <li>주간 매장 리포트</li>
+          <li>개선안 자동 생성</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">07</div>
+        <h5>알림 · 채팅</h5>
+        <ul>
+          <li>카카오 알림톡 5종</li>
+          <li>SMS fallback</li>
+          <li>채널톡 임베드</li>
+          <li>본사 공지 일괄 발송</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">08</div>
+        <h5>웹 + 태블릿 앱</h5>
+        <ul>
+          <li>웹 (PC + 태블릿 브라우저)</li>
+          <li>iPad/Android 전용 앱</li>
+          <li>React Native + Expo</li>
+          <li>오프라인 임시 동기화</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; padding:16px 24px; background:#fff; color:#000; display:inline-flex; gap:20px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.414rem;">★ 표시</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.369rem; font-weight:500;">블럭팡에서 가장 무겁고 가장 차별화되는 두 영역 — 요금 계산 엔진과 AI 인사이트.</span>
+    </div>
+
+    <div class="slide-num">05 / 12</div>
+  </div>
+
+  <!-- 07 PRICING ENGINE -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 05</span> The Pricing Engine</div>
+    <h2 class="ed-title" style="color:var(--ink);">요금·연체료,<br><em>점주가 손으로 계산하지 않습니다.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:18px;">
+      <div>
+        <p class="ed-body">레고 매장의 가장 큰 운영 부담은 "요금 계산"입니다. 시간당·정액·횟수의 3종 요금제, 등급별 초과요금, 일수 단위 연체료를 점주가 손으로 계산하면 분쟁과 실수가 반복됩니다.<br><br>블럭팡은 <strong style="color:var(--ink);">규칙 기반 요금 계산 엔진</strong>을 코어로 둡니다. 입실·퇴실·대여·반납 이벤트가 들어오면 엔진이 요금제·등급·연체일수를 종합해 자동 산출, 점주는 확인만 하면 됩니다.</p>
+
+        <div class="pull-quote" style="color:var(--ink); border-left-color:var(--accent);">
+          "요금 계산은 점주가 하지 않습니다. 시스템이 합니다."
+        </div>
+      </div>
+
+      <div>
+        <div style="background:#fff; color:#000; padding:24px 26px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.922rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#888; margin-bottom:14px;">PRICING RULE — SAMPLE OUTPUT</div>
+          <table style="width:100%; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.161rem; border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid #000;">
+                <td style="padding:6px 6px; font-weight:700;">이벤트</td>
+                <td style="padding:6px 6px; font-weight:700;">규칙</td>
+                <td style="padding:6px 6px; font-weight:700; text-align:right;">계산</td>
+                <td style="padding:6px 6px; font-weight:700; text-align:right;">결과</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">입실 13:20</td><td style="padding:6px;">정액 10시간권</td><td style="padding:6px; text-align:right;">잔여 6h 40m</td><td style="padding:6px; text-align:right; color:var(--accent);">차감</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">대여 #21255</td><td style="padding:6px;">나무 8회권</td><td style="padding:6px; text-align:right;">잔여 7회</td><td style="padding:6px; text-align:right; color:var(--accent);">−1회</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">반납 D+2</td><td style="padding:6px;">연체료 2,000원/일</td><td style="padding:6px; text-align:right;">2 × 2,000</td><td style="padding:6px; text-align:right; color:#c00;">+4,000원</td></tr>
+              <tr><td style="padding:6px;">결제</td><td style="padding:6px;">자동 토스 호출</td><td style="padding:6px; text-align:right;">잔액 차감</td><td style="padding:6px; text-align:right; color:var(--accent);">완료</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.071rem; color:#666; line-height:1.6;">엔진은 룰 우선순위에 따라 평가 — 점주는 결과 확인 후 1탭으로 승인. 분쟁 발생 시 계산 로그를 그대로 손님에게 알림톡 발송.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bulk-strip">
+      <div class="bulk-cell">
+        <div class="bn">01</div>
+        <h5>시간당 요금</h5>
+        <p>분 단위 카운트 — 홀드 시 자동 중지, 재개 시 재계산</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">02</div>
+        <h5>정액 차감</h5>
+        <p>10시간권 등 시간 패키지 — 잔여시간 실시간 갱신</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">03</div>
+        <h5>횟수 대여</h5>
+        <p>5/8/10회권 — 대여마다 1회 차감, 유효기간 자동 체크</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">04</div>
+        <h5>등급별 초과</h5>
+        <p>약정 등급 위 레고 대여 시 차액 자동 계산</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">05</div>
+        <h5>연체료</h5>
+        <p>연체일수 × 일 단가 — 반납 직전 자동 산출 + 알림</p>
+      </div>
+    </div>
+
+    <div class="slide-num">06 / 12</div>
+  </div>
+
+  <!-- 08 AI INSIGHT + CHAT -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 06</span> The Intelligence</div>
+    <h2 class="ed-title">AI는 매장을 분석하고,<br><em>채팅은 본사가 점주를 잡습니다.</em></h2>
+    <p class="lede">매장 운영의 두 번째 부담은 "혼자 판단해야 한다"는 외로움입니다. 블럭팡은 <strong>Claude / GPT API로 자동 분석된 주간 리포트</strong>를 점주에게 보내고, <strong>채널톡 임베드로 본사와 즉시 채팅</strong>을 잇습니다. AI는 점주의 두번째 머리, 본사 채팅은 점주의 든든한 동료가 됩니다.</p>
+
+    <div class="flow" style="margin-top:24px;">
+      <div class="flow-step start">
+        <div class="fs-tag">DATA</div>
+        <h5>매장 이벤트 수집</h5>
+        <p>입퇴실·매출·대여·이용시간</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-tag">PROMPT</div>
+        <h5>구조화 프롬프트</h5>
+        <p>5개 항목 분석 요청</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step core">
+        <div class="fs-tag" style="color:var(--ink-4, #6b7280);">LLM · 핵심</div>
+        <h5>Claude / GPT API</h5>
+        <p style="color:var(--ink-2, #262626);">요약 · 발견 · 개선안</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step end">
+        <div class="fs-tag" style="color:var(--ink-4, #6b7280);">DELIVER</div>
+        <h5>점주 리포트</h5>
+        <p style="color:var(--ink-2, #262626);">웹/앱 + 알림톡 요약</p>
+      </div>
+    </div>
+
+    <div class="ed-two-col" style="margin-top:30px;">
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.967rem; font-weight:700; letter-spacing:0.22em; color:#888; text-transform:uppercase; margin-bottom:10px;">AI 분석 5개 항목</div>
+        <p class="ed-body"><strong>① 매출 추이</strong> 전주 대비 증감과 원인 추정<br><strong>② 인기 레고</strong> 시리즈별 회전율·체류시간<br><strong>③ 고객 행동</strong> 재방문 주기·이탈 신호<br><strong>④ 요금제 효율</strong> 어떤 패키지가 마진 좋은지<br><strong>⑤ 다음 주 액션</strong> 구체 실행안 3가지</p>
+      </div>
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.967rem; font-weight:700; letter-spacing:0.22em; color:#888; text-transform:uppercase; margin-bottom:10px;">본사 ↔ 점주 채팅</div>
+        <p class="ed-body">자체 메신저를 새로 만들지 않습니다. <strong>채널톡 SDK를 웹·앱 양쪽에 임베드</strong>하면 본사가 점주에게 1:1, 1:N 메시지를 즉시 보낼 수 있고, 점주는 평소 쓰던 카톡과 비슷한 UX로 받습니다. 답장·이미지·공지·일괄 발송 모두 채널톡이 처리합니다.</p>
+      </div>
+    </div>
+
+    <div class="slide-num">07 / 12</div>
+  </div>
+
+  <!-- 09 BUILD & ROADMAP -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 07</span> The Build</div>
+    <h2 class="ed-title">1차 단위 통합 계약,<br><em>5단계 순차 배포.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:24px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:18px;">1차 단위 범위를 <strong>한 번의 계약</strong>으로 묶고, 우선순위 순서대로 빌드·배포합니다. 중간 추가 견적·재협상 없이 일관된 일정으로 진행되며, 2차 단위 확장은 별도 협의로 자연스럽게 이어집니다.</p>
+
+        <div style="background:#fafafa; border:1px solid #e5e7eb; color:var(--ink); padding:24px 26px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.34rem; opacity:0.55; margin-bottom:10px;">1차 단위 통합 범위</div>
+          <ul style="list-style:none; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; line-height:2; color:var(--ink-2, #262626);">
+            <li>— 본사·점주·직원·손님 4단 권한</li>
+            <li>— 입퇴실 · 홀드 · 상품판매 연동</li>
+            <li>— 대여반납 · 1회/중복 대여</li>
+            <li>— 요금제 3종 + 자동 연체료</li>
+            <li>— 토스페이먼츠 PG 연동</li>
+            <li>— 카카오 알림톡 5종 + SMS fallback</li>
+            <li>— AI 인사이트 5항목 (Claude/GPT)</li>
+            <li>— 채널톡 임베드 (본사-점주 채팅)</li>
+            <li>— 멀티테넌트 본사·점주 대시보드</li>
+            <li>— 웹 + iPad/Android 태블릿 앱</li>
+            <li>— 3개월 무상 유지보수</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; opacity:0.6; margin-bottom:12px; font-size:1.414rem;">단계별 배포 로드맵</div>
+        <div class="roadmap-list">
+          <div class="rl"><span class="rn">1.</span><span class="rt">DB 설계 + 멀티테넌트 + 4단 권한</span></div>
+          <div class="rl"><span class="rn">2.</span><span class="rt">입퇴실 · 대여반납 · 요금 엔진</span></div>
+          <div class="rl"><span class="rn">3.</span><span class="rt">PG · 알림톡 · 채널톡 임베드</span></div>
+          <div class="rl"><span class="rn">4.</span><span class="rt">AI 인사이트 + 대시보드 + 태블릿 앱</span></div>
+          <div class="rl"><span class="rn">5.</span><span class="rt">QA · 베타 매장 · 정식 오픈 · 인수인계</span></div>
+        </div>
+
+        <div style="margin-top:18px; padding:18px 24px; background:var(--accent); color:var(--ink); font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.34rem; line-height:1.55;">
+          오픈 후 <strong>3개월 무상 유지보수</strong> 포함 — 버그 수정·1차 가맹점 셋업 지원·소소한 개선까지.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">08 / 12</div>
+  </div>
+
+  <!-- 10 WBS 12 WEEK -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 08</span> The Launch · 12주 일정</div>
+    <h2 class="ed-title" style="font-size:5.061rem;">계약 후 <em>12주 안에 오픈합니다.</em></h2>
+
+    <div style="margin-top:18px; background:#f7f7f8; padding:24px 28px;">
+      <div style="display:grid; grid-template-columns:160px repeat(12, 1fr); gap:4px; align-items:center; font-family:'Pretendard Variable','Pretendard',sans-serif;">
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; padding:8px 0;">작업</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W1</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W2</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W3</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W4</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W5</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W6</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W7</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W8</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W9</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W10</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W11</div>
+        <div style="font-size:0.893rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W12</div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">기획 · 와이어 · 본사 정책 정의</div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">UI · 태블릿 디자인</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">DB · 멀티테넌트 · 권한</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">회원 · 입퇴실 · 홀드</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">대여반납 · 레고 카탈로그</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">요금 엔진 · 연체료 ★</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#F57C00; margin:6px 0;"></div>
+        <div style="height:16px; background:#F57C00; margin:6px 0;"></div>
+        <div style="height:16px; background:#F57C00; margin:6px 0;"></div>
+        <div style="height:16px; background:#F57C00; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">PG · 알림톡 · 채널톡</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">AI 인사이트 · 대시보드</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">태블릿 앱 (RN+Expo)</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:1.22rem; font-weight:500; padding:8px 0;">QA · 베타 매장 · 정식 오픈</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#6b7280; outline:3px solid #000; margin:6px 0;"></div>
+      </div>
+
+      <div style="display:flex; gap:24px; margin-top:18px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.071rem; color:#666;">
+        <span><span style="display:inline-block; width:12px; height:12px; background:#6b7280; vertical-align:middle; margin-right:8px;"></span>핵심 작업</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#F57C00; vertical-align:middle; margin-right:8px;"></span>요금 엔진 (블럭팡 차별점)</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#444; vertical-align:middle; margin-right:8px;"></span>병행 작업 / QA</span>
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px; opacity:0.4;">09 / 12</div>
+  </div>
+
+  <!-- 11 COST -->
+  <div class="slide light">
+    <div class="section-mark" style="color:var(--ink-4, #6b7280);"><span class="acc" style="color:var(--accent);">§ 09</span> The Cost</div>
+    <h2 class="ed-title" style="color:var(--ink);">1차 단위 견적<br><em>₩ 20,000,000 (VAT 별도)</em></h2>
+    <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.414rem; color:var(--ink-3, #525252); margin-top:-6px; margin-bottom:6px;">※ 본 금액은 <strong style="color:var(--accent);">최종 견적이 아니며</strong>, 미팅 후 요구사항 확정에 따라 항목·범위·금액 모두 <strong>조정 가능</strong>합니다.</p>
+
+    <div class="ed-two-col" style="margin-top:22px;">
+      <div>
+        <div class="cost-block dark" style="padding:26px 30px;">
+          <h4 style="margin-bottom:16px;">개발 비용 구성</h4>
+          <div class="cost-list">
+            <div class="cl-item"><span class="cl-name">기획 · UI · 태블릿 디자인</span><span class="cl-value">₩ 3,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">웹 프론트엔드 (Next.js)</span><span class="cl-value">₩ 4,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">백엔드 · DB · 멀티테넌트</span><span class="cl-value">₩ 5,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">요금 엔진 + AI 인사이트 ★</span><span class="cl-value">₩ 3,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">태블릿 앱 (RN + Expo)</span><span class="cl-value">₩ 3,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">PG · 알림톡 · 채널톡 연동</span><span class="cl-value">₩ 1,500,000</span></div>
+            <div class="cl-item"><span class="cl-name">QA · 베타 · 인수인계</span><span class="cl-value">₩ 500,000</span></div>
+            <div class="cl-item cl-total"><span class="cl-name">1차 단위 합계</span><span class="cl-value">₩ 20,000,000</span></div>
+          </div>
+        </div>
+
+        <div class="save-box">
+          <span class="sb-num">U2</span>
+          <span class="sb-text">2차 단위 — 요금제 추가 3종, 외부 레고 DB 자동수집, AI 21항목 풀세트, 쇼핑몰, 그룹회원. <strong>1차 오픈 후 실데이터 확인하면서 우선순위 협의 → 순차 개발</strong>로 안전하게 확장합니다.</span>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.964rem; line-height:1.55; color:var(--ink-2, #262626); border-top:3px solid var(--ink); padding-top:16px; margin-bottom:22px;">
+          매장 운영 SaaS는 한 번 잘 만들면 가맹점이 늘 때마다 매출이 늘어납니다. 첫 12주에 코어를 안정적으로 만드는 게 가장 큰 ROI입니다.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.1);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.87rem; line-height:1; color:var(--ink); min-width:160px;">3<span style="font-size:1.786rem;">개월</span></span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.414rem; color:var(--ink-3, #525252); line-height:1.5;">오픈 후 무상 유지보수 — 버그 수정, 1차 가맹점 셋업 지원, 소소한 개선 포함</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.1);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.87rem; line-height:1; color:var(--ink); min-width:160px;">12<span style="font-size:1.786rem;">주</span></span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.414rem; color:var(--ink-3, #525252); line-height:1.5;">계약 후 정식 오픈까지 — W9에 1차 베타 매장 운영 가능</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px;">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:3.87rem; line-height:1; color:var(--ink); min-width:160px;">+α</span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.414rem; color:var(--ink-3, #525252); line-height:1.5;">유지보수 종료 후 월 운영 계약 별도 협의 (정액형 권장)</span>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; padding:16px 22px; background:#fff; color:#000; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.265rem; line-height:1.6;">
+          ※ 토스페이먼츠 / 카카오 알림톡 / 채널톡 / Claude·GPT API 등 외부 사용료, 서버·도메인은 발주처 부담 (실비 정산 권장)
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">10 / 12</div>
+  </div>
+
+  <!-- 12 TECH COMPARE -->
+  <div class="slide light dense">
+    <div class="section-mark"><span class="acc">§ 10</span> The Tech</div>
+    <h2 class="ed-title">웹·앱 코드를 공유하는<br><em>단일 풀스택을 권장합니다.</em></h2>
+    <p class="lede" style="margin-bottom:14px;">웹(태블릿 브라우저)과 React Native 앱이 같은 데이터·도메인 로직을 공유해야 3개월이 가능합니다. 단일 백엔드 + 공유 타입 + 모노레포로 묶는 옵션 A를 권장하며, 백엔드 분리를 선호할 경우 옵션 B(NestJS 분리)도 가능합니다.</p>
+
+    <div class="tech-compare">
+      <div class="tc-cell hdr">항목</div>
+      <div class="tc-cell hdr acc">옵션 A · 단일 풀스택 (권장)</div>
+      <div class="tc-cell hdr">옵션 B · 백엔드 분리 (대안)</div>
+
+      <div class="tc-cell label">웹 프론트엔드</div>
+      <div class="tc-cell acc">Next.js 16 (App Router) · React 19 · Tailwind 4</div>
+      <div class="tc-cell">Next.js 16 · React 19 · Tailwind 4</div>
+
+      <div class="tc-cell label">백엔드 API</div>
+      <div class="tc-cell acc">Next.js Route Handlers · TypeScript</div>
+      <div class="tc-cell">NestJS 11 · TypeScript · OpenAPI</div>
+
+      <div class="tc-cell label">데이터베이스</div>
+      <div class="tc-cell acc">PostgreSQL 16 · Prisma 7 ORM</div>
+      <div class="tc-cell">PostgreSQL 16 · Prisma / TypeORM</div>
+
+      <div class="tc-cell label">태블릿 앱</div>
+      <div class="tc-cell acc">React Native 0.76 + Expo SDK 53 · 동일 TS 타입 공유</div>
+      <div class="tc-cell">React Native + Expo · OpenAPI 자동 클라이언트</div>
+
+      <div class="tc-cell label">결제 PG</div>
+      <div class="tc-cell acc">토스페이먼츠 결제창 v2 (Node SDK)</div>
+      <div class="tc-cell">토스페이먼츠 (NestJS Webhook)</div>
+
+      <div class="tc-cell label">알림 · 채팅</div>
+      <div class="tc-cell acc">카카오 알림톡 (NHN Cloud) · 채널톡 SDK 임베드</div>
+      <div class="tc-cell">동일 — 채널톡·NHN 모두 REST</div>
+
+      <div class="tc-cell label">AI LLM</div>
+      <div class="tc-cell acc">Anthropic SDK (Claude 3.7) · OpenAI SDK (gpt-4o-mini) fallback</div>
+      <div class="tc-cell">NestJS LLM 모듈 · 동일 모델</div>
+
+      <div class="tc-cell label">호스팅</div>
+      <div class="tc-cell acc">Vercel (웹·API) + AWS RDS · EAS Build (앱)</div>
+      <div class="tc-cell">AWS ECS / EC2 · RDS · EAS Build</div>
+
+      <div class="tc-cell label">강점</div>
+      <div class="tc-cell acc"><strong>웹·앱 타입 공유 · 1팀 운영 가능</strong> · 모노레포 · 배포 자동화 · 3개월에 안정적</div>
+      <div class="tc-cell"><strong>백엔드 독립 · 트래픽 큰 확장에 강함</strong> · 향후 모바일 앱 추가 시 영향 적음</div>
+
+      <div class="tc-cell label" style="border-bottom:none;">약점 / 유의</div>
+      <div class="tc-cell acc" style="border-bottom:none;">백엔드 무거운 작업은 별도 워커 큐로 분리 필요</div>
+      <div class="tc-cell" style="border-bottom:none;">통합 비용 + 조정 비용 상승 — 3개월 일정에서는 부담</div>
+    </div>
+
+    <div style="margin-top:18px; padding:14px 22px; background:var(--accent); color:var(--ink); display:inline-flex; gap:18px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.414rem;">권고</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.369rem;">3개월 일정·2,000만 견적에는 <strong>옵션 A (Next.js 풀스택 + Expo)</strong> 가 가장 안전합니다. 2차 단위에서 트래픽이 늘면 옵션 B로 분리 가능.</span>
+    </div>
+
+    <div class="slide-num">11 / 12</div>
+  </div>
+
+  <!-- 12 CONCLUSION -->
+  <div class="slide light" style="padding:50px 100px; justify-content:space-between;">
+    <div>
+      <div class="section-mark"><span class="acc">§ 11</span> In Conclusion</div>
+      <h2 class="ed-title" style="font-size:5.954rem;">매장 운영 SaaS는<br><em>"기능"이 아니라 "점주의 시간"입니다.</em></h2>
+      <p class="lede" style="font-size:1.815rem;">블럭팡은 플레이온의 단순 복제가 아닙니다. 점주가 태블릿 하나로 카운터를 운영하고, 본사가 가맹점 전체를 한 눈에 보며, AI가 매장을 분석하는 — <strong>점주의 시간을 절반으로 줄이는 운영 SaaS</strong>를 12주 안에 만들어 드립니다.</p>
+    </div>
+
+    <div class="ed-three-col" style="margin-top:0;">
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">전략</div>
+        <h4 style="font-size:1.86rem;">1차 단위 (코어) +<br>2차 단위 순차 확장</h4>
+        <ul><li>12주에 핵심 40% 안정 오픈</li><li>실데이터로 다음 견적 결정</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">방법</div>
+        <h4 style="font-size:1.86rem;">웹·앱 코드 공유 +<br>요금 엔진 중심 설계</h4>
+        <ul><li>Next.js + RN(Expo) 모노레포</li><li>요금·연체료·AI 자동화</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">조건</div>
+        <h4 style="font-size:1.86rem;">₩ 20M · 12주<br>+ 3개월 유지보수</h4>
+        <ul><li>1차 단위 통합 계약</li><li>오픈 후 가맹점 셋업 지원</li></ul>
+      </div>
+    </div>
+
+    <div class="end-strap">
+      <div style="display:flex; align-items:center; gap:20px;">
+        <img src="assets/blockpang_logo.png" alt="블럭팡" style="height:60px; width:auto;">
+        <div style="width:2px; height:42px; background:var(--ink);"></div>
+        <div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:2.233rem; line-height:1; color:var(--ink); letter-spacing:0.05em;">BLOCKPANG · PROPOSAL</div>
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.563rem; color:#666; margin-top:8px;">Blockpang Store Operating System — Built for Owners</div>
+        </div>
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1.28rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-3); line-height:2; font-weight:600;">
+        FOR · 블럭팡 남정일 담당자님<br>NEXT STEP — 1차 단위 계약 검토
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px;">12 / 12</div>
+  </div>
+
+</div>
+
+</body>
+</html>

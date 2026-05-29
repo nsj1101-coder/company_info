@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 600px; height: 600px; overflow: hidden; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; background: #040d1a; }
+
+  .cover {
+    width: 600px; height: 600px;
+    background: linear-gradient(135deg, #040d1a 0%, #061624 50%, #071a30 100%);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 44px;
+  }
+
+  .grid-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(6,182,212,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,182,212,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .orb1 {
+    position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 70%);
+  }
+  .orb2 {
+    position: absolute; bottom: 80px; left: -80px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+  }
+
+  .badge {
+    position: absolute; top: 40px; left: 44px;
+    background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.35);
+    color: #22d3ee; font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 6px 14px; border-radius: 4px; text-transform: uppercase;
+  }
+
+  .mock-ui {
+    position: absolute; top: 90px; right: 30px;
+    width: 228px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(6,182,212,0.15); border-radius: 14px; padding: 16px;
+  }
+  .mock-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+  }
+  .mock-title { font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 700; letter-spacing: 0.5px; }
+  .mock-live {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 9px; color: #4ade80;
+  }
+  .live-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
+
+  .pipeline { margin-bottom: 14px; }
+  .pipe-row { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+  .pipe-stage { font-size: 9px; color: rgba(255,255,255,0.5); width: 50px; }
+  .pipe-bar-bg { flex: 1; height: 7px; background: rgba(255,255,255,0.06); border-radius: 3px; }
+  .pipe-bar-fill { height: 7px; border-radius: 3px; }
+  .pipe-count { font-size: 9px; color: rgba(255,255,255,0.6); width: 22px; text-align: right; }
+
+  .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .kpi-card {
+    background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.12);
+    border-radius: 7px; padding: 8px;
+  }
+  .kpi-label { font-size: 8px; color: rgba(255,255,255,0.4); margin-bottom: 3px; }
+  .kpi-value { font-size: 15px; font-weight: 800; color: #22d3ee; }
+  .kpi-unit { font-size: 8px; color: rgba(255,255,255,0.4); }
+
+  .category { font-size: 12px; color: #22d3ee; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; text-transform: uppercase; }
+  .title { font-size: 32px; font-weight: 900; color: #fff; line-height: 1.18; margin-bottom: 14px; }
+  .title span { color: #22d3ee; }
+  .desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 20px; max-width: 316px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+  .tag {
+    font-size: 11px; font-weight: 600; padding: 4px 11px; border-radius: 4px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+  }
+  .tag.hot { background: rgba(6,182,212,0.12); border-color: rgba(6,182,212,0.3); color: #22d3ee; }
+
+  .bottom-line {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.07); padding-top: 18px;
+  }
+  .company { font-size: 12px; color: rgba(255,255,255,0.35); font-weight: 500; }
+  .company span { color: rgba(255,255,255,0.65); font-weight: 700; }
+  .arrow {
+    width: 36px; height: 36px; background: #06b6d4; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: #fff; font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="grid-bg"></div>
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+
+  <div class="badge">B2B CRM System</div>
+
+  <div class="mock-ui">
+    <div class="mock-header">
+      <div class="mock-title">영업 파이프라인</div>
+      <div class="mock-live"><div class="live-dot"></div>LIVE</div>
+    </div>
+    <div class="pipeline">
+      <div class="pipe-row">
+        <span class="pipe-stage">리드</span>
+        <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width:85%;background:linear-gradient(90deg,#06b6d4,#0891b2);"></div></div>
+        <span class="pipe-count">34</span>
+      </div>
+      <div class="pipe-row">
+        <span class="pipe-stage">상담중</span>
+        <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width:58%;background:linear-gradient(90deg,#6366f1,#4f46e5);"></div></div>
+        <span class="pipe-count">23</span>
+      </div>
+      <div class="pipe-row">
+        <span class="pipe-stage">제안</span>
+        <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width:38%;background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div>
+        <span class="pipe-count">15</span>
+      </div>
+      <div class="pipe-row">
+        <span class="pipe-stage">계약</span>
+        <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width:22%;background:linear-gradient(90deg,#4ade80,#16a34a);"></div></div>
+        <span class="pipe-count">9</span>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">전환율</div>
+        <div class="kpi-value">26<span class="kpi-unit">%</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">이번달 수주</div>
+        <div class="kpi-value">₩<span style="font-size:10px">8.4M</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">CRM · 고객관계 관리</div>
+  <div class="title">B2B 영업<br><span>CRM 시스템</span></div>
+  <div class="desc">B2B 영업팀을 위한 리드 추적·파이프라인 관리·실시간 대시보드. Next.js + PostgreSQL 기반.</div>
+  <div class="tags">
+    <span class="tag hot">Next.js</span>
+    <span class="tag hot">PostgreSQL</span>
+    <span class="tag">React</span>
+    <span class="tag">Prisma ORM</span>
+    <span class="tag">TypeScript</span>
+  </div>
+  <div class="bottom-line">
+    <div class="company">by <span>MaxImpact</span> · 개발+기획</div>
+    <div class="arrow">→</div>
+  </div>
+</div>
+</body>
+</html>

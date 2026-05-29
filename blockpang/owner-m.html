@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>블럭팡 점주 콘솔 · 명지점</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #111317;
+    --ink-2: #1c2129;
+    --muted: #6b7280;
+    --muted-2: #9ca3af;
+    --line: #e5e7eb;
+    --line-2: #f0f1f4;
+    --bg-soft: #f3f4f6;
+    --bg-tint: #f7f8fa;
+    --paper: #ffffff;
+    --blue: #1d7eff;
+    --blue-soft: #e8f1ff;
+    --green: #1fb96e;
+    --green-soft: #e8faf0;
+    --navy: #1c2a3f;
+    --navy-soft: #e7ebf2;
+    --red: #ef2c4e;
+    --red-soft: #fff0f3;
+    --orange: #ff7a1a;
+    --orange-soft: #fff2e6;
+    --owner: #6d28d9;
+    --owner-soft: #f1ebff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background: var(--bg-soft);
+    color: var(--ink);
+    min-height: 100vh; min-height: 100dvh;
+    overscroll-behavior: none;
+  }
+  img { display: block; max-width: 100%; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ─── App shell ─── */
+  .app {
+    width: 100vw;
+    height: 100vh; height: 100dvh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ─── Top bar ─── */
+  .topbar {
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 0 14px;
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 5;
+  }
+  .back-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-size: 20px; color: var(--ink);
+  }
+  .topbar-center {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-width: 0;
+  }
+  .topbar-logo { height: 22px; flex-shrink: 0; }
+  .store-meta { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .store-name {
+    font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--ink); line-height: 1.1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .owner-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--owner-soft);
+    color: var(--owner);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .owner-badge::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--owner);
+  }
+  .top-actions { display: flex; gap: 4px; align-items: center; }
+  .top-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    color: var(--ink); font-size: 17px;
+    position: relative;
+  }
+  .top-btn:active { background: var(--bg-soft); }
+  .top-btn .dot {
+    position: absolute; top: 8px; right: 8px;
+    width: 7px; height: 7px;
+    background: var(--red);
+    border-radius: 50%;
+    border: 1.5px solid #fff;
+  }
+
+  /* ─── Tab panes ─── */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg-soft);
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; animation: fadeIn 0.18s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── Hero stat cards ─── */
+  .hero-stats {
+    padding: 18px 14px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 16px 14px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line-2);
+  }
+  .stat-card .lbl {
+    font-size: 11px; font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .stat-card .val {
+    font-size: 24px; font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--ink); line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .stat-card .val .unit { font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 2px; }
+  .stat-card .sub {
+    font-size: 11px; color: var(--muted);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .stat-card .sub .up { color: var(--green); font-weight: 700; }
+  .stat-card .sub .down { color: var(--red); font-weight: 700; }
+  .stat-card .ribbon {
+    position: absolute;
+    top: 0; right: 0;
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, transparent 50%, var(--blue-soft) 50%);
+  }
+  .stat-card.green .ribbon { background: linear-gradient(135deg, transparent 50%, var(--green-soft) 50%); }
+  .stat-card.orange .ribbon { background: linear-gradient(135deg, transparent 50%, var(--orange-soft) 50%); }
+  .stat-card.red .ribbon { background: linear-gradient(135deg, transparent 50%, var(--red-soft) 50%); }
+  .stat-card.full { grid-column: span 2; }
+
+  .mini-stats {
+    padding: 6px 14px 4px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .mini-stat {
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+  .mini-stat .mv {
+    font-size: 15px; font-weight: 800; color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .mini-stat .mv.red { color: var(--red); }
+  .mini-stat .mv.orange { color: var(--orange); }
+  .mini-stat .ml {
+    font-size: 10px; color: var(--muted);
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* ─── Quick actions ─── */
+  .quick-actions {
+    padding: 14px 14px 6px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .qa {
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    padding: 12px 6px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: transform 0.1s ease, background 0.15s ease;
+  }
+  .qa:active { transform: scale(0.96); background: var(--bg-soft); }
+  .qa .qa-ico {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    color: #fff;
+  }
+  .qa .qa-ico.blue { background: var(--blue); }
+  .qa .qa-ico.green { background: var(--green); }
+  .qa .qa-ico.orange { background: var(--orange); }
+  .qa .qa-ico.navy { background: var(--navy); }
+  .qa .qa-ico.owner { background: var(--owner); }
+  .qa .qa-lbl { font-size: 11px; font-weight: 600; color: var(--ink); }
+
+  /* ─── Section heads / cards ─── */
+  .section {
+    padding: 14px 14px 0;
+  }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 4px 4px 10px;
+  }
+  .section-head h3 {
+    font-size: 16px; font-weight: 800; letter-spacing: -0.018em;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .section-head h3 .cnt {
+    font-size: 13px; color: var(--blue); font-weight: 700;
+  }
+  .section-head .more {
+    font-size: 12px; color: var(--muted); font-weight: 600;
+  }
+
+  .card-list {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--line-2);
+    overflow: hidden;
+  }
+
+  /* ─── Customer row ─── */
+  .cust-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: center;
+  }
+  .cust-row:last-child { border-bottom: none; }
+  .cust-row:active { background: var(--bg-tint); }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #fff;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .avatar.b1 { background: linear-gradient(135deg, #1d7eff, #5da5ff); }
+  .avatar.b2 { background: linear-gradient(135deg, #1fb96e, #4fd49a); }
+  .avatar.b3 { background: linear-gradient(135deg, #ff7a1a, #ffb38a); }
+  .avatar.b4 { background: linear-gradient(135deg, #6d28d9, #a78bfa); }
+  .avatar.b5 { background: linear-gradient(135deg, #ef2c4e, #ff7795); }
+  .avatar.b6 { background: linear-gradient(135deg, #1c2a3f, #4a5568); }
+  .cust-info { min-width: 0; }
+  .cust-name {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    letter-spacing: -0.008em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cust-name .tier {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 1px 5px; border-radius: 3px;
+    background: var(--bg-soft); color: var(--muted);
+  }
+  .cust-name .tier.gold { background: #fff6dd; color: #b78600; }
+  .cust-name .tier.rent { background: var(--blue-soft); color: var(--blue); }
+  .cust-meta {
+    font-size: 11.5px; color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cust-status {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+  }
+  .badge {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .badge.green { background: var(--green-soft); color: #16804f; }
+  .badge.blue { background: var(--blue-soft); color: var(--blue); }
+  .badge.orange { background: var(--orange-soft); color: var(--orange); }
+  .badge.red { background: var(--red-soft); color: var(--red); }
+  .badge.navy { background: var(--navy-soft); color: var(--navy); }
+  .badge.muted { background: var(--bg-soft); color: var(--muted); }
+  .left-time {
+    font-size: 11px; color: var(--ink-2);
+    font-weight: 600;
+  }
+  .left-time.danger { color: var(--red); }
+
+  /* ─── Rental row ─── */
+  .rent-row {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: center;
+  }
+  .rent-row:last-child { border-bottom: none; }
+  .rent-row:active { background: var(--bg-tint); }
+  .rent-thumb {
+    width: 48px; height: 48px;
+    background: var(--bg-soft);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--line-2);
+  }
+  .rent-thumb img { width: 100%; height: 100%; object-fit: contain; }
+  .rent-info { min-width: 0; }
+  .rent-name {
+    font-size: 13.5px; font-weight: 700; color: var(--ink);
+    letter-spacing: -0.008em;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rent-meta {
+    font-size: 11.5px; color: var(--muted);
+    margin-top: 2px;
+  }
+  .rent-action {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .small-btn {
+    padding: 7px 11px;
+    border-radius: 8px;
+    font-size: 12px; font-weight: 700;
+    transition: transform 0.08s ease, background 0.15s ease;
+  }
+  .small-btn:active { transform: scale(0.96); }
+  .small-btn.blue { background: var(--blue); color: #fff; }
+  .small-btn.green { background: var(--green); color: #fff; }
+  .small-btn.gray { background: var(--bg-soft); color: var(--ink); }
+  .small-btn.line { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+  .small-btn.red { background: var(--red); color: #fff; }
+
+  /* ─── Notice ─── */
+  .notice-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--line-2);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .notice-card + .notice-card { margin-top: 8px; }
+  .notice-card .nico {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--navy);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .notice-card .ntxt {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    line-height: 1.45;
+  }
+  .notice-card .ntxt .nt-meta {
+    font-size: 10.5px; color: var(--muted); font-weight: 500;
+    margin-top: 3px;
+  }
+  .notice-card .narrow {
+    color: var(--muted); font-size: 16px;
+  }
+
+  /* ─── Search bar ─── */
+  .search-wrap {
+    padding: 14px 14px 8px;
+    background: var(--bg-soft);
+    position: sticky; top: 0; z-index: 4;
+  }
+  .search {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .search input {
+    flex: 1;
+    background: transparent; border: none; outline: none;
+    font-family: inherit;
+    font-size: 14px; color: var(--ink);
+  }
+  .search input::placeholder { color: var(--muted-2); }
+  .search .si { color: var(--muted); font-size: 14px; }
+
+  /* ─── Tabs/Toggles (in-page) ─── */
+  .toggle-row {
+    padding: 4px 14px 12px;
+    display: flex; gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .toggle-row::-webkit-scrollbar { display: none; }
+  .tg {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-size: 13px; font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .tg.active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .tg .cnt {
+    margin-left: 4px;
+    font-weight: 700;
+    color: var(--muted-2);
+  }
+  .tg.active .cnt { color: rgba(255,255,255,0.75); }
+
+  /* ─── Sales chart ─── */
+  .chart-card {
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    padding: 18px 16px 14px;
+  }
+  .chart-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .chart-head .ttl {
+    font-size: 13px; color: var(--muted); font-weight: 600;
+  }
+  .chart-head .amt {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.024em;
+  }
+  .chart-bars {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    align-items: end;
+    height: 80px;
+    margin-bottom: 8px;
+  }
+  .bar {
+    background: linear-gradient(180deg, var(--blue) 0%, #5da5ff 100%);
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    min-height: 4px;
+  }
+  .bar.today {
+    background: linear-gradient(180deg, var(--orange) 0%, #ffb38a 100%);
+  }
+  .chart-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    text-align: center;
+  }
+  .chart-labels span {
+    font-size: 10.5px; color: var(--muted);
+    font-weight: 500;
+  }
+  .chart-labels span.today { color: var(--orange); font-weight: 700; }
+
+  .breakdown {
+    margin-top: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .br-row {
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .br-ico {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 12px;
+  }
+  .br-ico.blue { background: var(--blue); }
+  .br-ico.green { background: var(--green); }
+  .br-ico.orange { background: var(--orange); }
+  .br-ico.navy { background: var(--navy); }
+  .br-lbl {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+  }
+  .br-lbl .sub { display: block; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+  .br-amt {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── Recent transactions ─── */
+  .tx-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: center;
+  }
+  .tx-row:last-child { border-bottom: none; }
+  .tx-ico {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .tx-ico.charge { background: var(--blue-soft); color: var(--blue); }
+  .tx-ico.sale { background: var(--orange-soft); color: var(--orange); }
+  .tx-ico.late { background: var(--red-soft); color: var(--red); }
+  .tx-info { min-width: 0; }
+  .tx-name { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .tx-meta { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .tx-amt {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  /* ─── More tab ─── */
+  .more-list {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--line-2);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .more-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: center;
+  }
+  .more-row:last-child { border-bottom: none; }
+  .more-row:active { background: var(--bg-tint); }
+  .more-ico {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--bg-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .more-ico.owner { background: var(--owner-soft); color: var(--owner); }
+  .more-ico.blue { background: var(--blue-soft); color: var(--blue); }
+  .more-ico.green { background: var(--green-soft); color: var(--green); }
+  .more-ico.navy { background: var(--navy-soft); color: var(--navy); }
+  .more-ico.red { background: var(--red-soft); color: var(--red); }
+  .more-row .ml-lbl {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+  .more-row .ml-lbl .sub {
+    display: block; font-size: 11px; color: var(--muted); font-weight: 500;
+    margin-top: 2px;
+  }
+  .more-row .chev {
+    color: var(--muted-2); font-size: 16px;
+  }
+  .more-row .b-tag {
+    background: var(--red);
+    color: #fff;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 10px; font-weight: 800;
+    margin-right: 4px;
+  }
+
+  /* ─── Bottom tab bar ─── */
+  .tabbar {
+    flex-shrink: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px));
+    z-index: 10;
+  }
+  .tabbar button {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 4px 4px;
+    color: var(--muted);
+    transition: color 0.15s ease;
+  }
+  .tabbar button.active {
+    color: var(--ink);
+  }
+  .tabbar .ti {
+    font-size: 19px;
+    line-height: 1;
+  }
+  .tabbar .tl {
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+  .tabbar button.active .ti {
+    transform: scale(1.05);
+    transition: transform 0.18s ease;
+  }
+
+  /* ─── Modal (shared) ─── */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(13,17,23,0.55);
+    display: none;
+    align-items: flex-end; justify-content: center;
+    z-index: 100;
+    padding: 0;
+    animation: oIn 0.18s ease;
+  }
+  @keyframes oIn { from { opacity: 0; } to { opacity: 1; } }
+  .overlay.show { display: flex; }
+  .sheet {
+    background: #fff;
+    border-radius: 22px 22px 0 0;
+    width: 100%;
+    max-width: 480px;
+    padding: 14px 18px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: sIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  @keyframes sIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    margin: 0 auto 14px;
+  }
+  .sheet-title {
+    font-size: 17px; font-weight: 800;
+    letter-spacing: -0.018em;
+    margin-bottom: 4px;
+  }
+  .sheet-sub {
+    font-size: 12.5px; color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .sheet-section + .sheet-section { margin-top: 16px; }
+  .sheet-section .lb {
+    font-size: 11.5px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .field {
+    background: var(--bg-soft);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+    border: 1.5px solid transparent;
+  }
+  .field .fk { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .field .fv { font-size: 14px; color: var(--ink); font-weight: 700; }
+
+  .row-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .opt-card {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt-card.active {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+  }
+  .opt-card .ot { font-size: 14px; font-weight: 800; color: var(--ink); }
+  .opt-card .od { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .primary-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 14px; font-weight: 700;
+    transition: transform 0.08s ease;
+  }
+  .primary-btn:active { transform: scale(0.98); }
+  .primary-btn.blue { background: var(--blue); }
+  .primary-btn.green { background: var(--green); }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: fixed;
+    left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 8px);
+    background: rgba(28, 42, 63, 0.95);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 13px; font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 200;
+    box-shadow: 0 14px 32px -10px rgba(0,0,0,0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  /* ─── Floating back to proposal pill ─── */
+  .back-pill {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top, 10px));
+    right: 12px;
+    z-index: 50;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px);
+    color: var(--ink);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11.5px; font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -6px rgba(13,17,23,0.2);
+    border: 1px solid var(--line);
+  }
+
+  /* ─── Empty state ─── */
+  .empty {
+    padding: 36px 18px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .empty .em-ico {
+    font-size: 32px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+  }
+
+  /* ─── Activity feed ─── */
+  .feed {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--line-2);
+    overflow: hidden;
+  }
+  .feed-row {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: center;
+  }
+  .feed-row:last-child { border-bottom: none; }
+  .feed-dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .feed-dot.in { background: var(--green-soft); color: var(--green); }
+  .feed-dot.out { background: var(--navy-soft); color: var(--navy); }
+  .feed-dot.charge { background: var(--blue-soft); color: var(--blue); }
+  .feed-dot.rent { background: var(--orange-soft); color: var(--orange); }
+  .feed-row .ft-lbl {
+    font-size: 13px; color: var(--ink);
+  }
+  .feed-row .ft-lbl strong { font-weight: 700; }
+  .feed-row .ft-time {
+    font-size: 11px; color: var(--muted); font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<a href="/blockpang/" class="back-pill">← 제안서</a>
+
+<div class="app">
+
+  <!-- ─── TOP BAR ─── -->
+  <header class="topbar">
+    <button class="back-btn" aria-label="뒤로">←</button>
+    <div class="topbar-center">
+      <img src="/blockpang/assets/logo/blockpang_logo.png" alt="블럭팡" class="topbar-logo">
+      <div class="store-meta">
+        <span class="store-name">명지점</span>
+        <span class="owner-badge">OWNER · 점주 모드</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="top-btn" id="btnNotice">🔔<span class="dot"></span></button>
+      <button class="top-btn">⚙️</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================================================================
+         HOME TAB
+         =================================================================== -->
+    <section class="tab-pane active" data-tab="home">
+
+      <!-- Hero stats -->
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="ribbon"></div>
+          <div class="lbl">현재 입실</div>
+          <div class="val">8<span class="unit">명</span></div>
+          <div class="sub">정원 20명 · <strong>40%</strong></div>
+        </div>
+        <div class="stat-card orange">
+          <div class="ribbon"></div>
+          <div class="lbl">오늘 매출</div>
+          <div class="val">412<span class="unit">,000원</span></div>
+          <div class="sub"><span class="up">↑ 12%</span> 어제 대비</div>
+        </div>
+      </div>
+
+      <!-- Mini stats (4) -->
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="mv">3</div>
+          <div class="ml">대여 중</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mv orange">2</div>
+          <div class="ml">반납 D-1</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mv red">1</div>
+          <div class="ml">연체</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mv">12</div>
+          <div class="ml">대기 회원</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <button class="qa" data-action="newMember">
+          <div class="qa-ico blue">👤</div>
+          <div class="qa-lbl">회원가입</div>
+        </button>
+        <button class="qa" data-action="charge">
+          <div class="qa-ico green">⚡</div>
+          <div class="qa-lbl">요금충전</div>
+        </button>
+        <button class="qa" data-action="sale">
+          <div class="qa-ico orange">🛒</div>
+          <div class="qa-lbl">상품판매</div>
+        </button>
+        <button class="qa" data-action="guest">
+          <div class="qa-ico navy">🚪</div>
+          <div class="qa-lbl">비회원입실</div>
+        </button>
+      </div>
+
+      <!-- 현재 입실 손님 -->
+      <div class="section">
+        <div class="section-head">
+          <h3>입실 중인 손님 <span class="cnt">8</span></h3>
+          <button class="more" data-goto="customers">전체 →</button>
+        </div>
+        <div class="card-list" id="hmCustList"></div>
+      </div>
+
+      <!-- 실시간 매장 활동 -->
+      <div class="section">
+        <div class="section-head">
+          <h3>실시간 활동</h3>
+          <span class="more">최근 1시간</span>
+        </div>
+        <div class="feed">
+          <div class="feed-row">
+            <div class="feed-dot in">입</div>
+            <div class="ft-lbl"><strong>김민준</strong> 회원이 입실했어요</div>
+            <div class="ft-time">방금</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-dot rent">대</div>
+            <div class="ft-lbl"><strong>박지호</strong> 회원이 <strong>마인크래프트 농장의 노동</strong> 대여</div>
+            <div class="ft-time">8분 전</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-dot charge">충</div>
+            <div class="ft-lbl"><strong>이서연</strong> 회원이 시간정액권 충전 (75,000원)</div>
+            <div class="ft-time">14분 전</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-dot out">퇴</div>
+            <div class="ft-lbl"><strong>최우진</strong> 회원이 퇴실했어요 (1h 55m)</div>
+            <div class="ft-time">22분 전</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-dot in">입</div>
+            <div class="ft-lbl"><strong>정민서</strong> 회원이 입실했어요</div>
+            <div class="ft-time">38분 전</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대여 진행 -->
+      <div class="section">
+        <div class="section-head">
+          <h3>대여 현황 <span class="cnt">3</span></h3>
+          <button class="more" data-goto="rentals">전체 →</button>
+        </div>
+        <div class="card-list" id="hmRentList"></div>
+      </div>
+
+      <!-- 본사 알림 -->
+      <div class="section">
+        <div class="section-head">
+          <h3>본사 알림 <span class="cnt">2</span></h3>
+          <button class="more" data-goto="more">전체 →</button>
+        </div>
+        <div class="notice-card">
+          <div class="nico">📢</div>
+          <div class="ntxt">신규 입고 안내 — <strong>마인크래프트 21390</strong> 곧 배송 예정<div class="nt-meta">본사 · 2시간 전</div></div>
+          <div class="narrow">›</div>
+        </div>
+        <div class="notice-card">
+          <div class="nico" style="background:var(--blue);">💬</div>
+          <div class="ntxt">10월 가맹점 운영 가이드 업데이트<div class="nt-meta">본사 · 어제</div></div>
+          <div class="narrow">›</div>
+        </div>
+      </div>
+
+      <div style="height:24px"></div>
+    </section>
+
+
+    <!-- ===================================================================
+         CUSTOMERS TAB
+         =================================================================== -->
+    <section class="tab-pane" data-tab="customers">
+
+      <div class="search-wrap">
+        <div class="search">
+          <span class="si">🔍</span>
+          <input type="text" placeholder="이름·전화번호로 검색" id="custSearch">
+        </div>
+        <div class="toggle-row" id="custToggle">
+          <button class="tg active" data-cf="in">입실중 <span class="cnt">8</span></button>
+          <button class="tg" data-cf="all">전체 회원 <span class="cnt">342</span></button>
+          <button class="tg" data-cf="guest">비회원 <span class="cnt">3</span></button>
+          <button class="tg" data-cf="recent">최근 방문</button>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="card-list" id="fullCustList"></div>
+      </div>
+
+      <div style="height:24px"></div>
+    </section>
+
+
+    <!-- ===================================================================
+         RENTALS TAB
+         =================================================================== -->
+    <section class="tab-pane" data-tab="rentals">
+
+      <div class="search-wrap">
+        <div class="search">
+          <span class="si">🔍</span>
+          <input type="text" placeholder="레고 번호·회원명으로 검색">
+        </div>
+        <div class="toggle-row" id="rentToggle">
+          <button class="tg active" data-rf="active">대여중 <span class="cnt">3</span></button>
+          <button class="tg" data-rf="dueSoon">반납 D-1 <span class="cnt">2</span></button>
+          <button class="tg" data-rf="overdue">연체 <span class="cnt">1</span></button>
+          <button class="tg" data-rf="done">반납 완료 <span class="cnt">12</span></button>
+        </div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="card-list" id="fullRentList"></div>
+      </div>
+
+      <!-- 입고 관리 진입 -->
+      <div class="section">
+        <div class="section-head"><h3>레고 재고 관리</h3></div>
+        <div class="more-list">
+          <button class="more-row">
+            <div class="more-ico blue">📦</div>
+            <div class="ml-lbl">레고 입고<span class="sub">제품번호만 입력하면 자동 등록</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico green">🏷️</div>
+            <div class="ml-lbl">레고 등급 설정<span class="sub">새싹 · 열매 · 나무 · 숲</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico navy">📊</div>
+            <div class="ml-lbl">레고 분석 리포트<span class="sub">인기 시리즈 · 평균 대여 기간</span></div>
+            <div class="chev">›</div>
+          </button>
+        </div>
+      </div>
+
+      <div style="height:24px"></div>
+    </section>
+
+
+    <!-- ===================================================================
+         SALES TAB
+         =================================================================== -->
+    <section class="tab-pane" data-tab="sales">
+
+      <div class="toggle-row" style="padding:14px 14px 12px;">
+        <button class="tg active" data-sf="today">오늘</button>
+        <button class="tg" data-sf="week">이번 주</button>
+        <button class="tg" data-sf="month">이번 달</button>
+      </div>
+
+      <!-- 매출 차트 -->
+      <div class="section" style="padding-top:0;">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="ttl">이번 주 매출</div>
+              <div class="amt">₩ 2,847,000</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="ttl">전주 대비</div>
+              <div style="font-size:13px;font-weight:700;color:var(--green);margin-top:2px;">↑ 18.2%</div>
+            </div>
+          </div>
+          <div class="chart-bars">
+            <div class="bar" style="height: 55%;"></div>
+            <div class="bar" style="height: 38%;"></div>
+            <div class="bar" style="height: 62%;"></div>
+            <div class="bar" style="height: 71%;"></div>
+            <div class="bar" style="height: 48%;"></div>
+            <div class="bar" style="height: 84%;"></div>
+            <div class="bar today" style="height: 52%;"></div>
+          </div>
+          <div class="chart-labels">
+            <span>월</span><span>화</span><span>수</span>
+            <span>목</span><span>금</span><span>토</span>
+            <span class="today">오늘</span>
+          </div>
+
+          <div class="breakdown">
+            <div class="br-row">
+              <div class="br-ico blue">⚡</div>
+              <div class="br-lbl">요금 충전<span class="sub">시간정액 · 횟수권</span></div>
+              <div class="br-amt">₩ 1,840,000</div>
+            </div>
+            <div class="br-row">
+              <div class="br-ico orange">🛒</div>
+              <div class="br-lbl">상품 판매<span class="sub">음료 · 과자</span></div>
+              <div class="br-amt">₩ 462,000</div>
+            </div>
+            <div class="br-row">
+              <div class="br-ico green">🏬</div>
+              <div class="br-lbl">매장 이용료<span class="sub">시간당 과금</span></div>
+              <div class="br-amt">₩ 385,000</div>
+            </div>
+            <div class="br-row">
+              <div class="br-ico navy">⏰</div>
+              <div class="br-lbl">연체료<span class="sub">자동 계산</span></div>
+              <div class="br-amt">₩ 160,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결제 내역 -->
+      <div class="section">
+        <div class="section-head">
+          <h3>오늘의 결제 내역 <span class="cnt">14</span></h3>
+          <span class="more">실시간</span>
+        </div>
+        <div class="card-list" id="txList"></div>
+      </div>
+
+      <div style="height:24px"></div>
+    </section>
+
+
+    <!-- ===================================================================
+         MORE TAB
+         =================================================================== -->
+    <section class="tab-pane" data-tab="more">
+
+      <!-- Profile card -->
+      <div class="section" style="padding-top:18px;">
+        <div style="background:linear-gradient(135deg, var(--owner) 0%, #8b5cf6 100%); border-radius:18px; padding:18px; color:#fff;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800;">남</div>
+            <div style="flex:1;">
+              <div style="font-size:15px; font-weight:800;">남정일 점주님</div>
+              <div style="font-size:12px; opacity:0.85; margin-top:2px;">블럭팡 명지점 · 운영자</div>
+            </div>
+            <div style="font-size:18px; opacity:0.7;">›</div>
+          </div>
+          <div style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.18); display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+            <div>
+              <div style="font-size:11px; opacity:0.85;">개점일</div>
+              <div style="font-size:13px; font-weight:700; margin-top:2px;">2024.03.15</div>
+            </div>
+            <div>
+              <div style="font-size:11px; opacity:0.85;">누적 회원</div>
+              <div style="font-size:13px; font-weight:700; margin-top:2px;">342명</div>
+            </div>
+            <div>
+              <div style="font-size:11px; opacity:0.85;">레고 보유</div>
+              <div style="font-size:13px; font-weight:700; margin-top:2px;">186개</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 본사 소통 -->
+      <div class="section">
+        <div class="section-head"><h3>본사 소통</h3></div>
+        <div class="more-list">
+          <button class="more-row">
+            <div class="more-ico blue">💬</div>
+            <div class="ml-lbl">본사 채팅<span class="sub">실시간 1:1 메신저</span></div>
+            <span class="b-tag">2</span>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico navy">📢</div>
+            <div class="ml-lbl">본사 공지 / 알림<span class="sub">12건의 공지사항</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico green">📚</div>
+            <div class="ml-lbl">사용자 매뉴얼<span class="sub">기능별 가이드</span></div>
+            <div class="chev">›</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 매장 운영 -->
+      <div class="section">
+        <div class="section-head"><h3>매장 운영</h3></div>
+        <div class="more-list">
+          <button class="more-row">
+            <div class="more-ico owner">⚙️</div>
+            <div class="ml-lbl">요금제 설정<span class="sub">시간당 · 정액 · 횟수 · 월정액</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico owner">🛒</div>
+            <div class="ml-lbl">상품 관리<span class="sub">음료·과자·소모품 가격·재고</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico owner">📅</div>
+            <div class="ml-lbl">매장 캘린더<span class="sub">월별 매출·예약 현황</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico owner">📨</div>
+            <div class="ml-lbl">알림톡 템플릿<span class="sub">자동 발송 메시지 편집</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico owner">👥</div>
+            <div class="ml-lbl">직원 관리<span class="sub">권한·근태 (Phase 2 예정)</span></div>
+            <div class="chev">›</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- AI / 분석 -->
+      <div class="section">
+        <div class="section-head"><h3>AI 인사이트</h3></div>
+        <div style="background:#fff; border:1px solid var(--line-2); border-radius:16px; padding:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <span style="background:linear-gradient(135deg,#6d28d9,#8b5cf6); color:#fff; border-radius:6px; padding:3px 8px; font-size:10px; font-weight:800; letter-spacing:0.04em;">AI</span>
+            <span style="font-size:13px; font-weight:700;">이번 주 매장 리포트</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--ink-2); line-height:1.65;">
+            📈 매출 전주 대비 <strong style="color:var(--green);">+18%</strong> 증가 — 토요일 오후 시간대 회원 집중<br>
+            🔥 인기 시리즈: <strong>마인크래프트</strong> (평균 2.1시간 체류)<br>
+            💡 <strong>액션 제안</strong>: 일요일 한정 시간정액권 프로모션 권장
+          </div>
+          <button style="margin-top:12px; width:100%; padding:10px; background:var(--bg-soft); border-radius:8px; font-size:12px; font-weight:700; color:var(--ink);">전체 분석 보기 →</button>
+        </div>
+      </div>
+
+      <!-- 정산 / 계정 -->
+      <div class="section">
+        <div class="section-head"><h3>정산 / 계정</h3></div>
+        <div class="more-list">
+          <button class="more-row">
+            <div class="more-ico green">💰</div>
+            <div class="ml-lbl">월 정산<span class="sub">10월 누적 ₩ 8,420,000</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico navy">🧾</div>
+            <div class="ml-lbl">세금계산서<span class="sub">발행 내역 · 다운로드</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row">
+            <div class="more-ico blue">🔐</div>
+            <div class="ml-lbl">계정 / 보안<span class="sub">비밀번호 · 접속 이력</span></div>
+            <div class="chev">›</div>
+          </button>
+          <button class="more-row" id="btnLogout">
+            <div class="more-ico red">⎋</div>
+            <div class="ml-lbl">로그아웃</div>
+            <div class="chev">›</div>
+          </button>
+        </div>
+      </div>
+
+      <div style="text-align:center; padding:24px 0; color:var(--muted-2); font-size:11px;">
+        블럭팡 점주 콘솔 v1.0.0 · 명지점<br>
+        © 2026 BLOCKPANG · ALL RIGHTS RESERVED
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ─── Bottom Tab Bar ─── -->
+  <nav class="tabbar" id="tabbar">
+    <button class="active" data-target="home">
+      <span class="ti">🏠</span><span class="tl">홈</span>
+    </button>
+    <button data-target="customers">
+      <span class="ti">👥</span><span class="tl">회원</span>
+    </button>
+    <button data-target="rentals">
+      <span class="ti">📦</span><span class="tl">대여</span>
+    </button>
+    <button data-target="sales">
+      <span class="ti">💰</span><span class="tl">매출</span>
+    </button>
+    <button data-target="more">
+      <span class="ti">⋯</span><span class="tl">더보기</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ─── Quick action sheets ─── -->
+<div class="overlay" id="sheetCharge">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">요금 충전</div>
+    <div class="sheet-sub">회원에게 시간정액·횟수권을 충전합니다.</div>
+
+    <div class="sheet-section">
+      <div class="lb">대상 회원</div>
+      <div class="field">
+        <span class="fk">회원 검색</span>
+        <span class="fv">선택 ›</span>
+      </div>
+    </div>
+
+    <div class="sheet-section">
+      <div class="lb">요금제 선택</div>
+      <div class="row-pair">
+        <button class="opt-card active">
+          <div class="ot">시간정액</div>
+          <div class="od">10시간 · 75,000원</div>
+        </button>
+        <button class="opt-card">
+          <div class="ot">횟수권</div>
+          <div class="od">10회 · 120,000원</div>
+        </button>
+      </div>
+      <div class="row-pair" style="margin-top:8px;">
+        <button class="opt-card">
+          <div class="ot">시간당</div>
+          <div class="od">3,000원 / h</div>
+        </button>
+        <button class="opt-card">
+          <div class="ot">월정액</div>
+          <div class="od">220,000원 / 월</div>
+        </button>
+      </div>
+    </div>
+
+    <button class="primary-btn green">75,000원 결제하기 →</button>
+  </div>
+</div>
+
+<div class="overlay" id="sheetMember">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">신규 회원 가입</div>
+    <div class="sheet-sub">아이 이름과 보호자 연락처만 입력하면 됩니다.</div>
+
+    <div class="sheet-section">
+      <div class="lb">기본 정보</div>
+      <div class="field"><span class="fk">아이 이름</span><span class="fv">입력 ›</span></div>
+      <div class="field"><span class="fk">생년월일</span><span class="fv">선택 ›</span></div>
+      <div class="field"><span class="fk">보호자 연락처</span><span class="fv">010-····-····</span></div>
+    </div>
+
+    <div class="sheet-section">
+      <div class="lb">추가 정보 (선택)</div>
+      <div class="field"><span class="fk">CRM 메모</span><span class="fv">예: 마인크래프트 좋아함 ›</span></div>
+      <div class="field"><span class="fk">그룹 연결</span><span class="fv">형제·자매 묶기 ›</span></div>
+    </div>
+
+    <button class="primary-btn blue">가입 완료 + 첫 충전으로 →</button>
+  </div>
+</div>
+
+<div class="overlay" id="sheetSale">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">상품 판매</div>
+    <div class="sheet-sub">입실 회원에 연동하거나 단독 판매가 가능합니다.</div>
+
+    <div class="sheet-section">
+      <div class="lb">선택된 상품 (2)</div>
+      <div style="background:var(--bg-soft); border-radius:12px; padding:8px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px;">
+          <div style="font-size:13px; font-weight:700;">콜라 (350ml)</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:var(--muted);">×2</span>
+            <span style="font-size:13px; font-weight:700;">3,000원</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-top:1px solid var(--line-2);">
+          <div style="font-size:13px; font-weight:700;">새우깡</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:12px; color:var(--muted);">×1</span>
+            <span style="font-size:13px; font-weight:700;">1,500원</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-section">
+      <div class="lb">결제 방식</div>
+      <div class="row-pair">
+        <button class="opt-card active">
+          <div class="ot">현장 결제</div>
+          <div class="od">카드 · 현금</div>
+        </button>
+        <button class="opt-card">
+          <div class="ot">이용료에 합산</div>
+          <div class="od">입실 회원</div>
+        </button>
+      </div>
+    </div>
+
+    <button class="primary-btn">4,500원 결제 →</button>
+  </div>
+</div>
+
+<div class="overlay" id="sheetGuest">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">비회원 입실</div>
+    <div class="sheet-sub">1회 이용 손님을 위한 입실 처리.</div>
+
+    <div class="sheet-section">
+      <div class="lb">방문 정보</div>
+      <div class="field"><span class="fk">손님 이름 (별칭)</span><span class="fv">입력 ›</span></div>
+      <div class="field"><span class="fk">보호자 연락처 (선택)</span><span class="fv">010-····-···· ›</span></div>
+      <div class="field"><span class="fk">예상 이용 시간</span><span class="fv">2시간</span></div>
+    </div>
+
+    <div class="sheet-section">
+      <div class="lb">비회원 요금</div>
+      <div style="background:var(--bg-soft); border-radius:12px; padding:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+          <span style="font-size:12.5px; color:var(--muted);">시간당</span>
+          <span style="font-size:18px; font-weight:800;">5,000원</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="primary-btn">입실 처리 →</button>
+  </div>
+</div>
+
+<div class="overlay" id="sheetNotice">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">알림 <span style="font-size:13px; color:var(--muted); margin-left:4px;">3</span></div>
+    <div class="sheet-sub">본사 메시지와 매장 운영 알림.</div>
+
+    <div class="notice-card" style="margin-top:8px;">
+      <div class="nico" style="background:var(--red);">⏰</div>
+      <div class="ntxt">반납 연체 1건 발생 — <strong>21282 앵무새 집</strong> (D+2)<div class="nt-meta">매장 알림 · 30분 전</div></div>
+      <div class="narrow">›</div>
+    </div>
+    <div class="notice-card" style="margin-top:8px;">
+      <div class="nico">📢</div>
+      <div class="ntxt"><strong>21390</strong> 신상 입고 안내 — 곧 배송됩니다<div class="nt-meta">본사 · 2시간 전</div></div>
+      <div class="narrow">›</div>
+    </div>
+    <div class="notice-card" style="margin-top:8px;">
+      <div class="nico" style="background:var(--blue);">💬</div>
+      <div class="ntxt">10월 가맹점 운영 가이드 업데이트<div class="nt-meta">본사 · 어제</div></div>
+      <div class="narrow">›</div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // ─── Data ───
+  const CUSTOMERS = [
+    { n: '김민준', tier: '시간정액', tierClass: '', av: 1, in: '13:20', meta: '시간정액 · 잔여 4h 45m', badge: 'green', badgeLbl: '정상', danger: false },
+    { n: '박지호', tier: '대여회원', tierClass: 'rent', av: 2, in: '13:42', meta: '대여회원 · 잔여 7회', badge: 'blue', badgeLbl: '대여중', danger: false },
+    { n: '이서연', tier: 'VIP', tierClass: 'gold', av: 3, in: '14:08', meta: '시간정액 · 잔여 6h 20m', badge: 'green', badgeLbl: '정상', danger: false },
+    { n: '정민서', tier: '시간정액', tierClass: '', av: 4, in: '14:33', meta: '시간정액 · 잔여 28분', badge: 'orange', badgeLbl: '곧 마감', danger: true },
+    { n: '윤채원', tier: '시간정액', tierClass: '', av: 5, in: '14:55', meta: '시간정액 · 잔여 9h 12m', badge: 'green', badgeLbl: '정상', danger: false },
+    { n: '한도윤', tier: '비회원', tierClass: '', av: 6, in: '15:10', meta: '비회원 1회 이용 · 시간당', badge: 'navy', badgeLbl: '비회원', danger: false },
+    { n: '강서아', tier: '시간정액', tierClass: '', av: 1, in: '15:22', meta: '홀드 중 · 일시정지 (8분)', badge: 'muted', badgeLbl: '홀드', danger: false },
+    { n: '조준영', tier: '대여회원', tierClass: 'rent', av: 2, in: '15:40', meta: '대여회원 · 잔여 12회', badge: 'blue', badgeLbl: '대여중', danger: false },
+  ];
+
+  const RENTALS = [
+    { code: '21255', name: '네더 포털 매복', img: 'mk1.avif', user: '박지호', due: 'D-3', status: 'green', sLbl: '정상', danger: false },
+    { code: '21319', name: '농장의 노동', img: 'mk3.webp', user: '김민준', due: 'D-1', status: 'orange', sLbl: '반납 임박', danger: false },
+    { code: '21282', name: '앵무새 집', img: 'mk2.jpg', user: '최우진', due: 'D+2', status: 'red', sLbl: '연체', danger: true },
+    { code: '21338', name: '마을의 결투', img: 'mk4.jpg', user: '이서연', due: 'D-5', status: 'green', sLbl: '정상', danger: false },
+    { code: '21362', name: '모험가의 캠프', img: 'mk7.jpeg', user: '정민서', due: 'D-2', status: 'green', sLbl: '정상', danger: false },
+  ];
+
+  const TXS = [
+    { type: 'charge', name: '이서연 회원', meta: '시간정액 10시간 충전', amt: '+75,000원', time: '14:08' },
+    { type: 'sale', name: '비회원 상품판매', meta: '음료 2 · 과자 1', amt: '+8,500원', time: '14:12' },
+    { type: 'charge', name: '한도윤 회원', meta: '횟수권 5회 충전', amt: '+60,000원', time: '14:28' },
+    { type: 'late', name: '최우진 회원', meta: '연체료 (D+2)', amt: '+8,000원', time: '14:45' },
+    { type: 'sale', name: '김민준 회원', meta: '음료 1 (이용료 합산)', amt: '+2,500원', time: '15:02' },
+    { type: 'charge', name: '윤채원 회원', meta: '월정액 220,000원', amt: '+220,000원', time: '15:18' },
+  ];
+
+  // ─── Renderers ───
+  const renderCustomers = (target, list) => {
+    target.innerHTML = list.map(c => `
+      <div class="cust-row">
+        <div class="avatar b${c.av}">${c.n[0]}</div>
+        <div class="cust-info">
+          <div class="cust-name">
+            ${c.n}
+            ${c.tierClass ? `<span class="tier ${c.tierClass}">${c.tier}</span>` : ''}
+          </div>
+          <div class="cust-meta">입실 ${c.in} · ${c.meta}</div>
+        </div>
+        <div class="cust-status">
+          <span class="badge ${c.badge}">${c.badgeLbl}</span>
+          ${c.danger ? '<span class="left-time danger">마감 임박</span>' : ''}
+        </div>
+      </div>
+    `).join('');
+  };
+
+  const renderRentals = (target, list) => {
+    target.innerHTML = list.map(r => `
+      <div class="rent-row">
+        <div class="rent-thumb"><img src="/blockpang/assets/products/${r.img}" alt=""></div>
+        <div class="rent-info">
+          <div class="rent-name">${r.code} ${r.name}</div>
+          <div class="rent-meta">${r.user} · 반납 ${r.due}</div>
+        </div>
+        <div class="rent-action">
+          <span class="badge ${r.status}">${r.sLbl}</span>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  const renderTxs = (target, list) => {
+    target.innerHTML = list.map(t => {
+      const icoMap = { charge: '⚡', sale: '🛒', late: '⏰' };
+      return `
+        <div class="tx-row">
+          <div class="tx-ico ${t.type}">${icoMap[t.type]}</div>
+          <div class="tx-info">
+            <div class="tx-name">${t.name}</div>
+            <div class="tx-meta">${t.meta} · ${t.time}</div>
+          </div>
+          <div class="tx-amt">${t.amt}</div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  // Home — partial lists
+  renderCustomers(document.getElementById('hmCustList'), CUSTOMERS.slice(0, 4));
+  renderRentals(document.getElementById('hmRentList'), RENTALS.slice(0, 3));
+
+  // Customers tab — full list, filter
+  const fullCustList = document.getElementById('fullCustList');
+  let custFilter = 'in';
+  const renderFullCust = () => {
+    let data = CUSTOMERS;
+    if (custFilter === 'guest') data = CUSTOMERS.filter(c => c.tier === '비회원');
+    renderCustomers(fullCustList, data);
+  };
+  renderFullCust();
+
+  document.getElementById('custToggle').addEventListener('click', e => {
+    const b = e.target.closest('[data-cf]');
+    if (!b) return;
+    document.querySelectorAll('#custToggle .tg').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    custFilter = b.dataset.cf;
+    renderFullCust();
+  });
+
+  document.getElementById('custSearch').addEventListener('input', e => {
+    const q = e.target.value.trim();
+    const data = q ? CUSTOMERS.filter(c => c.n.includes(q)) : CUSTOMERS;
+    renderCustomers(fullCustList, data);
+  });
+
+  // Rentals tab
+  const fullRentList = document.getElementById('fullRentList');
+  let rentFilter = 'active';
+  const renderFullRent = () => {
+    let data = RENTALS;
+    if (rentFilter === 'overdue') data = RENTALS.filter(r => r.status === 'red');
+    if (rentFilter === 'dueSoon') data = RENTALS.filter(r => r.status === 'orange');
+    if (rentFilter === 'done') data = [];
+    renderRentals(fullRentList, data);
+    if (data.length === 0) {
+      fullRentList.innerHTML = `<div class="empty"><div class="em-ico">📭</div>해당 상태의 대여 건이 없습니다.</div>`;
+    }
+  };
+  renderFullRent();
+
+  document.getElementById('rentToggle').addEventListener('click', e => {
+    const b = e.target.closest('[data-rf]');
+    if (!b) return;
+    document.querySelectorAll('#rentToggle .tg').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    rentFilter = b.dataset.rf;
+    renderFullRent();
+  });
+
+  // Sales tab — txs
+  renderTxs(document.getElementById('txList'), TXS);
+
+  // ─── Tabbar nav ───
+  const tabbar = document.getElementById('tabbar');
+  const switchTab = name => {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.dataset.tab === name));
+    document.querySelectorAll('#tabbar button').forEach(b => b.classList.toggle('active', b.dataset.target === name));
+    document.querySelector('main').scrollTo({ top: 0, behavior: 'auto' });
+  };
+  tabbar.addEventListener('click', e => {
+    const b = e.target.closest('[data-target]');
+    if (!b) return;
+    switchTab(b.dataset.target);
+  });
+  document.querySelectorAll('[data-goto]').forEach(b => {
+    b.addEventListener('click', () => switchTab(b.dataset.goto));
+  });
+
+  // ─── Bottom sheets ───
+  const openSheet = id => document.getElementById(id).classList.add('show');
+  const closeSheet = id => document.getElementById(id).classList.remove('show');
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => {
+      if (e.target === o) o.classList.remove('show');
+    });
+  });
+
+  document.querySelectorAll('[data-action]').forEach(b => {
+    b.addEventListener('click', () => {
+      const map = { charge: 'sheetCharge', newMember: 'sheetMember', sale: 'sheetSale', guest: 'sheetGuest' };
+      const id = map[b.dataset.action];
+      if (id) openSheet(id);
+    });
+  });
+
+  document.getElementById('btnNotice').addEventListener('click', () => openSheet('sheetNotice'));
+
+  // Toast
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  const showToast = msg => {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  };
+
+  document.querySelectorAll('.primary-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
+      showToast('처리되었습니다.');
+    });
+  });
+
+  // Logout demo
+  const btnLogout = document.getElementById('btnLogout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      if (confirm('로그아웃 하시겠습니까?')) location.href = '/blockpang/logout';
+    });
+  }
+
+  // Cust row click → toast (demo)
+  document.querySelectorAll('#hmCustList, #fullCustList').forEach(el => {
+    el.addEventListener('click', e => {
+      const row = e.target.closest('.cust-row');
+      if (!row) return;
+      showToast('회원 상세 화면은 데모 예정 영역입니다');
+    });
+  });
+
+</script>
+
+</body>
+</html>

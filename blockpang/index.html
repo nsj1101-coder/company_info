@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블럭팡 운영 솔루션 | 모든게 자동</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --ink: #0d1117;
+    --ink-2: #20242b;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --paper: #ffffff;
+    --accent: #ffda00;
+    --accent-deep: #b8860b;
+    --accent-soft: #fff9d6;
+    --accent-ink: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ─── Top Nav ─── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 14px;
+    flex: 1; min-width: 0;
+  }
+  .brand-logo {
+    height: 38px; width: auto;
+    display: block; flex-shrink: 0;
+  }
+  .brand-tagline {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    font-style: italic; font-weight: 500;
+    font-size: 0.95rem; letter-spacing: -0.005em;
+    color: var(--ink); opacity: 0.7;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 18px;
+    flex-shrink: 0;
+  }
+  .nav-link {
+    color: var(--ink); opacity: 0.7;
+    font-size: 0.92rem; font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.18s ease;
+  }
+  .nav-link:hover { opacity: 1; }
+  .nav-link.owner-link {
+    background: #f1ebff; color: #6d28d9;
+    padding: 8px 14px; border-radius: 999px;
+    font-weight: 700; opacity: 1;
+    transition: background 0.18s ease;
+  }
+  .nav-link.owner-link:hover { background: #6d28d9; color: #fff; }
+  .nav-cta {
+    background: var(--ink); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--ink); }
+  .nav-cta:active { transform: scale(0.98); }
+
+  /* ─── Hero ─── */
+  .hero {
+    max-width: 1280px; margin: 0 auto;
+    padding: 90px 32px 60px;
+    text-align: center;
+  }
+  .hero .eyebrow {
+    display: inline-block; padding: 6px 14px;
+    background: var(--accent-soft); color: var(--accent-deep);
+    border-radius: 999px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em;
+    margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 700; line-height: 1.1; letter-spacing: -0.025em;
+    margin-bottom: 22px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p {
+    font-size: 1.15rem; color: var(--muted);
+    max-width: 640px; margin: 0 auto;
+  }
+
+  /* ─── Section Frame ─── */
+  .section {
+    max-width: 1280px; margin: 60px auto;
+    background: var(--paper); border-radius: 28px;
+    padding: 80px 64px;
+    box-shadow: 0 1px 0 rgba(13,17,23,0.04), 0 24px 60px -30px rgba(13,17,23,0.18);
+    overflow: hidden;
+  }
+  .section-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .section.reverse .section-grid { grid-template-areas: "media copy"; }
+  .section.reverse .copy { grid-area: copy; }
+  .section.reverse .media { grid-area: media; }
+
+  .tag-mark {
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--accent-deep); text-transform: uppercase;
+    margin-bottom: 14px; display: inline-block;
+  }
+  .copy h2 {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700; line-height: 1.15; letter-spacing: -0.022em;
+    margin-bottom: 20px;
+  }
+  .copy h2 span { display: block; }
+  .copy .lede {
+    color: var(--ink-2); font-size: 1.06rem; line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  /* ─── Accordion ─── */
+  .accordion { display: flex; flex-direction: column; gap: 10px; }
+  .acc-item {
+    border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; background: #fff;
+    transition: border-color 0.2s ease;
+  }
+  .acc-item.open { border-color: var(--accent); }
+  .acc-trigger {
+    width: 100%; padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 1rem; font-weight: 600; color: var(--ink);
+    text-align: left;
+  }
+  .acc-trigger .plus {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-deep); font-size: 1.25rem;
+    transition: transform 0.25s ease;
+  }
+  .acc-item.open .plus { transform: rotate(45deg); }
+  .acc-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 22px; color: var(--muted);
+    font-size: 0.96rem; line-height: 1.7;
+  }
+  .acc-item.open .acc-body {
+    max-height: 200px; padding: 0 22px 20px;
+  }
+
+  /* ─── Phone Mockup ─── */
+  .phone-stage {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px 0;
+  }
+  .phone {
+    width: 320px; aspect-ratio: 9 / 18.5;
+    background: #0d1117; border-radius: 42px;
+    padding: 14px; position: relative;
+    box-shadow:
+      0 0 0 2px #1a1f2a inset,
+      0 32px 60px -20px rgba(13,17,23,0.45),
+      0 12px 30px -10px rgba(255,122,26,0.18);
+  }
+  .phone::before {
+    content: ''; position: absolute;
+    top: 22px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px;
+    background: #0d1117; border-radius: 16px; z-index: 3;
+  }
+  .phone-screen {
+    position: relative; width: 100%; height: 100%;
+    background: #f3f4f8; border-radius: 30px; overflow: hidden;
+  }
+  .phone-screen .scr {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0; transition: opacity 0.6s ease;
+    background: #f3f4f8;
+  }
+  .phone-screen .scr.active { opacity: 1; }
+  .phone-dots {
+    position: absolute; bottom: -28px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 6px;
+  }
+  .phone-dots span {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: #cdd2d9; transition: background 0.3s ease, width 0.3s ease;
+  }
+  .phone-dots span.active { background: var(--accent); width: 18px; }
+
+  /* ─── Phone UI primitives ─── */
+  .status-bar {
+    padding: 36px 22px 8px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; font-weight: 600; color: var(--ink);
+  }
+  .scr-title {
+    padding: 6px 22px 14px;
+    font-size: 18px; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .scr-sub { padding: 0 22px 18px; font-size: 12px; color: var(--muted); }
+  .scr-body { flex: 1; padding: 0 18px; overflow: hidden; }
+  .scr-footer { padding: 16px 18px 22px; }
+  .pill-btn {
+    width: 100%; padding: 14px;
+    background: var(--accent); color: var(--ink);
+    border-radius: 14px; font-weight: 700; font-size: 14px;
+  }
+
+  /* Catalog grid */
+  .cat-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .cat-card {
+    background: #fff; border-radius: 12px;
+    padding: 10px; display: flex; flex-direction: column; gap: 6px;
+    border: 1px solid var(--line);
+  }
+  .cat-img {
+    aspect-ratio: 1; border-radius: 8px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), transparent 50%),
+      linear-gradient(135deg, var(--c1, #ffb377), var(--c2, #ff7a1a));
+    position: relative;
+  }
+  .cat-img::after {
+    content: ''; position: absolute;
+    inset: 22% 22%;
+    border-radius: 4px;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.4) 0 2px, transparent 2px 8px),
+      rgba(255,255,255,0.15);
+  }
+  .cat-card:nth-child(1) .cat-img { --c1: #ffb377; --c2: #ff7a1a; }
+  .cat-card:nth-child(2) .cat-img { --c1: #7ab9ff; --c2: #2563eb; }
+  .cat-card:nth-child(3) .cat-img { --c1: #b78bff; --c2: #6d28d9; }
+  .cat-card:nth-child(4) .cat-img { --c1: #6ee7b7; --c2: #059669; }
+  .cat-card:nth-child(5) .cat-img { --c1: #fda4af; --c2: #e11d48; }
+  .cat-card:nth-child(6) .cat-img { --c1: #fde68a; --c2: #d97706; }
+  .cat-label { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .cat-meta { font-size: 10px; color: var(--muted); }
+  .cat-tag {
+    align-self: flex-start;
+    font-size: 9px; padding: 2px 6px;
+    background: var(--accent-soft); color: var(--accent-deep);
+    border-radius: 999px; font-weight: 600;
+  }
+
+  /* Phone keypad */
+  .phone-input {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .phone-input .lbl { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .phone-input .num {
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .phone-input .num .blink {
+    display: inline-block; width: 2px; height: 1em;
+    background: var(--accent); vertical-align: middle;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+  .keypad {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .keypad button {
+    aspect-ratio: 1.4;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 18px; font-weight: 600; color: var(--ink);
+  }
+  .keypad button.zero { grid-column: 2; }
+  .keypad button.del { background: var(--accent-soft); color: var(--accent-deep); }
+
+  /* Info card */
+  .info-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px;
+  }
+  .info-row {
+    display: flex; justify-content: space-between; padding: 8px 0;
+    font-size: 12px; border-bottom: 1px solid var(--line);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .k { color: var(--muted); }
+  .info-row .v { font-weight: 600; color: var(--ink); }
+  .info-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 999px;
+    background: #ecfdf5; color: #047857;
+    font-size: 11px; font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* Success screen */
+  .success-mark {
+    width: 70px; height: 70px; margin: 36px auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 32px;
+    box-shadow: 0 12px 28px -8px rgba(255,122,26,0.45);
+  }
+  .success-title {
+    font-size: 18px; font-weight: 700; text-align: center;
+    margin-bottom: 6px;
+  }
+  .success-sub {
+    font-size: 12px; color: var(--muted); text-align: center;
+    margin-bottom: 22px;
+  }
+
+  /* Menu screen */
+  .menu-grid {
+    display: grid; gap: 10px;
+  }
+  .menu-tile {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  }
+  .menu-tile .ic {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  }
+  .menu-tile.alt .ic { background: linear-gradient(135deg, #6366f1, #4338ca); }
+  .menu-tile.alt2 .ic { background: linear-gradient(135deg, #10b981, #047857); }
+  .menu-tile.alt3 .ic { background: linear-gradient(135deg, #f59e0b, #b45309); }
+  .menu-tile .ti { font-size: 13px; font-weight: 600; }
+  .menu-tile .sub { font-size: 11px; color: var(--muted); }
+
+  /* Signup form */
+  .form-field { margin-bottom: 12px; }
+  .form-field label {
+    display: block; font-size: 11px; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .form-field .box {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px; font-weight: 500;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .form-field .box .cur { color: var(--ink); }
+
+  /* Plan cards */
+  .plan-list { display: grid; gap: 8px; }
+  .plan-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .plan-card.sel { border-color: var(--accent); background: var(--accent-soft); }
+  .plan-card .name { font-size: 12px; font-weight: 700; }
+  .plan-card .sub { font-size: 10px; color: var(--muted); }
+  .plan-card .price { font-size: 13px; font-weight: 700; color: var(--accent-deep); }
+
+  /* ─── Laptop Mockup ─── */
+  .laptop-stage {
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+  }
+  .laptop {
+    width: 100%; max-width: 560px;
+    background: #0d1117; border-radius: 18px 18px 6px 6px;
+    padding: 14px; position: relative;
+    box-shadow: 0 20px 50px -20px rgba(13,17,23,0.5);
+  }
+  .laptop-screen {
+    aspect-ratio: 16 / 10;
+    background: #f3f4f8; border-radius: 6px;
+    overflow: hidden; position: relative;
+  }
+  .laptop-screen .scr {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.6s ease;
+    display: flex;
+  }
+  .laptop-screen .scr.active { opacity: 1; }
+  .laptop-base {
+    width: 60%; height: 14px;
+    background: #cdd2d9; border-radius: 0 0 14px 14px;
+    margin-top: -2px;
+  }
+
+  /* Desktop dashboard */
+  .dash-side {
+    width: 28%; background: #0d1117; color: #fff;
+    padding: 16px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .dash-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 700; font-size: 13px;
+    margin-bottom: 14px;
+  }
+  .dash-logo .ld {
+    width: 18px; height: 18px; border-radius: 5px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  }
+  .dash-menu {
+    padding: 8px 10px; border-radius: 8px;
+    font-size: 11px; color: #cdd2d9;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dash-menu.active { background: rgba(255,122,26,0.18); color: #fff; }
+  .dash-menu .di { width: 6px; height: 6px; border-radius: 999px; background: currentColor; opacity: 0.6; }
+
+  .dash-main {
+    flex: 1; padding: 14px;
+    display: flex; flex-direction: column; gap: 12px;
+    overflow: hidden;
+  }
+  .dash-head {
+    font-size: 12px; font-weight: 700; color: var(--ink);
+  }
+  .dash-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .stat-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px;
+  }
+  .stat-card .stat-lbl { font-size: 8px; color: var(--muted); margin-bottom: 2px; }
+  .stat-card .stat-val { font-size: 14px; font-weight: 700; }
+  .stat-card .stat-delta { font-size: 8px; color: var(--accent-deep); }
+
+  .dash-table {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px;
+    flex: 1; overflow: hidden;
+  }
+  .dash-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr 60px;
+    gap: 6px;
+    font-size: 8px; padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .dash-row.head { font-weight: 700; color: var(--muted); }
+  .dash-row .ok { color: #047857; }
+  .dash-row .wait { color: var(--accent-deep); }
+
+  /* Bulk-add screen */
+  .bulk-main { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .bulk-head { font-size: 12px; font-weight: 700; }
+  .bulk-sub { font-size: 9px; color: var(--muted); margin-top: -6px; }
+  .bulk-ta {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    flex: 1; padding: 10px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 8px; color: var(--ink);
+    overflow: hidden;
+    line-height: 1.6;
+  }
+  .bulk-ta .ln { color: var(--muted); display: inline-block; width: 18px; }
+  .bulk-actions {
+    display: flex; gap: 6px; justify-content: flex-end;
+  }
+  .bulk-btn {
+    font-size: 8px; padding: 5px 10px; border-radius: 6px;
+    background: var(--ink); color: #fff; font-weight: 600;
+  }
+  .bulk-btn.prm { background: var(--accent); }
+
+  /* ─── Footer ─── */
+  footer {
+    text-align: center;
+    padding: 60px 32px 80px;
+    color: var(--muted); font-size: 0.9rem;
+  }
+
+  /* ─── Intro overlay ─── */
+  .intro-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .intro-overlay.in { opacity: 1; pointer-events: auto; }
+  .intro-overlay.gone { display: none; }
+  .intro-content {
+    text-align: center; padding: 40px;
+    max-width: 720px;
+  }
+  .intro-logo {
+    height: 96px; width: auto;
+    display: block; margin: 0 auto 32px;
+    opacity: 0; transform: translateY(14px);
+  }
+  .intro-overlay.in .intro-logo {
+    animation: introRise 0.8s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .intro-title {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+    font-weight: 700; letter-spacing: -0.02em;
+    line-height: 1.5; color: var(--ink);
+    opacity: 0; transform: translateY(14px);
+  }
+  .intro-overlay.in .intro-title {
+    animation: introRise 0.8s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .intro-title em {
+    font-style: normal; font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  @keyframes introRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .section { padding: 56px 28px; border-radius: 22px; }
+    .section-grid { grid-template-columns: 1fr; gap: 48px; }
+    .section.reverse .section-grid { grid-template-areas: none; }
+    .hero { padding: 60px 24px 30px; }
+    .topbar-inner { padding: 14px 20px; }
+    .phone { width: 260px; }
+    .brand-logo { height: 32px; }
+    .brand-tagline { font-size: 0.78rem; }
+  }
+  @media (max-width: 560px) {
+    .brand-tagline { display: none; }
+    .nav-link { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <img src="/blockpang/assets/logo/blockpang_logo.png" alt="블럭팡" class="brand-logo">
+      <span class="brand-tagline">MaxImpact와 함께한다면..</span>
+    </div>
+    <nav class="nav-links">
+      <a href="/blockpang/owner" target="_blank" rel="noopener" class="nav-link owner-link">점주 화면 →</a>
+      <a href="/blockpang/demo" target="_blank" rel="noopener" class="nav-cta">데모 화면 보기 →</a>
+    </nav>
+  </div>
+</div>
+
+<!-- Intro overlay -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-content">
+    <img src="/blockpang/assets/logo/blockpang_logo.png" alt="블럭팡" class="intro-logo">
+    <h2 class="intro-title">
+      안녕하세요 블럭팡 담당자님,<br>
+      <em>Max-Impact</em> 입니다.
+    </h2>
+  </div>
+</div>
+
+<section class="hero">
+  <span class="eyebrow">CORE FUNCTIONS · 모든게 자동화</span>
+  <h1>점주님의 모든 업무를<br><em>스마트 에이전트</em>가 처리합니다</h1>
+  <p>회원가입부터 요금충전, 입퇴실, 대여/반납까지. 단순 프로그램이 아닌, 손이 가지 않는 무인 운영 솔루션을 경험해 보세요.</p>
+</section>
+
+<!-- Section 1: 입실 / 퇴실 -->
+<section class="section">
+  <div class="section-grid">
+    <div class="copy">
+      <span class="tag-mark">01 · Check In / Out</span>
+      <h2><span>셀프 입퇴실</span><span>고객이 직접 처리</span></h2>
+      <p class="lede">
+        키오스크 한 대로 입실, 시간 관리, 퇴실까지 모두 자동화됩니다.<br>
+        결제와 안내 문자도 시스템이 알아서 처리하기 때문에 점주님은 다른 일에 집중할 수 있어요.
+      </p>
+      <div class="accordion" data-accordion>
+        <div class="acc-item open">
+          <button class="acc-trigger">일시 멈춤 기능 <span class="plus">+</span></button>
+          <div class="acc-body">자리를 잠깐 비우거나 새 상품을 고르는 동안 이용 시간을 일시 정지할 수 있어요.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">부가 상품 통합 결제 <span class="plus">+</span></button>
+          <div class="acc-body">음료, 간식 등 매장 상품 판매를 이용권과 함께 한 번에 정산할 수 있어 편리해요.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">이용 이력 자동 기록 <span class="plus">+</span></button>
+          <div class="acc-body">회원이 어떤 상품을 이용했는지 자동으로 기록되어 이력 관리와 분석에 활용할 수 있어요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="media">
+      <div class="phone-stage">
+        <div class="phone">
+          <div class="phone-screen" data-carousel>
+
+            <!-- Screen 1: Catalog -->
+            <div class="scr active">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">제품 선택</div>
+              <div class="scr-sub">이용하실 블록을 골라주세요</div>
+              <div class="scr-body">
+                <div class="cat-grid">
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-label">시티 시리즈</div><div class="cat-meta">중급 · 480pcs</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-label">크리에이터</div><div class="cat-meta">고급 · 920pcs</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-label">테크닉</div><div class="cat-meta">고급 · 1,240pcs</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-label">키즈</div><div class="cat-meta">초급 · 220pcs</div></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">선택 완료</button>
+              </div>
+            </div>
+
+            <!-- Screen 2: Identity check -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">본인 확인</div>
+              <div class="scr-sub">등록된 연락처를 입력해 주세요</div>
+              <div class="scr-body">
+                <div class="phone-input">
+                  <div class="lbl">전화번호</div>
+                  <div class="num">010-2648-4<span class="blink"></span></div>
+                </div>
+                <div class="keypad">
+                  <button>1</button><button>2</button><button>3</button>
+                  <button>4</button><button>5</button><button>6</button>
+                  <button>7</button><button>8</button><button>9</button>
+                  <button class="del">지움</button>
+                  <button class="zero">0</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 3: Info confirm -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">회원 정보 확인</div>
+              <div class="scr-sub">아래 정보로 입실을 진행할까요?</div>
+              <div class="scr-body">
+                <div class="info-badge">● 정회원</div>
+                <div class="info-card">
+                  <div class="info-row"><span class="k">이름</span><span class="v">강민지</span></div>
+                  <div class="info-row"><span class="k">요금제</span><span class="v">매장 10시간</span></div>
+                  <div class="info-row"><span class="k">잔여시간</span><span class="v">6시간 40분</span></div>
+                  <div class="info-row"><span class="k">유효기간</span><span class="v">D-180</span></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">입실 확인</button>
+              </div>
+            </div>
+
+            <!-- Screen 4: Done -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="success-mark">✓</div>
+              <div class="success-title">입실이 완료되었어요</div>
+              <div class="success-sub">즐거운 시간 보내세요!</div>
+              <div class="scr-body">
+                <div class="info-card">
+                  <div class="info-row"><span class="k">입실 시간</span><span class="v">13:20</span></div>
+                  <div class="info-row"><span class="k">선택한 블록</span><span class="v">시티 시리즈</span></div>
+                  <div class="info-row"><span class="k">남은 시간</span><span class="v">6시간 40분</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="phone-dots" data-dots>
+            <span class="active"></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: 대여 / 반납 -->
+<section class="section reverse">
+  <div class="section-grid">
+    <div class="media">
+      <div class="phone-stage">
+        <div class="phone">
+          <div class="phone-screen" data-carousel>
+
+            <!-- Screen 1: Rental catalog -->
+            <div class="scr active">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">대여 가능 제품</div>
+              <div class="scr-sub">반납 예정일까지 자유롭게 이용</div>
+              <div class="scr-body">
+                <div class="cat-grid">
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-tag">5일</div><div class="cat-label">스페이스 셔틀</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-tag">7일</div><div class="cat-label">시티 폴리스</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-tag">5일</div><div class="cat-label">아키텍처</div></div>
+                  <div class="cat-card"><div class="cat-img"></div><div class="cat-tag">7일</div><div class="cat-label">크리에이터</div></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">대여 신청</button>
+              </div>
+            </div>
+
+            <!-- Screen 2: ID check -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">회원 인증</div>
+              <div class="scr-sub">대여 회원 등록이 필요해요</div>
+              <div class="scr-body">
+                <div class="phone-input">
+                  <div class="lbl">전화번호</div>
+                  <div class="num">010-2648-441<span class="blink"></span></div>
+                </div>
+                <div class="keypad">
+                  <button>1</button><button>2</button><button>3</button>
+                  <button>4</button><button>5</button><button>6</button>
+                  <button>7</button><button>8</button><button>9</button>
+                  <button class="del">지움</button>
+                  <button class="zero">0</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 3: Member info -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">대여 회원 확인</div>
+              <div class="scr-sub">등급에 따라 자동 정산됩니다</div>
+              <div class="scr-body">
+                <div class="info-badge">● 골드 등급</div>
+                <div class="info-card">
+                  <div class="info-row"><span class="k">이름</span><span class="v">박서윤</span></div>
+                  <div class="info-row"><span class="k">요금제</span><span class="v">나무 8회 (5일)</span></div>
+                  <div class="info-row"><span class="k">잔여 횟수</span><span class="v">7회</span></div>
+                  <div class="info-row"><span class="k">반납 예정</span><span class="v">10월 1일</span></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">대여 진행</button>
+              </div>
+            </div>
+
+            <!-- Screen 4: Done -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="success-mark">✓</div>
+              <div class="success-title">대여가 완료되었어요</div>
+              <div class="success-sub">반납 예정일을 잊지 마세요</div>
+              <div class="scr-body">
+                <div class="info-card">
+                  <div class="info-row"><span class="k">제품명</span><span class="v">시티 폴리스</span></div>
+                  <div class="info-row"><span class="k">반납 예정일</span><span class="v">10. 01.</span></div>
+                  <div class="info-row"><span class="k">남은 횟수</span><span class="v">7회</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="phone-dots" data-dots>
+            <span class="active"></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copy">
+      <span class="tag-mark">02 · Rental / Return</span>
+      <h2><span>셀프 대여반납</span><span>무인 대여 시스템</span></h2>
+      <p class="lede">
+        회원 등급에 맞춰 자동으로 대여, 반납, 연체 관리가 됩니다.<br>
+        결제 완료까지 사람의 손이 필요 없고, 결과는 문자로 즉시 안내됩니다.
+      </p>
+      <div class="accordion" data-accordion>
+        <div class="acc-item open">
+          <button class="acc-trigger">비회원 1회 대여 <span class="plus">+</span></button>
+          <div class="acc-body">대여 회원이 아닌 손님도 요금 정책에 따라 단건 대여료가 자동 계산되어 이용할 수 있어요.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">등급별 요금 차등 <span class="plus">+</span></button>
+          <div class="acc-body">약정 등급을 초과하는 제품을 대여할 경우 초과 요금이 자동으로 부과됩니다.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">연체일수 자동 정산 <span class="plus">+</span></button>
+          <div class="acc-body">반납 시점에 연체 일수만큼 연체료가 자동 합산되어 추가 결제가 진행됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: 가입 / 충전 -->
+<section class="section">
+  <div class="section-grid">
+    <div class="copy">
+      <span class="tag-mark">03 · Signup / Recharge</span>
+      <h2><span>셀프 가입 · 충전</span><span>고객이 직접 처리</span></h2>
+      <p class="lede">
+        전용 단말기에서 회원 가입과 요금 충전을 손님이 직접 처리합니다.<br>
+        카운터에서 정보를 받아 적느라 시간을 쓸 필요가 없어요.
+      </p>
+      <div class="accordion" data-accordion>
+        <div class="acc-item open">
+          <button class="acc-trigger">최소 정보 가입 <span class="plus">+</span></button>
+          <div class="acc-body">아이 이름과 보호자 연락처만으로 회원 가입이 끝납니다. 불필요한 입력은 모두 제거했어요.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">요금제 자동 동기화 <span class="plus">+</span></button>
+          <div class="acc-body">점주님이 설정한 요금제 정보가 자동으로 단말기에 반영되어 손님이 직관적으로 고를 수 있어요.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">결제 안내 자동화 <span class="plus">+</span></button>
+          <div class="acc-body">충전 완료 시 결제 내역과 가입 요금제 정보가 자동으로 안내되고 문자로도 발송됩니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="media">
+      <div class="phone-stage">
+        <div class="phone">
+          <div class="phone-screen" data-carousel>
+
+            <!-- Screen 1: Menu -->
+            <div class="scr active">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">무엇을 도와드릴까요?</div>
+              <div class="scr-sub">메뉴를 선택해 주세요</div>
+              <div class="scr-body">
+                <div class="menu-grid">
+                  <div class="menu-tile"><div class="ic">+</div><div><div class="ti">신규 가입</div><div class="sub">처음이신가요?</div></div></div>
+                  <div class="menu-tile alt"><div class="ic">₩</div><div><div class="ti">요금 충전</div><div class="sub">이용권을 충전합니다</div></div></div>
+                  <div class="menu-tile alt2"><div class="ic">↑</div><div><div class="ti">셀프 퇴실</div><div class="sub">이용을 종료합니다</div></div></div>
+                  <div class="menu-tile alt3"><div class="ic">↺</div><div><div class="ti">반납하기</div><div class="sub">대여 제품을 반납합니다</div></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 2: Signup form -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">간단 회원가입</div>
+              <div class="scr-sub">이름과 연락처만 입력해 주세요</div>
+              <div class="scr-body">
+                <div class="form-field">
+                  <label>회원 이름</label>
+                  <div class="box"><span class="cur">강민지</span><span style="color:var(--accent-deep)">✎</span></div>
+                </div>
+                <div class="form-field">
+                  <label>보호자 연락처</label>
+                  <div class="box"><span class="cur">010-2648-4417</span><span style="color:var(--accent-deep)">✎</span></div>
+                </div>
+                <div class="form-field">
+                  <label>알림 동의</label>
+                  <div class="box"><span class="cur">SMS · 카카오톡 수신 동의</span><span style="color:var(--accent-deep)">✓</span></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">가입 완료</button>
+              </div>
+            </div>
+
+            <!-- Screen 3: Info confirm -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">가입 정보 확인</div>
+              <div class="scr-sub">아래 내용으로 가입할까요?</div>
+              <div class="scr-body">
+                <div class="info-card">
+                  <div class="info-row"><span class="k">이름</span><span class="v">강민지</span></div>
+                  <div class="info-row"><span class="k">연락처</span><span class="v">010-2648-4417</span></div>
+                  <div class="info-row"><span class="k">알림</span><span class="v">SMS · 카카오톡</span></div>
+                  <div class="info-row"><span class="k">매장</span><span class="v">블럭팡 본점</span></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">다음 단계</button>
+              </div>
+            </div>
+
+            <!-- Screen 4: Plan selection -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="scr-title">요금제 선택</div>
+              <div class="scr-sub">원하시는 이용권을 골라주세요</div>
+              <div class="scr-body">
+                <div class="plan-list">
+                  <div class="plan-card"><div><div class="name">매장 2시간</div><div class="sub">기본 이용권</div></div><div class="price">15,000원</div></div>
+                  <div class="plan-card sel"><div><div class="name">매장 10시간</div><div class="sub">추천 · 유효 180일</div></div><div class="price">75,000원</div></div>
+                  <div class="plan-card"><div><div class="name">월 무제한</div><div class="sub">매일 방문 시 추천</div></div><div class="price">120,000원</div></div>
+                  <div class="plan-card"><div><div class="name">나무 8회 대여권</div><div class="sub">5일 대여 · 8회</div></div><div class="price">88,000원</div></div>
+                </div>
+              </div>
+              <div class="scr-footer">
+                <button class="pill-btn">결제하기</button>
+              </div>
+            </div>
+
+            <!-- Screen 5: Done -->
+            <div class="scr">
+              <div class="status-bar"><span>9:41</span><span>● ● ●</span></div>
+              <div class="success-mark">✓</div>
+              <div class="success-title">충전이 완료되었어요</div>
+              <div class="success-sub">안내 문자가 발송됐어요</div>
+              <div class="scr-body">
+                <div class="info-card">
+                  <div class="info-row"><span class="k">요금제</span><span class="v">매장 10시간</span></div>
+                  <div class="info-row"><span class="k">결제 금액</span><span class="v">75,000원</span></div>
+                  <div class="info-row"><span class="k">유효기간</span><span class="v">D-180</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="phone-dots" data-dots>
+            <span class="active"></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: 제품 일괄 등록 -->
+<section class="section reverse">
+  <div class="section-grid">
+    <div class="media">
+      <div class="laptop-stage">
+        <div class="laptop">
+          <div class="laptop-screen" data-carousel>
+
+            <!-- Screen 1: Dashboard -->
+            <div class="scr active">
+              <div class="dash-side">
+                <div class="dash-logo"><span class="ld"></span> 블럭팡</div>
+                <div class="dash-menu"><span class="di"></span> 대시보드</div>
+                <div class="dash-menu active"><span class="di"></span> 제품 관리</div>
+                <div class="dash-menu"><span class="di"></span> 회원 관리</div>
+                <div class="dash-menu"><span class="di"></span> 대여 / 반납</div>
+                <div class="dash-menu"><span class="di"></span> 매출 분석</div>
+                <div class="dash-menu"><span class="di"></span> 환경 설정</div>
+              </div>
+              <div class="dash-main">
+                <div class="dash-head">제품 관리 · 입고 현황</div>
+                <div class="dash-stats">
+                  <div class="stat-card"><div class="stat-lbl">오늘 입고</div><div class="stat-val">147</div><div class="stat-delta">+22 vs 어제</div></div>
+                  <div class="stat-card"><div class="stat-lbl">자동 처리율</div><div class="stat-val">98.2%</div><div class="stat-delta">최근 7일</div></div>
+                  <div class="stat-card"><div class="stat-lbl">미등록 대기</div><div class="stat-val">3</div><div class="stat-delta">본사 요청 중</div></div>
+                </div>
+                <div class="dash-table">
+                  <div class="dash-row head"><div>코드</div><div>제품명</div><div>시리즈</div><div>상태</div></div>
+                  <div class="dash-row"><div>21255</div><div>네더 포털</div><div>마인크래프트</div><div class="ok">입고완료</div></div>
+                  <div class="dash-row"><div>10318</div><div>콩코드</div><div>아이콘</div><div class="ok">입고완료</div></div>
+                  <div class="dash-row"><div>42171</div><div>마즈다 RX-7</div><div>스피드챔피언</div><div class="ok">입고완료</div></div>
+                  <div class="dash-row"><div>76989</div><div>호라이즌</div><div>스페셜</div><div class="wait">정보조회중</div></div>
+                  <div class="dash-row"><div>60376</div><div>아이스크림 트럭</div><div>시티</div><div class="ok">입고완료</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 2: Bulk add -->
+            <div class="scr">
+              <div class="dash-side">
+                <div class="dash-logo"><span class="ld"></span> 블럭팡</div>
+                <div class="dash-menu"><span class="di"></span> 대시보드</div>
+                <div class="dash-menu active"><span class="di"></span> 제품 관리</div>
+                <div class="dash-menu"><span class="di"></span> 회원 관리</div>
+                <div class="dash-menu"><span class="di"></span> 대여 / 반납</div>
+                <div class="dash-menu"><span class="di"></span> 매출 분석</div>
+                <div class="dash-menu"><span class="di"></span> 환경 설정</div>
+              </div>
+              <div class="bulk-main">
+                <div class="bulk-head">원클릭 일괄 입고</div>
+                <div class="bulk-sub">제품번호만 입력하면 자동으로 정보를 조회해 등록합니다 · 최대 1,000개</div>
+                <div class="bulk-ta">
+                  <div><span class="ln">1</span>21255</div>
+                  <div><span class="ln">2</span>10318</div>
+                  <div><span class="ln">3</span>42171</div>
+                  <div><span class="ln">4</span>60376</div>
+                  <div><span class="ln">5</span>76989</div>
+                  <div><span class="ln">6</span>31313</div>
+                  <div><span class="ln">7</span>75257</div>
+                  <div><span class="ln">8</span>10497</div>
+                  <div><span class="ln">9</span>43210</div>
+                  <div><span class="ln">10</span>_</div>
+                </div>
+                <div class="bulk-actions">
+                  <button class="bulk-btn">초기화</button>
+                  <button class="bulk-btn prm">자동 등록 · 9건</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+    </div>
+    <div class="copy">
+      <span class="tag-mark">04 · One-Click Registration</span>
+      <h2><span>제품 일괄 등록</span><span>1,000건도 한 번에</span></h2>
+      <p class="lede">
+        제품번호만 붙여넣으면 시스템이 자동으로 정보를 조회해 등록과 입고까지 처리합니다.<br>
+        신상품을 받은 다음 매장 운영 준비 시간이 분 단위로 줄어듭니다.
+      </p>
+      <div class="accordion" data-accordion>
+        <div class="acc-item open">
+          <button class="acc-trigger">대량 입고 처리 <span class="plus">+</span></button>
+          <div class="acc-body">한 번에 최대 1,000개까지 등록할 수 있어 신상품 입고 작업이 클릭 한 번으로 끝납니다.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">자동 정보 동기화 <span class="plus">+</span></button>
+          <div class="acc-body">매일 새벽 갱신되는 제품 데이터베이스를 통해 정보가 항상 최신 상태로 유지됩니다.</div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">미등록 제품 자동 요청 <span class="plus">+</span></button>
+          <div class="acc-body">DB에 없는 신상품은 본사로 자동 등록 요청이 들어가 다음 동기화 때 정상 반영됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  © 2026 블럭팡 운영 솔루션 · Demo Preview
+</footer>
+
+<script>
+  // Intro fade (shown once per session after login)
+  (() => {
+    const intro = document.getElementById('introOverlay');
+    if (!intro) return;
+    requestAnimationFrame(() => intro.classList.add('in'));
+    setTimeout(() => intro.classList.remove('in'), 2400);
+    setTimeout(() => intro.classList.add('gone'), 3200);
+  })();
+
+  // Accordion
+  document.querySelectorAll('[data-accordion]').forEach(group => {
+    group.addEventListener('click', e => {
+      const trigger = e.target.closest('.acc-trigger');
+      if (!trigger) return;
+      const item = trigger.parentElement;
+      const isOpen = item.classList.contains('open');
+      group.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Carousel auto-rotate
+  document.querySelectorAll('[data-carousel]').forEach(carousel => {
+    const scrs = carousel.querySelectorAll('.scr');
+    const dots = carousel.parentElement.querySelector('[data-dots]');
+    const dotEls = dots ? dots.querySelectorAll('span') : [];
+    let i = 0;
+    setInterval(() => {
+      scrs[i].classList.remove('active');
+      if (dotEls[i]) dotEls[i].classList.remove('active');
+      i = (i + 1) % scrs.length;
+      scrs[i].classList.add('active');
+      if (dotEls[i]) dotEls[i].classList.add('active');
+    }, 2600);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+@page { size: A4; margin: 0; }
+
+body { font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+
+.dark { background: #0A0A0F; color: #ffffff; }
+.light { background: #ffffff; color: #0A0A0F; }
+.mid { background: #F5F5F7; color: #0A0A0F; }
+
+/* ─── COVER ─── */
+.cover {
+  background: #0A0A0F;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18mm 16mm;
+}
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.08) 1px, transparent 1px);
+  background-size: 18mm 18mm;
+}
+.cover-top {
+  position: relative;
+  z-index: 1;
+}
+.cover-badge {
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 3mm 6mm;
+  font-size: 8pt;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+}
+.cover-logo {
+  margin-top: 6mm;
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 52pt;
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: #2563EB;
+  line-height: 1;
+}
+.cover-logo span { color: #ffffff; }
+.cover-headline {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.cover-headline h1 {
+  font-size: 38pt;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: #ffffff;
+}
+.cover-headline h1 em {
+  color: #2563EB;
+  font-style: normal;
+}
+.cover-headline p {
+  margin-top: 5mm;
+  font-size: 12pt;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.05em;
+}
+.cover-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.cover-bottom-left {
+  font-size: 8pt;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.1em;
+}
+.cover-bottom-right {
+  text-align: right;
+  font-size: 8pt;
+  color: rgba(255,255,255,0.35);
+}
+.cover-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37,99,235,0.5), transparent);
+  margin: 5mm 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── CONTENTS ─── */
+.contents { padding: 18mm 16mm; }
+.contents-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 4mm;
+  margin-bottom: 14mm;
+}
+.contents-title {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 36pt;
+  font-weight: 900;
+  color: #2563EB;
+}
+.contents-sub {
+  font-size: 9pt;
+  color: rgba(10,10,15,0.4);
+  margin-bottom: 4mm;
+  letter-spacing: 0.05em;
+}
+.contents-divider {
+  width: 100%;
+  height: 1px;
+  background: #e5e7eb;
+  margin-bottom: 10mm;
+}
+.contents-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8mm;
+  padding: 8mm 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.contents-item:last-child { border-bottom: none; }
+.contents-num {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 28pt;
+  font-weight: 900;
+  color: #e5e7eb;
+  line-height: 1;
+  min-width: 20mm;
+}
+.contents-item-right {}
+.contents-item-label {
+  font-size: 7pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #2563EB;
+  margin-bottom: 1mm;
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+}
+.contents-item-title {
+  font-size: 16pt;
+  font-weight: 700;
+  color: #0A0A0F;
+}
+.contents-item-desc {
+  font-size: 9pt;
+  color: rgba(10,10,15,0.5);
+  margin-top: 1mm;
+}
+
+/* ─── SECTION DIVIDER ─── */
+.section-divider {
+  background: #0A0A0F;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 18mm 16mm;
+  position: relative;
+  overflow: hidden;
+}
+.section-bg-num {
+  position: absolute;
+  left: -8mm;
+  top: 50%;
+  transform: translateY(-60%);
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 180pt;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+  letter-spacing: -10px;
+}
+.section-label {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 8pt;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #2563EB;
+  margin-bottom: 5mm;
+  position: relative;
+  z-index: 1;
+}
+.section-num {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 4mm;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-size: 34pt;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -1px;
+}
+.section-title em { color: #2563EB; font-style: normal; }
+.section-bar {
+  width: 12mm;
+  height: 1.5mm;
+  background: #2563EB;
+  margin-bottom: 6mm;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── DETAIL PAGE ─── */
+.detail { padding: 16mm; }
+.detail-section-label {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 7pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #2563EB;
+  margin-bottom: 4mm;
+}
+.detail-title {
+  font-size: 22pt;
+  font-weight: 900;
+  color: #0A0A0F;
+  margin-bottom: 2mm;
+  letter-spacing: -0.5px;
+}
+.detail-sub {
+  font-size: 10pt;
+  color: rgba(10,10,15,0.5);
+  margin-bottom: 9mm;
+}
+.detail-divider {
+  width: 100%;
+  height: 1px;
+  background: #e5e7eb;
+  margin-bottom: 9mm;
+}
+
+/* Cards */
+.cards-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5mm;
+  margin-bottom: 5mm;
+}
+.card {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 3mm;
+  padding: 6mm;
+}
+.card.blue-border { border-color: #2563EB; }
+.card-icon {
+  width: 10mm;
+  height: 10mm;
+  background: #EFF6FF;
+  border-radius: 2mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3mm;
+  font-size: 14pt;
+}
+.card-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0A0A0F;
+  margin-bottom: 2mm;
+}
+.card-body {
+  font-size: 8.5pt;
+  color: rgba(10,10,15,0.6);
+  line-height: 1.6;
+}
+.card-tag {
+  display: inline-block;
+  background: #EFF6FF;
+  color: #2563EB;
+  font-size: 7pt;
+  padding: 1mm 2.5mm;
+  border-radius: 1mm;
+  margin-top: 3mm;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Dark detail */
+.detail-dark {
+  background: #0A0A0F;
+  color: #ffffff;
+  padding: 16mm;
+}
+.detail-dark .detail-title { color: #ffffff; }
+.detail-dark .detail-sub { color: rgba(255,255,255,0.45); }
+.detail-dark .detail-divider { background: rgba(255,255,255,0.1); }
+.detail-dark .card {
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
+.detail-dark .card.blue-border { border-color: #2563EB; }
+.detail-dark .card-title { color: #ffffff; }
+.detail-dark .card-body { color: rgba(255,255,255,0.55); }
+.detail-dark .card-icon { background: rgba(37,99,235,0.2); }
+.detail-dark .card-tag { background: rgba(37,99,235,0.2); }
+
+/* Process */
+.process-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5mm;
+}
+.process-step {
+  background: #F9FAFB;
+  border-radius: 3mm;
+  padding: 7mm;
+  border-top: 3px solid #2563EB;
+}
+.step-num {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 24pt;
+  font-weight: 900;
+  color: #2563EB;
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: 2mm;
+}
+.step-title {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #0A0A0F;
+  margin-bottom: 3mm;
+}
+.step-items {
+  list-style: none;
+}
+.step-items li {
+  font-size: 8.5pt;
+  color: rgba(10,10,15,0.6);
+  padding: 1.5mm 0;
+  padding-left: 4mm;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+.step-items li:last-child { border-bottom: none; }
+.step-items li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5mm;
+  height: 1.5mm;
+  border-radius: 50%;
+  background: #2563EB;
+  margin-top: 0.5mm;
+}
+
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4mm;
+}
+.pricing-card {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 3mm;
+  padding: 7mm 6mm;
+  display: flex;
+  flex-direction: column;
+}
+.pricing-card.featured {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+.pricing-badge {
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #2563EB;
+  margin-bottom: 3mm;
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+}
+.pricing-name {
+  font-size: 16pt;
+  font-weight: 900;
+  color: #0A0A0F;
+  margin-bottom: 2mm;
+}
+.pricing-price {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 22pt;
+  font-weight: 900;
+  color: #2563EB;
+  margin-bottom: 1mm;
+  line-height: 1;
+}
+.pricing-price span { font-size: 10pt; color: rgba(10,10,15,0.5); font-weight: 400; }
+.pricing-period {
+  font-size: 8pt;
+  color: rgba(10,10,15,0.45);
+  margin-bottom: 5mm;
+}
+.pricing-divider { height: 1px; background: #e5e7eb; margin-bottom: 5mm; }
+.pricing-items {
+  list-style: none;
+  flex: 1;
+}
+.pricing-items li {
+  font-size: 8.5pt;
+  color: rgba(10,10,15,0.7);
+  padding: 2mm 0;
+  padding-left: 4mm;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+.pricing-items li:last-child { border-bottom: none; }
+.pricing-items li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2563EB;
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+/* Tech stack */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin-bottom: 5mm;
+}
+.tech-item {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 2mm;
+  padding: 4mm;
+  text-align: center;
+  background: rgba(37,99,235,0.08);
+}
+.tech-item-name {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1mm;
+}
+.tech-item-role {
+  font-size: 7pt;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Stat boxes */
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4mm;
+  margin-bottom: 7mm;
+}
+.stat-box {
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.3);
+  border-radius: 3mm;
+  padding: 6mm;
+  text-align: center;
+}
+.stat-num {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 28pt;
+  font-weight: 900;
+  color: #2563EB;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 8pt;
+  color: rgba(255,255,255,0.5);
+  margin-top: 2mm;
+}
+
+/* Thank you */
+.thankyou {
+  background: #0A0A0F;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20mm;
+  position: relative;
+  overflow: hidden;
+}
+.thankyou-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+  background-size: 18mm 18mm;
+}
+.thankyou-logo {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 32pt;
+  font-weight: 900;
+  color: #2563EB;
+  margin-bottom: 8mm;
+  position: relative;
+  z-index: 1;
+}
+.thankyou h1 {
+  font-family: "Montserrat", "Apple SD Gothic Neo", sans-serif;
+  font-size: 52pt;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 10mm;
+  position: relative;
+  z-index: 1;
+}
+.thankyou-contacts {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+}
+.thankyou-contact-item {
+  font-size: 9pt;
+  color: rgba(255,255,255,0.45);
+}
+.thankyou-contact-item strong {
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+}
+.thankyou-line {
+  width: 20mm;
+  height: 1.5px;
+  background: #2563EB;
+  margin: 8mm auto;
+  position: relative;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — COVER
+══════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+
+  <div class="cover-top">
+    <div class="cover-badge">AI · Web developed Team</div>
+    <div class="cover-logo">Max<span>Impact</span></div>
+  </div>
+
+  <div class="cover-headline">
+    <h1>결과로 증명하는<br><em>개발팀.</em></h1>
+    <p>최적의 효율로, 최고의 작업물을.</p>
+  </div>
+
+  <div>
+    <div class="cover-line"></div>
+    <div class="cover-bottom">
+      <div class="cover-bottom-left">
+        © 2026 MaxImpact<br>All rights reserved.
+      </div>
+      <div class="cover-bottom-right">
+        서비스 소개서<br>2026
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — CONTENTS
+══════════════════════════════════════════ -->
+<div class="page light contents">
+  <div class="contents-header">
+    <div class="contents-title">Contents.</div>
+  </div>
+  <div class="contents-sub">MAXIMPACT SERVICE GUIDE 2026</div>
+  <div class="contents-divider"></div>
+
+  <div class="contents-item">
+    <div class="contents-num">01</div>
+    <div class="contents-item-right">
+      <div class="contents-item-label">Overview</div>
+      <div class="contents-item-title">MaxImpact 소개</div>
+      <div class="contents-item-desc">팀 소개, 핵심 가치, 차별점</div>
+    </div>
+  </div>
+
+  <div class="contents-item">
+    <div class="contents-num">02</div>
+    <div class="contents-item-right">
+      <div class="contents-item-label">Services</div>
+      <div class="contents-item-title">서비스 영역</div>
+      <div class="contents-item-desc">웹 개발, 플랫폼, AI 연동, 기술 스택</div>
+    </div>
+  </div>
+
+  <div class="contents-item">
+    <div class="contents-num">03</div>
+    <div class="contents-item-right">
+      <div class="contents-item-label">Process</div>
+      <div class="contents-item-title">진행 방식</div>
+      <div class="contents-item-desc">기획부터 배포까지, 단계별 협업 방식</div>
+    </div>
+  </div>
+
+  <div class="contents-item">
+    <div class="contents-num">04</div>
+    <div class="contents-item-right">
+      <div class="contents-item-label">Pricing</div>
+      <div class="contents-item-title">요금 안내</div>
+      <div class="contents-item-desc">프로젝트 규모별 패키지 안내</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — SECTION 01 DIVIDER
+══════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div class="section-bg-num">01</div>
+  <div class="section-num">SECTION 01</div>
+  <div class="section-label">Overview</div>
+  <div class="section-bar"></div>
+  <div class="section-title">MaxImpact란<br>어떤 팀인가요?</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — OVERVIEW
+══════════════════════════════════════════ -->
+<div class="page light detail">
+  <div class="detail-section-label">01 · Overview</div>
+  <div class="detail-title">기획부터 배포까지, 한 팀이 완성합니다.</div>
+  <div class="detail-sub">MaxImpact는 소규모이지만 에이전시 수준의 결과물을 제공하는 풀스택 개발팀입니다.</div>
+  <div class="detail-divider"></div>
+
+  <div class="stat-row" style="margin-bottom: 6mm;">
+    <div class="stat-box" style="background: #EFF6FF; border-color: #BFDBFE;">
+      <div class="stat-num" style="color: #2563EB;">3+</div>
+      <div class="stat-label" style="color: rgba(10,10,15,0.5);">년 개발 경력</div>
+    </div>
+    <div class="stat-box" style="background: #EFF6FF; border-color: #BFDBFE;">
+      <div class="stat-num" style="color: #2563EB;">50+</div>
+      <div class="stat-label" style="color: rgba(10,10,15,0.5);">완료 프로젝트</div>
+    </div>
+    <div class="stat-box" style="background: #EFF6FF; border-color: #BFDBFE;">
+      <div class="stat-num" style="color: #2563EB;">100%</div>
+      <div class="stat-label" style="color: rgba(10,10,15,0.5);">납기 준수율</div>
+    </div>
+  </div>
+
+  <div class="cards-2col">
+    <div class="card blue-border">
+      <div class="card-title">풀스택 원팀</div>
+      <div class="card-body">기획·디자인·프론트엔드·백엔드를 한 팀이 일관되게 처리합니다. 커뮤니케이션 비용을 줄이고, 납기를 정확히 지킵니다.</div>
+      <div class="card-tag">One-stop</div>
+    </div>
+    <div class="card">
+      <div class="card-title">AI 자동화 내재화</div>
+      <div class="card-body">Claude, GPT-4, Cursor 등 최신 AI 도구를 개발 파이프라인에 직접 통합합니다. 더 빠르고, 더 정확하게.</div>
+      <div class="card-tag">AI-powered</div>
+    </div>
+    <div class="card">
+      <div class="card-title">명확한 커뮤니케이션</div>
+      <div class="card-body">카카오톡·노션으로 진행 상황을 실시간 공유합니다. 중간 단계마다 확인·피드백하여 방향을 맞춥니다.</div>
+      <div class="card-tag">투명한 진행</div>
+    </div>
+    <div class="card">
+      <div class="card-title">결과물 보증</div>
+      <div class="card-body">납품 후 1개월 무상 유지보수를 제공합니다. 완성도에 확신이 있기에 결과물로 신뢰를 증명합니다.</div>
+      <div class="card-tag">AS 보장</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — SECTION 02 DIVIDER
+══════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div class="section-bg-num">02</div>
+  <div class="section-num">SECTION 02</div>
+  <div class="section-label">Services</div>
+  <div class="section-bar"></div>
+  <div class="section-title">무엇을<br>만들어 드리나요?</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 6 — SERVICES 1
+══════════════════════════════════════════ -->
+<div class="page light detail">
+  <div class="detail-section-label">02 · Services — 웹 서비스 & 플랫폼</div>
+  <div class="detail-title">비즈니스에 꼭 맞는 서비스를 만듭니다.</div>
+  <div class="detail-sub">단순 홈페이지부터 복잡한 플랫폼까지, 요구사항에 맞게 설계·개발합니다.</div>
+  <div class="detail-divider"></div>
+
+  <div class="cards-2col">
+    <div class="card blue-border">
+      <div class="card-title">SaaS / 구독 플랫폼</div>
+      <div class="card-body">반복 매출 구조를 만드는 구독 서비스를 설계합니다. 결제 연동, 요금제 관리, 사용량 추적까지 완성된 SaaS를 구축합니다.</div>
+      <div class="card-tag">Next.js · Stripe</div>
+    </div>
+    <div class="card">
+      <div class="card-title">관리자 대시보드</div>
+      <div class="card-body">데이터 시각화, 사용자 관리, 통계 리포트를 포함한 운영자 전용 어드민 패널을 개발합니다. 실시간 업데이트 지원.</div>
+      <div class="card-tag">React · Chart.js</div>
+    </div>
+    <div class="card">
+      <div class="card-title">예약 / 매칭 시스템</div>
+      <div class="card-body">일정 관리, 전문가-고객 매칭, 예약 확정·알림까지 처리하는 플랫폼을 구축합니다. 병원·학원·서비스업에 최적화.</div>
+      <div class="card-tag">MySQL · 알림 연동</div>
+    </div>
+    <div class="card">
+      <div class="card-title">마켓플레이스</div>
+      <div class="card-body">판매자·구매자 양방향 거래 플랫폼을 개발합니다. 상품 등록, 결제, 배송 추적, 리뷰 시스템을 포함한 완성형 커머스.</div>
+      <div class="card-tag">PHP · MariaDB</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 5mm; padding: 5mm 6mm; background: #F9FAFB; border-radius: 3mm; border-left: 3px solid #2563EB;">
+    <div style="font-size: 8pt; color: #2563EB; font-weight: 700; margin-bottom: 2mm;">ALSO AVAILABLE</div>
+    <div style="font-size: 8.5pt; color: rgba(10,10,15,0.6);">기업 홈페이지 · 랜딩 페이지 · 사내 인트라넷 · CRM 시스템 · 재고·물류 관리 시스템 · ERP 커스터마이징</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 7 — SERVICES 2 (TECH STACK)
+══════════════════════════════════════════ -->
+<div class="page detail-dark">
+  <div class="detail-section-label" style="color: #60A5FA;">02 · Services — AI 연동 & 기술 스택</div>
+  <div class="detail-title">최신 기술로 경쟁 우위를 만듭니다.</div>
+  <div class="detail-sub">AI를 단순히 활용하는 것이 아니라, 제품 안에 내재화합니다.</div>
+  <div class="detail-divider"></div>
+
+  <div class="cards-2col" style="margin-bottom: 6mm;">
+    <div class="card" style="border-color: rgba(37,99,235,0.5); background: rgba(37,99,235,0.1);">
+      <div class="card-title">AI 챗봇 연동</div>
+      <div class="card-body" style="color: rgba(255,255,255,0.55);">OpenAI·Claude API를 연결해 고객 상담 자동화, FAQ 응답, 맞춤 추천 기능을 제품에 내장합니다.</div>
+      <div class="card-tag" style="background: rgba(37,99,235,0.3);">GPT-4 · Claude API</div>
+    </div>
+    <div class="card">
+      <div class="card-title">문서 자동 생성</div>
+      <div class="card-body" style="color: rgba(255,255,255,0.55);">계약서·견적서·리포트를 자동 생성하는 기능을 개발합니다. 반복 업무를 AI로 대체해 운영 비용을 줄입니다.</div>
+      <div class="card-tag">AI Automation</div>
+    </div>
+  </div>
+
+  <div style="font-size: 9pt; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4mm;">Tech Stack</div>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <div class="tech-item-name">Next.js 15</div>
+      <div class="tech-item-role">Frontend</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">React 19</div>
+      <div class="tech-item-role">UI Library</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">TypeScript</div>
+      <div class="tech-item-role">Type Safety</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">Tailwind 4</div>
+      <div class="tech-item-role">Styling</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">PHP 8.5</div>
+      <div class="tech-item-role">Backend</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">MySQL / MariaDB</div>
+      <div class="tech-item-role">Database</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">Prisma 7</div>
+      <div class="tech-item-role">ORM</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-item-name">Vercel / AWS</div>
+      <div class="tech-item-role">Deploy</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 8 — SECTION 03 DIVIDER
+══════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div class="section-bg-num">03</div>
+  <div class="section-num">SECTION 03</div>
+  <div class="section-label">Process</div>
+  <div class="section-bar"></div>
+  <div class="section-title">어떻게<br>진행되나요?</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 9 — PROCESS
+══════════════════════════════════════════ -->
+<div class="page light detail">
+  <div class="detail-section-label">03 · Process</div>
+  <div class="detail-title">체계적인 4단계 프로세스</div>
+  <div class="detail-sub">처음 미팅부터 납품·운영까지 매 단계를 투명하게 공유합니다.</div>
+  <div class="detail-divider"></div>
+
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">기획 & 설계</div>
+      <ul class="step-items">
+        <li>요구사항 인터뷰 & 정리</li>
+        <li>화면 설계서(와이어프레임)</li>
+        <li>DB 구조 설계</li>
+        <li>개발 범위·일정 확정</li>
+        <li>견적서 · 계약서 작성</li>
+      </ul>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">UI / UX 디자인</div>
+      <ul class="step-items">
+        <li>브랜드 컬러·타이포 설정</li>
+        <li>Figma 시안 제작</li>
+        <li>모바일·PC 반응형 설계</li>
+        <li>클라이언트 피드백 반영</li>
+        <li>디자인 시스템 구축</li>
+      </ul>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">개발 & 테스트</div>
+      <ul class="step-items">
+        <li>프론트엔드 퍼블리싱</li>
+        <li>백엔드 API 개발</li>
+        <li>DB 연동 · 인증 구현</li>
+        <li>결제·외부 API 연동</li>
+        <li>QA 테스트 · 버그 수정</li>
+      </ul>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">배포 & 운영</div>
+      <ul class="step-items">
+        <li>서버 세팅 · 도메인 연결</li>
+        <li>SSL · 보안 설정</li>
+        <li>사용 방법 가이드 전달</li>
+        <li>1개월 무상 유지보수</li>
+        <li>장기 운영 계약 연장 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 5mm; padding: 4mm 6mm; background: #EFF6FF; border-radius: 3mm; display: flex; align-items: center; gap: 4mm;">
+    <div style="font-size: 8pt; color: #2563EB; font-weight: 700;">소통 채널</div>
+    <div style="width: 1px; height: 4mm; background: #BFDBFE;"></div>
+    <div style="font-size: 8.5pt; color: rgba(10,10,15,0.6);">카카오톡 오픈채팅 · 노션 워크스페이스 · 구글 드라이브 파일 공유 · 화상 미팅 (필요 시)</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 10 — SECTION 04 DIVIDER
+══════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div class="section-bg-num">04</div>
+  <div class="section-num">SECTION 04</div>
+  <div class="section-label">Pricing</div>
+  <div class="section-bar"></div>
+  <div class="section-title">비용이<br>어떻게 되나요?</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 11 — PRICING
+══════════════════════════════════════════ -->
+<div class="page light detail">
+  <div class="detail-section-label">04 · Pricing</div>
+  <div class="detail-title">프로젝트 규모에 맞는 패키지</div>
+  <div class="detail-sub">모든 금액은 VAT 별도이며, 프로젝트 복잡도에 따라 달라질 수 있습니다. 무료 상담 후 정확한 견적을 제공합니다.</div>
+  <div class="detail-divider"></div>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-badge">Basic</div>
+      <div class="pricing-name">기본형</div>
+      <div class="pricing-price">300<span>만원~</span></div>
+      <div class="pricing-period">단일 기능 / 소규모 프로젝트</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-items">
+        <li>랜딩 페이지 · 소개 사이트</li>
+        <li>반응형 웹 디자인</li>
+        <li>기본 CMS 연동</li>
+        <li>문의 폼 · 이메일 연동</li>
+        <li>배포 · SSL 설정</li>
+        <li>2주 무상 AS</li>
+      </ul>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-badge">Standard ★ 인기</div>
+      <div class="pricing-name">표준형</div>
+      <div class="pricing-price">700<span>만원~</span></div>
+      <div class="pricing-period">중규모 웹 서비스 / 플랫폼</div>
+      <div class="pricing-divider" style="background: #BFDBFE;"></div>
+      <ul class="pricing-items">
+        <li>회원가입 · 로그인 · 권한관리</li>
+        <li>관리자 대시보드</li>
+        <li>결제 연동 (카드·계좌)</li>
+        <li>예약 · 매칭 시스템</li>
+        <li>알림 발송 (이메일·SMS)</li>
+        <li>1개월 무상 AS</li>
+      </ul>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-badge">Premium</div>
+      <div class="pricing-name">고급형</div>
+      <div class="pricing-price">협의<span></span></div>
+      <div class="pricing-period">대규모 SaaS / 커스텀 플랫폼</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-items">
+        <li>대용량 데이터 처리</li>
+        <li>AI / ML 기능 내장</li>
+        <li>멀티테넌트 아키텍처</li>
+        <li>외부 API 다중 연동</li>
+        <li>성능 최적화 · 보안 강화</li>
+        <li>장기 운영 계약</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 5mm; padding: 4mm 6mm; background: #F9FAFB; border-radius: 3mm; border-left: 3px solid #2563EB;">
+    <div style="font-size: 8.5pt; color: rgba(10,10,15,0.6);">
+      <strong style="color: #2563EB;">계약 구조:</strong> 착수금 50% → 중간 확인 후 30% → 납품 완료 후 20% ·
+      <strong style="color: #2563EB;">유지보수:</strong> 월 30만원~(기능 추가·버그 수정 포함)
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 12 — THANK YOU
+══════════════════════════════════════════ -->
+<div class="page thankyou">
+  <div class="thankyou-grid"></div>
+  <div class="thankyou-logo">MaxImpact</div>
+  <h1>Thank you.</h1>
+  <div class="thankyou-line"></div>
+  <div class="thankyou-contacts">
+    <div class="thankyou-contact-item">
+      <strong>Email</strong> &nbsp; www3382www@gmail.com
+    </div>
+    <div class="thankyou-contact-item">
+      <strong>플랫폼</strong> &nbsp; 숨고 · 크몽 · 탈잉 검색: MaxImpact
+    </div>
+    <div class="thankyou-contact-item">
+      <strong>태그라인</strong> &nbsp; 최적의 효율로, 최고의 작업물을.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

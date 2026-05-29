@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>클라리넷하우스 쇼핑몰 리뉴얼 - 개발 WBS</title>
+<style>
+  @page { size: A3 landscape; margin: 10mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f7f9fc;
+    color: #1e293b;
+    line-height: 1.55;
+    padding: 40px 20px;
+  }
+  .container {
+    max-width: 1300px; margin: 0 auto;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
+    color: #fff;
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -50px; right: -50px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(96,165,250,0.18) 0%, transparent 70%);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(96,165,250,0.15);
+    border: 1px solid rgba(96,165,250,0.4);
+    color: #93c5fd;
+    font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 6px 14px; border-radius: 4px; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .title { font-size: 32px; font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+  .subtitle { font-size: 15px; opacity: 0.85; }
+  .meta { display: flex; gap: 28px; margin-top: 24px; flex-wrap: wrap; }
+  .meta-item { font-size: 13px; }
+  .meta-label { opacity: 0.7; font-weight: 500; }
+  .meta-value { font-weight: 700; margin-left: 6px; color: #93c5fd; }
+
+  .content { padding: 48px 56px; }
+  .section { margin-bottom: 48px; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-title {
+    font-size: 22px; font-weight: 800; color: #0f172a;
+    border-left: 4px solid #2563eb; padding-left: 14px;
+    margin-bottom: 8px;
+  }
+  .section-desc { font-size: 14px; color: #64748b; margin-bottom: 24px; padding-left: 18px; }
+
+  /* Summary cards */
+  .summary {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 36px;
+  }
+  .summary-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .summary-label { font-size: 12px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .summary-value { font-size: 24px; font-weight: 900; color: #1e3a8a; }
+  .summary-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+  /* Phase cards */
+  .phases {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    margin-bottom: 36px;
+  }
+  .phase {
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    position: relative;
+  }
+  .phase.p1 { border-color: #fb923c; background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%); }
+  .phase.p2 { border-color: #a855f7; background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%); }
+  .phase.p3 { border-color: #2563eb; background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); }
+  .phase.p4 { border-color: #16a34a; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); }
+  .phase.p5 { border-color: #db2777; background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 100%); }
+
+  .phase-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .phase.p1 .phase-num { color: #ea580c; }
+  .phase.p2 .phase-num { color: #9333ea; }
+  .phase.p3 .phase-num { color: #2563eb; }
+  .phase.p4 .phase-num { color: #16a34a; }
+  .phase.p5 .phase-num { color: #db2777; }
+
+  .phase-title { font-size: 15px; font-weight: 800; color: #0f172a; margin: 4px 0 8px; }
+  .phase-week { font-size: 12px; color: #64748b; font-weight: 600; }
+  .phase-deliverable { font-size: 11px; color: #475569; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; }
+
+  /* Gantt */
+  .gantt-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+  .gantt {
+    width: 100%; min-width: 1000px;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .gantt th {
+    background: #1e3a8a; color: #fff;
+    padding: 10px 8px; text-align: center;
+    font-weight: 700;
+    border-right: 1px solid #2c4a9d;
+  }
+  .gantt th.task-col { text-align: left; width: 320px; min-width: 320px; }
+  .gantt th.owner-col { width: 80px; min-width: 80px; }
+  .gantt td {
+    padding: 8px;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #f1f5f9;
+    text-align: center;
+    height: 36px;
+    position: relative;
+  }
+  .gantt td.task {
+    text-align: left;
+    font-weight: 600;
+    color: #1e293b;
+    padding-left: 14px;
+  }
+  .gantt td.task.sub {
+    padding-left: 28px;
+    font-weight: 500;
+    color: #475569;
+    font-size: 11.5px;
+  }
+  .gantt td.owner { color: #64748b; font-size: 11px; }
+  .gantt tr.group td { background: #f1f5f9; font-weight: 800; color: #0f172a; }
+  .gantt tr:hover td { background: #f8fafc; }
+  .gantt tr.group:hover td { background: #e2e8f0; }
+
+  .bar {
+    height: 18px; border-radius: 4px;
+    margin: 0 auto;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 10px; font-weight: 700;
+  }
+  .bar.p1 { background: linear-gradient(90deg, #fb923c, #ea580c); }
+  .bar.p2 { background: linear-gradient(90deg, #c084fc, #a855f7); }
+  .bar.p3 { background: linear-gradient(90deg, #60a5fa, #2563eb); }
+  .bar.p4 { background: linear-gradient(90deg, #4ade80, #16a34a); }
+  .bar.p5 { background: linear-gradient(90deg, #f472b6, #db2777); }
+
+  .bar-merged { width: 96%; }
+
+  /* Detail table */
+  .detail-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; margin-top: 16px;
+  }
+  .detail-table th {
+    background: #0f172a; color: #fff;
+    padding: 12px 14px; text-align: left;
+    font-weight: 700; font-size: 12px;
+  }
+  .detail-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+    color: #334155;
+  }
+  .detail-table tr:nth-child(even) td { background: #f8fafc; }
+  .detail-table tr:hover td { background: #eff6ff; }
+
+  .week-tag {
+    display: inline-block;
+    padding: 2px 8px; background: #dbeafe; color: #1e40af;
+    border-radius: 4px; font-size: 11px; font-weight: 700;
+    white-space: nowrap;
+  }
+  .phase-tag {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; white-space: nowrap;
+  }
+  .phase-tag.p1 { background: #fed7aa; color: #9a3412; }
+  .phase-tag.p2 { background: #e9d5ff; color: #6b21a8; }
+  .phase-tag.p3 { background: #dbeafe; color: #1e40af; }
+  .phase-tag.p4 { background: #d1fae5; color: #065f46; }
+  .phase-tag.p5 { background: #fce7f3; color: #9f1239; }
+
+  /* Milestones */
+  .milestones {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .ms-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 18px; position: relative;
+    border-left: 4px solid #2563eb;
+  }
+  .ms-week { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .ms-title { font-size: 15px; font-weight: 800; color: #0f172a; margin: 4px 0 8px; }
+  .ms-desc { font-size: 12px; color: #475569; line-height: 1.6; }
+
+  /* Risk */
+  .risk-list { display: flex; flex-direction: column; gap: 10px; }
+  .risk-row {
+    display: grid; grid-template-columns: 200px 1fr 1fr;
+    gap: 16px; padding: 14px 18px;
+    background: #fef2f2; border-left: 3px solid #ef4444;
+    border-radius: 6px;
+  }
+  .risk-name { font-weight: 700; color: #991b1b; font-size: 13px; }
+  .risk-desc { font-size: 12.5px; color: #475569; }
+  .risk-mitigate { font-size: 12.5px; color: #065f46; font-weight: 600; }
+
+  .footer {
+    background: #f1f5f9;
+    padding: 24px 56px;
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; color: #475569; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">WBS · WORK BREAKDOWN STRUCTURE</div>
+    <div class="title">클라리넷하우스 쇼핑몰 리뉴얼<br>개발 예상 WBS (8주 / 2개월)</div>
+    <div class="subtitle">디자인 리뉴얼 · 쇼핑몰 개발 · 데이터 마이그레이션 · 악보 제작 상담 통합 일정</div>
+    <div class="meta">
+      <div class="meta-item"><span class="meta-label">총 기간</span><span class="meta-value">8주 (40 영업일)</span></div>
+      <div class="meta-item"><span class="meta-label">시작 예정</span><span class="meta-value">계약 D-day +3일</span></div>
+      <div class="meta-item"><span class="meta-label">팀 구성</span><span class="meta-value">기획 1 · 디자인 1 · BE 1 · FE 1 · QA 0.5</span></div>
+      <div class="meta-item"><span class="meta-label">개발 방식</span><span class="meta-value">애자일 (1주 단위 데모)</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Summary -->
+    <div class="section">
+      <div class="section-title">1. 프로젝트 요약</div>
+      <div class="section-desc">2개월 8주 일정에 5개 Phase로 구성된 단계별 산출물 기반 진행 계획입니다.</div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <div class="summary-label">총 기간</div>
+          <div class="summary-value">8주</div>
+          <div class="summary-sub">약 40 영업일</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Phase 수</div>
+          <div class="summary-value">5단계</div>
+          <div class="summary-sub">기획→디자인→개발→QA→오픈</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">주요 마일스톤</div>
+          <div class="summary-value">4개</div>
+          <div class="summary-sub">디자인/알파/베타/오픈</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">필수 기능</div>
+          <div class="summary-value">11개</div>
+          <div class="summary-sub">+ 옵션 7개</div>
+        </div>
+      </div>
+
+      <div class="phases">
+        <div class="phase p1">
+          <div class="phase-num">PHASE 1</div>
+          <div class="phase-title">기획 · 설계</div>
+          <div class="phase-week">Week 1 (5일)</div>
+          <div class="phase-deliverable">요구사항 정의서, 화면 정의서, ERD, API 명세 초안</div>
+        </div>
+        <div class="phase p2">
+          <div class="phase-num">PHASE 2</div>
+          <div class="phase-title">디자인</div>
+          <div class="phase-week">Week 2~3 (10일)</div>
+          <div class="phase-deliverable">메인/상품/주문/관리자 시안, 디자인 시스템</div>
+        </div>
+        <div class="phase p3">
+          <div class="phase-num">PHASE 3</div>
+          <div class="phase-title">개발</div>
+          <div class="phase-week">Week 2~7 (30일)</div>
+          <div class="phase-deliverable">BE API, FE 쇼핑몰, 관리자 페이지, 결제 연동</div>
+        </div>
+        <div class="phase p4">
+          <div class="phase-num">PHASE 4</div>
+          <div class="phase-title">QA · 마이그레이션</div>
+          <div class="phase-week">Week 7~8 (8일)</div>
+          <div class="phase-deliverable">통합테스트, 보안점검, 기존 DB 이전</div>
+        </div>
+        <div class="phase p5">
+          <div class="phase-num">PHASE 5</div>
+          <div class="phase-title">오픈 · 인수인계</div>
+          <div class="phase-week">Week 8 (3일)</div>
+          <div class="phase-deliverable">운영 배포, 매뉴얼 인수인계, 안정화</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gantt Chart -->
+    <div class="section">
+      <div class="section-title">2. 8주 간트 차트 (Gantt Chart)</div>
+      <div class="section-desc">주차별 업무 분배 현황. 굵은 행은 Phase 그룹, 들여쓴 행은 세부 작업입니다.</div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ea580c"></div>Phase 1 · 기획/설계</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>Phase 2 · 디자인</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>Phase 3 · 개발</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Phase 4 · QA/마이그레이션</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#db2777"></div>Phase 5 · 오픈/인수인계</div>
+      </div>
+
+      <div class="gantt-wrap">
+        <table class="gantt">
+          <thead>
+            <tr>
+              <th class="task-col">작업 (Task)</th>
+              <th class="owner-col">담당</th>
+              <th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>W7</th><th>W8</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- Phase 1 -->
+            <tr class="group"><td class="task" colspan="10">PHASE 1 · 기획 / 설계</td></tr>
+            <tr>
+              <td class="task sub">요구사항 정의 / 킥오프 미팅</td>
+              <td class="owner">기획·전원</td>
+              <td><div class="bar p1 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">화면 정의서(IA · 와이어프레임)</td>
+              <td class="owner">기획</td>
+              <td><div class="bar p1 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">DB ERD 설계 (상품/주문/회원/적립금)</td>
+              <td class="owner">BE</td>
+              <td><div class="bar p1 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">API 명세서 초안</td>
+              <td class="owner">BE</td>
+              <td><div class="bar p1 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">개발 환경 셋업 (Git/CI/도메인 협의)</td>
+              <td class="owner">BE</td>
+              <td><div class="bar p1 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+
+            <!-- Phase 2 -->
+            <tr class="group"><td class="task" colspan="10">PHASE 2 · 디자인</td></tr>
+            <tr>
+              <td class="task sub">디자인 컨셉 / 무드보드</td>
+              <td class="owner">디자인</td>
+              <td></td>
+              <td><div class="bar p2 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">메인/카테고리/상품상세 시안</td>
+              <td class="owner">디자인</td>
+              <td></td>
+              <td><div class="bar p2 bar-merged">5d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">장바구니/주문/마이페이지 시안</td>
+              <td class="owner">디자인</td>
+              <td></td><td></td>
+              <td><div class="bar p2 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">관리자 페이지 시안</td>
+              <td class="owner">디자인</td>
+              <td></td><td></td>
+              <td><div class="bar p2 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+
+            <!-- Phase 3 -->
+            <tr class="group"><td class="task" colspan="10">PHASE 3 · 개발</td></tr>
+            <tr>
+              <td class="task sub">[BE] 프로젝트 부트스트랩 (NestJS+TypeORM)</td>
+              <td class="owner">BE</td>
+              <td></td>
+              <td><div class="bar p3 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 인증 (JWT, 카카오/구글 OAuth)</td>
+              <td class="owner">BE</td>
+              <td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 상품·카테고리·태그 도메인</td>
+              <td class="owner">BE</td>
+              <td></td><td></td>
+              <td><div class="bar p3 bar-merged">5d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 파일 업로드 (Multer, 청크, ZIP)</td>
+              <td class="owner">BE</td>
+              <td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] PDF 워터마크 / MP3 미리듣기 생성</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 장바구니·주문·결제 연동 (기존 XPay)</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">5d</div></td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 다운로드 토큰·유효기간 시스템</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 적립금 시스템 / 게시판</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[BE] 관리자 API (상품·주문·통계)</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">5d</div></td>
+              <td></td><td></td>
+            </tr>
+
+            <tr>
+              <td class="task sub">[FE] 프로젝트 부트스트랩 (Vite+React)</td>
+              <td class="owner">FE</td>
+              <td></td>
+              <td><div class="bar p3 bar-merged">2d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 공통 컴포넌트 / 레이아웃 / 라우터</td>
+              <td class="owner">FE</td>
+              <td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 메인 / 카테고리 / 상품 목록</td>
+              <td class="owner">FE</td>
+              <td></td><td></td>
+              <td><div class="bar p3 bar-merged">4d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 상품 상세 · 미리보기 · 미리듣기</td>
+              <td class="owner">FE</td>
+              <td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 회원가입 · 로그인 · 마이페이지</td>
+              <td class="owner">FE</td>
+              <td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">4d</div></td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 장바구니 · 결제 · 다운로드</td>
+              <td class="owner">FE</td>
+              <td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">4d</div></td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 검색·태그·필터 / 적립금 / 게시판</td>
+              <td class="owner">FE</td>
+              <td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">4d</div></td>
+              <td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 관리자 페이지 (상품·주문·회원·통계)</td>
+              <td class="owner">FE</td>
+              <td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">5d</div></td>
+              <td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">[FE] 모바일 반응형 최적화 · 브라우저 호환성</td>
+              <td class="owner">FE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p3 bar-merged">3d</div></td>
+              <td></td>
+            </tr>
+
+            <!-- Phase 4 -->
+            <tr class="group"><td class="task" colspan="10">PHASE 4 · QA / 마이그레이션</td></tr>
+            <tr>
+              <td class="task sub">기존 DB 분석 / 마이그레이션 스크립트</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p4 bar-merged">3d</div></td>
+              <td></td><td></td>
+            </tr>
+            <tr>
+              <td class="task sub">실 데이터 이전 (상품/회원/구매내역)</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p4 bar-merged">2d</div></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="task sub">통합 테스트 (결제·다운로드·미리보기)</td>
+              <td class="owner">QA·전원</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p4 bar-merged">3d</div></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="task sub">보안 점검 (XSS/CSRF/SQLi/취약점 스캔)</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p4 bar-merged">2d</div></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="task sub">버그 수정 라운드</td>
+              <td class="owner">전원</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p4 bar-merged">3d</div></td>
+              <td><div class="bar p4 bar-merged">2d</div></td>
+            </tr>
+
+            <!-- Phase 5 -->
+            <tr class="group"><td class="task" colspan="10">PHASE 5 · 오픈 / 인수인계</td></tr>
+            <tr>
+              <td class="task sub">운영 환경 배포 · 도메인 전환</td>
+              <td class="owner">BE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p5 bar-merged">2d</div></td>
+            </tr>
+            <tr>
+              <td class="task sub">관리자 매뉴얼 / 운영 가이드 작성</td>
+              <td class="owner">기획·BE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p5 bar-merged">2d</div></td>
+            </tr>
+            <tr>
+              <td class="task sub">고객사 인수인계 교육</td>
+              <td class="owner">기획·BE</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p5 bar-merged">1d</div></td>
+            </tr>
+            <tr>
+              <td class="task sub">오픈 직후 안정화 (핫픽스 대응)</td>
+              <td class="owner">전원</td>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              <td><div class="bar p5 bar-merged">2d</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Detail by week -->
+    <div class="section">
+      <div class="section-title">3. 주차별 세부 산출물</div>
+      <div class="section-desc">각 주차 종료 시점의 산출물과 검수 기준을 정의합니다.</div>
+
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th style="width:70px;">주차</th>
+            <th style="width:90px;">Phase</th>
+            <th>주요 작업</th>
+            <th style="width:300px;">산출물 / 검수 기준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="week-tag">Week 1</span></td>
+            <td><span class="phase-tag p1">기획/설계</span></td>
+            <td>킥오프, 요구사항 확정, 화면 정의서, ERD, API 명세, 개발 환경 준비</td>
+            <td>· 요구사항 정의서 v1.0<br>· 화면 정의서 (와이어프레임)<br>· DB ERD<br>· Git 저장소·도메인·호스팅 협의 완료</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 2</span></td>
+            <td><span class="phase-tag p2">디자인</span> <span class="phase-tag p3">개발</span></td>
+            <td>디자인 컨셉/메인 시안, BE·FE 부트스트랩, 인증 모듈, 공통 컴포넌트</td>
+            <td>· 디자인 컨셉 시안 (1차)<br>· 백엔드/프론트 프로젝트 골격<br>· 로그인/회원가입 동작</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 3</span></td>
+            <td><span class="phase-tag p2">디자인</span> <span class="phase-tag p3">개발</span></td>
+            <td>상품/주문/관리자 시안 완성, 상품·카테고리·태그 도메인, 파일 업로드, 상품목록/상세 화면</td>
+            <td>· 전체 페이지 디자인 시안 확정 (마일스톤 1)<br>· 관리자 상품 등록 가능<br>· 상품 목록/상세 노출</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 4</span></td>
+            <td><span class="phase-tag p3">개발</span></td>
+            <td>PDF 워터마크, MP3 미리듣기, 결제 연동, 회원가입/마이페이지, 장바구니/결제 화면</td>
+            <td>· 미리보기/미리듣기 동작<br>· 결제 → 다운로드 토큰 발급 플로우<br>· 알파 빌드 (마일스톤 2)</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 5</span></td>
+            <td><span class="phase-tag p3">개발</span></td>
+            <td>다운로드 유효기간 시스템, 적립금, 게시판, 검색/태그/필터</td>
+            <td>· 다운로드 만료 자동 종료 동작<br>· 적립 → 사용 플로우 검증<br>· 검색·태그 필터 동작</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 6</span></td>
+            <td><span class="phase-tag p3">개발</span> <span class="phase-tag p4">QA</span></td>
+            <td>관리자 페이지 통합, 매출/구매내역 통계, DB 마이그레이션 스크립트 작성</td>
+            <td>· 관리자 페이지 전체 기능 완료<br>· 마이그레이션 dry-run 성공<br>· 베타 빌드 (마일스톤 3)</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 7</span></td>
+            <td><span class="phase-tag p4">QA</span></td>
+            <td>모바일 최적화, 브라우저 호환성, 통합 테스트, 보안 점검, 실 데이터 마이그레이션</td>
+            <td>· 모바일/브라우저 호환성 확인<br>· 보안 점검 리포트<br>· 실 데이터 이전 완료<br>· 통합 테스트 패스</td>
+          </tr>
+          <tr>
+            <td><span class="week-tag">Week 8</span></td>
+            <td><span class="phase-tag p4">QA</span> <span class="phase-tag p5">오픈</span></td>
+            <td>최종 버그 수정, 운영 배포, 도메인 전환, 매뉴얼, 인수인계, 안정화</td>
+            <td>· 운영 오픈 (마일스톤 4)<br>· 관리자 매뉴얼<br>· 운영 가이드<br>· 인수인계 교육 완료</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Milestones -->
+    <div class="section">
+      <div class="section-title">4. 주요 마일스톤</div>
+      <div class="section-desc">고객사 확인이 반드시 필요한 4개 시점</div>
+
+      <div class="milestones">
+        <div class="ms-card">
+          <div class="ms-week">Milestone 1 · Week 3 종료</div>
+          <div class="ms-title">디자인 시안 확정</div>
+          <div class="ms-desc">전체 페이지 디자인 시안 + 디자인 시스템 확정. 이후 변경은 추가 일정 협의.</div>
+        </div>
+        <div class="ms-card">
+          <div class="ms-week">Milestone 2 · Week 4 종료</div>
+          <div class="ms-title">알파 빌드 시연</div>
+          <div class="ms-desc">결제 → 다운로드 전체 플로우 1차 시연. 핵심 기능 동작 확인.</div>
+        </div>
+        <div class="ms-card">
+          <div class="ms-week">Milestone 3 · Week 6 종료</div>
+          <div class="ms-title">베타 빌드 시연</div>
+          <div class="ms-desc">전체 기능 완성 + 관리자 페이지 검수. UAT(고객 인수 테스트) 시작.</div>
+        </div>
+        <div class="ms-card">
+          <div class="ms-week">Milestone 4 · Week 8 종료</div>
+          <div class="ms-title">운영 오픈 / 인수인계</div>
+          <div class="ms-desc">운영 환경 배포, 도메인 전환, 매뉴얼 교육, 안정화 모니터링.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk -->
+    <div class="section">
+      <div class="section-title">5. 주요 리스크 및 대응 방안</div>
+      <div class="section-desc">2개월 일정 내 발생 가능한 리스크와 사전 대응 계획</div>
+
+      <div class="risk-list">
+        <div class="risk-row" style="grid-template-columns: 200px 1fr 1fr; background:#fef9f4; border-left-color:#f59e0b;">
+          <div class="risk-name">기존 XPay 결제 연동 정보 누락</div>
+          <div class="risk-desc">기존 결제 모듈(XPay) 가맹점 키·연동 스펙·콜백 URL 등 자료 미수령 시 테스트 진행 불가</div>
+          <div class="risk-mitigate">Week 1에 고객사로부터 XPay 연동 자료 및 테스트 계정 수령, 그동안 mock 결제로 개발 병행</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">디자인 시안 협의 장기화</div>
+          <div class="risk-desc">시안 컨펌이 늦어지면 FE 개발이 막힘</div>
+          <div class="risk-mitigate">Week 1~2 집중 협의, 시안 컨펌 후 변경은 추가 일정 협의 명문화</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">기존 DB 구조 호환성 문제</div>
+          <div class="risk-desc">ASP/MSSQL → MySQL 마이그레이션 시 인코딩·비밀번호 해싱 불일치 가능</div>
+          <div class="risk-mitigate">Week 1에 기존 DB 샘플 분석 선행, 회원 비밀번호는 첫 로그인 시 재설정 안내</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">콘텐츠(상품 정보) 입력 지연</div>
+          <div class="risk-desc">기존 2,000건 이상 상품 데이터 이관 누락/지연</div>
+          <div class="risk-mitigate">마이그레이션 스크립트로 일괄 이전 + 누락된 미리보기·미리듣기는 사후 보완</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">옵션 기능 일정 압박</div>
+          <div class="risk-desc">해외결제·다국어·자동입금 등 옵션 7개 모두 포함 시 일정 초과 가능</div>
+          <div class="risk-mitigate">옵션 기능은 우선순위 협의 후 단계 적용. 미포함 항목은 2차 개발로 분리</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 클라리넷하우스 쇼핑몰 리뉴얼 프로젝트 · WBS v1.0 (2026-05-26)
+  </div>
+</div>
+</body>
+</html>

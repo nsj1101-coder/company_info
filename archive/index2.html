@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>MaxImpact — Company Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    :root {
+      --blue:#3182F6; --blue-light:#5B9CF6; --blue-dark:#1B64DA;
+      --bg:#0E1013; --bg2:#141519; --bg3:#1A1D23;
+      --text:#F9FAFB; --text2:#8B95A1; --text3:#4E5968; --text4:#333D4B;
+      --green:#34D399; --purple:#A78BFA; --orange:#FB923C;
+      --pink:#F472B6; --cyan:#22D3EE; --red:#EF4444;
+      --border:rgba(255,255,255,0.06);
+      --glass:rgba(26,29,35,0.6);
+      --glass-border:rgba(255,255,255,0.08);
+      --ease:cubic-bezier(0.16,1,0.3,1);
+    }
+
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+    html{overflow:hidden;height:100%}
+
+    body{
+      font-family:'Pretendard','Inter',-apple-system,sans-serif;
+      background:var(--bg);color:var(--text);
+      overflow:hidden;height:100%;
+      -webkit-font-smoothing:antialiased;
+      word-break:keep-all;
+    }
+
+    /* ====== SLIDE SYSTEM ====== */
+    .deck{
+      position:relative;width:100vw;height:100vh;
+    }
+
+    .slide{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      padding:60px 80px;
+      opacity:0;
+      transform:translateY(40px) scale(0.97);
+      transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);
+      pointer-events:none;
+      will-change:transform,opacity;
+    }
+    .slide.active{
+      opacity:1;transform:translateY(0) scale(1);
+      pointer-events:auto;z-index:2;
+    }
+    .slide.prev{
+      opacity:0;transform:translateY(-40px) scale(0.97);
+    }
+
+    .slide-inner{
+      width:100%;max-width:1100px;
+      position:relative;
+    }
+
+    /* ====== NAV BAR ====== */
+    .deck-nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      height:56px;display:flex;align-items:center;justify-content:space-between;
+      padding:0 40px;
+      background:rgba(14,16,19,0.6);
+      backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+      border-bottom:1px solid var(--border);
+    }
+    .deck-brand{font-size:16px;font-weight:800;color:var(--blue)}
+    .deck-page{font-size:13px;color:var(--text3);font-weight:500;font-variant-numeric:tabular-nums}
+
+    /* ====== PROGRESS BAR ====== */
+    .progress-bar{
+      position:fixed;top:56px;left:0;height:2px;z-index:100;
+      background:var(--blue);transition:width 0.5s var(--ease);
+    }
+
+    /* ====== SIDE DOTS ====== */
+    .side-dots{
+      position:fixed;right:32px;top:50%;transform:translateY(-50%);
+      z-index:100;display:flex;flex-direction:column;gap:10px;
+    }
+    .side-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:rgba(255,255,255,0.12);border:none;
+      cursor:pointer;transition:all 0.3s;padding:0;
+    }
+    .side-dot.active{
+      background:var(--blue);
+      box-shadow:0 0 12px rgba(49,130,246,0.4);
+      transform:scale(1.3);
+    }
+    .side-dot:hover{background:rgba(255,255,255,0.3)}
+
+    /* ====== CONTROLS ====== */
+    .deck-controls{
+      position:fixed;bottom:32px;right:40px;z-index:100;
+      display:flex;gap:8px;
+    }
+    .ctrl-btn{
+      width:44px;height:44px;border-radius:14px;border:1px solid var(--glass-border);
+      background:var(--glass);backdrop-filter:blur(20px);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:all 0.2s;color:var(--text2);
+    }
+    .ctrl-btn:hover{background:rgba(49,130,246,0.1);border-color:rgba(49,130,246,0.2);color:var(--blue)}
+    .ctrl-btn svg{width:18px;height:18px}
+
+    .key-hint{
+      position:fixed;bottom:36px;left:40px;z-index:100;
+      font-size:11px;color:var(--text3);
+      display:flex;align-items:center;gap:12px;
+    }
+    .key-hint kbd{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:24px;height:22px;padding:0 6px;
+      border-radius:5px;background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);font-size:10px;font-family:inherit;color:var(--text3);
+    }
+
+    /* ====== REUSABLE ====== */
+    .glass-box{
+      background:var(--glass);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+      border:1px solid var(--glass-border);border-radius:24px;
+    }
+
+    .tag{
+      display:inline-block;padding:5px 14px;border-radius:8px;
+      font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    }
+    .tag-blue{background:rgba(49,130,246,0.1);color:var(--blue-light)}
+    .tag-green{background:rgba(52,211,153,0.1);color:var(--green)}
+    .tag-purple{background:rgba(167,139,250,0.1);color:var(--purple)}
+    .tag-orange{background:rgba(251,146,60,0.1);color:var(--orange)}
+
+    .pill{
+      padding:4px 10px;border-radius:8px;font-size:11px;font-weight:500;
+      background:rgba(49,130,246,0.06);color:var(--blue-light);
+      border:1px solid rgba(49,130,246,0.12);display:inline-block;
+    }
+
+    .check-item{
+      display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2);
+    }
+    .check-icon{
+      width:18px;height:18px;border-radius:5px;flex-shrink:0;
+      background:rgba(52,211,153,0.12);color:var(--green);
+      display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
+    }
+
+    /* ====== SLIDE ANIMATIONS ====== */
+    .slide .anim{
+      opacity:0;transform:translateY(24px);
+      transition:opacity 0.5s var(--ease),transform 0.5s var(--ease);
+    }
+    .slide.active .anim{ opacity:1;transform:translateY(0); }
+    .slide.active .anim.d1{transition-delay:0.08s}
+    .slide.active .anim.d2{transition-delay:0.16s}
+    .slide.active .anim.d3{transition-delay:0.24s}
+    .slide.active .anim.d4{transition-delay:0.32s}
+    .slide.active .anim.d5{transition-delay:0.40s}
+    .slide.active .anim.d6{transition-delay:0.48s}
+    .slide.active .anim.d7{transition-delay:0.56s}
+    .slide.active .anim.d8{transition-delay:0.64s}
+
+    /* ====== SLIDE 0 — COVER (3D GLASS) ====== */
+    .cover-scene{
+      position:absolute;inset:0;
+      perspective:1200px;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    /* Ambient glow orbs */
+    .cover-orb{
+      position:absolute;border-radius:50%;filter:blur(100px);
+      animation:orbDrift 18s ease-in-out infinite alternate;
+    }
+    .cover-orb-1{width:500px;height:500px;background:rgba(49,130,246,0.12);top:-15%;left:-10%;animation-delay:0s}
+    .cover-orb-2{width:400px;height:400px;background:rgba(167,139,250,0.1);bottom:-10%;right:-8%;animation-delay:-6s}
+    .cover-orb-3{width:300px;height:300px;background:rgba(52,211,153,0.06);top:30%;right:15%;animation-delay:-12s}
+    @keyframes orbDrift{
+      0%{transform:translate(0,0) scale(1)}
+      50%{transform:translate(40px,-30px) scale(1.1)}
+      100%{transform:translate(-20px,20px) scale(0.95)}
+    }
+
+    /* Floating glass panels */
+    .glass-panel{
+      position:absolute;border-radius:24px;
+      background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 -1px 0 rgba(255,255,255,0.02);
+      transform-style:preserve-3d;
+    }
+
+    .glass-panel::before{
+      content:'';position:absolute;inset:0;border-radius:24px;
+      background:linear-gradient(135deg,rgba(255,255,255,0.05) 0%,transparent 50%);
+      pointer-events:none;
+    }
+
+    /* Reflection highlight stripe */
+    .glass-panel::after{
+      content:'';position:absolute;top:12%;left:8%;
+      width:35%;height:1px;
+      background:linear-gradient(90deg,rgba(255,255,255,0.15),transparent);
+      border-radius:1px;
+    }
+
+    .gp-1{
+      width:320px;height:200px;top:8%;left:6%;
+      transform:rotateY(18deg) rotateX(-6deg) translateZ(30px);
+      animation:glassFloat1 14s ease-in-out infinite;
+    }
+    .gp-2{
+      width:260px;height:160px;top:12%;right:8%;
+      transform:rotateY(-14deg) rotateX(8deg) translateZ(50px);
+      animation:glassFloat2 16s ease-in-out infinite;
+    }
+    .gp-3{
+      width:280px;height:180px;bottom:10%;left:10%;
+      transform:rotateY(12deg) rotateX(10deg) translateZ(20px);
+      animation:glassFloat3 18s ease-in-out infinite;
+    }
+    .gp-4{
+      width:200px;height:130px;bottom:15%;right:12%;
+      transform:rotateY(-20deg) rotateX(-5deg) translateZ(40px);
+      animation:glassFloat4 15s ease-in-out infinite;
+    }
+    /* Small accent panels */
+    .gp-5{
+      width:140px;height:90px;top:42%;left:3%;
+      transform:rotateY(22deg) rotateX(-8deg) translateZ(60px);
+      animation:glassFloat2 20s ease-in-out infinite reverse;
+      opacity:0.6;
+    }
+    .gp-6{
+      width:120px;height:80px;top:35%;right:5%;
+      transform:rotateY(-25deg) rotateX(12deg) translateZ(70px);
+      animation:glassFloat1 17s ease-in-out infinite reverse;
+      opacity:0.5;
+    }
+
+    @keyframes glassFloat1{
+      0%,100%{transform:rotateY(18deg) rotateX(-6deg) translateZ(30px) translateY(0)}
+      50%{transform:rotateY(14deg) rotateX(-2deg) translateZ(40px) translateY(-15px)}
+    }
+    @keyframes glassFloat2{
+      0%,100%{transform:rotateY(-14deg) rotateX(8deg) translateZ(50px) translateY(0)}
+      50%{transform:rotateY(-10deg) rotateX(4deg) translateZ(60px) translateY(-20px)}
+    }
+    @keyframes glassFloat3{
+      0%,100%{transform:rotateY(12deg) rotateX(10deg) translateZ(20px) translateY(0)}
+      50%{transform:rotateY(8deg) rotateX(6deg) translateZ(35px) translateY(-12px)}
+    }
+    @keyframes glassFloat4{
+      0%,100%{transform:rotateY(-20deg) rotateX(-5deg) translateZ(40px) translateY(0)}
+      50%{transform:rotateY(-16deg) rotateX(-1deg) translateZ(55px) translateY(-18px)}
+    }
+
+    /* Inner content of glass panels (fake UI) */
+    .gp-content{
+      padding:20px;display:flex;flex-direction:column;gap:8px;
+      position:relative;z-index:1;height:100%;
+    }
+    .gp-line{height:5px;border-radius:3px;background:rgba(255,255,255,0.05)}
+    .gp-line.w30{width:30%}.gp-line.w50{width:50%}.gp-line.w70{width:70%}.gp-line.w90{width:90%}
+    .gp-line.accent-b{background:rgba(49,130,246,0.15)}
+    .gp-line.accent-p{background:rgba(167,139,250,0.15)}
+    .gp-line.accent-g{background:rgba(52,211,153,0.15)}
+    .gp-blocks{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:auto}
+    .gp-block{height:24px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04)}
+    .gp-chart{display:flex;align-items:flex-end;gap:3px;height:36px;margin-top:auto}
+    .gp-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px}
+
+    /* 3D perspective floor grid */
+    .cover-grid{
+      position:absolute;bottom:0;left:-10%;right:-10%;height:55%;
+      background:
+        linear-gradient(rgba(49,130,246,0.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(49,130,246,0.04) 1px,transparent 1px);
+      background-size:50px 50px;
+      transform:perspective(400px) rotateX(55deg);
+      transform-origin:bottom center;
+      mask-image:linear-gradient(transparent 10%,rgba(0,0,0,0.4) 50%,transparent 95%);
+      -webkit-mask-image:linear-gradient(transparent 10%,rgba(0,0,0,0.4) 50%,transparent 95%);
+      pointer-events:none;
+    }
+
+    /* Center glass hero card */
+    .cover-glass-hero{
+      position:relative;z-index:2;
+      padding:56px 64px;
+      border-radius:32px;
+      background:linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02));
+      backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:
+        0 24px 80px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        inset 0 -1px 0 rgba(255,255,255,0.03),
+        0 0 120px rgba(49,130,246,0.08);
+      text-align:center;
+      transform:perspective(1000px) rotateX(2deg);
+      transition:transform 0.6s var(--ease);
+      transform-style:preserve-3d;
+    }
+    .cover-glass-hero:hover{
+      transform:perspective(1000px) rotateX(0deg) translateY(-4px);
+    }
+
+    /* Top reflection bar */
+    .cover-glass-hero::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+      border-radius:32px 32px 0 0;
+    }
+
+    /* Inner glow */
+    .cover-glass-hero::after{
+      content:'';position:absolute;top:-40%;left:50%;
+      width:60%;height:60%;border-radius:50%;
+      background:radial-gradient(circle,rgba(49,130,246,0.08),transparent 70%);
+      transform:translateX(-50%);pointer-events:none;
+    }
+
+    .cover-sub{
+      font-size:12px;font-weight:600;letter-spacing:5px;text-transform:uppercase;
+      color:var(--text3);margin-bottom:24px;
+      transform:translateZ(20px);
+    }
+
+    .cover-title{
+      font-size:clamp(52px,8vw,88px);font-weight:900;letter-spacing:-3px;
+      color:var(--blue);line-height:1;margin-bottom:20px;
+      text-shadow:0 0 100px rgba(49,130,246,0.3),0 4px 20px rgba(0,0,0,0.3);
+      transform:translateZ(40px);
+    }
+
+    .cover-tagline{
+      font-size:clamp(15px,1.8vw,18px);color:var(--text2);
+      max-width:460px;margin:0 auto 0;line-height:1.7;
+      transform:translateZ(15px);
+    }
+
+    .cover-divider{
+      width:48px;height:1px;margin:28px auto;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+    }
+
+    .cover-bottom{
+      display:flex;align-items:center;justify-content:center;gap:32px;
+      transform:translateZ(10px);
+    }
+    .cover-stat{text-align:center}
+    .cover-stat .cs-val{font-size:22px;font-weight:800;color:var(--text)}
+    .cover-stat .cs-val span{color:var(--blue)}
+    .cover-stat .cs-lbl{font-size:11px;color:var(--text3);margin-top:2px;font-weight:500}
+    .cover-stat-divider{width:1px;height:32px;background:rgba(255,255,255,0.06)}
+
+    .cover-year{
+      position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+      font-size:11px;color:var(--text3);font-weight:500;letter-spacing:3px;z-index:2;
+    }
+
+    /* Floating particles */
+    .cover-particles{position:absolute;inset:0;pointer-events:none;z-index:1}
+    .c-particle{
+      position:absolute;width:2px;height:2px;border-radius:50%;
+      background:rgba(49,130,246,0.4);
+      animation:particleRise linear infinite;
+    }
+    @keyframes particleRise{
+      0%{transform:translateY(0) scale(1);opacity:0}
+      10%{opacity:1}
+      90%{opacity:0.5}
+      100%{transform:translateY(-100vh) scale(0.3);opacity:0}
+    }
+
+    /* ====== SLIDE 1 — ABOUT ====== */
+    .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+
+    .about-left h2{
+      font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1.25;margin-bottom:20px;
+    }
+    .about-left h2 .acc{color:var(--blue)}
+    .about-left>p{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:32px}
+
+    .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .about-stat{padding:20px;border-radius:16px;background:rgba(255,255,255,0.02);border:1px solid var(--border)}
+    .about-stat .val{font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-0.5px}
+    .about-stat .lbl{font-size:12px;color:var(--text3);margin-top:4px;font-weight:500}
+
+    .about-right{
+      display:flex;flex-direction:column;gap:16px;
+    }
+    .about-card{
+      padding:24px 28px;border-radius:20px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+      transition:border-color 0.3s;
+    }
+    .about-card:hover{border-color:rgba(49,130,246,0.2)}
+    .about-card h4{font-size:15px;font-weight:700;margin-bottom:6px}
+    .about-card p{font-size:13px;color:var(--text2);line-height:1.6}
+    .about-card .card-accent{
+      width:28px;height:3px;border-radius:2px;margin-bottom:12px;
+    }
+
+    /* ====== SLIDE 2 — SERVICES ====== */
+    .services-layout h2{
+      font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:48px;
+      text-align:center;
+    }
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .svc-card{
+      padding:28px 24px;border-radius:20px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+      transition:all 0.35s var(--ease);
+    }
+    .svc-card:hover{border-color:rgba(49,130,246,0.2);transform:translateY(-4px)}
+    .svc-icon{
+      width:44px;height:44px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:16px;
+      transform:perspective(500px) rotateY(-6deg);
+      box-shadow:3px 3px 0 rgba(0,0,0,0.2),6px 6px 0 rgba(0,0,0,0.08);
+      transition:transform 0.3s var(--ease);
+    }
+    .svc-card:hover .svc-icon{transform:perspective(500px) rotateY(0) scale(1.08)}
+    .svc-icon svg{width:20px;height:20px;fill:#fff}
+    .svc-card h4{font-size:15px;font-weight:700;margin-bottom:6px}
+    .svc-card p{font-size:12px;color:var(--text2);line-height:1.6}
+    .svc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+    .svc-tags span{
+      padding:2px 8px;border-radius:5px;font-size:10px;font-weight:500;
+      background:rgba(255,255,255,0.03);color:var(--text3);border:1px solid var(--border);
+    }
+
+    /* ====== SLIDE 3,4 — PORTFOLIO DETAIL ====== */
+    .pf-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+    .pf-info .pf-tag{margin-bottom:16px}
+    .pf-info h2{font-size:34px;font-weight:800;letter-spacing:-0.5px;line-height:1.25;margin-bottom:14px}
+    .pf-info>p{font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:24px}
+    .pf-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+    .pf-features{display:flex;flex-direction:column;gap:10px}
+
+    .pf-visual{
+      border-radius:20px;overflow:hidden;
+      background:linear-gradient(135deg,rgba(49,130,246,0.06),rgba(167,139,250,0.06));
+      border:1px solid var(--glass-border);
+      aspect-ratio:4/3;
+    }
+    .pf-mockup{display:flex;flex-direction:column;height:100%}
+    .pm-bar{display:flex;gap:5px;padding:10px 14px;background:rgba(0,0,0,0.3)}
+    .pm-dot{width:7px;height:7px;border-radius:50%}
+    .pm-dot:nth-child(1){background:#FF5F57}
+    .pm-dot:nth-child(2){background:#FFBD2E}
+    .pm-dot:nth-child(3){background:#28CA41}
+    .pm-body{flex:1;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .pm-line{height:7px;border-radius:4px;background:rgba(255,255,255,0.04)}
+    .pm-line.w30{width:30%}.pm-line.w50{width:50%}
+    .pm-line.w70{width:70%}.pm-line.w90{width:90%}
+    .pm-line.acc{background:rgba(49,130,246,0.2)}
+    .pm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .pm-block{height:36px;border-radius:8px;background:rgba(49,130,246,0.06);border:1px solid rgba(49,130,246,0.1)}
+    .pm-chart{display:flex;align-items:flex-end;gap:5px;height:50px;margin-top:auto}
+    .pm-bar-item{flex:1;border-radius:3px 3px 0 0}
+
+    /* ====== SLIDE 5 — MORE PROJECTS ====== */
+    .more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .more-card{
+      padding:24px 20px;border-radius:18px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+      transition:all 0.35s var(--ease);text-align:center;
+    }
+    .more-card:hover{border-color:rgba(49,130,246,0.2);transform:translateY(-4px)}
+    .more-icon{
+      width:48px;height:48px;border-radius:14px;margin:0 auto 14px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+      transform:perspective(400px) rotateY(-5deg);
+      box-shadow:3px 3px 0 rgba(0,0,0,0.15),6px 6px 0 rgba(0,0,0,0.06);
+    }
+    .more-card h4{font-size:14px;font-weight:700;margin-bottom:6px}
+    .more-card p{font-size:11px;color:var(--text2);line-height:1.5}
+    .more-pills{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:10px}
+    .more-pills span{padding:2px 7px;border-radius:5px;font-size:9px;font-weight:500;background:rgba(255,255,255,0.03);color:var(--text3);border:1px solid var(--border)}
+
+    /* ====== SLIDE 6 — PROCESS ====== */
+    .proc-layout h2{font-size:36px;font-weight:800;letter-spacing:-1px;text-align:center;margin-bottom:56px}
+    .proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
+    .proc-steps::before{
+      content:'';position:absolute;top:36px;left:50px;right:50px;height:2px;
+      background:linear-gradient(90deg,var(--blue),var(--purple),var(--green),var(--orange));
+      opacity:0.25;
+    }
+    .proc-step{text-align:center;position:relative;z-index:1}
+    .proc-num{
+      width:40px;height:40px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;font-weight:800;color:#fff;margin:0 auto 16px;
+      transform:perspective(400px) rotateY(-5deg);
+      box-shadow:3px 3px 0 rgba(0,0,0,0.2);
+      transition:transform 0.3s var(--ease);
+    }
+    .proc-step:hover .proc-num{transform:perspective(400px) rotateY(0) scale(1.1)}
+    .proc-step h4{font-size:15px;font-weight:700;margin-bottom:6px}
+    .proc-step p{font-size:12px;color:var(--text2);line-height:1.6}
+    .proc-detail{
+      margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    }
+    .proc-detail-card{
+      padding:20px 18px;border-radius:16px;
+      background:rgba(255,255,255,0.02);border:1px solid var(--border);
+      text-align:center;
+    }
+    .proc-detail-card .pd-val{font-size:22px;font-weight:800;color:var(--blue);margin-bottom:4px}
+    .proc-detail-card .pd-lbl{font-size:11px;color:var(--text3);font-weight:500}
+
+    /* ====== SLIDE 7 — WHY US ====== */
+    .why-layout h2{font-size:36px;font-weight:800;letter-spacing:-1px;text-align:center;margin-bottom:48px}
+    .why-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .why-card{
+      padding:30px 28px;border-radius:20px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+      position:relative;overflow:hidden;
+      transition:all 0.35s var(--ease);
+    }
+    .why-card:hover{border-color:rgba(49,130,246,0.2);transform:translateY(-3px)}
+    .why-card::before{
+      content:'';position:absolute;top:0;left:0;
+      width:3px;height:100%;border-radius:0 3px 3px 0;
+    }
+    .why-card:nth-child(1)::before{background:var(--blue)}
+    .why-card:nth-child(2)::before{background:var(--purple)}
+    .why-card:nth-child(3)::before{background:var(--green)}
+    .why-card:nth-child(4)::before{background:var(--orange)}
+    .why-card h4{font-size:16px;font-weight:700;margin-bottom:8px}
+    .why-card p{font-size:13px;color:var(--text2);line-height:1.7}
+
+    /* ====== SLIDE 8 — TECH ====== */
+    .tech-layout h2{font-size:36px;font-weight:800;letter-spacing:-1px;text-align:center;margin-bottom:48px}
+    .tech-categories{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .tech-cat{
+      padding:28px 24px;border-radius:20px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+    }
+    .tech-cat h4{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--text2)}
+    .tech-items{display:flex;flex-direction:column;gap:10px}
+    .tech-item{display:flex;align-items:center;gap:10px}
+    .tech-bar-bg{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.04);overflow:hidden}
+    .tech-bar-fill{height:100%;border-radius:3px;transition:width 1s var(--ease);width:0}
+    .slide.active .tech-bar-fill{width:var(--w)}
+    .tech-item .t-name{width:80px;font-size:12px;font-weight:600;color:var(--text2);flex-shrink:0}
+
+    /* ====== SLIDE 9 — CONTACT ====== */
+    .contact-layout{text-align:center}
+    .contact-layout h2{
+      font-size:42px;font-weight:800;letter-spacing:-1.5px;line-height:1.25;margin-bottom:16px;
+    }
+    .contact-layout h2 .acc{color:var(--blue)}
+    .contact-layout>p{font-size:17px;color:var(--text2);margin-bottom:48px}
+
+    .contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:720px;margin:0 auto 48px}
+    .cc{
+      padding:28px 20px;border-radius:20px;
+      background:var(--glass);backdrop-filter:blur(20px);
+      border:1px solid var(--glass-border);
+      text-align:center;transition:all 0.3s var(--ease);
+    }
+    .cc:hover{border-color:rgba(49,130,246,0.2);transform:translateY(-3px)}
+    .cc-icon{
+      width:44px;height:44px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 12px;background:rgba(49,130,246,0.08);border:1px solid rgba(49,130,246,0.12);
+    }
+    .cc-icon svg{width:18px;height:18px}
+    .cc .cc-label{font-size:11px;color:var(--text3);font-weight:500;margin-bottom:4px}
+    .cc .cc-value{font-size:14px;font-weight:600}
+
+    .contact-cta{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:16px 40px;border-radius:16px;
+      background:var(--blue);color:#fff;border:none;
+      font-size:16px;font-weight:700;font-family:inherit;
+      cursor:pointer;text-decoration:none;transition:all 0.25s;
+    }
+    .contact-cta:hover{
+      background:var(--blue-light);transform:translateY(-2px);
+      box-shadow:0 8px 30px rgba(49,130,246,0.35);
+    }
+    .contact-cta svg{width:16px;height:16px}
+
+    .contact-footer{
+      margin-top:56px;font-size:12px;color:var(--text3);
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media(max-width:900px){
+      .slide{padding:60px 32px}
+      .about-layout,.pf-layout{grid-template-columns:1fr;gap:32px}
+      .svc-grid{grid-template-columns:1fr 1fr}
+      .more-grid{grid-template-columns:1fr 1fr}
+      .proc-steps,.proc-detail{grid-template-columns:1fr 1fr}
+      .proc-steps::before{display:none}
+      .why-cards{grid-template-columns:1fr}
+      .tech-categories{grid-template-columns:1fr}
+      .contact-cards{grid-template-columns:1fr}
+      .pf-visual{display:none}
+      .side-dots{display:none}
+    }
+    @media(max-width:640px){
+      .slide{padding:60px 20px}
+      .deck-nav{padding:0 20px}
+      .svc-grid,.more-grid{grid-template-columns:1fr}
+      .cover-title{font-size:48px;letter-spacing:-2px}
+      .key-hint{display:none}
+      .deck-controls{right:20px;bottom:20px}
+    }
+
+    /* ====== PRINT / PDF ====== */
+    @media print {
+      html,body{overflow:visible;height:auto}
+      .slide{
+        position:relative;opacity:1;transform:none;pointer-events:auto;
+        page-break-after:always;break-after:page;
+        min-height:100vh;
+      }
+      .deck-nav,.progress-bar,.side-dots,.deck-controls,.key-hint{display:none}
+      .slide .anim{opacity:1;transform:none}
+      .slide .tech-bar-fill{width:var(--w) !important}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="deck-nav">
+    <div class="deck-brand">MaxImpact</div>
+    <div class="deck-page"><span id="currentPage">01</span> / <span id="totalPages">10</span></div>
+  </div>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- SIDE DOTS -->
+  <div class="side-dots" id="sideDots"></div>
+
+  <!-- CONTROLS -->
+  <div class="deck-controls">
+    <button class="ctrl-btn" onclick="goSlide(current-1)" aria-label="이전">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="ctrl-btn" onclick="goSlide(current+1)" aria-label="다음">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="key-hint">
+    <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> 또는 스크롤로 이동</span>
+  </div>
+
+  <!-- ========== DECK ========== -->
+  <div class="deck" id="deck">
+
+    <!-- SLIDE 0: COVER (3D GLASS) -->
+    <div class="slide active">
+      <!-- Background layer -->
+      <div class="cover-scene">
+        <!-- Ambient orbs -->
+        <div class="cover-orb cover-orb-1"></div>
+        <div class="cover-orb cover-orb-2"></div>
+        <div class="cover-orb cover-orb-3"></div>
+
+        <!-- Floating glass panels with fake UI -->
+        <div class="glass-panel gp-1">
+          <div class="gp-content">
+            <div class="gp-line w30 accent-b"></div>
+            <div class="gp-line w90"></div>
+            <div class="gp-line w70"></div>
+            <div class="gp-blocks">
+              <div class="gp-block" style="background:rgba(49,130,246,0.06);border-color:rgba(49,130,246,0.1)"></div>
+              <div class="gp-block" style="background:rgba(52,211,153,0.06);border-color:rgba(52,211,153,0.1)"></div>
+              <div class="gp-block" style="background:rgba(167,139,250,0.06);border-color:rgba(167,139,250,0.1)"></div>
+            </div>
+            <div class="gp-chart">
+              <div class="gp-bar" style="height:35%;background:var(--blue)"></div>
+              <div class="gp-bar" style="height:55%;background:var(--blue)"></div>
+              <div class="gp-bar" style="height:40%;background:var(--green)"></div>
+              <div class="gp-bar" style="height:70%;background:var(--blue)"></div>
+              <div class="gp-bar" style="height:50%;background:var(--green)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-panel gp-2">
+          <div class="gp-content">
+            <div class="gp-line w50 accent-p"></div>
+            <div class="gp-line w90"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+              <div style="height:40px;border-radius:8px;background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.08)"></div>
+              <div style="height:40px;border-radius:8px;background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.08)"></div>
+            </div>
+            <div class="gp-line w70" style="margin-top:auto"></div>
+          </div>
+        </div>
+        <div class="glass-panel gp-3">
+          <div class="gp-content">
+            <div class="gp-line w30 accent-g"></div>
+            <div class="gp-line w90"></div>
+            <div class="gp-line w50"></div>
+            <div class="gp-chart" style="height:44px">
+              <div class="gp-bar" style="height:45%;background:var(--green)"></div>
+              <div class="gp-bar" style="height:65%;background:var(--green)"></div>
+              <div class="gp-bar" style="height:50%;background:var(--cyan)"></div>
+              <div class="gp-bar" style="height:80%;background:var(--green)"></div>
+              <div class="gp-bar" style="height:55%;background:var(--cyan)"></div>
+              <div class="gp-bar" style="height:90%;background:var(--green)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-panel gp-4">
+          <div class="gp-content">
+            <div class="gp-line w50 accent-b"></div>
+            <div class="gp-line w70"></div>
+            <div class="gp-blocks" style="grid-template-columns:1fr 1fr;margin-top:auto">
+              <div class="gp-block" style="background:rgba(251,146,60,0.05);border-color:rgba(251,146,60,0.08)"></div>
+              <div class="gp-block" style="background:rgba(244,114,182,0.05);border-color:rgba(244,114,182,0.08)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-panel gp-5">
+          <div class="gp-content">
+            <div class="gp-line w50 accent-p"></div>
+            <div class="gp-line w90"></div>
+            <div class="gp-line w30"></div>
+          </div>
+        </div>
+        <div class="glass-panel gp-6">
+          <div class="gp-content">
+            <div class="gp-line w70 accent-g"></div>
+            <div class="gp-line w50"></div>
+          </div>
+        </div>
+
+        <!-- Particles -->
+        <div class="cover-particles" id="coverParticles"></div>
+      </div>
+
+      <!-- Floor grid -->
+      <div class="cover-grid"></div>
+
+      <!-- Center glass hero card -->
+      <div class="slide-inner" style="display:flex;justify-content:center">
+        <div class="cover-glass-hero anim" id="heroCard">
+          <div class="cover-sub anim d1">AI · Web Developed Team</div>
+          <div class="cover-title anim d2">MaxImpact</div>
+          <p class="cover-tagline anim d3">최적의 효율로, 최고의 가치를 보여드립니다.<br>비싸기만 한 웹 프로젝트, 이제는 달라졌습니다.</p>
+          <div class="cover-divider anim d4"></div>
+          <div class="cover-bottom anim d5">
+            <div class="cover-stat"><div class="cs-val"><span>50</span>+</div><div class="cs-lbl">프로젝트</div></div>
+            <div class="cover-stat-divider"></div>
+            <div class="cover-stat"><div class="cs-val"><span>98</span>%</div><div class="cs-lbl">만족도</div></div>
+            <div class="cover-stat-divider"></div>
+            <div class="cover-stat"><div class="cs-val"><span>15</span>+</div><div class="cs-lbl">전문 인력</div></div>
+            <div class="cover-stat-divider"></div>
+            <div class="cover-stat"><div class="cs-val"><span>24</span>h</div><div class="cs-lbl">견적 응답</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-year anim d6">COMPANY INTRODUCTION 2026</div>
+    </div>
+
+    <!-- SLIDE 1: ABOUT -->
+    <div class="slide">
+      <div class="slide-inner">
+        <div class="about-layout">
+          <div class="about-left">
+            <span class="tag tag-blue anim">About Us</span>
+            <h2 class="anim d1">소수정예 팀이<br><span class="acc">최대의 임팩트</span>를<br>만들어냅니다</h2>
+            <p class="anim d2">MaxImpact는 소수정예 풀스택 개발팀입니다. 검증된 프리랜서 네트워크와 함께, 대형 에이전시 수준의 퀄리티를 합리적인 비용으로 제공합니다.</p>
+            <div class="about-stats anim d3">
+              <div class="about-stat"><div class="val">50+</div><div class="lbl">완료 프로젝트</div></div>
+              <div class="about-stat"><div class="val">98%</div><div class="lbl">고객 만족도</div></div>
+              <div class="about-stat"><div class="val">15+</div><div class="lbl">전문 인력 풀</div></div>
+              <div class="about-stat"><div class="val">24h</div><div class="lbl">평균 견적 응답</div></div>
+            </div>
+          </div>
+          <div class="about-right">
+            <div class="about-card anim d2">
+              <div class="card-accent" style="background:var(--blue)"></div>
+              <h4>풀스택 개발</h4>
+              <p>프론트엔드부터 백엔드, DB 설계, 서버 배포까지 원스톱으로 진행합니다.</p>
+            </div>
+            <div class="about-card anim d3">
+              <div class="card-accent" style="background:var(--purple)"></div>
+              <h4>AI 기술 활용</h4>
+              <p>최신 AI 도구를 적극 활용하여 개발 속도와 코드 품질을 동시에 확보합니다.</p>
+            </div>
+            <div class="about-card anim d4">
+              <div class="card-accent" style="background:var(--green)"></div>
+              <h4>장기 파트너십</h4>
+              <p>일회성 외주가 아닌, 지속적인 유지보수와 기능 확장을 지원합니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: SERVICES -->
+    <div class="slide">
+      <div class="slide-inner services-layout">
+        <span class="tag tag-blue anim" style="display:block;text-align:center;margin-bottom:16px">Services</span>
+        <h2 class="anim d1">무엇이든 만들어 드립니다</h2>
+        <div class="svc-grid">
+          <div class="svc-card anim d2">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#3182F6,#1B64DA)">
+              <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            </div>
+            <h4>ERP / CRM / CMS</h4>
+            <p>재무·인사·고객관리·콘텐츠 관리까지 기업 맞춤형 올인원 시스템.</p>
+            <div class="svc-tags"><span>대시보드</span><span>권한관리</span><span>분석</span></div>
+          </div>
+          <div class="svc-card anim d3">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#34D399,#059669)">
+              <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.17 14.75l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25z"/></svg>
+            </div>
+            <h4>쇼핑몰 / 마켓플레이스</h4>
+            <p>PG 결제, 포인트, 입찰, 리뷰 시스템을 갖춘 본격 커머스 플랫폼.</p>
+            <div class="svc-tags"><span>PG 연동</span><span>포인트</span><span>매칭</span></div>
+          </div>
+          <div class="svc-card anim d4">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <h4>맞춤형 웹서비스</h4>
+            <p>SaaS, 예약, 중개 플랫폼 등 아이디어를 현실로.</p>
+            <div class="svc-tags"><span>API 설계</span><span>채팅</span><span>알림톡</span></div>
+          </div>
+          <div class="svc-card anim d5">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#FB923C,#EA580C)">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            </div>
+            <h4>데이터 분석 시스템</h4>
+            <p>PDF 파싱, 수식 엔진, 재무 분석 등 복잡한 데이터 처리.</p>
+            <div class="svc-tags"><span>PDF</span><span>수식</span><span>리포트</span></div>
+          </div>
+          <div class="svc-card anim d6">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#F472B6,#DB2777)">
+              <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+            </div>
+            <h4>대학교 / 졸업 과제</h4>
+            <p>캡스톤, 졸업작품, 학술 프로젝트를 기한 내 납품.</p>
+            <div class="svc-tags"><span>캡스톤</span><span>논문</span><span>빠른 납기</span></div>
+          </div>
+          <div class="svc-card anim d7">
+            <div class="svc-icon" style="background:linear-gradient(135deg,#22D3EE,#0891B2)">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 7H9v2h6v-2zm3-3H7v2h11V8zm-3 8H7v-2h8v2z"/></svg>
+            </div>
+            <h4>반응형 웹사이트</h4>
+            <p>회사 소개, 랜딩, 포트폴리오 등 모던 반응형 웹.</p>
+            <div class="svc-tags"><span>반응형</span><span>SEO</span><span>모던</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: PORTFOLIO — 세무 종합 플랫폼 -->
+    <div class="slide">
+      <div class="slide-inner">
+        <div class="pf-layout">
+          <div class="pf-info">
+            <span class="tag tag-green anim pf-tag">Enterprise SaaS</span>
+            <h2 class="anim d1">세무 종합 플랫폼</h2>
+            <p class="anim d2">세무 전문가를 위한 올인원 검진 솔루션. PDF 재무제표를 업로드하면 1,100개+ 수식 엔진이 자동으로 재무 건전성을 분석하고 절세 전략 리포트를 생성합니다.</p>
+            <div class="pf-pills anim d3">
+              <span class="pill">PHP MVC</span>
+              <span class="pill">MariaDB</span>
+              <span class="pill">RESTful API</span>
+              <span class="pill">Jenkins CI/CD</span>
+              <span class="pill">카카오톡</span>
+            </div>
+            <div class="pf-features anim d4">
+              <div class="check-item"><span class="check-icon">✓</span>PDF 자동 파싱 & 데이터 추출 엔진</div>
+              <div class="check-item"><span class="check-icon">✓</span>1,100개+ 수식 기반 재무분석</div>
+              <div class="check-item"><span class="check-icon">✓</span>업종별 벤치마킹 & 등급 판정</div>
+              <div class="check-item"><span class="check-icon">✓</span>역할 기반 접근제어 시스템</div>
+              <div class="check-item"><span class="check-icon">✓</span>3개년 장부분석 비교 대시보드</div>
+            </div>
+          </div>
+          <div class="pf-visual anim d3">
+            <div class="pf-mockup">
+              <div class="pm-bar"><div class="pm-dot"></div><div class="pm-dot"></div><div class="pm-dot"></div></div>
+              <div class="pm-body">
+                <div class="pm-line w30 acc"></div>
+                <div class="pm-line w90"></div>
+                <div class="pm-line w70"></div>
+                <div class="pm-grid">
+                  <div class="pm-block" style="background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.12)"></div>
+                  <div class="pm-block" style="background:rgba(251,146,60,0.08);border-color:rgba(251,146,60,0.12)"></div>
+                  <div class="pm-block" style="background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.12)"></div>
+                </div>
+                <div class="pm-chart">
+                  <div class="pm-bar-item" style="height:30%;background:var(--blue)"></div>
+                  <div class="pm-bar-item" style="height:55%;background:var(--blue)"></div>
+                  <div class="pm-bar-item" style="height:40%;background:var(--blue)"></div>
+                  <div class="pm-bar-item" style="height:75%;background:var(--green)"></div>
+                  <div class="pm-bar-item" style="height:60%;background:var(--blue)"></div>
+                  <div class="pm-bar-item" style="height:90%;background:var(--green)"></div>
+                  <div class="pm-bar-item" style="height:45%;background:var(--blue)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PORTFOLIO — 인테리어 매칭 -->
+    <div class="slide">
+      <div class="slide-inner">
+        <div class="pf-layout">
+          <div class="pf-visual anim d1" style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(244,114,182,0.06));">
+            <div class="pf-mockup">
+              <div class="pm-bar"><div class="pm-dot"></div><div class="pm-dot"></div><div class="pm-dot"></div></div>
+              <div class="pm-body">
+                <div class="pm-line w50 acc" style="background:rgba(167,139,250,0.2)"></div>
+                <div class="pm-line w90"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                  <div style="background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.1);border-radius:8px;padding:10px">
+                    <div class="pm-line w30" style="margin-bottom:6px;background:rgba(167,139,250,0.12)"></div>
+                    <div class="pm-line w90"></div>
+                    <div class="pm-line w70" style="margin-top:4px"></div>
+                  </div>
+                  <div style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.1);border-radius:8px;padding:10px">
+                    <div class="pm-line w30" style="margin-bottom:6px;background:rgba(52,211,153,0.12)"></div>
+                    <div class="pm-line w90"></div>
+                    <div class="pm-line w70" style="margin-top:4px"></div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:auto">
+                  <div style="flex:1;height:30px;border-radius:7px;background:rgba(49,130,246,0.12);border:1px solid rgba(49,130,246,0.18)"></div>
+                  <div style="flex:1;height:30px;border-radius:7px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.18)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="tag tag-purple anim pf-tag">Marketplace</span>
+            <h2 class="anim d1">인테리어 중개 매칭 플랫폼</h2>
+            <p class="anim d2">고객과 인테리어 업체를 연결하는 견적 비교 플랫폼. 입찰 시스템, 실시간 채팅, PG 결제까지 풀스택으로 구현한 C2B 매칭 서비스.</p>
+            <div class="pf-pills anim d3">
+              <span class="pill">PHP MVC</span>
+              <span class="pill">MySQL</span>
+              <span class="pill">Tailwind CSS</span>
+              <span class="pill">NicePay 결제</span>
+              <span class="pill">OAuth 2.0</span>
+            </div>
+            <div class="pf-features anim d4">
+              <div class="check-item"><span class="check-icon">✓</span>입찰 기반 견적 매칭 시스템</div>
+              <div class="check-item"><span class="check-icon">✓</span>실시간 1:1 & 비교견적 채팅</div>
+              <div class="check-item"><span class="check-icon">✓</span>6단계 포인트 충전 시스템</div>
+              <div class="check-item"><span class="check-icon">✓</span>NicePay 통합 결제 (카드/계좌/간편결제)</div>
+              <div class="check-item"><span class="check-icon">✓</span>7종 알림 & 카카오 알림톡</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: MORE PROJECTS -->
+    <div class="slide">
+      <div class="slide-inner">
+        <span class="tag tag-green anim" style="display:block;text-align:center;margin-bottom:16px">More Projects</span>
+        <h2 class="anim d1" style="font-size:36px;font-weight:800;letter-spacing:-1px;text-align:center;margin-bottom:48px">그 외 다양한 프로젝트</h2>
+        <div class="more-grid">
+          <div class="more-card anim d2">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(49,130,246,0.12),rgba(49,130,246,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5C23 14.17 18.33 13 16 13z" fill="#3182F6"/></svg>
+            </div>
+            <h4>CRM 시스템</h4>
+            <p>B2B 영업팀 고객 파이프라인 관리. 리드 추적, 거래 단계, 실시간 대시보드.</p>
+            <div class="more-pills"><span>Next.js</span><span>PostgreSQL</span></div>
+          </div>
+          <div class="more-card anim d3">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(251,146,60,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.17 14.75l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25z" fill="#FB923C"/></svg>
+            </div>
+            <h4>패션 쇼핑몰</h4>
+            <p>카테고리 관리, 장바구니, PG 결제, 쿠폰/포인트 풀스택 쇼핑몰.</p>
+            <div class="more-pills"><span>PHP</span><span>TossPayments</span></div>
+          </div>
+          <div class="more-card anim d4">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(52,211,153,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" fill="#34D399"/></svg>
+            </div>
+            <h4>병원 예약 시스템</h4>
+            <p>환자 예약·접수·진료 이력. 스케줄링, 대기열, 문자 알림 자동화.</p>
+            <div class="more-pills"><span>React</span><span>Node.js</span></div>
+          </div>
+          <div class="more-card anim d5">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(167,139,250,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="#A78BFA"/></svg>
+            </div>
+            <h4>졸업작품 AI 감정분석</h4>
+            <p>SNS 텍스트 감정분석 웹앱. NLP 모델 연동, 시각화 대시보드.</p>
+            <div class="more-pills"><span>Python</span><span>Flask</span></div>
+          </div>
+          <div class="more-card anim d6">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(244,114,182,0.12),rgba(244,114,182,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z" fill="#F472B6"/></svg>
+            </div>
+            <h4>사내 ERP</h4>
+            <p>재고, 발주, 정산, 직원 관리를 위한 사내 통합 관리 시스템.</p>
+            <div class="more-pills"><span>PHP</span><span>MySQL</span></div>
+          </div>
+          <div class="more-card anim d7">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(22,211,238,0.12),rgba(22,211,238,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 7H9v2h6v-2zm3-3H7v2h11V8zm-3 8H7v-2h8v2z" fill="#22D3EE"/></svg>
+            </div>
+            <h4>기업 소개 웹사이트</h4>
+            <p>모던 디자인 반응형 기업 소개 + 관리자 CMS 제작.</p>
+            <div class="more-pills"><span>HTML/CSS</span><span>JS</span></div>
+          </div>
+          <div class="more-card anim d7">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(239,68,68,0.12),rgba(239,68,68,0.04))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#EF4444"/></svg>
+            </div>
+            <h4>커뮤니티 플랫폼</h4>
+            <p>게시판, 댓글, 좋아요, 실시간 알림 기능의 커뮤니티 서비스.</p>
+            <div class="more-pills"><span>React</span><span>Firebase</span></div>
+          </div>
+          <div class="more-card anim d8">
+            <div class="more-icon" style="background:linear-gradient(135deg,rgba(49,130,246,0.12),rgba(167,139,250,0.08))">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="#3182F6"/></svg>
+            </div>
+            <h4>다국어 랜딩페이지</h4>
+            <p>한/영/일 다국어 지원 서비스 소개 랜딩페이지 제작.</p>
+            <div class="more-pills"><span>Next.js</span><span>i18n</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: PROCESS -->
+    <div class="slide">
+      <div class="slide-inner proc-layout">
+        <span class="tag tag-purple anim" style="display:block;text-align:center;margin-bottom:16px">Process</span>
+        <h2 class="anim d1">프로젝트 진행 프로세스</h2>
+        <div class="proc-steps">
+          <div class="proc-step anim d2">
+            <div class="proc-num" style="background:linear-gradient(135deg,#3182F6,#1B64DA)">1</div>
+            <h4>상담 & 기획</h4>
+            <p>요구사항 분석 후<br>최적의 솔루션 제안.<br>무료 견적 포함.</p>
+          </div>
+          <div class="proc-step anim d3">
+            <div class="proc-num" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">2</div>
+            <h4>설계 & 디자인</h4>
+            <p>DB 설계, API 아키텍처,<br>UI/UX 디자인 확정.</p>
+          </div>
+          <div class="proc-step anim d4">
+            <div class="proc-num" style="background:linear-gradient(135deg,#34D399,#059669)">3</div>
+            <h4>개발 & 테스트</h4>
+            <p>애자일 개발,<br>주단위 진행상황 공유.<br>QA 포함.</p>
+          </div>
+          <div class="proc-step anim d5">
+            <div class="proc-num" style="background:linear-gradient(135deg,#FB923C,#EA580C)">4</div>
+            <h4>배포 & 유지보수</h4>
+            <p>서버 배포 완료 후<br>안정적인 유지보수<br>지원.</p>
+          </div>
+        </div>
+        <div class="proc-detail anim d6">
+          <div class="proc-detail-card">
+            <div class="pd-val">1~2일</div>
+            <div class="pd-lbl">견적 응답</div>
+          </div>
+          <div class="proc-detail-card">
+            <div class="pd-val">1~2주</div>
+            <div class="pd-lbl">설계 완료</div>
+          </div>
+          <div class="proc-detail-card">
+            <div class="pd-val">주 1회</div>
+            <div class="pd-lbl">진행상황 공유</div>
+          </div>
+          <div class="proc-detail-card">
+            <div class="pd-val">3개월</div>
+            <div class="pd-lbl">무상 유지보수</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: WHY US -->
+    <div class="slide">
+      <div class="slide-inner why-layout">
+        <span class="tag tag-orange anim" style="display:block;text-align:center;margin-bottom:16px">Why Us</span>
+        <h2 class="anim d1">왜 MaxImpact인가</h2>
+        <div class="why-cards">
+          <div class="why-card anim d2">
+            <h4>합리적인 비용</h4>
+            <p>소수정예 팀 구조로 불필요한 관리비용을 제거. 대형 에이전시 대비 40~60% 저렴하면서 동일하거나 그 이상의 퀄리티를 보장합니다.</p>
+          </div>
+          <div class="why-card anim d3">
+            <h4>빠른 납기</h4>
+            <p>숙련된 풀스택 개발자가 직접 작업합니다. 커뮤니케이션 리드타임 없이, 의사결정부터 구현까지 최단 시간에 진행됩니다.</p>
+          </div>
+          <div class="why-card anim d4">
+            <h4>검증된 기술력</h4>
+            <p>1,100개 수식 엔진, PG 결제 연동, 실시간 채팅, PDF 파싱 등 복잡한 비즈니스 로직을 실전에서 구현한 경험이 있습니다.</p>
+          </div>
+          <div class="why-card anim d5">
+            <h4>끝까지 책임</h4>
+            <p>납품 후에도 버그 수정, 기능 추가, 서버 관리를 지속 지원합니다. 일회성 외주가 아닌 장기 파트너를 지향합니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: TECH STACK -->
+    <div class="slide">
+      <div class="slide-inner tech-layout">
+        <span class="tag tag-blue anim" style="display:block;text-align:center;margin-bottom:16px">Tech Stack</span>
+        <h2 class="anim d1">기술 스택</h2>
+        <div class="tech-categories">
+          <div class="tech-cat anim d2">
+            <h4>Backend</h4>
+            <div class="tech-items">
+              <div class="tech-item"><span class="t-name">PHP</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:95%;background:var(--blue)"></div></div></div>
+              <div class="tech-item"><span class="t-name">Node.js</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:80%;background:var(--blue)"></div></div></div>
+              <div class="tech-item"><span class="t-name">Python</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:70%;background:var(--blue)"></div></div></div>
+              <div class="tech-item"><span class="t-name">Java</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:60%;background:var(--blue)"></div></div></div>
+            </div>
+          </div>
+          <div class="tech-cat anim d3">
+            <h4>Frontend</h4>
+            <div class="tech-items">
+              <div class="tech-item"><span class="t-name">React</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:90%;background:var(--purple)"></div></div></div>
+              <div class="tech-item"><span class="t-name">Next.js</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:88%;background:var(--purple)"></div></div></div>
+              <div class="tech-item"><span class="t-name">Tailwind</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:92%;background:var(--purple)"></div></div></div>
+              <div class="tech-item"><span class="t-name">TypeScript</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:85%;background:var(--purple)"></div></div></div>
+            </div>
+          </div>
+          <div class="tech-cat anim d4">
+            <h4>Infra & DB</h4>
+            <div class="tech-items">
+              <div class="tech-item"><span class="t-name">MySQL</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:95%;background:var(--green)"></div></div></div>
+              <div class="tech-item"><span class="t-name">MariaDB</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:90%;background:var(--green)"></div></div></div>
+              <div class="tech-item"><span class="t-name">PostgreSQL</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:72%;background:var(--green)"></div></div></div>
+              <div class="tech-item"><span class="t-name">AWS / CI/CD</span><div class="tech-bar-bg"><div class="tech-bar-fill" style="--w:78%;background:var(--green)"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: CONTACT -->
+    <div class="slide">
+      <div class="slide-inner contact-layout">
+        <span class="tag tag-blue anim">Contact</span>
+        <h2 class="anim d1">프로젝트를<br><span class="acc">시작</span>하세요</h2>
+        <p class="anim d2">간단한 정보를 남겨주시면 24시간 내에 무료 견적을 보내드립니다.</p>
+        <div class="contact-cards anim d3">
+          <div class="cc">
+            <div class="cc-icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#3182F6"/></svg>
+            </div>
+            <div class="cc-label">이메일</div>
+            <div class="cc-value">contact@maximpact.kr</div>
+          </div>
+          <div class="cc">
+            <div class="cc-icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="#3182F6"/></svg>
+            </div>
+            <div class="cc-label">전화</div>
+            <div class="cc-value">010-0000-0000</div>
+          </div>
+          <div class="cc">
+            <div class="cc-icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#3182F6"/></svg>
+            </div>
+            <div class="cc-label">카카오톡</div>
+            <div class="cc-value">MaxImpact</div>
+          </div>
+        </div>
+        <a href="#" class="contact-cta anim d4">
+          무료 견적 요청하기
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="contact-footer anim d5">
+          © 2026 MaxImpact. All rights reserved.<br>
+          AI · Web Developed Team — 최적의 효율로 최고의 가치를.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /deck -->
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+    let transitioning = false;
+
+    document.getElementById('totalPages').textContent = String(total).padStart(2,'0');
+
+    // Create side dots
+    const dotsContainer = document.getElementById('sideDots');
+    slides.forEach((_,i) => {
+      const dot = document.createElement('button');
+      dot.className = 'side-dot' + (i===0?' active':'');
+      dot.addEventListener('click', () => goSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function goSlide(n) {
+      if(transitioning || n===current || n<0 || n>=total) return;
+      transitioning = true;
+
+      const prev = slides[current];
+      const next = slides[n];
+      const direction = n > current ? 1 : -1;
+
+      // Outgoing
+      prev.classList.remove('active');
+      prev.classList.add('prev');
+      if(direction < 0) {
+        prev.style.transform = 'translateY(40px) scale(0.97)';
+      }
+
+      // Incoming
+      next.style.transition = 'none';
+      next.style.transform = direction > 0 ? 'translateY(40px) scale(0.97)' : 'translateY(-40px) scale(0.97)';
+      next.style.opacity = '0';
+
+      requestAnimationFrame(() => {
+        next.style.transition = '';
+        next.classList.add('active');
+        next.style.transform = '';
+        next.style.opacity = '';
+      });
+
+      setTimeout(() => {
+        prev.classList.remove('prev');
+        prev.style.transform = '';
+        transitioning = false;
+      }, 600);
+
+      current = n;
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('currentPage').textContent = String(current+1).padStart(2,'0');
+      const progress = ((current+1)/total)*100;
+      document.getElementById('progressBar').style.width = progress+'%';
+
+      document.querySelectorAll('.side-dot').forEach((d,i) => {
+        d.classList.toggle('active', i===current);
+      });
+    }
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') { e.preventDefault(); goSlide(current+1); }
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp') { e.preventDefault(); goSlide(current-1); }
+      if(e.key==='Home') { e.preventDefault(); goSlide(0); }
+      if(e.key==='End') { e.preventDefault(); goSlide(total-1); }
+    });
+
+    // Scroll / Touch
+    let lastWheel = 0;
+    document.addEventListener('wheel', e => {
+      e.preventDefault();
+      const now = Date.now();
+      if(now - lastWheel < 800) return;
+      lastWheel = now;
+      if(e.deltaY > 20) goSlide(current+1);
+      else if(e.deltaY < -20) goSlide(current-1);
+    }, {passive:false});
+
+    let touchStartY = 0;
+    document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
+    document.addEventListener('touchend', e => {
+      const diff = touchStartY - e.changedTouches[0].clientY;
+      if(Math.abs(diff) > 50) {
+        if(diff > 0) goSlide(current+1);
+        else goSlide(current-1);
+      }
+    });
+
+    // ===== COVER: Generate particles =====
+    (function(){
+      const pc = document.getElementById('coverParticles');
+      if(!pc) return;
+      for(let i=0;i<20;i++){
+        const p = document.createElement('div');
+        p.className = 'c-particle';
+        p.style.left = Math.random()*100+'%';
+        p.style.top = (60+Math.random()*40)+'%';
+        p.style.animationDuration = (12+Math.random()*20)+'s';
+        p.style.animationDelay = (Math.random()*15)+'s';
+        p.style.width = p.style.height = (1+Math.random()*2)+'px';
+        const colors = ['rgba(49,130,246,0.5)','rgba(167,139,250,0.4)','rgba(52,211,153,0.4)'];
+        p.style.background = colors[Math.floor(Math.random()*3)];
+        pc.appendChild(p);
+      }
+    })();
+
+    // ===== COVER: 3D tilt on hero card =====
+    (function(){
+      const card = document.getElementById('heroCard');
+      if(!card) return;
+      document.addEventListener('mousemove', e => {
+        if(current !== 0) return;
+        const cx = window.innerWidth/2, cy = window.innerHeight/2;
+        const dx = (e.clientX - cx) / cx;
+        const dy = (e.clientY - cy) / cy;
+        card.style.transform = `perspective(1000px) rotateX(${-dy*4}deg) rotateY(${dx*4}deg)`;
+
+        // Parallax glass panels
+        document.querySelectorAll('.glass-panel').forEach((p,i) => {
+          const depth = 0.5 + i*0.15;
+          p.style.marginLeft = (dx*15*depth)+'px';
+          p.style.marginTop = (dy*10*depth)+'px';
+        });
+      });
+      document.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(2deg)';
+      });
+    })();
+  </script>
+</body>
+</html>

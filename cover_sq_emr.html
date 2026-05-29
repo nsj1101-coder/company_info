@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html, body { width: 800px; height: 800px; background: #ffffff; }
+body {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.cover {
+  width: 800px; height: 800px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  padding: 56px 52px;
+  display: flex; flex-direction: column;
+}
+
+/* Decorative shapes */
+.big-circle {
+  position: absolute;
+  top: -160px; right: -160px;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+}
+.ring {
+  position: absolute;
+  bottom: -100px; left: -80px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  border: 24px solid currentColor;
+  opacity: 0.18;
+}
+.mini-dot {
+  position: absolute;
+  top: 180px; right: 60px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #111;
+  z-index: 3;
+}
+
+/* Top meta */
+.top-meta {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #999;
+  font-weight: 700;
+  position: relative; z-index: 5;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+.year { color: #bbb; }
+
+.spacer { flex: 1; }
+
+/* Title block */
+.title-block {
+  position: relative; z-index: 5;
+}
+.title-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.title-kr {
+  font-size: 46px; font-weight: 800; color: #111;
+  line-height: 1.2; letter-spacing: -0.025em;
+  margin-bottom: 22px;
+}
+.desc {
+  font-size: 14.5px; color: #555;
+  line-height: 1.65;
+  max-width: 540px;
+  font-weight: 400;
+}
+
+/* Bottom block */
+.bottom-block {
+  margin-top: 36px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px;
+  position: relative; z-index: 5;
+}
+.tags {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  max-width: 520px;
+}
+.tag {
+  padding: 6px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: #555;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.brand {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; color: #aaa;
+  font-weight: 700; letter-spacing: 0.06em;
+  white-space: nowrap;
+  margin-bottom: 4px;
+}
+.brand strong { color: #222; font-weight: 900; }
+
+/* Floating badge top-right */
+.badge {
+  position: absolute;
+  top: 56px; right: 52px;
+  background: #ffffff;
+  border-radius: 100px;
+  padding: 7px 14px 7px 7px;
+  display: flex; align-items: center; gap: 9px;
+  box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+  z-index: 6;
+}
+.badge .ico {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 900;
+  font-family: 'Inter', sans-serif;
+}
+.badge .txt {
+  font-size: 11px; font-weight: 800; color: #222;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.06em;
+}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="big-circle" id="big-circle"></div>
+  <div class="ring" id="ring"></div>
+  <div class="mini-dot"></div>
+
+  <div class="badge">
+    <div class="ico" id="badge-ico">M</div>
+    <div class="txt" id="ph-badge-text">BADGE</div>
+  </div>
+
+  <div class="top-meta">
+    <span>PROJECT</span>
+    <span class="dot" id="meta-dot-1"></span>
+    <span id="ph-category">CATEGORY</span>
+    <span class="dot" style="background:#ddd"></span>
+    <span class="year" id="ph-year">YEAR</span>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="title-block">
+    <div class="title-en" id="ph-en">EN</div>
+    <div class="title-kr" id="ph-title">제목</div>
+    <div class="desc" id="ph-desc">설명</div>
+  </div>
+
+  <div class="bottom-block">
+    <div class="tags" id="ph-tags">
+      <span class="tag">tag</span>
+    </div>
+    <div class="brand"><strong>MAX</strong>IMPACT</div>
+  </div>
+</div>
+
+<script>window.COVER_DATA = {"accent": "#1E40AF", "category": "HEALTHCARE · EMR", "year": "2025", "en": "EMR / CRM", "title": "안과 EMR · CRM<br>통합 솔루션", "desc": "환자 진료 차트, 동공 측정값 시계열, 처방 이력을 통합 관리하는 안과 의료기관 전용 시스템.", "tagsHtml": "<span class=\"tag accent\">Next.js 15</span><span class=\"tag\">React 19</span><span class=\"tag\">Prisma 7</span><span class=\"tag\">MariaDB</span>", "badgeIco": "Rx", "badgeText": "MEDICAL CHART"};</script>
+<script>
+  const DATA = window.COVER_DATA || {};
+  const $ = (id) => document.getElementById(id);
+  $('ph-category').textContent = DATA.category;
+  $('ph-year').textContent = DATA.year;
+  $('ph-en').textContent = DATA.en;
+  $('ph-title').innerHTML = DATA.title;
+  $('ph-desc').textContent = DATA.desc;
+  $('ph-tags').innerHTML = DATA.tagsHtml;
+  $('badge-ico').textContent = DATA.badgeIco;
+  $('ph-badge-text').textContent = DATA.badgeText;
+
+  $('meta-dot-1').style.background = DATA.accent;
+  $('big-circle').style.background = DATA.accent;
+  $('ring').style.color = DATA.accent;
+  $('badge-ico').style.background = DATA.accent;
+  document.querySelector('.title-en').style.color = DATA.accent;
+  document.querySelector('.cover').style.background = '#ffffff';
+  document.querySelectorAll('.tag.accent').forEach(el => {
+    el.style.borderColor = DATA.accent;
+    el.style.color = DATA.accent;
+    el.style.background = DATA.accentBg;
+  });
+</script>
+</body>
+</html>

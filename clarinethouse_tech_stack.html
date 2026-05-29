@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>클라리넷하우스 쇼핑몰 리뉴얼 - 기술 스택 사용 예정 문서</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f7f9fc;
+    color: #1e293b;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 32px rgba(0,0,0,0.06); overflow: hidden; }
+
+  .header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+    color: #fff;
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -50px; right: -50px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 6px 14px; border-radius: 4px; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .title { font-size: 32px; font-weight: 900; margin-bottom: 12px; line-height: 1.3; }
+  .subtitle { font-size: 15px; opacity: 0.85; }
+  .meta { display: flex; gap: 28px; margin-top: 24px; flex-wrap: wrap; }
+  .meta-item { font-size: 13px; }
+  .meta-label { opacity: 0.7; font-weight: 500; }
+  .meta-value { font-weight: 700; margin-left: 6px; }
+
+  .content { padding: 48px 56px; }
+
+  .section { margin-bottom: 56px; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-title {
+    font-size: 22px; font-weight: 800; color: #0f172a;
+    border-left: 4px solid #2563eb; padding-left: 14px;
+    margin-bottom: 8px;
+  }
+  .section-desc { font-size: 14px; color: #64748b; margin-bottom: 28px; padding-left: 18px; }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .stack-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .stack-card:hover { border-color: #93c5fd; box-shadow: 0 4px 16px rgba(37,99,235,0.08); }
+
+  .stack-card-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; padding-bottom: 14px;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .stack-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    color: #fff; font-weight: 900; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stack-icon.be { background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); }
+  .stack-icon.fe { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); }
+  .stack-icon.db { background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%); }
+  .stack-icon.infra { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); }
+  .stack-icon.pay { background: linear-gradient(135deg, #db2777 0%, #ec4899 100%); }
+  .stack-icon.media { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
+
+  .stack-card-name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .stack-card-sub { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+  .tech-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .tech-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    background: #fff; border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    font-size: 13px;
+  }
+  .tech-name { font-weight: 700; color: #1e293b; }
+  .tech-version { font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+  .tech-purpose { font-size: 12px; color: #475569; }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .feature-row {
+    display: flex; align-items: start; gap: 12px;
+    padding: 14px 16px;
+    background: #f8fafc; border-radius: 8px;
+    border-left: 3px solid #2563eb;
+  }
+  .feature-num {
+    flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #2563eb; color: #fff;
+    font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feature-text { font-size: 13px; color: #334155; line-height: 1.5; }
+  .feature-text strong { color: #0f172a; }
+
+  .arch-box {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 12px;
+    padding: 28px;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  .arch-box .comment { color: #64748b; }
+  .arch-box .key { color: #60a5fa; font-weight: 700; }
+  .arch-box .val { color: #fbbf24; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  th {
+    background: #1e3a8a; color: #fff;
+    padding: 12px 14px; text-align: left;
+    font-weight: 700; font-size: 13px;
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+  }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eff6ff; }
+
+  .footer {
+    background: #f1f5f9;
+    padding: 24px 56px;
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .highlight {
+    background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+    padding: 1px 6px; border-radius: 3px; font-weight: 700;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #dbeafe; color: #1e40af;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+    margin-right: 4px;
+  }
+  .pill.green { background: #d1fae5; color: #065f46; }
+  .pill.orange { background: #fed7aa; color: #9a3412; }
+  .pill.purple { background: #e9d5ff; color: #6b21a8; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">TECH STACK PROPOSAL</div>
+    <div class="title">클라리넷하우스 쇼핑몰 리뉴얼<br>기술 스택 사용 예정 문서</div>
+    <div class="subtitle">디지털 콘텐츠(악보 PDF · MR MP3) 판매 플랫폼 풀스택 구축안</div>
+    <div class="meta">
+      <div class="meta-item"><span class="meta-label">프로젝트</span><span class="meta-value">Clarinet House Mall Renewal</span></div>
+      <div class="meta-item"><span class="meta-label">개발 기간</span><span class="meta-value">2개월 (8주)</span></div>
+      <div class="meta-item"><span class="meta-label">아키텍처</span><span class="meta-value">풀스택 모노레포 (BE+FE 분리)</span></div>
+      <div class="meta-item"><span class="meta-label">작성일</span><span class="meta-value">2026-05-26</span></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- 1. 개요 -->
+    <div class="section">
+      <div class="section-title">1. 프로젝트 개요</div>
+      <div class="section-desc">기존 ASP 기반 클라리넷하우스 쇼핑몰을 모던 풀스택 구조로 리뉴얼합니다.</div>
+
+      <div class="feature-grid">
+        <div class="feature-row">
+          <div class="feature-num">1</div>
+          <div class="feature-text"><strong>디지털 콘텐츠 판매</strong><br>악보(PDF), MR(MP3) 중심, 수천 개 상품 확장 대응</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">2</div>
+          <div class="feature-text"><strong>결제 후 자동 다운로드</strong><br>악보 즉시 인쇄, 음원 다운로드 + 유효기간 자동 종료</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">3</div>
+          <div class="feature-text"><strong>관리자 페이지</strong><br>관리자 직접 상품 등록(PDF/MP3/ZIP), 구매내역 관리</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">4</div>
+          <div class="feature-text"><strong>미리보기·미리듣기</strong><br>악보 PDF 일부 페이지 워터마크 미리보기, MP3 30초 미리듣기</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">5</div>
+          <div class="feature-text"><strong>적립금 / 검색 태그</strong><br>구매 적립·사용 시스템 + 검색어 태그 기반 필터링</div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-num">6</div>
+          <div class="feature-text"><strong>관리자 통합</strong><br>4단계 카테고리 · 다단계 권한 · 매출/구매 통계</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 기술 스택 -->
+    <div class="section">
+      <div class="section-title">2. 기술 스택 (I-Fit 프로젝트 기준 동일 적용)</div>
+      <div class="section-desc">검증된 동일 스택으로 학습/유지보수 비용 최소화 및 안정성 확보</div>
+
+      <div class="stack-grid">
+
+        <!-- Backend -->
+        <div class="stack-card">
+          <div class="stack-card-head">
+            <div class="stack-icon be">BE</div>
+            <div>
+              <div class="stack-card-name">Backend</div>
+              <div class="stack-card-sub">API 서버 · 비즈니스 로직</div>
+            </div>
+          </div>
+          <ul class="tech-list">
+            <li class="tech-item"><span class="tech-name">NestJS</span><span class="tech-version">^10.4.0</span></li>
+            <li class="tech-item"><span class="tech-name">TypeScript</span><span class="tech-version">^5.5.4</span></li>
+            <li class="tech-item"><span class="tech-name">TypeORM</span><span class="tech-version">^0.3.20</span></li>
+            <li class="tech-item"><span class="tech-name">class-validator / transformer</span><span class="tech-version">^0.14.1</span></li>
+            <li class="tech-item"><span class="tech-name">Passport (JWT/Local/Kakao/Google)</span><span class="tech-version">^0.7.0</span></li>
+            <li class="tech-item"><span class="tech-name">bcrypt</span><span class="tech-version">^6.0.0</span></li>
+          </ul>
+        </div>
+
+        <!-- Frontend -->
+        <div class="stack-card">
+          <div class="stack-card-head">
+            <div class="stack-icon fe">FE</div>
+            <div>
+              <div class="stack-card-name">Frontend</div>
+              <div class="stack-card-sub">사용자 쇼핑몰 + 관리자 페이지</div>
+            </div>
+          </div>
+          <ul class="tech-list">
+            <li class="tech-item"><span class="tech-name">React</span><span class="tech-version">^18.3.1</span></li>
+            <li class="tech-item"><span class="tech-name">Vite</span><span class="tech-version">^5.4.0</span></li>
+            <li class="tech-item"><span class="tech-name">TypeScript</span><span class="tech-version">^5.5.4</span></li>
+            <li class="tech-item"><span class="tech-name">React Router DOM</span><span class="tech-version">^6.26.0</span></li>
+            <li class="tech-item"><span class="tech-name">Zustand</span><span class="tech-version">^4.5.4</span></li>
+            <li class="tech-item"><span class="tech-name">Axios</span><span class="tech-version">^1.7.7</span></li>
+          </ul>
+        </div>
+
+        <!-- DB -->
+        <div class="stack-card">
+          <div class="stack-card-head">
+            <div class="stack-icon db">DB</div>
+            <div>
+              <div class="stack-card-name">Database</div>
+              <div class="stack-card-sub">상품 · 회원 · 주문 · 적립금</div>
+            </div>
+          </div>
+          <ul class="tech-list">
+            <li class="tech-item"><span class="tech-name">MariaDB / MySQL</span><span class="tech-version">8.x</span></li>
+            <li class="tech-item"><span class="tech-name">mysql2</span><span class="tech-version">^3.11.0</span></li>
+            <li class="tech-item"><span class="tech-name">TypeORM Migration</span><span class="tech-version">^0.3.20</span></li>
+            <li class="tech-item"><span class="tech-name">Redis (옵션 · 캐시/세션)</span><span class="tech-version">7.x</span></li>
+          </ul>
+        </div>
+
+        <!-- 파일/미디어 -->
+        <div class="stack-card">
+          <div class="stack-card-head">
+            <div class="stack-icon media">FS</div>
+            <div>
+              <div class="stack-card-name">파일 · 미디어 처리</div>
+              <div class="stack-card-sub">PDF · MP3 · ZIP 업로드 / 변환</div>
+            </div>
+          </div>
+          <ul class="tech-list">
+            <li class="tech-item"><span class="tech-name">Multer (업로드)</span><span class="tech-version">^2.1.1</span></li>
+            <li class="tech-item"><span class="tech-name">서버 파일 스토리지 (호스팅 디스크)</span><span class="tech-version">-</span></li>
+            <li class="tech-item"><span class="tech-name">Sharp (이미지 처리)</span><span class="tech-version">^0.34.5</span></li>
+            <li class="tech-item"><span class="tech-name">pdf-lib (PDF 워터마크/미리보기)</span><span class="tech-version">^1.17</span></li>
+            <li class="tech-item"><span class="tech-name">ffmpeg-static (MP3 30초 컷)</span><span class="tech-version">^5.2</span></li>
+            <li class="tech-item"><span class="tech-name">서명 URL (자체 JWT 토큰)</span><span class="tech-version">-</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. 필수 기능 매핑 -->
+    <div class="section">
+      <div class="section-title">3. 필수 기능 ↔ 기술 매핑</div>
+      <div class="section-desc">요청하신 11개 필수 기능을 각 기술로 어떻게 구현하는지 정리합니다.</div>
+
+      <table>
+        <thead>
+          <tr><th style="width:60px;">#</th><th>요구 기능</th><th>구현 방식 / 기술</th><th style="width:100px;">유형</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>결제 후 자동 다운로드</strong></td><td>기존 결제(XPay) 완료 콜백 수신 → 다운로드 토큰(JWT) 생성 → 인증된 다운로드 URL 발급 → 메일/페이지 자동 노출</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>2</td><td><strong>PDF/MP3/ZIP 업로드</strong></td><td>관리자 페이지 Multer 업로드 (대용량 청크 지원), MIME 검증, ZIP은 선택 업로드</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>3</td><td><strong>관리자 페이지</strong></td><td>React Admin (별도 빌드) + JWT Role-based Guard (admin/super-admin)</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>4</td><td><strong>관리자 상품 직접 등록</strong></td><td>4단계 카테고리·태그·가격·적립금·아이콘·미리보기파일·전체파일·MR 입력 폼 (기존 운영 UI 호환)</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>5</td><td><strong>구매내역 관리</strong></td><td>Orders + OrderItems + Downloads 테이블, 관리자 검색/필터/엑셀 export</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>6</td><td><strong>다운로드 제한(유효기간 자동 종료)</strong></td><td>downloads 테이블에 expires_at, max_count 컬럼 + 다운로드 시 검증 미들웨어 (예: 악보 1년/MR 1개월)</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>7</td><td><strong>악보 미리보기</strong></td><td>pdf-lib로 첫 1~2페이지 워터마크 삽입 후 별도 경로 저장 → 프론트는 PDF.js로 뷰어 렌더</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>8</td><td><strong>음원 미리듣기</strong></td><td>ffmpeg-static으로 30초 컷 자동 생성 + SoundCloud iframe 임베드도 병행 지원</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>9</td><td><strong>적립금</strong></td><td>RewardTransactions 테이블 (적립/사용/소멸), 주문 시 % 적립, 결제 시 사용 차감, 1년 유효기간</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>10</td><td><strong>검색어 태그</strong></td><td>tags + product_tags M:N 테이블, MySQL FULLTEXT 인덱스 + 자동완성 (Trie 또는 Elastic 옵션)</td><td><span class="pill">필수</span></td></tr>
+          <tr><td>11</td><td>비회원 구매</td><td>guest_orders 별도 처리, 이메일+주문번호 인증으로 다운로드 페이지 접근</td><td><span class="pill green">옵션</span></td></tr>
+          <tr><td>12</td><td>견적서 출력</td><td>PDF 자동 생성 (pdfmake) + 다운로드 링크 메일 발송</td><td><span class="pill green">옵션</span></td></tr>
+          <tr><td>13</td><td>필터링 강화(장르·악기편성)</td><td>카테고리 4단계 + 다중 태그 + 악기편성 attribute 필터링</td><td><span class="pill green">옵션</span></td></tr>
+          <tr><td>14</td><td>다국어(번역)</td><td>react-i18next + 백엔드 상품설명 다국어 컬럼</td><td><span class="pill green">옵션</span></td></tr>
+          <tr><td>15</td><td>게시판 정리</td><td>공지·Q&amp;A·후기 통합 board 도메인 + 첨부파일 업로드</td><td><span class="pill green">옵션</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. 보안/운영 -->
+    <div class="section">
+      <div class="section-title">4. 보안 · 운영 · 마이그레이션</div>
+      <div class="section-desc">기존 사이트 Q&amp;A에서 우려한 항목에 대한 대응 방안</div>
+
+      <table>
+        <thead>
+          <tr><th style="width:200px;">항목</th><th>대응 방안</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>모바일 최적화</strong></td><td>반응형(모바일 퍼스트) + CSS Modules 활용</td></tr>
+          <tr><td><strong>보안 (해킹·취약점)</strong></td><td>JWT + HttpOnly Cookie, bcrypt 해싱, class-validator 입력검증, SQL Injection·XSS·CSRF 방어, Rate Limit (nest-throttler), Helmet 미들웨어, 다운로드 토큰 단일 사용 옵션</td></tr>
+          <tr><td><strong>호스팅 환경</strong></td><td>고객사 보유 호스팅(또는 국내 호스팅사 - 카페24/가비아/닷홈 등) 활용. Node.js 가능 환경 필요. 구체 사양은 별도 협의</td></tr>
+          <tr><td><strong>DB 이전 (마이그레이션)</strong></td><td>기존 ASP/MSSQL 데이터(상품·회원·구매내역) → TypeORM 마이그레이션 스크립트로 1회 전환, 회원 비밀번호는 재설정 안내(기존 해싱방식 불일치 시)</td></tr>
+          <tr><td><strong>소유권 이전</strong></td><td>호스팅·도메인·소스코드 모두 고객사 명의로 추후 이전 가능. 인수인계 문서 제공</td></tr>
+          <tr><td><strong>제작업체 폐업 대비</strong></td><td>전체 소스코드 + DB 스키마 + 운영 매뉴얼 일체 고객사 인계, 일반적인 OSS 스택이라 타 업체 인계 용이</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. 외부 서비스 -->
+    <div class="section">
+      <div class="section-title">5. 외부 서비스 · API 의존성</div>
+      <div class="section-desc">초기 셋업 시 고객사 계정 발급/연동이 필요한 외부 서비스 목록</div>
+
+      <table>
+        <thead>
+          <tr><th style="width:200px;">서비스</th><th>용도</th><th style="width:120px;">계정 주체</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>호스팅 (별도 협의)</td><td>웹 서버 · 파일 저장 (Node.js 가능 환경)</td><td>고객사</td></tr>
+          <tr><td>XPay (기존 결제)</td><td>기존 운영 중인 결제 모듈 그대로 연동</td><td>고객사 (기존 계정 유지)</td></tr>
+          <tr><td>Kakao / Google OAuth</td><td>소셜 로그인</td><td>고객사 (개발자 계정)</td></tr>
+          <tr><td>SoundCloud</td><td>음원 미리듣기 임베드 (기존 유지)</td><td>고객사 (기존 계정)</td></tr>
+          <tr><td>도메인 (가비아/카페24 등)</td><td>clarinethouse.com 유지/이전</td><td>고객사</td></tr>
+          <tr><td>SMTP (네이버웍스/Mailgun)</td><td>주문확인·다운로드 안내메일</td><td>고객사</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 클라리넷하우스 쇼핑몰 리뉴얼 프로젝트 · 기술 스택 사용 예정 문서 v1.0
+  </div>
+</div>
+</body>
+</html>

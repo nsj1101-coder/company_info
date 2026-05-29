@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MaxImpact — 플랫폼 등록 전략 보고서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #3182F6;
+    --blue-light: #EBF3FF;
+    --blue-dim: rgba(49,130,246,0.12);
+    --green: #00B493;
+    --green-light: #E6FAF7;
+    --orange: #FF6B35;
+    --orange-light: #FFF0EB;
+    --purple: #7C3AED;
+    --purple-light: #F3EEFF;
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --text-primary: #191F28;
+    --text-secondary: #4E5968;
+    --text-tertiary: #8B95A1;
+    --border: #E5E8EB;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    word-break: keep-all;
+  }
+
+  /* ── 레이아웃 ── */
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px 120px; }
+
+  /* ── 헤더 ── */
+  .report-header {
+    background: linear-gradient(135deg, #0E1013 0%, #1A2035 100%);
+    border-radius: 24px;
+    padding: 56px 48px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(49,130,246,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(124,58,237,0.12) 0%, transparent 50%);
+  }
+  .report-header > * { position: relative; }
+  .report-tag {
+    display: inline-block;
+    background: rgba(49,130,246,0.2);
+    border: 1px solid rgba(49,130,246,0.35);
+    color: #7FB8FF;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .report-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .report-header p {
+    color: rgba(255,255,255,0.55);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .header-meta-item span:first-child {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .header-meta-item span:last-child {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ── 목차 ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .toc h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .toc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .toc-list li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .toc-list li a:hover { color: var(--blue); }
+  .toc-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--blue-dim);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: 48px; }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-label .num {
+    width: 28px; height: 28px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-label h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+
+  /* ── 인사이트 배너 ── */
+  .insight {
+    background: var(--blue-dim);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #1A4B9E;
+    font-weight: 500;
+  }
+  .insight.green {
+    background: var(--green-light);
+    border-color: var(--green);
+    color: #006B5A;
+  }
+  .insight.orange {
+    background: var(--orange-light);
+    border-color: var(--orange);
+    color: #9B3500;
+  }
+  .insight.purple {
+    background: var(--purple-light);
+    border-color: var(--purple);
+    color: #4C1D95;
+  }
+
+  /* ── 테이블 ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { background: #F3F5F7; }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+  tbody td { padding: 14px 16px; color: var(--text-primary); vertical-align: top; }
+  tbody tr:hover td { background: #FAFBFC; }
+
+  /* ── 배지 ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-orange { background: var(--orange-light); color: var(--orange); }
+  .badge-purple { background: var(--purple-light); color: var(--purple); }
+  .badge-gray { background: #F3F5F7; color: var(--text-secondary); }
+
+  /* ── 서비스 카드 ── */
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .service-card-header {
+    background: linear-gradient(135deg, #0E1013, #1A2035);
+    padding: 20px 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .service-card-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .service-card-body { padding: 24px 28px; }
+
+  /* ── 패키지 테이블 ── */
+  .pkg-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  .pkg-table th {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+  }
+  .pkg-table th:nth-child(2) { background: #2A3550; }
+  .pkg-table th:nth-child(3) { background: var(--blue); }
+  .pkg-table th:nth-child(4) { background: #1A1A2E; }
+  .pkg-table td {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .pkg-table td:first-child {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    background: #FAFBFC;
+    white-space: nowrap;
+  }
+  .pkg-table td:nth-child(3) { background: rgba(49,130,246,0.04); }
+  .pkg-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--blue);
+  }
+
+  /* ── 카피 블록 ── */
+  .copy-block {
+    background: #F7F8FA;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text-primary);
+    white-space: pre-line;
+    position: relative;
+    margin: 12px 0;
+  }
+  .copy-block-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* ── 태그 목록 ── */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    background: var(--blue-dim);
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+
+  /* ── 우선순위 테이블 ── */
+  .priority-row-1 td:first-child { border-left: 3px solid #FFB800; }
+  .priority-row-2 td:first-child { border-left: 3px solid var(--text-tertiary); }
+  .priority-row-3 td:first-child { border-left: 3px solid var(--text-tertiary); }
+
+  /* ── 체크리스트 ── */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+  .checklist li::before {
+    content: '';
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--green-light);
+    border: 1.5px solid var(--green);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%2300B493' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── 구분선 ── */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .report-header { padding: 36px 24px; }
+    .report-header h1 { font-size: 26px; }
+    .card { padding: 20px; }
+    .service-card-body { padding: 20px; }
+    .copy-block { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- 헤더 -->
+  <header class="report-header">
+    <div class="report-tag">MaxImpact Internal Report</div>
+    <h1>플랫폼 등록 전략 &<br>경쟁사 분석 보고서</h1>
+    <p>크몽 · 위시켓 · 해외 플랫폼 포지셔닝 전략 및 실제 등록 텍스트</p>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <span>작성일</span>
+        <span>2026. 04. 04</span>
+      </div>
+      <div class="header-meta-item">
+        <span>작성</span>
+        <span>MaxImpact AI팀</span>
+      </div>
+      <div class="header-meta-item">
+        <span>분석 플랫폼</span>
+        <span>크몽 · 위시켓 · Upwork · Fiverr</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 목차 -->
+  <div class="toc">
+    <h3>목차</h3>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">1</span>플랫폼 비교 및 우선순위</a></li>
+      <li><a href="#s2"><span class="toc-num">2</span>크몽 — 경쟁 환경 분석</a></li>
+      <li><a href="#s3"><span class="toc-num">3</span>크몽 — MaxImpact 등록 서비스 (3종)</a></li>
+      <li><a href="#s4"><span class="toc-num">4</span>위시켓 — 파트너 프로필 전략</a></li>
+      <li><a href="#s5"><span class="toc-num">5</span>해외 플랫폼 — Upwork · Fiverr</a></li>
+      <li><a href="#s6"><span class="toc-num">6</span>실행 로드맵 (90일)</a></li>
+    </ul>
+  </div>
+
+
+  <!-- ① 플랫폼 비교 -->
+  <section class="section" id="s1">
+    <div class="section-label">
+      <div class="num">1</div>
+      <h2>플랫폼 비교 및 등록 우선순위</h2>
+    </div>
+
+    <div class="insight">
+      MaxImpact의 강점인 <strong>팀 구조 + 유지보수 실적</strong>이 가장 잘 먹히는 플랫폼부터 공략합니다. 개인 프리랜서가 많은 플랫폼에서 팀 단위는 희소성이 있어 유리합니다.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>플랫폼</th>
+            <th>타깃</th>
+            <th>단가</th>
+            <th>경쟁 강도</th>
+            <th>첫 수익 예상</th>
+            <th>추천 이유</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🥇 1위</strong></td>
+            <td><strong>크몽</strong></td>
+            <td>개인·소상공인·스타트업</td>
+            <td>50만~500만</td>
+            <td><span class="badge badge-orange">중상</span></td>
+            <td><span class="badge badge-green">2~4주</span></td>
+            <td>국내 최대, 즉시 시작, 유지보수 서비스 틈새</td>
+          </tr>
+          <tr>
+            <td><strong>🥈 2위</strong></td>
+            <td><strong>위시켓</strong></td>
+            <td>중소기업·스타트업</td>
+            <td>500만~5,000만</td>
+            <td><span class="badge badge-blue">중</span></td>
+            <td><span class="badge badge-orange">1~2개월</span></td>
+            <td>고단가, 기업 발주, 팀 단위 유리</td>
+          </tr>
+          <tr>
+            <td><strong>🥉 3위</strong></td>
+            <td><strong>Upwork</strong></td>
+            <td>글로벌 스타트업·기업</td>
+            <td>$55~95/hr</td>
+            <td><span class="badge badge-orange">중상</span></td>
+            <td><span class="badge badge-orange">2~3개월</span></td>
+            <td>달러 수익, 장기 계약, 에이전시 등록 가능</td>
+          </tr>
+          <tr>
+            <td>4위</td>
+            <td>Fiverr</td>
+            <td>글로벌 소규모 클라이언트</td>
+            <td>$50~500</td>
+            <td><span class="badge badge-orange">높음</span></td>
+            <td><span class="badge badge-green">1~2주</span></td>
+            <td>리뷰 빠르게 쌓기, 브랜드 인지도</td>
+          </tr>
+          <tr>
+            <td>5위</td>
+            <td>탈잉·클래스101</td>
+            <td>개발자 지망생</td>
+            <td>강의 건당</td>
+            <td><span class="badge badge-blue">중</span></td>
+            <td><span class="badge badge-gray">3개월+</span></td>
+            <td>브랜드 구축, 수동 소득</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ② 크몽 경쟁 분석 -->
+  <section class="section" id="s2">
+    <div class="section-label">
+      <div class="num">2</div>
+      <h2>크몽 — 경쟁 환경 분석</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>IT프로그래밍 카테고리 상위 판매 패턴</div>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr><th>항목</th><th>상위 판매자 공통점</th><th>MaxImpact 대응 전략</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>제목 구조</td>
+              <td>기술명 + 핵심 기능 + 차별점 (35자 내)</td>
+              <td>"Next.js·PHP | AI팀" 명시로 신뢰도↑</td>
+            </tr>
+            <tr>
+              <td>가격 전략</td>
+              <td>베이직을 낮게 → 리뷰 먼저, 이후 상향</td>
+              <td>초반 베이직 30~40만원으로 리뷰 3건 확보</td>
+            </tr>
+            <tr>
+              <td>설명 구조</td>
+              <td>수치 → 기술스택 → 납품구성물 → 주의사항</td>
+              <td>동일 구조 적용, "유지보수 5건" 수치 강조</td>
+            </tr>
+            <tr>
+              <td>포트폴리오</td>
+              <td>실제 스크린샷 최소 5장</td>
+              <td>세무플랫폼·인테리어 플랫폼 캡처 첨부</td>
+            </tr>
+            <tr>
+              <td>응답 속도</td>
+              <td>1시간 내 응답 → 알고리즘 상위 노출</td>
+              <td>크몽 앱 알림 ON, 첫 2주 빠른 응답 집중</td>
+            </tr>
+            <tr>
+              <td>태그</td>
+              <td>10개 꽉 채움, 주요 기술명 포함</td>
+              <td>아래 태그 전략 참조</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="insight orange">
+      <strong>주의:</strong> 크몽은 초기 리뷰가 없으면 노출이 매우 낮습니다. 지인 첫 구매 1~2건으로 리뷰를 선제 확보하거나, 베이직 패키지를 의도적으로 낮게 잡아 빠르게 실 구매 유도를 권장합니다.
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>크몽 vs 위시켓 — 클라이언트 유형 차이</div>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr><th></th><th>크몽</th><th>위시켓</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>주요 클라이언트</td><td>개인 사업자, 소상공인, 1인 스타트업</td><td>중소기업, VC 투자 스타트업, 대기업 계열사</td></tr>
+            <tr><td>의사결정 속도</td><td>빠름 (당일~3일)</td><td>느림 (2주~1개월)</td></tr>
+            <tr><td>예산 민감도</td><td>높음 — 가격 비교 많음</td><td>낮음 — 품질·신뢰도 중심</td></tr>
+            <tr><td>프로젝트 규모</td><td>소~중 (50만~300만)</td><td>중~대 (500만~수천만)</td></tr>
+            <tr><td>재계약 가능성</td><td>낮음</td><td>높음</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ③ 크몽 등록 텍스트 -->
+  <section class="section" id="s3">
+    <div class="section-label">
+      <div class="num">3</div>
+      <h2>크몽 — MaxImpact 등록 서비스 (3종)</h2>
+    </div>
+
+    <!-- 서비스 1 -->
+    <div class="service-card">
+      <div class="service-card-header">
+        <div>
+          <div style="font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">서비스 ①  메인 서비스</div>
+          <h3>기업 맞춤 웹서비스 풀스택 개발 | Next.js · PHP | AI팀 MaxImpact</h3>
+        </div>
+        <span class="badge badge-blue" style="white-space:nowrap; flex-shrink:0;">주력 상품</span>
+      </div>
+      <div class="service-card-body">
+
+        <span class="copy-block-label">서비스 소개 (구매 전 노출되는 150자 요약)</span>
+        <div class="copy-block">런칭 3개월 만에 유지보수 계약 5건 달성한 AI 개발팀입니다. 기획→디자인→개발→배포→유지보수까지 원스톱으로 제공합니다. 세무플랫폼·인테리어 중개 등 실제 서비스 운영 레퍼런스 보유.</div>
+
+        <span class="copy-block-label">서비스 상세 설명 (본문 전체)</span>
+        <div class="copy-block">안녕하세요, MaxImpact AI 개발팀입니다.
+
+저희는 단순 외주 개발이 아닌, 서비스가 실제로 성장하도록 함께하는 기술 파트너입니다.
+
+━━━━━━━━━━━━━━━━━━━━━
+✅ 왜 MaxImpact인가요?
+━━━━━━━━━━━━━━━━━━━━━
+
+• 런칭 3개월 만에 유지보수 계약 5건 달성 — 납품 후에도 찾는 팀
+• 기획 전문가(PM) + 백엔드 + 프론트엔드 + 디자이너 풀팀 구성
+• OWASP 기반 보안 코딩 + AWS/Vercel CI/CD 자동 배포
+• Agile 스프린트 방식으로 2주마다 진행 상황 공유
+
+━━━━━━━━━━━━━━━━━━━━━
+🛠 기술 스택
+━━━━━━━━━━━━━━━━━━━━━
+
+프론트엔드: React, Next.js 14+, TypeScript, Tailwind CSS
+백엔드: PHP 8.x (MVC), Node.js, REST API, JWT 인증
+데이터베이스: MySQL / MariaDB / PostgreSQL
+인프라: AWS EC2/RDS, Vercel, GitHub Actions, Docker
+기타: Figma 기획, ERD 설계, 관리자 페이지 포함
+
+━━━━━━━━━━━━━━━━━━━━━
+📦 납품 구성물
+━━━━━━━━━━━━━━━━━━━━━
+
+✓ 소스코드 전체 납품 (Git 저장소)
+✓ 배포 완료 상태로 납품
+✓ 관리자 페이지 포함
+✓ 기능 명세서 + API 문서
+✓ 1개월 무상 AS 기본 포함
+
+━━━━━━━━━━━━━━━━━━━━━
+💼 레퍼런스
+━━━━━━━━━━━━━━━━━━━━━
+
+• 세무 종합 플랫폼 — 세무사·고객 매칭, 문서 관리, 결제 시스템 (유지보수 진행 중)
+• 인테리어 중개 매칭 플랫폼 — 지역별 업체 매칭, 견적, 리뷰 (유지보수 진행 중)
+
+상담 시 포트폴리오 상세본 제공 가능합니다.
+
+━━━━━━━━━━━━━━━━━━━━━
+⚠️ 구매 전 확인해 주세요
+━━━━━━━━━━━━━━━━━━━━━
+
+• 프로젝트 규모·기능에 따라 가격이 달라집니다 → 먼저 문의 주세요
+• 기획서가 없어도 PM이 함께 기획합니다
+• 급하신 경우 일정 조율 가능합니다 (먼저 문의)</div>
+
+        <span class="copy-block-label">패키지 구성</span>
+        <div class="table-wrap" style="margin:12px 0;">
+          <table class="pkg-table">
+            <thead>
+              <tr>
+                <th style="background:#F3F5F7; color:var(--text-secondary);">항목</th>
+                <th>베이직</th>
+                <th>스탠다드 ★</th>
+                <th>프리미엄</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>패키지명</td>
+                <td>랜딩페이지</td>
+                <td>중소형 웹서비스</td>
+                <td>대형 풀스택 시스템</td>
+              </tr>
+              <tr>
+                <td>가격</td>
+                <td><span class="pkg-price">50만원</span></td>
+                <td><span class="pkg-price">180만원</span></td>
+                <td><span class="pkg-price">450만원~</span></td>
+              </tr>
+              <tr>
+                <td>기간</td>
+                <td>7일</td>
+                <td>30일</td>
+                <td>60일~</td>
+              </tr>
+              <tr>
+                <td>포함 내용</td>
+                <td>반응형 랜딩 1페이지, 관리자 미포함</td>
+                <td>핵심 기능 3~5개, 관리자 포함, 1개월 AS</td>
+                <td>전체 기획+설계+개발+배포, 3개월 AS, CI/CD</td>
+              </tr>
+              <tr>
+                <td>수정 횟수</td>
+                <td>3회</td>
+                <td>무제한</td>
+                <td>무제한</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <span class="copy-block-label">등록 태그 (10개)</span>
+        <div class="tag-list">
+          <span class="tag">#웹개발</span>
+          <span class="tag">#풀스택개발</span>
+          <span class="tag">#Nextjs</span>
+          <span class="tag">#PHP개발</span>
+          <span class="tag">#반응형웹</span>
+          <span class="tag">#관리자페이지</span>
+          <span class="tag">#웹서비스개발</span>
+          <span class="tag">#스타트업개발</span>
+          <span class="tag">#외주개발</span>
+          <span class="tag">#유지보수</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 서비스 2 -->
+    <div class="service-card">
+      <div class="service-card-header">
+        <div>
+          <div style="font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">서비스 ②  유지보수 특화</div>
+          <h3>기존 웹서비스 유지보수·기능 추가 | 월정액 관리 | 빠른 대응 보장</h3>
+        </div>
+        <span class="badge badge-green" style="white-space:nowrap; flex-shrink:0;">틈새 서비스</span>
+      </div>
+      <div class="service-card-body">
+
+        <div class="insight green" style="margin-top:0;">
+          크몽에서 유지보수 월정액 서비스는 경쟁자가 거의 없습니다. MaxImpact의 실적(5건)을 그대로 차별화 포인트로 활용할 수 있는 블루오션 카테고리입니다.
+        </div>
+
+        <span class="copy-block-label">서비스 소개 (150자 요약)</span>
+        <div class="copy-block">이미 운영 중인 웹서비스의 버그 수정·기능 추가·서버 관리를 월정액으로 맡겨주세요. 현재 5개 서비스를 장기 유지보수 중입니다. React, Next.js, PHP, WordPress 모두 가능합니다.</div>
+
+        <span class="copy-block-label">패키지 구성</span>
+        <div class="table-wrap" style="margin:12px 0;">
+          <table class="pkg-table">
+            <thead>
+              <tr>
+                <th style="background:#F3F5F7; color:var(--text-secondary);">항목</th>
+                <th>라이트</th>
+                <th>스탠다드 ★</th>
+                <th>프리미엄</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>가격</td><td><span class="pkg-price">20만/월</span></td><td><span class="pkg-price">45만/월</span></td><td><span class="pkg-price">90만/월</span></td></tr>
+              <tr><td>대응 시간</td><td>48시간 내</td><td>24시간 내</td><td>8시간 내</td></tr>
+              <tr><td>작업 범위</td><td>버그 수정 + 소규모 수정</td><td>버그 수정 + 기능 추가 20시간</td><td>버그 수정 + 기능 추가 40시간 + 성능 최적화</td></tr>
+              <tr><td>진행 보고</td><td>월 1회</td><td>주 1회</td><td>주 2회</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <span class="copy-block-label">등록 태그 (10개)</span>
+        <div class="tag-list">
+          <span class="tag">#웹유지보수</span>
+          <span class="tag">#월정액유지보수</span>
+          <span class="tag">#버그수정</span>
+          <span class="tag">#기능추가</span>
+          <span class="tag">#서버관리</span>
+          <span class="tag">#React유지보수</span>
+          <span class="tag">#PHP유지보수</span>
+          <span class="tag">#WordPress</span>
+          <span class="tag">#장기계약</span>
+          <span class="tag">#빠른대응</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 서비스 3 -->
+    <div class="service-card">
+      <div class="service-card-header">
+        <div>
+          <div style="font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px;">서비스 ③  AI 기능 특화</div>
+          <h3>AI 기능 웹서비스 개발 | ChatGPT·Claude API 연동 | 업무 자동화 시스템</h3>
+        </div>
+        <span class="badge badge-purple" style="white-space:nowrap; flex-shrink:0;">성장 서비스</span>
+      </div>
+      <div class="service-card-body">
+
+        <div class="insight purple" style="margin-top:0;">
+          AI API 연동 수요는 2024~2025년 급증했지만 실제로 제대로 구현하는 팀은 적습니다. "ChatGPT" 키워드가 크몽 IT 검색 상위 노출에 매우 유리합니다.
+        </div>
+
+        <span class="copy-block-label">서비스 소개 (150자 요약)</span>
+        <div class="copy-block">ChatGPT, Claude API를 활용한 AI 기능을 귀사 서비스에 통합해드립니다. AI 상담봇, 문서 자동화, 데이터 분석 대시보드, 자동화 워크플로우 개발 전문팀입니다.</div>
+
+        <span class="copy-block-label">등록 태그 (10개)</span>
+        <div class="tag-list">
+          <span class="tag">#AI개발</span>
+          <span class="tag">#ChatGPT연동</span>
+          <span class="tag">#Claude API</span>
+          <span class="tag">#업무자동화</span>
+          <span class="tag">#챗봇개발</span>
+          <span class="tag">#AI웹서비스</span>
+          <span class="tag">#LLM개발</span>
+          <span class="tag">#데이터대시보드</span>
+          <span class="tag">#API연동</span>
+          <span class="tag">#자동화시스템</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ④ 위시켓 -->
+  <section class="section" id="s4">
+    <div class="section-label">
+      <div class="num">4</div>
+      <h2>위시켓 — 파트너 프로필 전략</h2>
+    </div>
+
+    <div class="insight">
+      위시켓은 크몽과 달리 <strong>기업 담당자</strong>가 파트너를 직접 찾거나 프로젝트를 올립니다. 개인보다 팀·에이전시가 훨씬 유리하며, 유지보수 실적과 팀 구성이 핵심 신뢰 요소입니다.
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>팀 소개 (프로필 본문 전체)</div>
+      <div class="copy-block">MaxImpact는 기획·개발·디자인 전 과정을 원스톱으로 제공하는 AI 전문 개발팀입니다.
+
+[핵심 수치]
+• 런칭 후 3개월, 유지보수 계약 5건 달성
+• 평균 프로젝트 기간: 4~8주
+• 장기 유지보수 고객 비율: 100% (납품 프로젝트 전원 재계약)
+
+[전문 분야]
+✓ 중소기업 맞춤 웹서비스 (매칭 플랫폼, SaaS, 관리 시스템)
+✓ 레거시 시스템 현대화 (PHP → Next.js 마이그레이션)
+✓ AI 기능 통합 (ChatGPT API, 자동화 워크플로우)
+✓ 클라우드 인프라 구축 (AWS, CI/CD, 모니터링)
+
+[팀 구성]
+PM 1인 | 백엔드 개발자 | 프론트엔드 개발자 | UI/UX 디자이너
++ 검증된 프리랜서 네트워크 (필요 시 즉시 투입)
+
+[보유 기술]
+Next.js 14 · React 19 · TypeScript · PHP 8 · MySQL · AWS · Docker
+Figma · GitHub Actions · Vercel · Tailwind CSS · REST API · JWT</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>요율 및 설정값 가이드</div>
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead><tr><th>항목</th><th>권장 설정</th><th>이유</th></tr></thead>
+          <tbody>
+            <tr><td>시간당 요율</td><td><strong>70,000원/시간</strong></td><td>중급~고급 사이, 팀 단위 정당화</td></tr>
+            <tr><td>최소 프로젝트</td><td><strong>500만원</strong></td><td>소규모 단가 낭비 방지</td></tr>
+            <tr><td>선호 유형</td><td>웹서비스 개발, 플랫폼 구축, 유지보수</td><td>강점 영역 집중</td></tr>
+            <tr><td>가능 기간</td><td>4주 이상 프로젝트</td><td>단기 요건 작업 지양</td></tr>
+            <tr><td>포트폴리오</td><td>세무플랫폼 + 인테리어 플랫폼 2건 필수 등록</td><td>실제 운영 서비스 신뢰도</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>위시켓 프로젝트 지원 전략 — 제안서 작성 포인트</div>
+      <ul class="checklist" style="margin-top:4px;">
+        <li>프로젝트 공고 올라온 지 <strong>24시간 내 지원</strong> (조기 지원자 우대 경향)</li>
+        <li>제안서 첫 문단에 <strong>유사 프로젝트 레퍼런스</strong> 구체적으로 언급</li>
+        <li>예산 제시 시 <strong>마일스톤 분할</strong> (착수금 30% → 중간 30% → 완료 40%) 명시</li>
+        <li>일정은 <strong>버퍼 20% 포함</strong>한 현실적 기간 제시 (신뢰도 ↑)</li>
+        <li>팀 구성원 역할 간략 소개 포함 → 개인 프리랜서와 차별화</li>
+        <li>제안서 마지막에 <strong>"무료 기획 상담 30분"</strong> 제안으로 문 열기</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ⑤ 해외 플랫폼 -->
+  <section class="section" id="s5">
+    <div class="section-label">
+      <div class="num">5</div>
+      <h2>해외 플랫폼 — Upwork · Fiverr</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:#14A800;"></span>Upwork — 에이전시 프로필 (영문)</div>
+
+      <span class="copy-block-label">Profile Headline</span>
+      <div class="copy-block">Full-Stack Web Agency | Next.js · PHP · AI Integration | 5 Long-term Clients in 3 Months</div>
+
+      <span class="copy-block-label">Overview (전체 소개)</span>
+      <div class="copy-block">MaxImpact is a South Korea-based development team specializing in building production-ready web services from scratch.
+
+What sets us apart:
+→ 5 long-term maintenance contracts secured within 3 months of launch
+→ Full team: PM + Backend + Frontend + Designer (no freelancer handoffs)
+→ OWASP security practices built into every project
+→ Agile delivery with bi-weekly demos and transparent progress tracking
+
+Tech Stack:
+Next.js 14, React 19, TypeScript, PHP 8, MySQL, AWS, Docker, CI/CD, Figma
+
+Past work includes a legal/tax service matching platform and an interior contractor marketplace — both currently under ongoing maintenance contracts with the original clients.
+
+We don't just ship code. We build systems that clients want to keep running.
+
+Hourly Rate: $55/hr | Fixed-price projects preferred for larger scopes</div>
+
+      <div class="table-wrap" style="margin:16px 0 0;">
+        <table>
+          <thead><tr><th>설정 항목</th><th>권장값</th></tr></thead>
+          <tbody>
+            <tr><td>Hourly Rate</td><td><strong>$55/hr</strong> (초반 경쟁력, 리뷰 후 $75로 상향)</td></tr>
+            <tr><td>Profile Type</td><td>Agency (팀 단위 등록)</td></tr>
+            <tr><td>Availability</td><td>More than 30 hrs/week</td></tr>
+            <tr><td>English Level</td><td>Conversational (AI 번역 활용)</td></tr>
+            <tr><td>Job Categories</td><td>Web Development, Full Stack, PHP, React/Next.js</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:#1DBF73;"></span>Fiverr — 서비스 리스팅</div>
+
+      <span class="copy-block-label">Gig Title</span>
+      <div class="copy-block">I will build your full-stack web app with Next.js, React or PHP with admin panel</div>
+
+      <span class="copy-block-label">Gig Description</span>
+      <div class="copy-block">Hi, I'm from MaxImpact — a full-stack development team from South Korea.
+
+We build complete, production-ready web applications — not just landing pages.
+
+What you get:
+✅ Full-stack development (frontend + backend + database)
+✅ Admin dashboard included
+✅ Deployed and live on delivery
+✅ Source code delivered via GitHub
+✅ 30-day free support after delivery
+
+Our stack: Next.js 14, React, TypeScript, PHP 8, MySQL, AWS, Tailwind CSS
+
+We've built:
+• A tax professional matching platform (ongoing maintenance)
+• An interior contractor marketplace (ongoing maintenance)
+
+📩 Message me before ordering to confirm scope and timeline.</div>
+
+      <div class="insight green">
+        Fiverr는 빠른 리뷰 확보용입니다. 초반 2~3건을 저렴하게 수주해 5성 리뷰를 쌓은 뒤 가격을 올리는 전략이 효과적입니다.
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ⑥ 실행 로드맵 -->
+  <section class="section" id="s6">
+    <div class="section-label">
+      <div class="num">6</div>
+      <h2>실행 로드맵 (90일)</h2>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap" style="margin:0; border:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>기간</th>
+              <th>우선 작업</th>
+              <th>목표</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-blue">1~2주차</span></td>
+              <td>
+                크몽 계정 개설 + 서비스 3종 등록<br>
+                위시켓 파트너 프로필 작성<br>
+                포트폴리오 스크린샷 5장+ 준비
+              </td>
+              <td>플랫폼 노출 시작</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">3~4주차</span></td>
+              <td>
+                크몽 베이직 패키지 1~2건 저가 수주 → 리뷰 확보<br>
+                위시켓 프로젝트 공고 매일 확인 + 지원<br>
+                Upwork 에이전시 계정 개설
+              </td>
+              <td>크몽 첫 리뷰 3건</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-orange">2개월차</span></td>
+              <td>
+                크몽 베이직 가격 40만 → 60만 상향<br>
+                위시켓 첫 프로젝트 수주 목표<br>
+                Upwork 첫 제안서 10건 발송
+              </td>
+              <td>월 수익 200만+ 달성</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-green">3개월차</span></td>
+              <td>
+                크몽 리뷰 10건+ → 상위 노출 안정화<br>
+                Fiverr 계정 개설 (영어권 수요 테스트)<br>
+                위시켓 유지보수 계약 전환 유도
+              </td>
+              <td>월 수익 500만+ / 플랫폼 안정화</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--orange);"></span>빠른 실행을 위한 체크리스트</div>
+      <ul class="checklist">
+        <li>크몽 계정 개설 시 사업자 인증 완료 (신뢰 배지 획득)</li>
+        <li>프로필 사진 — 팀 사진 또는 로고 (개인 프리랜서와 차별화)</li>
+        <li>포트폴리오 이미지 최소 5장 (세무플랫폼, 인테리어 플랫폼 캡처)</li>
+        <li>크몽 앱 설치 + 알림 ON → 문의 1시간 내 응답 (알고리즘 상위 노출)</li>
+        <li>서비스 소개에 "유지보수 5건" 수치 반드시 포함</li>
+        <li>위시켓 파트너 프로필에 실제 구현 기술 배지 최대한 등록</li>
+        <li>크몽 서비스 3종 → 상호 연계 (메인 서비스 → 유지보수 서비스로 업셀링)</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card" style="background:linear-gradient(135deg,#F0F7FF,#E8F3FF); border-color:#C5DCF8;">
+      <div class="card-title" style="color:#1A4B9E;"><span class="dot"></span>결론 요약</div>
+      <p style="font-size:14px; color:#2A5BA8; line-height:1.9;">
+        MaxImpact의 핵심 무기는 <strong>"런칭 3개월, 유지보수 5건"</strong>이라는 수치입니다.<br>
+        이 수치를 모든 플랫폼 텍스트 전면에 배치하고, 개인 프리랜서와 달리 <strong>PM + 풀팀</strong>이 붙는다는 점을 차별화 포인트로 일관되게 강조하세요.<br><br>
+        크몽 3종 서비스 등록 → 위시켓 파트너 프로필 → Upwork 순으로 진행하되,<br>
+        <strong>첫 달은 크몽 리뷰 확보에 집중</strong>하는 것이 가장 중요합니다.
+      </p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

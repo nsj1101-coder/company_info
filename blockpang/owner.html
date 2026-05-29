@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>블럭팡 점주 콘솔 · 명지점 (PC 미리보기)</title>
+<script>
+  // Mobile auto-redirect — phones go to owner-m
+  (function() {
+    try {
+      var ua = navigator.userAgent || '';
+      var isPhone = /iPhone|Android.*Mobile|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      var isNarrow = window.innerWidth <= 640;
+      if (isPhone || isNarrow) location.replace('/blockpang/owner-m');
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #111317;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #ecedf2;
+    --owner: #6d28d9;
+    --owner-soft: #f1ebff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 18% 0%, rgba(109,40,217,0.10), transparent 38%),
+      radial-gradient(circle at 82% 100%, rgba(29,126,255,0.10), transparent 38%),
+      var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  button, a { font-family: inherit; cursor: pointer; }
+
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px;
+    gap: 40px;
+  }
+
+  /* Side info panel */
+  .info-panel {
+    max-width: 320px;
+    color: var(--ink);
+  }
+  .info-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--owner-soft);
+    color: var(--owner);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
+  }
+  .info-eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--owner);
+  }
+  .info-panel h1 {
+    font-size: 2rem; font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.025em;
+    margin-bottom: 14px;
+  }
+  .info-panel h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--owner), #8b5cf6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .info-panel p {
+    color: var(--muted); font-size: 0.95rem; line-height: 1.7;
+    margin-bottom: 22px;
+  }
+  .info-meta {
+    display: flex; flex-direction: column; gap: 10px;
+    font-size: 13px; color: var(--ink);
+  }
+  .info-meta .row { display: flex; align-items: center; gap: 10px; }
+  .info-meta .row .k { color: var(--muted); width: 80px; font-weight: 500; }
+  .info-meta .row .v { font-weight: 700; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 24px;
+    padding: 9px 16px;
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    transition: transform 0.1s ease, border-color 0.15s ease;
+  }
+  .back-link:hover { border-color: var(--ink); transform: translateX(-2px); }
+
+  /* Phone mockup */
+  .phone {
+    width: 393px;
+    height: 852px;
+    background: #1a1d23;
+    border-radius: 56px;
+    padding: 12px;
+    position: relative;
+    box-shadow:
+      0 40px 100px -30px rgba(13,17,23,0.5),
+      0 0 0 2px #2a2f38 inset;
+    flex-shrink: 0;
+  }
+  .phone::before {
+    content: ''; position: absolute;
+    top: 18px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px;
+    background: #0d1117; border-radius: 16px; z-index: 5;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    background: #f3f4f6;
+  }
+  .phone-screen iframe {
+    width: 100%; height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  /* Floating back-to-proposal */
+  .back-pill {
+    position: fixed;
+    top: 18px; left: 18px;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 0.86rem; font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 6px 18px -8px rgba(13,17,23,0.2);
+    border: 1px solid var(--line);
+    transition: transform 0.12s ease;
+  }
+  .back-pill:hover { transform: translateX(-2px); }
+
+  /* Responsive: hide info-panel on narrow desktop */
+  @media (max-width: 960px) {
+    .info-panel { display: none; }
+    .stage { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="/blockpang/" class="back-pill">← 제안서</a>
+
+<div class="stage">
+
+  <div class="info-panel">
+    <div class="info-eyebrow">OWNER · 점주 콘솔</div>
+    <h1>점주의 일을 절반으로,<br><em>본사의 통제는 두 배로.</em></h1>
+    <p>가맹점 점주가 카운터에서 한 손으로 매장을 운영합니다. 회원·대여·매출·재고를 한 화면에서, 본사와 실시간으로 소통하며.</p>
+
+    <div class="info-meta">
+      <div class="row"><span class="k">데모 매장</span><span class="v">블럭팡 명지점</span></div>
+      <div class="row"><span class="k">점주</span><span class="v">남정일</span></div>
+      <div class="row"><span class="k">타겟 디바이스</span><span class="v">iPhone · Android</span></div>
+      <div class="row"><span class="k">예상 사이즈</span><span class="v">393 × 852</span></div>
+    </div>
+
+    <a href="/blockpang/" class="back-link">← 제안서로 돌아가기</a>
+  </div>
+
+  <div class="phone">
+    <div class="phone-screen">
+      <iframe src="/blockpang/owner-m?embed=1" title="블럭팡 점주 콘솔 — 모바일 미리보기"></iframe>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

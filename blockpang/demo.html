@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>블럭팡 키오스크 데모</title>
+<script>
+  // Mobile auto-redirect (must run before render)
+  (function() {
+    try {
+      var ua = navigator.userAgent || '';
+      var isPhone = /iPhone|Android.*Mobile|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      var isNarrow = window.innerWidth <= 640;
+      if (isPhone || isNarrow) {
+        location.replace('/blockpang/demo-m');
+      }
+    } catch (e) {}
+  })();
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #111317;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg-soft: #f3f4f6;
+    --blue: #1d7eff;
+    --green: #1fb96e;
+    --green-soft: #e8faf0;
+    --navy: #1c2a3f;
+    --red: #ef2c4e;
+    --orange: #ff7a1a;
+    --orange-soft: #fff2e6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(255,122,26,0.10), transparent 38%),
+      radial-gradient(circle at 88% 100%, rgba(29,126,255,0.10), transparent 38%),
+      #f0f1f5;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ─── Tablet stage ─── */
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .tablet-wrap {
+    transform-origin: center center;
+  }
+  .tablet {
+    width: 768px;
+    height: 1024px;
+    background: #1a1d23;
+    border-radius: 36px;
+    padding: 18px;
+    position: relative;
+    box-shadow:
+      0 30px 80px -30px rgba(13,17,23,0.55),
+      0 0 0 2px #2a2f38 inset;
+  }
+  .tablet::after {
+    content: ''; position: absolute;
+    top: 24px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #2a2f38;
+    z-index: 5;
+  }
+  .screen {
+    width: 100%; height: 100%;
+    background: #f3f4f6;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  /* ─── Top bar ─── */
+  .topbar {
+    height: 72px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 48px 1fr 48px;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+  .back-btn {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .back-btn:hover { background: var(--bg-soft); }
+  .topbar-center {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .topbar-logo {
+    height: 32px; width: auto;
+  }
+  .topbar-store {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  /* ─── Brand selector ─── */
+  .brand-row {
+    height: 64px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .brand-row .brand-name {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .brand-row .chev {
+    font-size: 14px; color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ─── Category chips ─── */
+  .chips-wrap {
+    background: #fff;
+    padding: 8px 24px 20px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chips-wrap::-webkit-scrollbar { display: none; }
+  .chips {
+    display: flex; gap: 10px;
+    width: max-content;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 18px;
+    border: 1.5px solid #cfd5e0;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 15px; font-weight: 600;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    white-space: nowrap;
+  }
+  .chip .count {
+    color: var(--muted); font-weight: 600; font-size: 13px;
+  }
+  .chip.active {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+  .chip.active .count { color: rgba(255,255,255,0.85); }
+
+  /* ─── Product grid ─── */
+  .grid-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px 28px;
+    background: var(--bg-soft);
+    scroll-behavior: smooth;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    border: 1.5px solid transparent;
+    transition: border-color 0.18s ease, transform 0.12s ease;
+    cursor: pointer;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card.selected {
+    border-color: var(--green);
+  }
+  .card.with-actions .card-actions { display: grid; }
+
+  .card-badge {
+    position: absolute;
+    top: 14px; left: 14px;
+    background: var(--orange-soft);
+    color: var(--orange);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 5px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,122,26,0.3);
+    z-index: 1;
+  }
+  .card-badge.shop {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+  }
+
+  .card-img {
+    aspect-ratio: 1.1;
+    background: #f6f7fb;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .card-img img {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+  }
+
+  .card-body {
+    padding: 14px 16px 14px;
+    border-top: 1px solid var(--line);
+  }
+  .card-code {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #fff0f3;
+    color: var(--red);
+    border: 1px solid rgba(239,44,78,0.25);
+    font-size: 12px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card-name {
+    font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-price {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 17px; font-weight: 700;
+    color: var(--ink);
+  }
+  .card-price .unit {
+    font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+  .card-meta {
+    margin-top: 6px;
+    font-size: 12px; color: var(--muted);
+  }
+
+  .card-actions {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .card-actions button {
+    padding: 14px 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: background 0.18s ease;
+  }
+  .card-actions button:hover {
+    background: var(--bg-soft);
+  }
+  .card-actions button + button {
+    border-left: 1px solid var(--line);
+  }
+  .card-actions button .ico { font-size: 14px; opacity: 0.7; }
+
+  /* ─── Modal overlay ─── */
+  .overlay {
+    position: absolute; inset: 0;
+    background: rgba(13,17,23,0.55);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    z-index: 10;
+    animation: fadeIn 0.2s ease;
+  }
+  .overlay.show { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal {
+    background: #fff;
+    border-radius: 20px;
+    width: min(440px, 100%);
+    overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+    animation: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-head {
+    padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: #f6f7fb;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-title {
+    font-size: 17px; font-weight: 700;
+    color: var(--ink);
+  }
+  .modal-tag {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+  }
+  .modal-tag.green { background: var(--green); color: #fff; }
+  .modal-tag.navy  { background: var(--navy); color: #fff; }
+  .modal-close {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    color: var(--muted); font-size: 20px;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.06); }
+
+  .modal-body {
+    padding: 28px 24px 24px;
+  }
+
+  /* Phone modal */
+  .phone-label { font-size: 14px; color: var(--muted); text-align: center; }
+  .phone-display {
+    text-align: center;
+    font-size: 32px; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--ink);
+    margin: 10px 0 4px;
+    min-height: 44px;
+  }
+  .phone-display .blink {
+    display: inline-block; width: 2px; height: 0.9em;
+    background: var(--blue); vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+  .phone-hint {
+    text-align: center;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .keypad button {
+    aspect-ratio: 1.6;
+    background: #fff;
+    border: 1.5px solid #e2e6ec;
+    border-radius: 14px;
+    font-size: 22px; font-weight: 700;
+    color: var(--ink);
+    transition: background 0.12s ease, transform 0.08s ease;
+  }
+  .keypad button:hover { background: var(--bg-soft); }
+  .keypad button:active { transform: scale(0.97); }
+  .keypad .del {
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .keypad .ok {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green);
+    font-size: 16px;
+  }
+  .keypad .ok:hover { background: #18a35d; }
+  .keypad .ok:disabled {
+    background: #cfd5e0;
+    border-color: #cfd5e0;
+    color: #fff;
+    cursor: not-allowed;
+  }
+
+  /* Identity modal */
+  .id-body { text-align: center; }
+  .id-head-q {
+    font-size: 19px; font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .id-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: var(--green-soft);
+    color: #16804f;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .id-msg {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .id-msg strong { color: var(--ink); font-weight: 700; }
+  .id-product {
+    background: var(--bg-soft);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .id-product .name {
+    font-size: 14px; font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .id-product .desc {
+    font-size: 12px; color: var(--muted);
+  }
+  .id-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 8px;
+  }
+  .id-actions button {
+    padding: 14px 8px;
+    border-radius: 12px;
+    font-size: 14px; font-weight: 700;
+    transition: opacity 0.18s ease, transform 0.08s ease;
+  }
+  .id-actions button:active { transform: scale(0.98); }
+  .id-actions .no { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+  .id-actions .yes { background: var(--green); color: #fff; }
+  .id-actions .yes:hover { background: #18a35d; }
+  .id-actions .charge { background: var(--navy); color: #fff; }
+  .id-actions .charge:hover { background: #2a3b56; }
+
+  /* Done modal */
+  .done-body { text-align: center; padding: 32px 24px 24px; }
+  .done-name { font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+  .done-msg { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .done-msg strong { color: var(--ink); font-weight: 700; }
+  .done-btn {
+    background: var(--green);
+    color: #fff;
+    padding: 12px 36px;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    transition: background 0.18s ease, transform 0.08s ease;
+  }
+  .done-btn:hover { background: #18a35d; }
+  .done-btn:active { transform: scale(0.98); }
+
+  /* ─── Rental flow (blue) ─── */
+  .modal-head.blue { background: var(--blue); border-bottom-color: transparent; }
+  .modal-head.blue .modal-title { color: #fff; }
+  .modal-head.blue .modal-close { color: rgba(255,255,255,0.85); }
+  .modal-tag.blue { background: #fff; color: var(--blue); }
+  .modal-tag.blue-soft {
+    background: rgba(255,255,255,0.2); color: #fff;
+    backdrop-filter: blur(4px);
+  }
+
+  .auth-phone {
+    display: flex; gap: 10px;
+    justify-content: center; align-items: center;
+    margin: 8px 0 22px;
+  }
+  .auth-seg {
+    background: #f6f7fb;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 22px; font-weight: 700;
+    color: var(--muted);
+    min-width: 88px;
+    text-align: center;
+  }
+  .auth-seg.active {
+    background: #e6f6ee; border-color: var(--green);
+    color: var(--ink);
+  }
+  .auth-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 8px;
+  }
+  .auth-actions button {
+    padding: 13px 8px;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    transition: opacity 0.18s ease, transform 0.08s ease, background 0.18s ease;
+  }
+  .auth-actions button:active { transform: scale(0.98); }
+  .auth-actions .cancel { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+  .auth-actions .verify { background: var(--blue); color: #fff; }
+  .auth-actions .verify:hover { background: #1668d6; }
+
+  .auth-code-wrap {
+    margin-top: 16px;
+    display: none;
+    animation: slideDown 0.22s ease;
+  }
+  .auth-code-wrap.show { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .auth-code-input {
+    width: 100%;
+    padding: 14px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 0.4em;
+    font-family: inherit;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .auth-code-input::placeholder {
+    color: #9ca3af;
+    font-size: 13px;
+    letter-spacing: normal;
+    font-weight: 500;
+  }
+  .auth-code-input:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(29,126,255,0.15);
+  }
+  .auth-error {
+    font-size: 12px; color: #b91c1c;
+    margin-top: 6px;
+    text-align: center;
+    min-height: 16px;
+  }
+  .auth-code-ok {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    background: var(--blue);
+    color: #fff;
+    transition: background 0.18s ease, transform 0.08s ease;
+  }
+  .auth-code-ok:hover { background: #1668d6; }
+  .auth-code-ok:active { transform: scale(0.98); }
+
+  .id-status.blue { background: #e6f0ff; color: #1668d6; }
+  .id-actions.two-col { grid-template-columns: 1fr 1.5fr; }
+  .id-actions .yes-rent { background: var(--blue); color: #fff; }
+  .id-actions .yes-rent:hover { background: #1668d6; }
+
+  .done-rent-prod {
+    font-size: 14px; font-weight: 700;
+    color: var(--ink);
+    margin: 6px 0 16px;
+  }
+  .done-rent-btn {
+    background: var(--blue); color: #fff;
+    padding: 12px 36px;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 700;
+    transition: background 0.18s ease, transform 0.08s ease;
+  }
+  .done-rent-btn:hover { background: #1668d6; }
+  .done-rent-btn:active { transform: scale(0.98); }
+
+  /* ─── Floating action buttons (post check-in) ─── */
+  .float-actions {
+    position: absolute;
+    bottom: 28px; right: 28px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 8;
+  }
+  .float-actions.show {
+    display: flex;
+    animation: floatIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .float-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    color: #fff;
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,0.35);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+  }
+  .float-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 14px 28px -10px rgba(0,0,0,0.4);
+  }
+  .float-btn:active { transform: scale(0.96); }
+  .float-btn.exit { background: var(--red); }
+  .float-btn.return { background: #ff8a3d; }
+  .float-btn.up { background: var(--blue); font-size: 22px; }
+
+  /* ─── Toast ─── */
+  .toast {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translate(-50%, 8px);
+    background: rgba(28, 42, 63, 0.95);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    z-index: 9;
+    white-space: nowrap;
+    box-shadow: 0 14px 32px -10px rgba(0,0,0,0.4);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  /* Floating "back to proposal" pill */
+  .back-pill {
+    position: fixed;
+    top: 18px; left: 18px;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 0.88rem; font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 18px -8px rgba(13,17,23,0.25);
+    transition: transform 0.12s ease;
+  }
+  .back-pill:hover { transform: translateX(-2px); }
+
+  /* ─── Mobile (phone) — strip bezel, fill viewport ─── */
+  @media (max-width: 640px) {
+    html, body {
+      overflow-y: auto;
+    }
+    .stage {
+      position: absolute;
+      inset: auto;
+      width: 100%;
+      min-height: 100vh;
+      padding: 0;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .tablet-wrap {
+      transform-origin: top left !important;
+      width: 768px;
+    }
+    .tablet {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .tablet::after { display: none; }
+    .screen { border-radius: 0; }
+    /* 뒤로가기 버튼 모바일 최적화 */
+    .back-pill {
+      bottom: auto;
+      top: 12px;
+      right: 12px;
+      left: auto;
+      padding: 8px 14px;
+      font-size: 0.78rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<a href="/blockpang/" class="back-pill">← 제안서로 돌아가기</a>
+
+<div class="stage">
+  <div class="tablet-wrap" id="tabletWrap">
+    <div class="tablet">
+      <div class="screen">
+
+        <!-- Top bar -->
+        <header class="topbar">
+          <button class="back-btn">←</button>
+          <div class="topbar-center">
+            <img src="/blockpang/assets/logo/blockpang_logo.png" alt="블럭팡" class="topbar-logo">
+            <span class="topbar-store">블럭팡 명지점</span>
+          </div>
+          <span></span>
+        </header>
+
+        <!-- Brand selector -->
+        <div class="brand-row">
+          <span class="brand-name">마인크래프트®</span>
+          <span class="chev">▾</span>
+        </div>
+
+        <!-- Categories -->
+        <div class="chips-wrap">
+          <div class="chips" id="chips">
+            <button class="chip active" data-cat="all">전체 <span class="count">8개</span></button>
+            <button class="chip" data-cat="sprout">새싹 <span class="count">2개</span></button>
+            <button class="chip" data-cat="fruit">열매 <span class="count">3개</span></button>
+            <button class="chip" data-cat="tree">나무 <span class="count">2개</span></button>
+            <button class="chip" data-cat="forest">숲 <span class="count">1개</span></button>
+          </div>
+        </div>
+
+        <!-- Product grid -->
+        <div class="grid-wrap">
+          <div class="grid" id="grid"></div>
+        </div>
+
+        <!-- Phone modal -->
+        <div class="overlay" id="overlayPhone">
+          <div class="modal">
+            <div class="modal-head">
+              <span class="modal-title">전화번호 입력</span>
+              <button class="modal-close" data-close>×</button>
+            </div>
+            <div class="modal-body">
+              <div class="phone-label">전화번호</div>
+              <div class="phone-display" id="phoneDisplay">010-<span class="blink"></span></div>
+              <div class="phone-hint"><span id="phoneCount">4</span>/11자리</div>
+              <div class="keypad">
+                <button data-key="1">1</button>
+                <button data-key="2">2</button>
+                <button data-key="3">3</button>
+                <button data-key="4">4</button>
+                <button data-key="5">5</button>
+                <button data-key="6">6</button>
+                <button data-key="7">7</button>
+                <button data-key="8">8</button>
+                <button data-key="9">9</button>
+                <button class="del" data-key="del">지우기</button>
+                <button data-key="0">0</button>
+                <button class="ok" id="phoneOk" data-key="ok">완료</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Identity check modal -->
+        <div class="overlay" id="overlayIdentity">
+          <div class="modal">
+            <div class="modal-head">
+              <span class="modal-title">본인확인</span>
+              <span class="modal-tag green" id="identityTag">입실하기</span>
+            </div>
+            <div class="modal-body id-body">
+              <div class="id-head-q">회원님이 맞으신가요?</div>
+              <div class="id-status">● 시간정액권</div>
+              <div class="id-msg">
+                회원님의 현재 잔여시간은 <strong>13시간 53분</strong>입니다.<br>
+                선택하신 제품으로 입실을 진행할까요?
+              </div>
+              <div class="id-product">
+                <div class="name" id="idProductName">—</div>
+                <div class="desc" id="idProductDesc">—</div>
+              </div>
+              <div class="id-actions">
+                <button class="no" data-close>아니오</button>
+                <button class="yes" id="identityConfirm">입실하기</button>
+                <button class="charge">시간충전</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Done modal -->
+        <div class="overlay" id="overlayDone">
+          <div class="modal">
+            <div class="modal-head">
+              <span class="modal-title">요청완료</span>
+              <span class="modal-tag navy" id="doneTag">매장에서 이용</span>
+            </div>
+            <div class="done-body">
+              <div class="done-name">회원님.</div>
+              <div class="done-msg">
+                <strong>입실 신청이 완료되었습니다.</strong><br>
+                5분 후에 자동으로 입실 처리됩니다.
+              </div>
+              <button class="done-btn" id="doneOk">확인</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 본인인증 (rental flow) -->
+        <div class="overlay" id="overlayAuth">
+          <div class="modal">
+            <div class="modal-head blue">
+              <span class="modal-title">본인인증</span>
+              <span class="modal-tag blue-soft">대여하기</span>
+            </div>
+            <div class="modal-body">
+              <div class="auth-phone">
+                <div class="auth-seg">010</div>
+                <div class="auth-seg active">2648-4417</div>
+              </div>
+              <div class="auth-actions">
+                <button class="cancel" data-close>취소</button>
+                <button class="verify" id="authVerify">인증하기</button>
+              </div>
+              <div class="auth-code-wrap" id="authCodeWrap">
+                <input type="text" class="auth-code-input" id="authCodeInput"
+                       placeholder="데모 버전이니 0000을 입력해주세요"
+                       maxlength="4" inputmode="numeric" autocomplete="one-time-code">
+                <div class="auth-error" id="authError"></div>
+                <button class="auth-code-ok" id="authCodeOk">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 본인확인 (rental flow) -->
+        <div class="overlay" id="overlayIdentityRent">
+          <div class="modal">
+            <div class="modal-head blue">
+              <span class="modal-title">본인확인</span>
+              <span class="modal-tag blue-soft">대여하기</span>
+            </div>
+            <div class="modal-body id-body">
+              <div class="id-head-q">회원님이 맞으신가요?</div>
+              <div class="id-status blue">● 대여회원</div>
+              <div class="id-msg">
+                회원님의 현재 잔여횟수는 <strong>8회</strong>입니다.<br>
+                선택하신 제품을 집으로 대여하시겠어요?
+              </div>
+              <div class="id-product">
+                <div class="name" id="idRentProductName">—</div>
+                <div class="desc">레고를 집으로 대여하시겠어요?</div>
+              </div>
+              <div class="id-actions two-col">
+                <button class="no" data-close>아니오</button>
+                <button class="yes-rent" id="rentConfirm">대여하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 요청완료 (rental flow) -->
+        <div class="overlay" id="overlayDoneRent">
+          <div class="modal">
+            <div class="modal-head blue">
+              <span class="modal-title">요청완료</span>
+              <span class="modal-tag blue-soft">대여하기</span>
+            </div>
+            <div class="done-body">
+              <div class="done-name">회원님.</div>
+              <div class="done-rent-prod" id="doneRentProd">—</div>
+              <div class="done-msg">
+                <strong>대여 신청이 완료되었습니다.</strong><br>
+                점주님 승인 후 즉시 대여 처리됩니다.<br>
+                회원님의 현재 잔여횟수는 <strong>7회</strong>입니다.
+              </div>
+              <button class="done-rent-btn" id="doneRentOk">확인</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating actions (after check-in) -->
+        <div class="float-actions" id="floatActions">
+          <button class="float-btn exit" data-float="exit">퇴실</button>
+          <button class="float-btn return" data-float="return">반납</button>
+          <button class="float-btn up" data-float="up" aria-label="위로 가기">↑</button>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── Products data ───
+  const PRODUCTS = [
+    { code: '21267', name: '마인크래프트® | 우민 사막 순찰대', price: 10000, img: 'mk1.avif', meta: '연령 7+, 부품수 105개, 등급 새싹, 사이즈 S' },
+    { code: '21282', name: '마인크래프트® | 앵무새 집',       price: 25000, img: 'mk2.jpg',  meta: '연령 8+, 부품수 535개, 등급 숲, 사이즈 M' },
+    { code: '21319', name: '마인크래프트® | 농장의 노동',     price: 12000, img: 'mk3.webp', meta: '연령 7+, 부품수 252개, 등급 열매, 사이즈 S' },
+    { code: '21338', name: '마인크래프트® | 마을의 결투',     price: 18000, img: 'mk4.jpg',  meta: '연령 8+, 부품수 412개, 등급 나무, 사이즈 M' },
+    { code: '21341', name: '마인크래프트® | 곡식 농장',       price: 8000,  img: 'mk6.jpg',  meta: '연령 6+, 부품수 86개, 등급 새싹, 사이즈 S' },
+    { code: '21362', name: '마인크래프트® | 모험가의 캠프',   price: 15000, img: 'mk7.jpeg', meta: '연령 7+, 부품수 328개, 등급 열매, 사이즈 M' },
+    { code: '21376', name: '마인크래프트® | 광물 채집장',     price: 20000, img: 'mk8.jpeg', meta: '연령 8+, 부품수 480개, 등급 나무, 사이즈 M' },
+    { code: '21389', name: '마인크래프트® | 늪지대 모험',     price: 11000, img: 'mk1.avif', meta: '연령 7+, 부품수 198개, 등급 열매, 사이즈 S' },
+  ];
+
+  // ─── Tablet auto-scale (모바일은 너비 기준 풀스케일) ───
+  const tabletWrap = document.getElementById('tabletWrap');
+  const TABLET_W = 768, TABLET_H = 1024;
+  const fitTablet = () => {
+    const isMobile = window.innerWidth <= 640;
+    if (isMobile) {
+      const scale = window.innerWidth / TABLET_W;
+      tabletWrap.style.transform = `scale(${scale})`;
+      // 페이지 높이를 스케일된 mockup 높이에 맞춰 스크롤 영역 확보
+      document.body.style.height = (TABLET_H * scale) + 'px';
+    } else {
+      const PAD = 24;
+      const w = window.innerWidth - PAD * 2;
+      const h = window.innerHeight - PAD * 2;
+      const scale = Math.min(w / TABLET_W, h / TABLET_H, 1.2);
+      tabletWrap.style.transform = `scale(${scale})`;
+      document.body.style.height = '';
+    }
+  };
+  fitTablet();
+  window.addEventListener('resize', fitTablet);
+  window.addEventListener('orientationchange', fitTablet);
+
+  // ─── Render product grid ───
+  const grid = document.getElementById('grid');
+  const renderGrid = () => {
+    grid.innerHTML = PRODUCTS.map((p, i) => {
+      const isNew = i < 5;
+      const isShopOnly = false;
+      return `
+        <article class="card" data-idx="${i}">
+          ${isNew ? '<span class="card-badge">NEW</span>' : ''}
+          <div class="card-img">
+            <img src="/blockpang/assets/products/${p.img}" alt="${p.name}">
+          </div>
+          <div class="card-body">
+            <span class="card-code">${p.code}</span>
+            <div class="card-name">${p.name}</div>
+            <div class="card-price">
+              ${p.price.toLocaleString()}원 <span class="unit">/ 1회 대여료</span>
+            </div>
+            <div class="card-meta">${p.meta}</div>
+          </div>
+          <div class="card-actions">
+            <button data-act="shop">🏬 매장에서 이용</button>
+            <button data-act="home">🏠 집으로 대여</button>
+          </div>
+        </article>
+      `;
+    }).join('');
+  };
+  renderGrid();
+
+  // ─── Card selection + actions ───
+  let currentProductIdx = null;
+  let currentAction = 'shop';
+
+  grid.addEventListener('click', e => {
+    const actBtn = e.target.closest('[data-act]');
+    if (actBtn) {
+      e.stopPropagation();
+      currentAction = actBtn.dataset.act;
+      if (currentAction === 'home') {
+        openAuth();
+      } else {
+        openPhone();
+      }
+      return;
+    }
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const idx = Number(card.dataset.idx);
+    document.querySelectorAll('.card').forEach(c => {
+      c.classList.remove('selected', 'with-actions');
+    });
+    card.classList.add('selected', 'with-actions');
+    currentProductIdx = idx;
+  });
+
+  // ─── Modals ───
+  const overlayPhone = document.getElementById('overlayPhone');
+  const overlayIdentity = document.getElementById('overlayIdentity');
+  const overlayDone = document.getElementById('overlayDone');
+  const phoneDisplay = document.getElementById('phoneDisplay');
+  const phoneCount = document.getElementById('phoneCount');
+  const phoneOk = document.getElementById('phoneOk');
+  const idProductName = document.getElementById('idProductName');
+  const idProductDesc = document.getElementById('idProductDesc');
+  const identityTag = document.getElementById('identityTag');
+  const doneTag = document.getElementById('doneTag');
+  const identityConfirm = document.getElementById('identityConfirm');
+  const doneOk = document.getElementById('doneOk');
+
+  let phoneDigits = '010';
+
+  const renderPhone = () => {
+    const padded = phoneDigits.replace(/^(\d{3})(\d{0,4})(\d{0,4}).*/, (_, a, b, c) => {
+      let out = a;
+      if (b.length) out += '-' + b;
+      if (c.length) out += '-' + c;
+      return out;
+    });
+    phoneDisplay.innerHTML = padded + '<span class="blink"></span>';
+    phoneCount.textContent = phoneDigits.length;
+    phoneOk.disabled = phoneDigits.length < 11;
+  };
+
+  const openPhone = () => {
+    phoneDigits = '010';
+    renderPhone();
+    overlayPhone.classList.add('show');
+  };
+
+  const closeAllOverlays = () => {
+    overlayPhone.classList.remove('show');
+    overlayIdentity.classList.remove('show');
+    overlayDone.classList.remove('show');
+  };
+
+  document.querySelectorAll('[data-close]').forEach(b => {
+    b.addEventListener('click', closeAllOverlays);
+  });
+
+  // Keypad
+  document.querySelectorAll('.keypad button').forEach(b => {
+    b.addEventListener('click', () => {
+      const k = b.dataset.key;
+      if (k === 'del') {
+        if (phoneDigits.length > 0) phoneDigits = phoneDigits.slice(0, -1);
+      } else if (k === 'ok') {
+        if (phoneDigits.length < 11) return;
+        openIdentity();
+      } else {
+        if (phoneDigits.length < 11) phoneDigits += k;
+      }
+      renderPhone();
+    });
+  });
+
+  const openIdentity = () => {
+    overlayPhone.classList.remove('show');
+    const p = PRODUCTS[currentProductIdx ?? 0];
+    idProductName.textContent = `${p.code} ${p.name}`;
+    idProductDesc.textContent = currentAction === 'home'
+      ? '선택하신 제품을 집으로 대여 처리합니다.'
+      : '레고를 매장에서 만들어 보시겠어요?';
+    identityTag.textContent = currentAction === 'home' ? '대여하기' : '입실하기';
+    identityConfirm.textContent = currentAction === 'home' ? '대여하기' : '입실하기';
+    overlayIdentity.classList.add('show');
+  };
+
+  identityConfirm.addEventListener('click', () => {
+    overlayIdentity.classList.remove('show');
+    doneTag.textContent = currentAction === 'home' ? '집으로 대여' : '매장에서 이용';
+    // Update the done message to reflect action
+    const doneMsg = document.querySelector('.done-msg');
+    if (currentAction === 'home') {
+      doneMsg.innerHTML = '<strong>대여 신청이 완료되었습니다.</strong><br>잠시 후 매장 직원이 안내해 드립니다.';
+    } else {
+      doneMsg.innerHTML = '<strong>입실 신청이 완료되었습니다.</strong><br>5분 후에 자동으로 입실 처리됩니다.';
+    }
+    overlayDone.classList.add('show');
+  });
+
+  doneOk.addEventListener('click', () => {
+    closeAllOverlays();
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected', 'with-actions'));
+    // Show floating action buttons after 입실 completion
+    floatActions.classList.add('show');
+  });
+
+  // ─── 대여 (rental) flow ───
+  const overlayAuth = document.getElementById('overlayAuth');
+  const overlayIdentityRent = document.getElementById('overlayIdentityRent');
+  const overlayDoneRent = document.getElementById('overlayDoneRent');
+  const authVerify = document.getElementById('authVerify');
+  const authCodeWrap = document.getElementById('authCodeWrap');
+  const authCodeInput = document.getElementById('authCodeInput');
+  const authCodeOk = document.getElementById('authCodeOk');
+  const authError = document.getElementById('authError');
+  const rentConfirm = document.getElementById('rentConfirm');
+  const doneRentOk = document.getElementById('doneRentOk');
+  const idRentProductName = document.getElementById('idRentProductName');
+  const doneRentProd = document.getElementById('doneRentProd');
+
+  const resetAuth = () => {
+    authCodeWrap.classList.remove('show');
+    authCodeInput.value = '';
+    authError.textContent = '';
+    authVerify.style.display = '';
+    authVerify.disabled = false;
+  };
+
+  const openAuth = () => {
+    resetAuth();
+    overlayAuth.classList.add('show');
+  };
+
+  authVerify.addEventListener('click', () => {
+    authVerify.disabled = true;
+    authVerify.textContent = '인증 발송됨';
+    authCodeWrap.classList.add('show');
+    setTimeout(() => authCodeInput.focus(), 120);
+  });
+
+  authCodeInput.addEventListener('input', () => {
+    authError.textContent = '';
+    authCodeInput.value = authCodeInput.value.replace(/\D/g, '').slice(0, 4);
+  });
+
+  authCodeInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      authCodeOk.click();
+    }
+  });
+
+  authCodeOk.addEventListener('click', () => {
+    const v = authCodeInput.value.trim();
+    if (v !== '0000') {
+      authError.textContent = '인증번호가 일치하지 않습니다. (데모: 0000)';
+      authCodeInput.focus();
+      return;
+    }
+    overlayAuth.classList.remove('show');
+    setTimeout(openIdentityRent, 80);
+  });
+
+  const openIdentityRent = () => {
+    const p = PRODUCTS[currentProductIdx ?? 0];
+    idRentProductName.textContent = `${p.code} ${p.name}`;
+    overlayIdentityRent.classList.add('show');
+  };
+
+  rentConfirm.addEventListener('click', () => {
+    overlayIdentityRent.classList.remove('show');
+    const p = PRODUCTS[currentProductIdx ?? 0];
+    doneRentProd.textContent = `${p.code} ${p.name}`;
+    setTimeout(() => overlayDoneRent.classList.add('show'), 80);
+  });
+
+  doneRentOk.addEventListener('click', () => {
+    overlayDoneRent.classList.remove('show');
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected', 'with-actions'));
+  });
+
+  // Also reset cards when auth is cancelled
+  overlayAuth.addEventListener('click', e => {
+    if (e.target === overlayAuth) {
+      overlayAuth.classList.remove('show');
+    }
+  });
+
+  // ─── Floating action buttons (post check-in) ───
+  const floatActions = document.getElementById('floatActions');
+  const toast = document.getElementById('toast');
+  const gridWrap = document.querySelector('.grid-wrap');
+  let toastTimer;
+  const showToast = msg => {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  };
+
+  floatActions.addEventListener('click', e => {
+    const btn = e.target.closest('[data-float]');
+    if (!btn) return;
+    const a = btn.dataset.float;
+    if (a === 'up') {
+      gridWrap.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (a === 'exit') {
+      showToast('퇴실 요청이 접수되었습니다.');
+      setTimeout(() => floatActions.classList.remove('show'), 1200);
+    } else if (a === 'return') {
+      showToast('반납 안내가 카운터로 전달됐어요.');
+    }
+  });
+</script>
+
+</body>
+</html>

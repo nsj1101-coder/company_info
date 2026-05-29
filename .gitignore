@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+build
+dist
+*.log
+.DS_Store
+.playwright-mcp/
+
+# env
+.env*
+!.env.example
+
+# db
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.vscode
+.idea

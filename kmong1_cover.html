@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 600px; height: 600px; overflow: hidden; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; background: #020c18; }
+
+  .cover {
+    width: 600px; height: 600px;
+    background: linear-gradient(135deg, #020c18 0%, #041628 50%, #071e38 100%);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 44px;
+  }
+
+  .grid-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(52,211,153,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52,211,153,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .orb1 {
+    position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(52,211,153,0.18) 0%, transparent 70%);
+  }
+  .orb2 {
+    position: absolute; bottom: 80px; left: -80px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%);
+  }
+
+  .badge {
+    position: absolute; top: 40px; left: 44px;
+    background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.35);
+    color: #34d399; font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 6px 14px; border-radius: 4px; text-transform: uppercase;
+  }
+
+  .mock-ui {
+    position: absolute; top: 88px; right: 30px;
+    width: 220px; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(52,211,153,0.15); border-radius: 14px; padding: 16px;
+  }
+  .mock-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+  }
+  .mock-title { font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 700; letter-spacing: 0.5px; }
+  .mock-live {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 9px; color: #4ade80;
+  }
+  .live-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 14px; }
+  .stat-box {
+    background: rgba(52,211,153,0.07); border: 1px solid rgba(52,211,153,0.15);
+    border-radius: 8px; padding: 9px;
+  }
+  .stat-label { font-size: 8px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .stat-value { font-size: 16px; font-weight: 900; color: #34d399; }
+  .stat-unit { font-size: 8px; color: rgba(255,255,255,0.4); }
+
+  .feature-list { display: flex; flex-direction: column; gap: 5px; }
+  .feature-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 9px; color: rgba(255,255,255,0.55);
+    padding: 5px 7px;
+    background: rgba(255,255,255,0.03); border-radius: 5px;
+  }
+  .feature-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; flex-shrink: 0; }
+
+  .category { font-size: 12px; color: #34d399; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; text-transform: uppercase; }
+  .title { font-size: 32px; font-weight: 900; color: #fff; line-height: 1.18; margin-bottom: 14px; }
+  .title span { color: #34d399; }
+  .desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 20px; max-width: 310px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+  .tag {
+    font-size: 11px; font-weight: 600; padding: 4px 11px; border-radius: 4px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+  }
+  .tag.hot { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.3); color: #34d399; }
+
+  .bottom-line {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.07); padding-top: 18px;
+  }
+  .company { font-size: 12px; color: rgba(255,255,255,0.35); font-weight: 500; }
+  .company span { color: rgba(255,255,255,0.65); font-weight: 700; }
+  .arrow {
+    width: 36px; height: 36px; background: #10b981; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: #fff; font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="grid-bg"></div>
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+
+  <div class="badge">SaaS · Tax Platform</div>
+
+  <div class="mock-ui">
+    <div class="mock-header">
+      <div class="mock-title">세무 대시보드</div>
+      <div class="mock-live"><div class="live-dot"></div>LIVE</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="stat-label">이번달 신고</div>
+        <div class="stat-value">48<span class="stat-unit">건</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">절세 금액</div>
+        <div class="stat-value">₩<span style="font-size:10px">12M</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">가입 고객사</div>
+        <div class="stat-value">124<span class="stat-unit">개</span></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">자동화율</div>
+        <div class="stat-value">91<span class="stat-unit">%</span></div>
+      </div>
+    </div>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-dot"></div>부가세·종합소득세 자동 계산</div>
+      <div class="feature-item"><div class="feature-dot"></div>국세청 전자신고 API 연동</div>
+      <div class="feature-item"><div class="feature-dot"></div>다중 사업자 통합 관리</div>
+    </div>
+  </div>
+
+  <div class="category">SaaS · 세무·회계 플랫폼</div>
+  <div class="title">세무 종합<br><span>플랫폼</span> 개발</div>
+  <div class="desc">세금 신고·절세 전략·국세청 API 연동을 자동화한 SaaS 세무 플랫폼. Next.js + MySQL 풀스택.</div>
+  <div class="tags">
+    <span class="tag hot">Next.js</span>
+    <span class="tag hot">MySQL</span>
+    <span class="tag">React</span>
+    <span class="tag">TypeScript</span>
+    <span class="tag">Prisma ORM</span>
+  </div>
+  <div class="bottom-line">
+    <div class="company">by <span>MaxImpact</span> · 개발+기획</div>
+    <div class="arrow">→</div>
+  </div>
+</div>
+</body>
+</html>

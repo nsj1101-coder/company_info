@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DentBiz | B2B 치과 의료기기 커머스 구축 제안서</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --ink: #111317;
+    --paper: #ffffff;
+    --gray-50: #fafafa;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #2563EB;
+    --accent-deep: #1d4ed8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+  @page { size: 1600px 900px; margin: 0; }
+
+  html, body { background: #000; }
+
+  .deck { width: 100%; }
+
+  .slide {
+    width: 1600px;
+    height: 900px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 100px;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  .slide.dark  { background: #0a0a0a; color: #fff; }
+  .slide.light { background: #ffffff; color: #111317; }
+  .slide.gray  { background: #f3f4f6; color: #111317; }
+  .slide.ink   { background: #0d1117; color: #fff; }
+
+  /* ─── Editorial Markers ─── */
+
+  .section-mark {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-size: 1rem;
+    font-weight: 400;
+    color: currentColor;
+    opacity: 0.55;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .section-mark::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.22;
+  }
+  .section-mark .acc {
+    color: var(--accent);
+    opacity: 1;
+    font-weight: 500;
+  }
+
+  /* ─── Editorial Titles ─── */
+
+  h2.ed-title {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 4.2rem;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  h2.ed-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .slide.dark h2.ed-title em,
+  .slide.ink h2.ed-title em { color: #6ea0ff; }
+
+  /* ─── Lede paragraph ─── */
+  p.lede {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.32rem;
+    line-height: 1.55;
+    color: #333;
+    max-width: 920px;
+    margin-bottom: 26px;
+    border-top: 3px solid currentColor;
+    padding-top: 16px;
+  }
+  .slide.dark p.lede, .slide.ink p.lede {
+    color: rgba(255,255,255,0.88);
+    border-top-color: #fff;
+  }
+  p.lede strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Body text ─── */
+  p.ed-body {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.85;
+    font-weight: 400;
+    color: #2a2a2a;
+    max-width: 720px;
+  }
+  .slide.dark p.ed-body, .slide.ink p.ed-body {
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ─── Layout helpers ─── */
+
+  .ed-two-col {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    margin-top: 24px;
+    align-items: start;
+  }
+  .ed-two-col.even { grid-template-columns: 1fr 1fr; }
+  .ed-three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 28px;
+  }
+  .ed-four-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 28px;
+  }
+
+  /* ─── Stat circles ─── */
+  .circle-row { display: flex; gap: 22px; align-items: center; margin-top: 24px; flex-wrap: wrap; }
+  .stat-circle {
+    width: 168px; height: 168px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 18px;
+    flex-shrink: 0;
+  }
+  .stat-circle.solid { background: #0a0a0a; color: #fff; border-color: #0a0a0a; }
+  .stat-circle.solid-acc { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .stat-circle.solid-light { background: #fff; color: #000; border-color: #000; }
+  .stat-circle .sc-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2.7rem;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .stat-circle .sc-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    line-height: 1.4;
+  }
+
+  /* ─── Stat strip ─── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: 22px 0;
+    border-top: 3px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+  .stat-strip > div { padding: 22px 26px; border-right: 1px solid currentColor; }
+  .stat-strip > div:last-child { border-right: none; }
+  .stat-strip .ss-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 3rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat-strip .ss-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* ─── Card strip ─── */
+  .card-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,0,0,0.1);
+    margin-top: 24px;
+  }
+  .slide.dark .card-strip, .slide.ink .card-strip { background: rgba(255,255,255,0.15); }
+  .card-strip .cs-cell { background: #fff; padding: 22px 24px; }
+  .slide.dark .card-strip .cs-cell, .slide.ink .card-strip .cs-cell { background: #0a0a0a; }
+  .cs-cell .cs-icon {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .cs-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+  .cs-cell p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+
+  /* ─── Persona cards ─── */
+  .persona-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 22px;
+  }
+  .persona-card {
+    padding: 24px 22px;
+    background: #f3f4f6;
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+  }
+  .persona-card.featured { background: #0a0a0a; color: #fff; }
+  .persona-card.acc { background: var(--accent); color: #fff; }
+  .persona-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .persona-card.featured .persona-tag,
+  .persona-card.acc .persona-tag { color: rgba(255,255,255,0.7); }
+  .persona-card h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin-bottom: 12px;
+  }
+  .persona-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .persona-meta span {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+  }
+  .persona-section { margin-bottom: 12px; }
+  .persona-section .ps-label {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.54rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .persona-card ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .persona-card ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Phase columns ─── */
+  .phase-col {
+    border-top: 4px solid currentColor;
+    padding-top: 16px;
+  }
+  .phase-col .pc-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+  .phase-col h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .phase-col ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.95;
+    opacity: 0.85;
+  }
+  .phase-col ul li::before { content: '— '; opacity: 0.4; }
+
+  /* ─── Reference table ─── */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 22px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+  .ref-table th {
+    text-align: left;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+    border-bottom: 2px solid #000;
+    opacity: 0.6;
+  }
+  .ref-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-size: 0.92rem;
+    font-weight: 400;
+    color: #333;
+    vertical-align: top;
+  }
+  .ref-table td.name { font-weight: 600; color: #000; }
+  .ref-table .badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    background: var(--accent);
+    color: #fff;
+    margin-right: 6px;
+  }
+
+  /* ─── Pull quote ─── */
+  .pull-quote {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 1.3;
+    color: currentColor;
+    padding: 14px 0 14px 32px;
+    border-left: 4px solid var(--accent);
+    margin: 22px 0;
+    max-width: 1080px;
+  }
+  .pull-quote strong { font-style: normal; font-weight: 600; }
+
+  /* ─── Feature matrix ─── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,0,0,0.1);
+    margin-top: 22px;
+  }
+  .slide.dark .feature-grid, .slide.ink .feature-grid { background: rgba(255,255,255,0.12); }
+  .feat-cell {
+    background: #fff;
+    padding: 22px 22px 20px;
+    display: flex; flex-direction: column;
+    min-height: 175px;
+  }
+  .slide.dark .feat-cell, .slide.ink .feat-cell { background: #0a0a0a; }
+  .feat-cell .feat-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .feat-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    margin-bottom: 8px;
+  }
+  .feat-cell ul {
+    list-style: none;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.75;
+    opacity: 0.82;
+  }
+  .feat-cell ul li::before { content: '— '; opacity: 0.4; }
+  .feat-cell.dark-cell { background: #0a0a0a; color: #fff; }
+  .feat-cell.dark-cell .feat-num { color: #6ea0ff; }
+  .feat-cell.acc-cell { background: var(--accent); color: #fff; }
+  .feat-cell.acc-cell .feat-num { color: rgba(255,255,255,0.7); }
+
+  /* ─── Flow diagram ─── */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .flow-step {
+    padding: 22px 22px;
+    background: #fff;
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.08);
+    min-height: 130px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .flow-step.start { background: #e5e7eb; }
+  .flow-step.core { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .flow-step.end { background: #000; color: #fff; border-color: #000; }
+  .flow-step .fs-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 8px;
+  }
+  .flow-step h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .flow-step p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.74rem;
+    line-height: 1.55;
+    opacity: 0.78;
+    margin-top: 6px;
+  }
+  .flow-arrow {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: rgba(0,0,0,0.45);
+  }
+
+  /* ─── Cost ─── */
+  .cost-block {
+    padding: 28px 30px;
+    background: #f3f4f6;
+  }
+  .cost-block.dark { background: #0a0a0a; color: #fff; }
+  .cost-block.acc { background: var(--accent); color: #fff; }
+  .cost-block h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    margin-bottom: 18px;
+    letter-spacing: -0.005em;
+  }
+  .cost-list { display: flex; flex-direction: column; gap: 0; }
+  .cost-list .cl-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+  .cost-block.dark .cl-item, .cost-block.acc .cl-item { border-bottom-color: rgba(255,255,255,0.12); }
+  .cost-list .cl-item:last-child { border-bottom: none; }
+  .cl-item .cl-name { font-size: 0.9rem; font-weight: 400; color: #333; }
+  .cost-block.dark .cl-name, .cost-block.acc .cl-name { color: rgba(255,255,255,0.85); }
+  .cl-item .cl-value { font-size: 0.96rem; font-weight: 500; color: #000; }
+  .cost-block.dark .cl-value, .cost-block.acc .cl-value { color: #fff; }
+  .cost-list .cl-total { padding-top: 14px; margin-top: 8px; border-top: 2px solid #000; }
+  .cost-block.dark .cl-total, .cost-block.acc .cl-total { border-top-color: rgba(255,255,255,0.4); }
+  .cl-total .cl-name { font-weight: 700; }
+  .cl-total .cl-value { font-weight: 300; font-size: 1.4rem; }
+
+  /* ─── Tech compare table ─── */
+  .tech-compare {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    margin-top: 24px;
+    border-top: 2px solid currentColor;
+  }
+  .tc-row { display: contents; }
+  .tc-cell {
+    padding: 14px 18px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .slide.dark .tc-cell, .slide.ink .tc-cell { border-bottom-color: rgba(255,255,255,0.12); }
+  .tc-cell.hdr {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    border-bottom: 2px solid currentColor;
+    opacity: 0.7;
+  }
+  .tc-cell.label { font-weight: 600; }
+  .tc-cell.acc { background: rgba(37,99,235,0.08); }
+  .tc-cell.gold {
+    background: var(--accent); color: #fff;
+    font-weight: 500;
+  }
+
+  /* ─── Cover specific ─── */
+  .nameplate {
+    border-top: 6px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ─── Slide num ─── */
+  .slide-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    position: absolute;
+    bottom: 32px;
+    left: 100px;
+  }
+  .slide.dark .slide-num, .slide.ink .slide-num { color: #fff; opacity: 0.4; }
+
+  /* ─── Brand corner (MaxImpact) ─── */
+  .brand-corner {
+    position: absolute;
+    bottom: 28px;
+    right: 100px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  .brand-corner .bar { width: 28px; height: 1px; background: currentColor; }
+
+  /* ─── Big figure ─── */
+  .big-figure {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 18px 0;
+  }
+  .big-figure .bf-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 6rem;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: currentColor;
+  }
+  .big-figure .bf-text {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.96rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: currentColor;
+    opacity: 0.85;
+    max-width: 320px;
+  }
+
+  /* ─── Bulk highlight (slide 07) ─── */
+  .bulk-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    margin-top: 24px;
+    background: rgba(255,255,255,0.1);
+  }
+  .bulk-cell {
+    background: #0d1117;
+    padding: 24px 22px;
+    color: #fff;
+  }
+  .bulk-cell .bn {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: #6ea0ff;
+    margin-bottom: 12px;
+  }
+  .bulk-cell h5 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+  .bulk-cell p {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ─── Admin/User preview grid (no real images — use color tiles) ─── */
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+    height: 540px;
+  }
+  .preview-card {
+    position: relative;
+    background: #141414;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  .preview-card.main-card { grid-row: span 2; }
+  .preview-card .pc-mock {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 6px;
+  }
+  .preview-card .pc-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+  }
+  .preview-card .pc-bar.acc { background: var(--accent); opacity: 0.6; width: 28%; }
+  .preview-card .pc-bar.wide { width: 70%; }
+  .preview-card .pc-bar.mid { width: 50%; }
+  .preview-card .pc-bar.short { width: 30%; }
+  .preview-card .pc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    flex: 1;
+    margin-top: 6px;
+  }
+  .preview-card .pc-grid > div {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+  }
+  .preview-card .preview-label {
+    position: absolute;
+    top: 12px; left: 12px;
+    padding: 5px 11px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #fff;
+    text-transform: uppercase;
+    z-index: 3;
+  }
+  .preview-card .preview-title {
+    position: relative;
+    z-index: 2;
+    padding: 14px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    width: 100%;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-list {
+    display: flex; flex-direction: column;
+    gap: 1px; background: rgba(0,0,0,0.12);
+  }
+  .roadmap-list .rl {
+    background: #fff;
+    padding: 16px 22px;
+    display: flex; gap: 20px; align-items: center;
+  }
+  .roadmap-list .rl .rn {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--accent);
+    min-width: 40px;
+  }
+  .roadmap-list .rl .rt {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  /* ─── Conclusion box ─── */
+  .end-strap {
+    padding-top: 22px;
+    border-top: 6px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  /* ─── Logo block (top-left of cover) ─── */
+  .mi-logo-row {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    color: rgba(255,255,255,0.85);
+  }
+  .mi-logo-row img { height: 38px; opacity: 0.9; }
+  .mi-logo-row .mi-divider { width: 1px; height: 26px; background: rgba(255,255,255,0.25); }
+  .mi-logo-row .mi-text {
+    font-size: 0.66rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+  }
+
+  /* ─── Cost saving block ─── */
+  .save-box {
+    background: var(--accent);
+    color: #fff;
+    padding: 24px 28px;
+    display: flex; gap: 24px; align-items: center;
+    margin-top: 14px;
+  }
+  .save-box .sb-num {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2.6rem;
+    line-height: 1;
+    min-width: 160px;
+  }
+  .save-box .sb-text {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 01 COVER -->
+  <div class="slide dark" style="padding:50px 100px; justify-content:space-between;">
+    <div class="nameplate" style="border-color:rgba(255,255,255,0.7); color:rgba(255,255,255,0.85);">
+      <span>DENTBIZ ARCHIVE</span>
+      <span>VOL.01 — PROPOSAL · 2026 / 05</span>
+      <span>FOR CLIENT REVIEW</span>
+    </div>
+
+    <div>
+      <div class="mi-logo-row" style="margin-bottom:32px;">
+        <img src="assets/maximpact_logo.png" alt="MaxImpact">
+        <div class="mi-divider"></div>
+        <div class="mi-text">Proposal by<br>MaxImpact Studio</div>
+      </div>
+      <h1 style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:6.2rem; line-height:0.96; letter-spacing:-0.03em; margin:0 0 26px; color:#fff;">
+        The <em style="font-style:italic; font-weight:500; color:#6ea0ff;">B2B Dental</em><br>Commerce Proposal.
+      </h1>
+      <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:400; font-size:1.3rem; line-height:1.55; color:rgba(255,255,255,0.82); max-width:880px; padding-top:16px; border-top:3px solid #fff;">
+        면허로 검증된 의료인만 가격을 보고, 수십만 SKU가 단 한 번의 업로드로 살아 움직이는 — <strong style="font-style:normal; font-weight:600;">의료기기 전용 B2B 커머스</strong>를 위한 12주 구축안.
+      </p>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.55); line-height:2;">
+        FOR · DENTBIZ (가칭)<br>BY · MAXIMPACT
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1rem; color:rgba(255,255,255,0.72);">
+        "재고도, 가격도, 단종도 — 운영을 가볍게."
+      </div>
+    </div>
+
+    <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.66rem; letter-spacing:0.2em; opacity:0.4; color:#fff;">01 / 14</div>
+  </div>
+
+  <!-- 02 PREMISE -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 01</span> The Premise</div>
+    <h2 class="ed-title">시장은 충분합니다.<br><em>운영을 견디는 시스템이 부족할 뿐.</em></h2>
+    <p class="lede">치과 의료기기는 일반 쇼핑몰과 다릅니다. 면허로 자격을 가른 뒤 가격을 공개해야 하고, 수십만 SKU가 매주 단종·신상으로 바뀝니다. 진짜 문제는 <strong>"기능"이 아니라 "운영"입니다.</strong> 등록·가격·재고를 가볍게 다룰 수 있어야 진짜 매출이 됩니다.</p>
+
+    <div class="circle-row">
+      <div class="stat-circle solid"><div class="sc-num">수십만+</div><div class="sc-label">초기 등록<br>SKU 규모</div></div>
+      <div class="stat-circle"><div class="sc-num">3</div><div class="sc-label">레퍼런스<br>비교 분석</div></div>
+      <div class="stat-circle solid-acc"><div class="sc-num">2</div><div class="sc-label">인증 단계<br>면허 / 사업자</div></div>
+      <div class="stat-circle solid-light"><div class="sc-num">12<span style="font-size:1.3rem;">주</span></div><div class="sc-label">정식 오픈까지<br>개발 기간</div></div>
+    </div>
+
+    <div class="card-strip" style="margin-top:32px;">
+      <div class="cs-cell"><div class="cs-icon">i.</div><h5>대량 등록</h5><p>Excel 일괄 업로드 + 비동기 워커 — 수십만건도 안전 처리</p></div>
+      <div class="cs-cell"><div class="cs-icon">ii.</div><h5>가격 노출 제어</h5><p>비회원=리스트만 · 로그인=가격 · 승인=구매 — 3단 게이트</p></div>
+      <div class="cs-cell"><div class="cs-icon">iii.</div><h5>의료인 인증</h5><p>면허번호 + 사업자등록증 첨부 → 관리자 승인 워크플로우</p></div>
+      <div class="cs-cell"><div class="cs-icon">iv.</div><h5>전자세금계산서</h5><p>결제 직후 발행 연동 — B2B 거래의 필수 요건</p></div>
+    </div>
+
+    <div class="slide-num">02 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 03 STRATEGY -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 02</span> The Strategy</div>
+    <h2 class="ed-title">"폐쇄형"은 아닙니다.<br><em>대신, 단계적으로 공개합니다.</em></h2>
+    <p class="lede">의뢰서의 핵심 요청 그대로 — 비회원은 둘러보지만 가격은 모르고, 회원은 가격을 보지만 자격 검증 전엔 결제할 수 없습니다. 검색 노출과 의료기기 거래 안전을 동시에 잡는 <strong>3단계 권한 게이트</strong>가 본 프로젝트의 뼈대입니다.</p>
+
+    <div class="ed-three-col" style="margin-top:28px;">
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag" style="color:#000;">Gate 01 — Guest</div>
+        <h4>비회원</h4>
+        <ul>
+          <li>상품 리스트·상세 조회</li>
+          <li>가격 마스킹 ("로그인 후 확인")</li>
+          <li>SEO·검색 노출 유지</li>
+          <li>장바구니·결제 차단</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">Gate 02 — Member</div>
+        <h4>회원 (인증 전)</h4>
+        <ul>
+          <li>면허번호·사업자증 등록</li>
+          <li>가격 노출 / 견적 가능</li>
+          <li>장바구니 사용 가능</li>
+          <li>결제는 승인 후 활성화</li>
+        </ul>
+      </div>
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag" style="color:#000;">Gate 03 — Approved</div>
+        <h4>승인 의료인</h4>
+        <ul>
+          <li>모든 결제 수단 활성화</li>
+          <li>세금계산서 자동 발행</li>
+          <li>전용가·등급가 적용</li>
+          <li>재구매·정기 발주 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:30px; padding:20px 28px; background:#0a0a0a; color:#fff; display:inline-flex; gap:22px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1rem; opacity:0.7;">결론</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:1rem; font-weight:500;">"열려 있되 안전한" 의료기기 전용 게이트 — 검색 유입과 유통 규제, 둘 다 충족.</span>
+    </div>
+
+    <div class="slide-num">03 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 04 CUSTOMER PERSONAS -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 03</span> The Customer</div>
+    <h2 class="ed-title">진짜 구매자는<br><em>"클릭하는 의사"가 아닙니다.</em></h2>
+    <p class="lede" style="margin-bottom:18px;">치과 거래의 구매 결정은 4가지 역할로 나뉩니다. 각자의 워크플로우가 다르고, 시스템도 그에 맞춰 분리되어야 합니다.</p>
+
+    <div class="persona-row" style="margin-top:18px;">
+      <div class="persona-card">
+        <div class="persona-tag">Persona 01</div>
+        <h4>개원의 / 원장<br>"의사결정자"</h4>
+        <div class="persona-meta"><span>30~50대</span><span>최종 승인권</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>가격·할인·신뢰 동시 확인</li><li>업체 비교에 시간 부족</li></ul></div>
+        <div class="persona-section"><div class="ps-label">DentBiz</div><ul><li>등급가·견적함 제공</li><li>관심상품 알림</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">Persona 02</div>
+        <h4>구매 담당자<br>"실제 발주자"</h4>
+        <div class="persona-meta"><span>병원 행정</span><span>반복 발주</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>매번 같은 상품 재검색</li><li>세금계산서 수동 처리</li></ul></div>
+        <div class="persona-section"><div class="ps-label">DentBiz</div><ul><li>즐겨찾기·재구매</li><li>세금계산서 자동 발행</li></ul></div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-tag">Persona 03</div>
+        <h4>치과위생사 / 기공사<br>"카테고리 전문가"</h4>
+        <div class="persona-meta"><span>20~30대</span><span>상세 검색</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>스펙·호환성 정보 부족</li><li>경쟁몰 비교 피로</li></ul></div>
+        <div class="persona-section"><div class="ps-label">DentBiz</div><ul><li>상세 스펙 필터</li><li>호환 모델 태깅</li></ul></div>
+      </div>
+      <div class="persona-card acc">
+        <div class="persona-tag">Persona 04 · 운영</div>
+        <h4>당사 운영 매니저<br>"매일의 등록·가격·재고"</h4>
+        <div class="persona-meta"><span>대량 SKU</span><span>잦은 변동</span></div>
+        <div class="persona-section"><div class="ps-label">고민</div><ul><li>단종·신상 매주 발생</li><li>가격 변동 일괄 반영</li></ul></div>
+        <div class="persona-section"><div class="ps-label">DentBiz</div><ul><li><strong style="color:#fff;">Excel 일괄 등록·수정</strong></li><li>품절·단종 토글 1클릭</li></ul></div>
+      </div>
+    </div>
+
+    <div class="slide-num">04 / 14</div>
+    <div class="brand-corner" style="color:#fff; opacity:0.7;"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 05 MARKET & REFERENCES -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 04</span> The Market</div>
+    <h2 class="ed-title">레퍼런스는 같고,<br><em>운영 효율은 다릅니다.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:22px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:20px;">제출하신 레퍼런스는 모두 "치과 의료기기 B2B"라는 같은 카테고리에 있지만, <strong>대량 SKU 운영·가격 노출 제어·인증 워크플로우</strong> 측면에서 강점이 갈립니다. DentBiz는 각 사이트의 장점만 골라 모은 형태로 설계합니다.</p>
+
+        <div class="stat-strip">
+          <div><div class="ss-num">3+1</div><div class="ss-label">레퍼런스 분석</div></div>
+          <div><div class="ss-num">∞</div><div class="ss-label">SKU 확장성</div></div>
+          <div><div class="ss-num">6<span style="font-size:1.3rem;">개월</span></div><div class="ss-label">무상 유지보수</div></div>
+        </div>
+
+        <p class="ed-body" style="margin-top:16px;">DentBiz의 차별점은 "기능의 가짓수"가 아닙니다. <strong>대량 등록·잦은 가격 변동·면허 자동 검증</strong>이라는 세 가지 운영 부담을 줄이는 데 모든 설계를 정렬합니다.</p>
+      </div>
+
+      <div>
+        <table class="ref-table">
+          <thead><tr><th>레퍼런스</th><th>주력 강점</th><th>DentBiz 도입</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="name">이덴트<br><span style="font-size:0.65rem; color:#888; font-weight:400;">edent.co.kr</span></td>
+              <td>풍부한 카테고리 정보 · 등급별 가격</td>
+              <td><span class="badge">YES</span> 카테고리·등급</td>
+            </tr>
+            <tr>
+              <td class="name">세일글로발<br><span style="font-size:0.65rem; color:#888; font-weight:400;">seilglobal.co.kr</span></td>
+              <td>심플 UI · 빠른 검색 동선</td>
+              <td><span class="badge">YES</span> 검색·필터 UX</td>
+            </tr>
+            <tr>
+              <td class="name">덴버스<br><span style="font-size:0.65rem; color:#888; font-weight:400;">denbus.co.kr</span></td>
+              <td>가격 마스킹 · 회원 등급제</td>
+              <td><span class="badge">YES</span> 3단 권한 게이트</td>
+            </tr>
+            <tr>
+              <td class="name">DV Mall<br><span style="font-size:0.65rem; color:#888; font-weight:400;">dvmall.co.kr</span></td>
+              <td>관리자 콘솔 · 운영 도구</td>
+              <td><span class="badge">YES</span> 어드민 운영성</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="slide-num">05 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 06 FEATURE MAP -->
+  <div class="slide ink">
+    <div class="section-mark" style="color:rgba(255,255,255,0.7);"><span class="acc" style="color:#6ea0ff;">§ 05</span> The Feature Map</div>
+    <h2 class="ed-title" style="color:#fff;">8개 영역,<br><em>한 번의 통합 계약.</em></h2>
+
+    <div class="feature-grid">
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">01</div>
+        <h5>회원 · 인증</h5>
+        <ul>
+          <li>이메일·소셜 가입</li>
+          <li>면허번호 검증</li>
+          <li>사업자등록증 첨부</li>
+          <li>관리자 승인</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">02</div>
+        <h5>상품 · 카탈로그</h5>
+        <ul>
+          <li>리스트 · 상세 · 검색</li>
+          <li>카테고리 트리</li>
+          <li>스펙·호환성 필터</li>
+          <li>가격 마스킹</li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">03</div>
+        <h5>대량 등록 ★</h5>
+        <ul>
+          <li>Excel 업로드 (수십만)</li>
+          <li>이미지 일괄 매칭</li>
+          <li>비동기 큐 워커</li>
+          <li>오류 행 리포트</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">04</div>
+        <h5>주문 · 결제</h5>
+        <ul>
+          <li>카드 · 계좌이체</li>
+          <li>PG 연동 (KCP/토스)</li>
+          <li>전자세금계산서</li>
+          <li>주문 상태 트래킹</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">05</div>
+        <h5>배송 · 반품</h5>
+        <ul>
+          <li>택배사 API 연동</li>
+          <li>운송장 자동 등록</li>
+          <li>반품·교환 신청</li>
+          <li>배송지 다중 관리</li>
+        </ul>
+      </div>
+      <div class="feat-cell acc-cell">
+        <div class="feat-num">06</div>
+        <h5>관리자 콘솔 ★</h5>
+        <ul>
+          <li>상품·가격·재고 일괄</li>
+          <li>주문·배송 관리</li>
+          <li>회원 승인·등급</li>
+          <li>매출 대시보드</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">07</div>
+        <h5>고객센터</h5>
+        <ul>
+          <li>1:1 문의</li>
+          <li>FAQ · 공지사항</li>
+          <li>이메일·알림 자동화</li>
+          <li>상품 Q&A</li>
+        </ul>
+      </div>
+      <div class="feat-cell dark-cell">
+        <div class="feat-num">08</div>
+        <h5>모바일 반응형</h5>
+        <ul>
+          <li>모바일 전용 UX</li>
+          <li>태블릿 카탈로그</li>
+          <li>PWA 옵션</li>
+          <li>QR 재구매</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; padding:16px 24px; background:#fff; color:#000; display:inline-flex; gap:20px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:0.95rem;">★ 표시</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.92rem; font-weight:500;">DentBiz 프로젝트에서 가장 무겁고 가장 차별화되는 두 영역.</span>
+    </div>
+
+    <div class="slide-num">06 / 14</div>
+    <div class="brand-corner" style="color:#fff; opacity:0.5;"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 07 BULK CATALOG -->
+  <div class="slide ink">
+    <div class="section-mark" style="color:rgba(255,255,255,0.7);"><span class="acc" style="color:#6ea0ff;">§ 06</span> The Bulk Catalog</div>
+    <h2 class="ed-title" style="color:#fff;">수십만 SKU,<br><em>한 번의 업로드로 살아납니다.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:18px;">
+      <div>
+        <p class="ed-body">치과 의료기기의 운영 부담은 "상품의 수"가 아니라 "상품의 변화"입니다. 매주 단종·신상·가격 변경이 발생하고, 일일이 수정하면 누락과 실수가 쌓입니다.<br><br>DentBiz는 일반 쇼핑몰의 "한 건씩 등록" 모델이 아닌, <strong style="color:#fff;">SKU 단위 부분 업데이트(Upsert)</strong> 구조로 설계합니다. Excel을 다시 올리면 변경된 행만 반영되고, 같은 양식으로 가격만 일괄 수정할 수도 있습니다.</p>
+
+        <div class="pull-quote" style="color:#fff; border-left-color:#6ea0ff;">
+          "엑셀 파일 한 장이 곧 가격표·재고표·신상 목록이 되는 운영."
+        </div>
+      </div>
+
+      <div>
+        <div style="background:#fff; color:#000; padding:24px 26px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#888; margin-bottom:14px;">SAMPLE EXCEL — UPSERT</div>
+          <table style="width:100%; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.78rem; border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid #000;">
+                <td style="padding:6px 6px; font-weight:700;">SKU</td>
+                <td style="padding:6px 6px; font-weight:700;">상품명</td>
+                <td style="padding:6px 6px; font-weight:700; text-align:right;">가격</td>
+                <td style="padding:6px 6px; font-weight:700; text-align:right;">재고</td>
+                <td style="padding:6px 6px; font-weight:700;">상태</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">DB-00012</td><td style="padding:6px;">콤퍼지트 레진 A2</td><td style="padding:6px; text-align:right;">38,000</td><td style="padding:6px; text-align:right;">120</td><td style="padding:6px; color:var(--accent);">판매</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">DB-00013</td><td style="padding:6px;">임프레션 트레이 ML</td><td style="padding:6px; text-align:right;">12,500</td><td style="padding:6px; text-align:right;">0</td><td style="padding:6px; color:#888;">품절</td></tr>
+              <tr style="border-bottom:1px solid #eee;"><td style="padding:6px;">DB-00014</td><td style="padding:6px;">스케일러 팁 GE-04</td><td style="padding:6px; text-align:right;">88,000</td><td style="padding:6px; text-align:right;">25</td><td style="padding:6px; color:var(--accent);">판매</td></tr>
+              <tr><td style="padding:6px; color:#aaa;">DB-00015</td><td style="padding:6px; color:#aaa;">디지털 X-ray 센서</td><td style="padding:6px; text-align:right; color:#aaa;">—</td><td style="padding:6px; text-align:right; color:#aaa;">—</td><td style="padding:6px; color:#c00;">단종</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.72rem; color:#666; line-height:1.6;">SKU 코드가 기준 키 — 같은 양식 재업로드 시 변경 행만 반영되고, 단종 행은 자동으로 미노출 처리됩니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bulk-strip">
+      <div class="bulk-cell">
+        <div class="bn">01</div>
+        <h5>비동기 큐</h5>
+        <p>수십만 건 업로드 시 화면 멈춤 없음 — 백그라운드 워커로 처리</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">02</div>
+        <h5>오류 행 리포트</h5>
+        <p>실패한 행만 별도 엑셀로 다운로드 — 수정 후 재업로드</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">03</div>
+        <h5>이미지 매칭</h5>
+        <p>SKU 코드명으로 이미지 zip 일괄 매칭 — 1:N도 자동</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">04</div>
+        <h5>가격 일괄</h5>
+        <p>가격만 담긴 양식으로 빠른 가격 조정 가능</p>
+      </div>
+      <div class="bulk-cell">
+        <div class="bn">05</div>
+        <h5>단종 토글</h5>
+        <p>1클릭 또는 엑셀 상태 컬럼으로 미노출 처리</p>
+      </div>
+    </div>
+
+    <div class="slide-num">07 / 14</div>
+    <div class="brand-corner" style="color:#fff; opacity:0.5;"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 08 VERIFICATION FLOW -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 07</span> The Verification</div>
+    <h2 class="ed-title">의료인 인증,<br><em>한 화면에서 끝납니다.</em></h2>
+    <p class="lede">의료기기 거래의 법적 안전성은 "누가 사느냐"에 달려 있습니다. 면허번호·사업자등록증 두 가지를 한 폼에서 받고, 관리자 큐에서 일괄 승인합니다 — 인증 결과는 자동으로 권한·등급에 반영됩니다.</p>
+
+    <div class="flow" style="margin-top:24px;">
+      <div class="flow-step start">
+        <div class="fs-tag">STEP 01</div>
+        <h5>회원가입</h5>
+        <p>이메일·전화번호·비밀번호</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-tag">STEP 02</div>
+        <h5>자격 정보 입력</h5>
+        <p>면허번호 · 사업자증 첨부</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step core">
+        <div class="fs-tag" style="color:rgba(255,255,255,0.6);">STEP 03 · 핵심</div>
+        <h5>관리자 승인 큐</h5>
+        <p style="color:rgba(255,255,255,0.85);">검토 · 등급 부여 · 알림</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step end">
+        <div class="fs-tag" style="color:rgba(255,255,255,0.6);">STEP 04</div>
+        <h5>구매 활성화</h5>
+        <p style="color:rgba(255,255,255,0.85);">결제 · 세금계산서 발행</p>
+      </div>
+    </div>
+
+    <div class="ed-two-col" style="margin-top:30px;">
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.22em; color:#888; text-transform:uppercase; margin-bottom:10px;">관리자 측면</div>
+        <p class="ed-body">관리자 콘솔에는 "승인 대기" 큐가 별도 탭으로 노출되며, 회원별 첨부 자료를 한 화면에서 확인 후 <strong>승인 / 보류 / 반려</strong>를 1클릭으로 처리합니다. 자동 이메일 안내, 등급 부여, 결제 권한 활성화는 백엔드가 자동으로 처리합니다.</p>
+      </div>
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.22em; color:#888; text-transform:uppercase; margin-bottom:10px;">회원 측면</div>
+        <p class="ed-body">승인 전에도 가격 조회·장바구니·견적 요청은 가능하므로 구매 의도가 사라지지 않습니다. 승인이 완료되면 즉시 알림이 가고, 장바구니의 상품을 그대로 결제로 이어갈 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="slide-num">08 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 09 BUILD & ROADMAP -->
+  <div class="slide gray">
+    <div class="section-mark"><span class="acc">§ 08</span> The Build</div>
+    <h2 class="ed-title">전 범위 통합 계약,<br><em>5단계 순차 배포.</em></h2>
+
+    <div class="ed-two-col" style="margin-top:24px;">
+      <div>
+        <p class="ed-body" style="margin-bottom:18px;">의뢰서의 전 범위를 <strong>한 번의 계약</strong>으로 묶고, 우선순위 순서대로 빌드·배포합니다. 중간 견적·재협상 없이 일관된 일정으로 진행되어 더 빠르고, 예상치 못한 비용이 발생하지 않습니다.</p>
+
+        <div style="background:#0a0a0a; color:#fff; padding:24px 26px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:0.9rem; opacity:0.7; margin-bottom:10px;">전체 통합 범위</div>
+          <ul style="list-style:none; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.9rem; line-height:2; color:rgba(255,255,255,0.88);">
+            <li>— 회원 가입 · 면허·사업자 인증</li>
+            <li>— 상품 리스트 · 상세 · 카테고리</li>
+            <li>— 대량 등록 (Excel + 이미지)</li>
+            <li>— 카드·계좌 결제 · 전자세금계산서</li>
+            <li>— 배송 · 반품 · 운송장 자동화</li>
+            <li>— 관리자 콘솔 (상품·주문·회원·매출)</li>
+            <li>— 고객센터 · 공지·FAQ</li>
+            <li>— 모바일 반응형 · 6개월 무상 유지보수</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; opacity:0.6; margin-bottom:12px; font-size:0.95rem;">단계별 배포 로드맵</div>
+        <div class="roadmap-list">
+          <div class="rl"><span class="rn">1.</span><span class="rt">회원·인증·상품 카탈로그 골격</span></div>
+          <div class="rl"><span class="rn">2.</span><span class="rt">대량 등록 모듈 + 관리자 콘솔 기본</span></div>
+          <div class="rl"><span class="rn">3.</span><span class="rt">결제 PG 연동 + 전자세금계산서</span></div>
+          <div class="rl"><span class="rn">4.</span><span class="rt">배송·반품·고객센터 + 운영 자동화</span></div>
+          <div class="rl"><span class="rn">5.</span><span class="rt">QA · 정식 오픈 · 운영 인수인계</span></div>
+        </div>
+
+        <div style="margin-top:18px; padding:18px 24px; background:var(--accent); color:#fff; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.9rem; line-height:1.55;">
+          오픈 후 <strong>6개월 무상 유지보수</strong> 포함 — 버그 수정·운영 지원·소소한 개선 작업까지.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">09 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 10 WBS 12 WEEK -->
+  <div class="slide light" style="padding:50px 100px;">
+    <div class="section-mark"><span class="acc">§ 09</span> The Launch · 12주 일정</div>
+    <h2 class="ed-title" style="font-size:3.4rem;">계약 후 <em>12주 안에 오픈합니다.</em></h2>
+
+    <div style="margin-top:18px; background:#f7f7f8; padding:24px 28px;">
+      <div style="display:grid; grid-template-columns:160px repeat(12, 1fr); gap:4px; align-items:center; font-family:'Pretendard Variable','Pretendard',sans-serif;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; padding:8px 0;">작업</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W1</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W2</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W3</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W4</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W5</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W6</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W7</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W8</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W9</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W10</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W11</div>
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.18em; color:#888; text-transform:uppercase; text-align:center; padding:8px 0;">W12</div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">기획 · 와이어프레임</div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">UI 디자인</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">DB · 백엔드 코어</div>
+        <div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">회원 · 면허 인증</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">프론트 · 카탈로그</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">대량 등록 · 관리자</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#2563EB; margin:6px 0;"></div>
+        <div style="height:16px; background:#2563EB; margin:6px 0;"></div>
+        <div style="height:16px; background:#2563EB; margin:6px 0;"></div>
+        <div style="height:16px; background:#2563EB; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">결제 · 세금계산서</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">배송 · 고객센터</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">QA · 베타 운영</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; background:#444; margin:6px 0;"></div>
+        <div style="height:16px; margin:6px 0;"></div>
+
+        <div style="font-size:0.82rem; font-weight:500; padding:8px 0;">정식 오픈 · 인수</div>
+        <div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div><div style="height:16px; margin:6px 0;"></div>
+        <div style="height:16px; background:#000; outline:3px solid #000; margin:6px 0;"></div>
+      </div>
+
+      <div style="display:flex; gap:24px; margin-top:18px; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.72rem; color:#666;">
+        <span><span style="display:inline-block; width:12px; height:12px; background:#000; vertical-align:middle; margin-right:8px;"></span>핵심 작업</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#2563EB; vertical-align:middle; margin-right:8px;"></span>대량등록·관리자 (DentBiz 차별점)</span>
+        <span><span style="display:inline-block; width:12px; height:12px; background:#444; vertical-align:middle; margin-right:8px;"></span>병행 작업 / QA</span>
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px; opacity:0.4;">10 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 11 COST -->
+  <div class="slide dark">
+    <div class="section-mark" style="color:rgba(255,255,255,0.7);"><span class="acc" style="color:#6ea0ff;">§ 10</span> The Cost</div>
+    <h2 class="ed-title" style="color:#fff;">통합 견적<br><em>₩ 20,000,000 (VAT 별도)</em></h2>
+
+    <div class="ed-two-col" style="margin-top:22px;">
+      <div>
+        <div class="cost-block dark" style="padding:26px 30px;">
+          <h4 style="margin-bottom:16px;">개발 비용 구성</h4>
+          <div class="cost-list">
+            <div class="cl-item"><span class="cl-name">기획 · UI/UX 디자인</span><span class="cl-value">₩ 3,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">프론트엔드 (반응형 포함)</span><span class="cl-value">₩ 5,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">백엔드 · DB · API</span><span class="cl-value">₩ 6,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">대량 등록 · 관리자 콘솔</span><span class="cl-value">₩ 3,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">결제 PG · 전자세금계산서 연동</span><span class="cl-value">₩ 2,000,000</span></div>
+            <div class="cl-item"><span class="cl-name">QA · 배포 · 인수인계</span><span class="cl-value">₩ 1,000,000</span></div>
+            <div class="cl-item cl-total"><span class="cl-name">개발 합계</span><span class="cl-value">₩ 20,000,000</span></div>
+          </div>
+        </div>
+
+        <div class="save-box">
+          <span class="sb-num">−33%</span>
+          <span class="sb-text">초기 요청 견적 ₩30M 대비 약 1/3 절감 — 통합 계약 · 단계 배포로 의사결정·재협상 비용을 줄였습니다.</span>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1.32rem; line-height:1.55; color:rgba(255,255,255,0.88); border-top:3px solid #fff; padding-top:16px; margin-bottom:22px;">
+          B2B 커머스는 한 번 잘 만들면 5년을 씁니다. 첫 12주에 운영 부담을 줄여놓는 것이 가장 큰 비용 절감입니다.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.2);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:2.6rem; line-height:1; color:#fff; min-width:160px;">6<span style="font-size:1.2rem;">개월</span></span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.95rem; color:rgba(255,255,255,0.82); line-height:1.5;">오픈 후 무상 유지보수 — 버그 수정, 운영 지원, 소소한 기능 개선 포함</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.2);">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:2.6rem; line-height:1; color:#fff; min-width:160px;">12<span style="font-size:1.2rem;">주</span></span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.95rem; color:rgba(255,255,255,0.82); line-height:1.5;">계약 후 정식 오픈까지 — 단계 배포로 W8 시점 1차 검수 가능</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:18px;">
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-weight:600; font-size:2.6rem; line-height:1; color:#fff; min-width:160px;">+α</span>
+            <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.95rem; color:rgba(255,255,255,0.82); line-height:1.5;">유지보수 종료 후 월 운영 계약 별도 협의 (정액형 권장)</span>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; padding:16px 22px; background:#fff; color:#000; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.85rem; line-height:1.6;">
+          ※ 결제 PG·세금계산서 외부 수수료 · 도메인 · 서버 호스팅 비용은 발주처 부담 (실비 정산 권장)
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-num">11 / 14</div>
+    <div class="brand-corner" style="color:#fff; opacity:0.5;"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 12 TECH COMPARE -->
+  <div class="slide light">
+    <div class="section-mark"><span class="acc">§ 11</span> The Tech</div>
+    <h2 class="ed-title">두 가지 기술 옵션,<br><em>같은 견적·같은 일정.</em></h2>
+    <p class="lede" style="margin-bottom:14px;">발주서에 명시된 PHP 스택과, 운영 효율 관점의 Next.js 스택을 동등하게 비교합니다. 결정은 발주처 IT팀의 기존 자산·인력에 맞춰 선택 가능합니다.</p>
+
+    <div class="tech-compare">
+      <div class="tc-cell hdr">항목</div>
+      <div class="tc-cell hdr acc">옵션 A · PHP 스택 (의뢰 명시)</div>
+      <div class="tc-cell hdr">옵션 B · Next.js 풀스택 (대안 제시)</div>
+
+      <div class="tc-cell label">언어 · 프레임워크</div>
+      <div class="tc-cell acc">PHP 8.3 · Laravel 11 (or 순수 MVC)</div>
+      <div class="tc-cell">TypeScript · Next.js 16 (App Router)</div>
+
+      <div class="tc-cell label">데이터베이스</div>
+      <div class="tc-cell acc">MySQL 8 / MariaDB</div>
+      <div class="tc-cell">PostgreSQL 16 (or MySQL 8)</div>
+
+      <div class="tc-cell label">프론트 빌드</div>
+      <div class="tc-cell acc">Webpack 5 · Vanilla JS + Blade 템플릿</div>
+      <div class="tc-cell">React 19 · Tailwind 4 · 서버 컴포넌트</div>
+
+      <div class="tc-cell label">대량 등록 워커</div>
+      <div class="tc-cell acc">Laravel Queue · Redis · Horizon</div>
+      <div class="tc-cell">BullMQ · Redis · Node 워커 프로세스</div>
+
+      <div class="tc-cell label">결제 PG</div>
+      <div class="tc-cell acc">KCP · 토스페이먼츠 PHP SDK</div>
+      <div class="tc-cell">토스페이먼츠 / 포트원 v2 (Node SDK)</div>
+
+      <div class="tc-cell label">전자세금계산서</div>
+      <div class="tc-cell acc">팝빌 / 바이로 PHP API</div>
+      <div class="tc-cell">팝빌 / 바이로 REST API</div>
+
+      <div class="tc-cell label">호스팅 권장</div>
+      <div class="tc-cell acc">Cafe24 · AWS LightSail · 가비아</div>
+      <div class="tc-cell">Vercel + AWS RDS · 또는 AWS ECS 단일</div>
+
+      <div class="tc-cell label">강점</div>
+      <div class="tc-cell acc"><strong>국내 PG·세금계산서 SDK 생태계 풍부</strong> · 국내 호스팅 호환성 최고 · 운영 인력 구하기 쉬움</div>
+      <div class="tc-cell"><strong>모던 UX · 빠른 페이지 응답</strong> · 향후 모바일 앱(React Native) 자산 공유 · 빌드 자동화</div>
+
+      <div class="tc-cell label" style="border-bottom:none;">약점 / 유의</div>
+      <div class="tc-cell acc" style="border-bottom:none;">관리자 콘솔 UX 작성 시간이 다소 추가됨</div>
+      <div class="tc-cell" style="border-bottom:none;">발주처 내부에 Node 운영 인력이 없으면 외부 의존 발생</div>
+    </div>
+
+    <div style="margin-top:18px; padding:14px 22px; background:var(--accent); color:#fff; display:inline-flex; gap:18px; align-items:center;">
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:0.95rem;">권고</span>
+      <span style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.92rem;">발주서 명시대로 <strong>옵션 A (PHP)</strong> 기본 채택 권장 — 의료기기 B2B 도메인의 운영·인계 안정성이 가장 높습니다.</span>
+    </div>
+
+    <div class="slide-num">12 / 14</div>
+    <div class="brand-corner"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 13 DESIGN PREVIEW (사전 제시 메인 시안) -->
+  <div class="slide ink" style="padding:46px 70px 36px;">
+    <div class="section-mark" style="color:rgba(255,255,255,0.7);"><span class="acc" style="color:#6ea0ff;">§ 12</span> The Design · 사전 제시 메인 시안</div>
+
+    <div style="display:grid; grid-template-columns: 1.05fr 1.95fr; gap:30px; align-items:flex-start; margin-top:6px; flex:1;">
+      <div>
+        <h2 class="ed-title" style="color:#fff; font-size:2.5rem; line-height:1.1; margin-bottom:12px;">
+          말이 아닌,<br><em>화면으로 먼저.</em>
+        </h2>
+        <p style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:1rem; line-height:1.55; color:rgba(255,255,255,0.86); border-top:3px solid #fff; padding-top:12px; margin-bottom:18px;">
+          본 메인 시안은 MaxImpact가 <strong style="font-style:normal; font-weight:600;">계약 전 사전 제시</strong>한 디자인입니다. 컨펌만 떨어지면 그대로 구현으로 진행합니다.
+        </p>
+
+        <div style="background:rgba(255,255,255,0.04); border-left:3px solid var(--accent); padding:14px 18px; margin-bottom:12px;">
+          <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.22em; color:rgba(255,255,255,0.55); text-transform:uppercase; margin-bottom:8px;">디자인 요지</div>
+          <ul style="list-style:none; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.82rem; line-height:1.85; color:rgba(255,255,255,0.88);">
+            <li>— 블랙·화이트 절제미 · 의료기기 신뢰감</li>
+            <li>— 상단 전폭 검색바 · 카테고리·베스트·기획전·신제품</li>
+            <li>— NEW ARRIVAL 풀폭 히어로 · "자세히 보기" CTA</li>
+            <li>— 좌측 카테고리 사이드바 · 우측 인기 제품 그리드</li>
+            <li>— BEST · HOT 배지 · 신상품순 정렬</li>
+          </ul>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="background:#fff; color:#000; padding:12px 14px;">
+            <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.2em; color:#888; text-transform:uppercase; margin-bottom:4px;">레이아웃</div>
+            <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.82rem; font-weight:500;">12 컬럼 · 1440 기준</div>
+          </div>
+          <div style="background:var(--accent); color:#fff; padding:12px 14px;">
+            <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.2em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-bottom:4px;">반응형</div>
+            <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.82rem; font-weight:500;">PC · 태블릿 · 모바일</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; padding:12px 16px; background:#0f1521; border:1px solid rgba(255,255,255,0.1); font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.74rem; color:rgba(255,255,255,0.75); line-height:1.55;">
+          ※ 본 시안은 Variant 디자인 툴에서 작성된 사전 시안으로, 실제 구현 시 발주처 컨펌을 거쳐 일부 색상·여백·레이아웃은 조정될 수 있습니다.
+        </div>
+      </div>
+
+      <div style="position:relative; background:#fff; padding:6px; box-shadow: 0 24px 80px rgba(0,0,0,0.5);">
+        <img src="assets/variant_main_viewport.png" alt="DentBiz 메인 시안" style="display:block; width:100%; height:auto;">
+        <div style="position:absolute; top:14px; right:14px; padding:6px 11px; background:rgba(0,0,0,0.78); backdrop-filter:blur(6px); font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.22em; color:#fff; text-transform:uppercase;">PRE-DESIGN · BY MAXIMPACT</div>
+      </div>
+    </div>
+
+    <div class="slide-num">13 / 14</div>
+    <div class="brand-corner" style="color:#fff; opacity:0.5;"><div class="bar"></div>MAXIMPACT</div>
+  </div>
+
+  <!-- 14 CONCLUSION -->
+  <div class="slide light" style="padding:50px 100px; justify-content:space-between;">
+    <div>
+      <div class="section-mark"><span class="acc">§ 13</span> In Conclusion</div>
+      <h2 class="ed-title" style="font-size:4rem;">의료기기 B2B는<br><em>"기능"이 아니라 "운영"입니다.</em></h2>
+      <p class="lede" style="font-size:1.22rem;">DentBiz는 단순한 쇼핑몰 복제가 아닙니다. 면허로 안전을 가르고, 수십만 SKU를 가볍게 다루고, 변동이 잦아도 운영자가 지치지 않는 — <strong>운영 효율 우선의 의료기기 커머스</strong>를 12주 안에 만들어 드립니다.</p>
+    </div>
+
+    <div class="ed-three-col" style="margin-top:0;">
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">전략</div>
+        <h4 style="font-size:1.25rem;">3단계 권한 게이트<br>+ 단계 배포</h4>
+        <ul><li>비회원 · 회원 · 승인 의료인</li><li>SEO와 규제 동시 충족</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:var(--accent); border-top-width:6px;">
+        <div class="pc-tag" style="color:var(--accent);">방법</div>
+        <h4 style="font-size:1.25rem;">통합 계약 +<br>대량 등록 모듈 중심 설계</h4>
+        <ul><li>Excel Upsert · 비동기 워커</li><li>가격·재고·단종 1클릭 관리</li></ul>
+      </div>
+      <div class="phase-col" style="border-top-color:#000;">
+        <div class="pc-tag">조건</div>
+        <h4 style="font-size:1.25rem;">₩ 20M · 12주<br>+ 6개월 유지보수</h4>
+        <ul><li>초기 견적 대비 −33%</li><li>오픈 후 무상 운영 지원</li></ul>
+      </div>
+    </div>
+
+    <div class="end-strap">
+      <div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:600; font-size:1.6rem; line-height:1; color:#000; letter-spacing:0.05em;">DENT · BIZ</div>
+        <div style="font-family:'Pretendard Variable','Pretendard',sans-serif; font-style:italic; font-size:0.9rem; color:#666; margin-top:6px;">B2B Dental Commerce — Built for Operations</div>
+      </div>
+      <div style="text-align:right; font-family:'Pretendard Variable','Pretendard',sans-serif; font-size:0.66rem; letter-spacing:0.22em; text-transform:uppercase; color:#666; line-height:2;">
+        PROPOSAL · 2026 / 05<br>NEXT STEP — 통합 계약 검토
+      </div>
+    </div>
+
+    <div class="slide-num" style="position:relative; bottom:0; left:0; margin-top:8px;">14 / 14</div>
+  </div>
+
+</div>
+
+</body>
+</html>

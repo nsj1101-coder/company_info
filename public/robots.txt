@@ -1,0 +1,49 @@
+# MaxImpact - robots.txt
+# https://maximpact.co.kr/
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /api/
+Disallow: /submissions.db
+Disallow: /*.db$
+Disallow: /node_modules/
+Disallow: /.playwright-mcp/
+
+# Major search engines - explicit allow
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Daumoa
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# AI crawlers (GEO/AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://maximpact.co.kr/sitemap.xml

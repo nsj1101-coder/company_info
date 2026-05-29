@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html, body { width: 1200px; height: 800px; background: #ffffff; }
+body {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.cover {
+  width: 1200px; height: 800px;
+  background: #ffffff;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  overflow: hidden;
+}
+
+/* LEFT — content */
+.left {
+  padding: 72px 64px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative;
+  background: #ffffff;
+  border-right: 1px solid #f0f0f0;
+}
+.top-meta {
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #999;
+  font-weight: 700;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+.year { color: #bbb; }
+
+.title-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.title-kr {
+  font-size: 58px; font-weight: 800; color: #111;
+  line-height: 1.18; letter-spacing: -0.025em;
+  margin-bottom: 26px;
+}
+.desc {
+  font-size: 16.5px; color: #555;
+  line-height: 1.7;
+  max-width: 580px;
+  font-weight: 400;
+}
+
+.bottom-row {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px;
+}
+.tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-width: 540px;
+}
+.tag {
+  padding: 7px 14px;
+  border: 1px solid #e6e6e6;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: #555;
+  background: #fff;
+}
+
+.brand {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; color: #aaa;
+  font-weight: 700; letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.brand strong { color: #222; font-weight: 900; }
+
+/* RIGHT — geometric illustration zone */
+.right {
+  position: relative;
+  overflow: hidden;
+}
+
+.big-circle {
+  position: absolute;
+  top: -120px; right: -140px;
+  width: 460px; height: 460px;
+  border-radius: 50%;
+}
+.ring-circle {
+  position: absolute;
+  bottom: -100px; left: -80px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  border: 30px solid currentColor;
+  opacity: 0.22;
+}
+.mini-dot {
+  position: absolute;
+  top: 260px; left: 130px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #111;
+}
+
+/* Floating badge top-left */
+.badge {
+  position: absolute;
+  top: 64px; left: 40px;
+  background: #ffffff;
+  border-radius: 100px;
+  padding: 9px 18px 9px 9px;
+  display: flex; align-items: center; gap: 11px;
+  box-shadow: 0 6px 24px rgba(15,23,42,0.08);
+  z-index: 5;
+}
+.badge .ico {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 13px; font-weight: 900;
+  font-family: 'Inter', sans-serif;
+}
+.badge .txt {
+  font-size: 12px; font-weight: 800; color: #222;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.06em;
+}
+
+/* Bottom code card */
+.code-card {
+  position: absolute;
+  bottom: 56px; right: 36px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-family: 'JetBrains Mono', 'Inter', monospace;
+  font-size: 11.5px;
+  color: #444;
+  box-shadow: 0 10px 36px rgba(15,23,42,0.10);
+  min-width: 230px;
+  z-index: 5;
+  line-height: 1.85;
+}
+.code-card .cmt { color: #aaa; }
+.code-card .k { font-weight: 700; }
+
+/* Stat card top-right */
+.stat-card {
+  position: absolute;
+  top: 64px; right: 36px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 8px 28px rgba(15,23,42,0.08);
+  z-index: 5;
+  text-align: right;
+}
+.stat-card .lbl {
+  font-size: 10px; color: #999;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.stat-card .val {
+  font-size: 22px; font-weight: 900; color: #111;
+  letter-spacing: -0.02em;
+}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="left">
+    <div class="top-meta">
+      <span>PROJECT</span>
+      <span class="dot" id="meta-dot-1"></span>
+      <span id="ph-category">CATEGORY</span>
+      <span class="dot" style="background:#ddd"></span>
+      <span class="year" id="ph-year">YEAR</span>
+    </div>
+
+    <div>
+      <div class="title-en" id="ph-en">EN</div>
+      <div class="title-kr" id="ph-title">TITLE</div>
+      <div class="desc" id="ph-desc">DESC</div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="tags" id="ph-tags">
+        <span class="tag">tag</span>
+      </div>
+      <div class="brand"><strong>MAX</strong>IMPACT</div>
+    </div>
+  </div>
+
+  <div class="right" id="right-zone">
+    <div class="big-circle" id="big-circle"></div>
+    <div class="ring-circle" id="ring-circle"></div>
+    <div class="mini-dot"></div>
+    <div class="badge">
+      <div class="ico" id="badge-ico">M</div>
+      <div class="txt" id="ph-badge-text">BADGE</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl" id="ph-stat-lbl">STACK</div>
+      <div class="val" id="ph-stat-val">FULL</div>
+    </div>
+    <div class="code-card" id="ph-code">
+      <div class="cmt">// stack</div>
+    </div>
+  </div>
+</div>
+
+<script>window.COVER_DATA = {"accent": "#DB2777", "accentBg": "#FDF2F8", "category": "NATIVE APP · DATING", "year": "2024", "en": "VALUE-MATCH", "title": "가치관 기반<br>네이티브 소개팅 앱", "desc": "외모가 아닌 가치관 · 라이프스타일 · MBTI 기반의 정교한 매칭 알고리즘. iOS / Android 네이티브 앱.", "tagsHtml": "<span class=\"tag accent\">React Native</span><span class=\"tag\">NestJS</span><span class=\"tag\">TypeScript</span><span class=\"tag\">PostgreSQL</span><span class=\"tag\">Socket.IO</span>", "badgeIco": "♥", "badgeText": "VALUE MATCH", "statLbl": "ALGO", "statVal": "VALUES", "codeHtml": "<div><span class=\"k\">match</span> Value-based</div><div><span class=\"k\">chat</span> Socket.IO</div><div><span class=\"k\">push</span> FCM · APNs</div>"};</script>
+<script>
+  // Data injected via template
+  const DATA = window.COVER_DATA || {
+    accent: '#2563EB',
+    accentBg: '#EFF6FF',
+    category: 'PROJECT',
+    year: '2025',
+    en: 'PROJECT',
+    title: '제목',
+    desc: '설명',
+    tagsHtml: '<span class="tag">tag</span>',
+    badgeIco: 'M',
+    badgeText: 'BADGE',
+    statLbl: 'STACK',
+    statVal: 'FULL',
+    codeHtml: '<div class="cmt">// stack</div>'
+  };
+  const $ = (id) => document.getElementById(id);
+  $('ph-category').textContent = DATA.category;
+  $('ph-year').textContent = DATA.year;
+  $('ph-en').textContent = DATA.en;
+  $('ph-title').innerHTML = DATA.title;
+  $('ph-desc').textContent = DATA.desc;
+  $('ph-tags').innerHTML = DATA.tagsHtml;
+  $('badge-ico').textContent = DATA.badgeIco;
+  $('ph-badge-text').textContent = DATA.badgeText;
+  $('ph-stat-lbl').textContent = DATA.statLbl;
+  $('ph-stat-val').textContent = DATA.statVal;
+  $('ph-code').innerHTML = '<div class="cmt">// stack</div>' + DATA.codeHtml;
+
+  document.getElementById('meta-dot-1').style.background = DATA.accent;
+  document.getElementById('right-zone').style.background = DATA.accentBg;
+  document.getElementById('big-circle').style.background = DATA.accent;
+  document.getElementById('ring-circle').style.color = DATA.accent;
+  document.getElementById('badge-ico').style.background = DATA.accent;
+  document.querySelector('.title-en').style.color = DATA.accent;
+  // accent tag styling
+  document.querySelectorAll('.tag.accent').forEach(el => {
+    el.style.borderColor = DATA.accent;
+    el.style.color = DATA.accent;
+    el.style.background = DATA.accentBg;
+  });
+  // accent code keyword
+  document.querySelectorAll('.code-card .k').forEach(el => {
+    el.style.color = DATA.accent;
+  });
+</script>
+</body>
+</html>
