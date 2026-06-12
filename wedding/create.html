@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayDot Wedding · 앨범 만들기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-2: #2d2624;
+    --muted: #7a6e6c;
+    --line: #f0d8d2;
+    --line-2: #f7e1da;
+    --paper: #ffffff;
+    --bg: #fbf3f0;
+    --bg-2: #fdf8f6;
+    --blush: #fde8e5;
+    --rose: #e8a39b;
+    --rose-deep: #c97070;
+    --paydot-blue: #2a348f;
+    --paydot-blue-deep: #1f266b;
+    --paydot-purple: #8a6daf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+  button, input, textarea, select {
+    font-family: inherit;
+    color: inherit;
+  }
+  button { cursor: pointer; border: none; background: none; }
+
+  /* ─── Topbar ─── */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar a.brand { display: flex; align-items: center; gap: 10px; }
+  .topbar .brand img { height: 28px; }
+  .topbar .back {
+    color: var(--muted); font-size: 0.92rem; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.18s ease;
+    text-decoration: none;
+  }
+  .topbar .back:hover { color: var(--ink); }
+
+  /* ─── Layout ─── */
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding: 36px 28px 80px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* ─── Sidebar ─── */
+  .side {
+    position: sticky; top: 86px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 26px 24px;
+  }
+  .side h2 {
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--rose-deep);
+    letter-spacing: 0.14em;
+    margin-bottom: 18px;
+  }
+  .side-steps {
+    display: flex; flex-direction: column; gap: 4px;
+    margin-bottom: 22px;
+  }
+  .side-step {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 0.92rem; font-weight: 600;
+    transition: background 0.18s ease, color 0.18s ease;
+    cursor: pointer;
+  }
+  .side-step .ni {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .side-step.active { background: var(--blush); color: var(--rose-deep); }
+  .side-step.active .ni { background: var(--rose-deep); color: #fff; }
+  .side-step.done .ni { background: var(--paydot-blue); color: #fff; }
+  .side-step.done { color: var(--ink); }
+  .side-summary {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .side-summary .row {
+    display: flex; justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.85rem;
+  }
+  .side-summary .row .k { color: var(--muted); }
+  .side-summary .row .v { color: var(--ink); font-weight: 600; max-width: 60%; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ─── Main panel ─── */
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 36px 40px 32px;
+    min-height: 520px;
+    display: flex; flex-direction: column;
+  }
+  .panel-head {
+    margin-bottom: 28px;
+  }
+  .panel-head .small {
+    color: var(--rose-deep);
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.14em;
+    margin-bottom: 8px;
+  }
+  .panel-head h1 {
+    font-size: 1.7rem; font-weight: 700;
+    letter-spacing: -0.018em;
+  }
+  .panel-head p {
+    color: var(--muted); font-size: 0.96rem;
+    margin-top: 6px;
+    line-height: 1.7;
+  }
+
+  /* ─── Steps content ─── */
+  .step-pane { display: none; flex: 1; flex-direction: column; }
+  .step-pane.active { display: flex; }
+
+  .row-2 {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 0.82rem; font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .field input, .field select, .field textarea {
+    background: var(--bg-2);
+    border: 1.4px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.96rem;
+    transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(232,163,155,0.18);
+  }
+
+  /* ─── Cover style picker ─── */
+  .covers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 4px;
+  }
+  .cover-card {
+    aspect-ratio: 0.75;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    padding: 12px;
+    cursor: pointer;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    color: #fff;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .cover-card:hover { transform: translateY(-2px); }
+  .cover-card.selected {
+    border-color: var(--paydot-blue);
+    box-shadow: 0 18px 36px -16px rgba(42,52,143,0.5);
+  }
+  .cover-card .name { font-size: 0.78rem; font-weight: 700; opacity: 0.95; }
+  .cover-card .ti { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.012em; margin-top: 2px; }
+  .cover-card.c1 { background: linear-gradient(160deg, #f8e0db, #e8a39b 60%, #c97070); }
+  .cover-card.c2 { background: linear-gradient(160deg, #f3e4d8, #cfa78a 60%, #8e5e44); }
+  .cover-card.c3 { background: linear-gradient(160deg, #ecd9e8, #b693c6 60%, #6e548f); }
+  .cover-card.c4 { background: linear-gradient(160deg, #dde6f0, #889dc4 60%, #2a348f); }
+
+  /* ─── Privacy radio ─── */
+  .privacy {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 4px;
+  }
+  .priv-opt {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 18px;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-2);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .priv-opt:hover { border-color: var(--line-2); }
+  .priv-opt.selected { border-color: var(--paydot-blue); background: #ecf0ff; }
+  .priv-radio {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: #fff;
+    position: relative;
+    transition: border-color 0.18s ease;
+  }
+  .priv-opt.selected .priv-radio {
+    border-color: var(--paydot-blue);
+  }
+  .priv-opt.selected .priv-radio::after {
+    content: '';
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    background: var(--paydot-blue);
+  }
+  .priv-text .ti {
+    font-weight: 700; font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  .priv-text .sub {
+    color: var(--muted); font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  /* ─── Final done step ─── */
+  .done-stage {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    gap: 22px;
+    padding: 12px 12px 0;
+  }
+  .qr-card {
+    width: 220px; height: 220px;
+    background:
+      conic-gradient(from 0deg at 50% 50%, #fff 0deg, #fff 0deg);
+    border: 12px solid #fff;
+    border-radius: 24px;
+    position: relative;
+    box-shadow: 0 22px 40px -20px rgba(201,112,112,0.4);
+  }
+  .qr-grid {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: repeat(13,1fr); grid-template-rows: repeat(13,1fr);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .qr-grid span { background: var(--ink); }
+  .qr-grid span.off { background: transparent; }
+  .qr-grid .corner {
+    grid-row: span 3; grid-column: span 3;
+    border: 4px solid var(--ink);
+    background: transparent;
+    position: relative;
+  }
+  .qr-grid .corner::after {
+    content: ''; position: absolute; inset: 2px;
+    background: var(--ink);
+  }
+  .done-stage h3 {
+    font-size: 1.5rem; font-weight: 700;
+    letter-spacing: -0.018em;
+  }
+  .done-stage p { color: var(--muted); font-size: 0.96rem; line-height: 1.7; }
+  .done-cta {
+    display: inline-flex; gap: 10px; margin-top: 6px;
+  }
+  .done-cta .copy-link {
+    background: #fff;
+    border: 1.4px solid var(--line);
+    color: var(--ink); padding: 12px 22px;
+    border-radius: 999px;
+    font-size: 0.9rem; font-weight: 600;
+    transition: border-color 0.18s ease;
+  }
+  .done-cta .copy-link:hover { border-color: var(--rose); }
+  .done-cta .open-album {
+    background: var(--paydot-blue); color: #fff;
+    padding: 12px 22px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 700;
+    text-decoration: none;
+    transition: background 0.18s ease;
+  }
+  .done-cta .open-album:hover { background: var(--paydot-blue-deep); }
+
+  /* ─── Nav buttons ─── */
+  .nav-row {
+    margin-top: auto;
+    padding-top: 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--line);
+    margin-top: 28px;
+    padding-top: 22px;
+  }
+  .btn-prev {
+    color: var(--muted); font-size: 0.94rem; font-weight: 600;
+    padding: 10px 16px;
+    transition: color 0.18s ease;
+  }
+  .btn-prev:hover { color: var(--ink); }
+  .btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-next {
+    background: var(--paydot-blue); color: #fff;
+    padding: 13px 32px;
+    border-radius: 999px;
+    font-size: 0.96rem; font-weight: 700;
+    transition: background 0.18s ease, transform 0.1s ease;
+  }
+  .btn-next:hover { background: var(--paydot-blue-deep); }
+  .btn-next:active { transform: scale(0.99); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; padding: 24px 20px 60px; gap: 20px; }
+    .side { position: static; }
+    .panel { padding: 28px 24px; }
+    .row-2 { grid-template-columns: 1fr; }
+    .covers { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="/wedding/"><img src="/wedding/assets/logo/paydot_logo.png" alt="PayDot"></a>
+  <a class="back" href="/wedding/">← 홈으로</a>
+</div>
+
+<div class="wrap">
+  <aside class="side">
+    <h2>PROGRESS</h2>
+    <div class="side-steps" id="sideSteps">
+      <div class="side-step active" data-step="1"><span class="ni">1</span> 신랑·신부 정보</div>
+      <div class="side-step" data-step="2"><span class="ni">2</span> 예식 정보</div>
+      <div class="side-step" data-step="3"><span class="ni">3</span> 표지 선택</div>
+      <div class="side-step" data-step="4"><span class="ni">4</span> 공개 설정</div>
+      <div class="side-step" data-step="5"><span class="ni">✓</span> 발급 완료</div>
+    </div>
+    <div class="side-summary">
+      <div class="row"><span class="k">앨범 이름</span><span class="v" id="sumTitle">미정</span></div>
+      <div class="row"><span class="k">예식 일시</span><span class="v" id="sumDate">미정</span></div>
+      <div class="row"><span class="k">표지</span><span class="v" id="sumCover">미정</span></div>
+      <div class="row"><span class="k">공개 범위</span><span class="v" id="sumPrivacy">미정</span></div>
+    </div>
+  </aside>
+
+  <section class="panel">
+    <!-- Step 1: 신랑·신부 정보 -->
+    <div class="step-pane active" data-pane="1">
+      <div class="panel-head">
+        <div class="small">STEP 01</div>
+        <h1>신랑 신부 정보부터 입력해 주세요</h1>
+        <p>앨범 이름과 표지 카피에 함께 나오는 정보입니다.</p>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>신랑 이름</label>
+          <input type="text" id="groomName" placeholder="예) 김민준">
+        </div>
+        <div class="field">
+          <label>신부 이름</label>
+          <input type="text" id="brideName" placeholder="예) 이서연">
+        </div>
+      </div>
+      <div class="field">
+        <label>앨범 부제 (선택)</label>
+        <input type="text" id="subtitle" placeholder="예) 우리 둘의 약속, 그날의 모든 시선">
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" disabled>← 이전</button>
+        <button class="btn-next" data-go="2">다음 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: 예식 정보 -->
+    <div class="step-pane" data-pane="2">
+      <div class="panel-head">
+        <div class="small">STEP 02</div>
+        <h1>예식 일시와 장소를 알려주세요</h1>
+        <p>QR 페이지 상단에 함께 보입니다. 결혼식 전에 미리 만들어도 괜찮아요.</p>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>예식 날짜</label>
+          <input type="date" id="ceremonyDate">
+        </div>
+        <div class="field">
+          <label>예식 시간</label>
+          <input type="time" id="ceremonyTime">
+        </div>
+      </div>
+      <div class="field">
+        <label>예식장</label>
+        <input type="text" id="venue" placeholder="예) 신라호텔 영빈관 2층 다이너스티홀">
+      </div>
+      <div class="field">
+        <label>주소 또는 길 안내 (선택)</label>
+        <input type="text" id="venueAddr" placeholder="예) 서울 중구 동호로 249">
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" data-go="1">← 이전</button>
+        <button class="btn-next" data-go="3">다음 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 표지 선택 -->
+    <div class="step-pane" data-pane="3">
+      <div class="panel-head">
+        <div class="small">STEP 03</div>
+        <h1>표지 스타일을 골라주세요</h1>
+        <p>나중에 언제든지 변경할 수 있어요. 4가지 분위기 중에서 골라보세요.</p>
+      </div>
+      <div class="covers" id="covers">
+        <div class="cover-card c1 selected" data-cover="블러시">
+          <span class="name">BLUSH</span>
+          <span class="ti">은은한 로즈</span>
+        </div>
+        <div class="cover-card c2" data-cover="얼스">
+          <span class="name">EARTH</span>
+          <span class="ti">차분한 모래</span>
+        </div>
+        <div class="cover-card c3" data-cover="라일락">
+          <span class="name">LILAC</span>
+          <span class="ti">고요한 라일락</span>
+        </div>
+        <div class="cover-card c4" data-cover="네이비">
+          <span class="name">NAVY</span>
+          <span class="ti">차분한 네이비</span>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" data-go="2">← 이전</button>
+        <button class="btn-next" data-go="4">다음 →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 공개 설정 -->
+    <div class="step-pane" data-pane="4">
+      <div class="panel-head">
+        <div class="small">STEP 04</div>
+        <h1>누가 사진을 올리고 볼 수 있나요?</h1>
+        <p>나중에 언제든 다시 바꿀 수 있습니다. 지금은 가장 가까운 설정으로 시작하세요.</p>
+      </div>
+      <div class="privacy" id="privacy">
+        <div class="priv-opt selected" data-priv="공개">
+          <div class="priv-radio"></div>
+          <div class="priv-text">
+            <div class="ti">QR이나 링크가 있는 누구나</div>
+            <div class="sub">하객 누구나 회원가입 없이 사진을 올리고 볼 수 있어요. 일반적인 결혼식에 추천합니다.</div>
+          </div>
+        </div>
+        <div class="priv-opt" data-priv="가족">
+          <div class="priv-radio"></div>
+          <div class="priv-text">
+            <div class="ti">초대받은 사람만</div>
+            <div class="sub">초대 링크를 받은 분만 사진을 올리고 볼 수 있어요. 가족 또는 친구 한정 보관함에 권장합니다.</div>
+          </div>
+        </div>
+        <div class="priv-opt" data-priv="비공개">
+          <div class="priv-radio"></div>
+          <div class="priv-text">
+            <div class="ti">신랑·신부만</div>
+            <div class="sub">부부만 보고 올릴 수 있는 비공개 보관함입니다. 스튜디오 원본을 받아두는 용도로 추천합니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-prev" data-go="3">← 이전</button>
+        <button class="btn-next" data-go="5">앨범 발급 →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: 완료 -->
+    <div class="step-pane" data-pane="5">
+      <div class="panel-head">
+        <div class="small">DONE</div>
+        <h1>앨범이 발급되었어요</h1>
+        <p>아래 QR 또는 링크를 청첩장과 함께 전달하시면 끝. 하객은 가입 없이 사진을 올릴 수 있어요.</p>
+      </div>
+      <div class="done-stage">
+        <div class="qr-card">
+          <div class="qr-grid" id="qrGrid"></div>
+        </div>
+        <div>
+          <h3 id="doneTitle">민준 · 서연의 결혼</h3>
+          <p id="doneSub">2026년 4월 6일 · 신라호텔 영빈관</p>
+        </div>
+        <div class="done-cta">
+          <button class="copy-link">링크 복사</button>
+          <a class="open-album" href="/wedding/album">샘플 앨범 열어보기 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const state = {
+    step: 1,
+    groomName: '', brideName: '',
+    subtitle: '',
+    ceremonyDate: '', ceremonyTime: '', venue: '',
+    cover: '블러시',
+    privacy: '공개',
+  };
+
+  const panes = document.querySelectorAll('.step-pane');
+  const sideSteps = document.querySelectorAll('.side-step');
+
+  const go = (n) => {
+    state.step = n;
+    panes.forEach(p => p.classList.toggle('active', Number(p.dataset.pane) === n));
+    sideSteps.forEach(s => {
+      const k = Number(s.dataset.step);
+      s.classList.toggle('active', k === n);
+      s.classList.toggle('done', k < n);
+    });
+    syncSummary();
+    if (n === 5) renderQR();
+  };
+
+  document.querySelectorAll('[data-go]').forEach(b => {
+    b.addEventListener('click', () => {
+      // basic capture
+      state.groomName = document.getElementById('groomName').value.trim();
+      state.brideName = document.getElementById('brideName').value.trim();
+      state.subtitle = document.getElementById('subtitle').value.trim();
+      state.ceremonyDate = document.getElementById('ceremonyDate').value;
+      state.ceremonyTime = document.getElementById('ceremonyTime').value;
+      state.venue = document.getElementById('venue').value.trim();
+      go(Number(b.dataset.go));
+    });
+  });
+
+  // cover picker
+  document.getElementById('covers').addEventListener('click', e => {
+    const card = e.target.closest('.cover-card');
+    if (!card) return;
+    document.querySelectorAll('.cover-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.cover = card.dataset.cover;
+    syncSummary();
+  });
+
+  // privacy picker
+  document.getElementById('privacy').addEventListener('click', e => {
+    const opt = e.target.closest('.priv-opt');
+    if (!opt) return;
+    document.querySelectorAll('.priv-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    state.privacy = opt.dataset.priv;
+    syncSummary();
+  });
+
+  const syncSummary = () => {
+    const tn = (state.groomName || state.brideName)
+      ? `${state.groomName || '신랑'} · ${state.brideName || '신부'}`
+      : '미정';
+    document.getElementById('sumTitle').textContent = tn;
+    document.getElementById('sumDate').textContent =
+      state.ceremonyDate ? `${state.ceremonyDate}${state.ceremonyTime ? ' ' + state.ceremonyTime : ''}` : '미정';
+    document.getElementById('sumCover').textContent = state.cover;
+    document.getElementById('sumPrivacy').textContent = state.privacy;
+
+    // done-step title
+    if (state.groomName && state.brideName) {
+      document.getElementById('doneTitle').textContent = `${state.groomName} · ${state.brideName}의 결혼`;
+    }
+    if (state.ceremonyDate) {
+      const venue = state.venue || '식장 미정';
+      document.getElementById('doneSub').textContent = `${state.ceremonyDate}${state.ceremonyTime ? ' ' + state.ceremonyTime : ''} · ${venue}`;
+    }
+  };
+
+  // copy link button stub
+  document.querySelector('.copy-link').addEventListener('click', e => {
+    const original = e.target.textContent;
+    e.target.textContent = '복사되었습니다';
+    setTimeout(() => { e.target.textContent = original; }, 1400);
+  });
+
+  // pseudo-QR grid (deterministic pattern, not a real QR)
+  const renderQR = () => {
+    const grid = document.getElementById('qrGrid');
+    if (grid.dataset.rendered) return;
+    grid.dataset.rendered = '1';
+    grid.innerHTML = '';
+    const cells = 13 * 13;
+    // corners
+    const corners = [[0,0],[0,10],[10,0]];
+    const cornerSet = new Set(corners.map(([r,c]) => r*13 + c));
+    for (let i = 0; i < cells; i++) {
+      const r = Math.floor(i/13), c = i%13;
+      // mark corner positions
+      const isCornerCell = corners.some(([cr,cc]) => r >= cr && r < cr+3 && c >= cc && c < cc+3);
+      const span = document.createElement('span');
+      if (isCornerCell) {
+        // skip corner area; render once below
+        span.classList.add('off');
+        grid.appendChild(span);
+        continue;
+      }
+      // pseudo pattern
+      const on = ((r*31 + c*17 + r*c) % 7) < 3;
+      if (!on) span.classList.add('off');
+      grid.appendChild(span);
+    }
+    // overlay 3 corner squares
+    corners.forEach(([r,c]) => {
+      const corner = document.createElement('div');
+      corner.style.position = 'absolute';
+      corner.style.gridRow = `${r+1} / span 3`;
+      corner.style.gridColumn = `${c+1} / span 3`;
+      corner.style.border = '4px solid var(--ink)';
+      corner.style.borderRadius = '2px';
+      corner.style.background = 'transparent';
+      corner.style.position = 'relative';
+      const inner = document.createElement('div');
+      inner.style.position = 'absolute';
+      inner.style.inset = '3px';
+      inner.style.background = 'var(--ink)';
+      corner.appendChild(inner);
+      grid.appendChild(corner);
+    });
+  };
+</script>
+
+</body>
+</html>

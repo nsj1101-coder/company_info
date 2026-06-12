@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일반 회원 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+
+    .bot-area{display:flex;flex:1;min-height:0;overflow:hidden}
+    .filter-side{width:240px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px;padding:20px;overflow-y:auto}
+    .filter-side .add-btn{width:100%;background:var(--fg-primary);color:var(--fg-inverse);border:none;border-radius:var(--radius-sm);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+    .filter-side .add-btn i{font-size:16px}
+    .seg-tab{display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+    .seg-tab .st{flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--fg-secondary);background:var(--bg-card);cursor:pointer;border-left:1px solid var(--border)}
+    .seg-tab .st:first-child{border-left:none}
+    .seg-tab .st.active{background:var(--accent);color:var(--fg-inverse);font-weight:600}
+    .region-sec{display:flex;flex-direction:column;gap:10px}
+    .region-sec .rg-title{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .region-sec .rg-row{display:flex;align-items:center;justify-content:space-between}
+    .region-sec .rg-row .rg-l{font-size:14px;color:var(--fg-secondary)}
+    .region-sec .rg-row .rg-v{font-family:var(--font-mono);font-size:14px;color:var(--fg-muted)}
+
+    .table-wrap{flex:1;min-width:0;background:var(--bg-card);display:flex;flex-direction:column;overflow:hidden}
+    .info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 24px}
+    .info-bar .info-txt{font-size:14px;color:var(--fg-muted)}
+    .sort-frame{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);font-size:14px;font-weight:500;color:var(--fg-secondary);cursor:pointer}
+    .sort-frame i{font-size:14px}
+    .ag-table-scroll{flex:1;overflow-y:auto}
+    .ag-table{width:100%;border-collapse:collapse;table-layout:fixed}
+    .ag-table thead th{background:var(--bg-secondary);height:44px;padding:0 0 0 12px;font-size:14px;font-weight:600;color:var(--fg-muted);text-align:left;border-bottom:1px solid var(--border-light);white-space:nowrap}
+    .ag-table thead th:first-child{padding-left:24px;width:28px}
+    .ag-table thead th:last-child{padding-right:24px;text-align:center}
+    .ag-table tbody td{height:52px;padding:0 0 0 12px;font-size:14px;color:var(--fg-primary);border-bottom:1px solid var(--border-light);vertical-align:middle}
+    .ag-table tbody td:first-child{padding-left:24px;width:28px}
+    .ag-table tbody td:last-child{padding-right:24px}
+    .ag-table tbody tr.selected{background:#F9F9FF}
+    .ag-ck{width:16px;height:16px;border:1.5px solid var(--border);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;vertical-align:middle}
+    .ag-ck.on{background:var(--accent);border-color:var(--accent);color:#fff}
+    .ag-ck.on::after{content:'';width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+    .ag-name{display:inline-flex;align-items:center;gap:10px;font-weight:500}
+    .ag-av{width:32px;height:32px;border-radius:50%;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ag-av i{color:var(--accent);font-size:16px}
+    .ag-country,.ag-mgr{color:var(--fg-secondary);font-weight:400}
+    .ag-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:14px;font-weight:500}
+    .ag-badge.on{background:var(--accent-light);color:var(--accent)}
+    .ag-badge.off{background:#FFEBEE;color:var(--danger)}
+    .ag-num{font-family:var(--font-mono);font-weight:500;color:var(--fg-primary)}
+    .ag-date{font-family:var(--font-mono);color:var(--fg-muted)}
+    .ag-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+    .ag-actions i{color:var(--fg-muted);font-size:16px;cursor:pointer}
+
+    .ag-pag{display:flex;align-items:center;justify-content:center;position:relative;height:48px;padding:0 24px;border-top:1px solid var(--border-light);flex-shrink:0}
+    .ag-pag .pag-info{position:absolute;left:24px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--fg-muted)}
+    .ag-pag .pag-btns{display:flex;align-items:center;gap:4px}
+    .ag-pag .pb{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:14px;color:var(--fg-secondary);border:none;background:none;cursor:pointer}
+    .ag-pag .pb.bd{border:1px solid var(--border)}
+    .ag-pag .pb.active{background:var(--accent);color:#fff;font-weight:600}
+    .ag-pag .pb i{font-size:16px;color:var(--fg-muted)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item active" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>일반 회원</h1>
+        <p>코지워커 SHOP 일반 구매 회원 관리</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="이름·이메일·연락처 검색"></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#84c140"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBE2;color:#84c140">신규 가입</span><span class="noti-time">10분 전</span><div class="noti-text">송영미 회원이 신규 가입했습니다</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#34C759"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">신규 주문</span><span class="noti-time">1시간 전</span><div class="noti-text">임봉기 회원이 카본로얄파인더를 주문했습니다</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">문의 접수</span><span class="noti-time">3시간 전</span><div class="noti-text">박정수 보호자가 배송 문의를 남겼습니다</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bot-area">
+      <aside class="filter-side">
+        <button class="add-btn" onclick="navigateTo('user-add.html')"><i class="icon-plus"></i>회원 추가</button>
+        <div class="seg-tab" id="agencyStatusTabs">
+          <div class="st active" data-status="all">전체</div>
+          <div class="st" data-status="on">구매O</div>
+          <div class="st" data-status="off">구매X</div>
+        </div>
+        <div class="region-sec">
+          <div class="rg-title">가입 월별</div>
+          <div class="rg-row"><span class="rg-l">2025-05</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2025-04</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2025-03</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2025-02</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2025-01</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2024-12</span><span class="rg-v">1</span></div>
+          <div class="rg-row"><span class="rg-l">2024-11</span><span class="rg-v">1</span></div>
+        </div>
+      </aside>
+
+      <div class="table-wrap">
+        <div class="info-bar">
+          <span class="info-txt">총 10명 회원</span>
+          <button class="sort-frame"><i class="icon-arrow-up-down"></i>가입일순</button>
+        </div>
+        <div class="ag-table-scroll">
+          <table class="ag-table">
+            <colgroup>
+              <col style="width:52px">
+              <col style="width:16%">
+              <col style="width:200px">
+              <col style="width:140px">
+              <col style="width:110px">
+              <col style="width:80px">
+              <col style="width:130px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th><span class="ag-ck"></span></th>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>연락처</th>
+                <th>가입일</th>
+                <th>주문수</th>
+                <th>총구매액</th>
+                <th>최근 로그인</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>김영자</span></td>
+                <td class="ag-country">kim.yj@example.com</td>
+                <td class="ag-mgr">010-1234-5678</td>
+                <td class="ag-date">2024.08.12</td>
+                <td class="ag-num">3</td>
+                <td class="ag-num">380,000원</td>
+                <td class="ag-date">1시간 전</td>
+              </tr>
+              <tr class="selected">
+                <td><span class="ag-ck on"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>박정수 보호자</span></td>
+                <td class="ag-country">parkjs@example.com</td>
+                <td class="ag-mgr">010-2345-6789</td>
+                <td class="ag-date">2024.11.04</td>
+                <td class="ag-num">5</td>
+                <td class="ag-num">1,250,000원</td>
+                <td class="ag-date">어제</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>이순희</span></td>
+                <td class="ag-country">leesh@example.com</td>
+                <td class="ag-mgr">010-3456-7890</td>
+                <td class="ag-date">2025.01.22</td>
+                <td class="ag-num">1</td>
+                <td class="ag-num">90,000원</td>
+                <td class="ag-date">3일 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>최광호 보호자</span></td>
+                <td class="ag-country">choigh@example.com</td>
+                <td class="ag-mgr">010-4567-8901</td>
+                <td class="ag-date">2025.02.15</td>
+                <td class="ag-num">2</td>
+                <td class="ag-num">540,000원</td>
+                <td class="ag-date">5일 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>정명자</span></td>
+                <td class="ag-country">jungmj@example.com</td>
+                <td class="ag-mgr">010-5678-9012</td>
+                <td class="ag-date">2024.09.30</td>
+                <td class="ag-num">4</td>
+                <td class="ag-num">870,000원</td>
+                <td class="ag-date">1주 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>강수민 보호자</span></td>
+                <td class="ag-country">kangsm@example.com</td>
+                <td class="ag-mgr">010-6789-0123</td>
+                <td class="ag-date">2025.03.08</td>
+                <td class="ag-num">1</td>
+                <td class="ag-num">250,000원</td>
+                <td class="ag-date">2주 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>임봉기</span></td>
+                <td class="ag-country">limbg@example.com</td>
+                <td class="ag-mgr">010-7890-1234</td>
+                <td class="ag-date">2024.12.19</td>
+                <td class="ag-num">6</td>
+                <td class="ag-num">1,680,000원</td>
+                <td class="ag-date">1달 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>한경순 보호자</span></td>
+                <td class="ag-country">hanks@example.com</td>
+                <td class="ag-mgr">010-8901-2345</td>
+                <td class="ag-date">2025.04.05</td>
+                <td class="ag-num">2</td>
+                <td class="ag-num">460,000원</td>
+                <td class="ag-date">1달 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>송영미</span></td>
+                <td class="ag-country">songym@example.com</td>
+                <td class="ag-mgr">010-9012-3456</td>
+                <td class="ag-date">2025.05.11</td>
+                <td class="ag-num">1</td>
+                <td class="ag-num">195,000원</td>
+                <td class="ag-date">2달 전</td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-user"></i></span>조병국 보호자</span></td>
+                <td class="ag-country">chobk@example.com</td>
+                <td class="ag-mgr">010-0123-4567</td>
+                <td class="ag-date">2024.10.25</td>
+                <td class="ag-num">3</td>
+                <td class="ag-num">720,000원</td>
+                <td class="ag-date">3개월 전</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ag-pag">
+          <span class="pag-info">1-10 / 10</span>
+          <div class="pag-btns">
+            <button class="pb bd"><i class="icon-chevron-left"></i></button>
+            <button class="pb active">1</button>
+            <button class="pb bd"><i class="icon-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="agencyRegisterModal">
+  <div class="modal-content" style="width:520px;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)">
+      <div style="font-size:18px;font-weight:700;color:var(--fg-primary);font-family:'Pretendard',sans-serif">회원 추가</div>
+      <i class="icon-x" style="font-size:20px;color:var(--fg-muted);cursor:pointer" onclick="closeModal('agencyRegisterModal')"></i>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">이름 <span class="required">*</span></label>
+          <input class="form-input" type="text" placeholder="회원 이름">
+        </div>
+        <div class="form-group">
+          <label class="form-label">사용자 구분 <span class="required">*</span></label>
+          <select class="form-select"><option value="">구분 선택</option><option>본인</option><option>보호자</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">이메일 <span class="required">*</span></label>
+          <input class="form-input" type="text" placeholder="example@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">연락처</label>
+          <input class="form-input" type="text" placeholder="010-0000-0000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">메모</label>
+        <input class="form-input" type="text" placeholder="관리용 메모">
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;padding:16px 24px;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary" style="flex:1;height:44px" onclick="closeModal('agencyRegisterModal')">취소</button>
+      <button class="btn btn-primary" style="flex:1;height:44px" onclick="closeModal('agencyRegisterModal');showSuccess('등록이 완료되었습니다','회원이 정상적으로 등록되었습니다.')">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  (function(){
+    const tabs = document.querySelectorAll('#agencyStatusTabs .st');
+    const rows = document.querySelectorAll('.ag-table tbody tr');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.status;
+        rows.forEach(r => {
+          const badge = r.querySelector('.ag-badge');
+          if (!badge) return;
+          const status = badge.classList.contains('on') ? 'on' : 'off';
+          r.style.display = (filter === 'all' || filter === status) ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 통계 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+
+    .stats-body{display:flex;flex:1;min-height:0;overflow:hidden}
+
+    .f-panel{width:240px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+    .f-panel .btn-dl{width:100%;background:#111827;color:#fff;border-radius:var(--radius-sm);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:8px;border:none;font-size:14px;font-weight:600;cursor:pointer}
+    .f-sec{display:flex;flex-direction:column;gap:10px}
+    .f-sec-lbl{font-size:14px;font-weight:600;color:var(--fg-muted)}
+    .f-date{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--fg-secondary);font-size:13px;font-family:var(--font-mono)}
+    .f-date i{color:var(--fg-muted);font-size:14px;flex-shrink:0}
+    .f-date input[type="month"]{border:none;outline:none;background:transparent;font:inherit;color:var(--fg-secondary);padding:0;width:100%;min-width:0}
+    .f-date .dash{color:var(--fg-muted)}
+    .f-mk{display:flex;align-items:center;gap:8px;height:24px;font-size:14px;color:var(--fg-primary);cursor:pointer}
+    .f-mk .mk-box{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .f-mk.on .mk-box{background:var(--accent);border-color:var(--accent);color:#fff}
+    .f-mk.on .mk-box::after{content:'';width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+
+    .main-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+    .tab-row{display:flex;height:44px;background:var(--bg-card);border-bottom:1px solid var(--border);flex-shrink:0}
+    .st-tab{padding:0 24px;display:flex;align-items:center;font-size:14px;color:var(--fg-muted);cursor:pointer;text-decoration:none}
+    .st-tab.active{color:var(--accent);font-weight:600;box-shadow:inset 0 -2px 0 var(--accent)}
+
+    .content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px}
+    .pt-top-row{display:flex;gap:16px;flex:1;min-height:0}
+    .chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px}
+    .chart-card h3{font-size:16px;font-weight:600;color:var(--fg-primary)}
+
+    .funnel-card{flex:1;min-width:0;height:260px}
+    .fn-body{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center}
+    .fn-row{display:flex;align-items:center;gap:10px}
+    .fn-row .fl{width:40px;flex-shrink:0;font-size:14px;color:var(--fg-secondary)}
+    .fn-row .ft{flex:1;height:22px;background:var(--border-light);border-radius:4px;overflow:hidden}
+    .fn-row .ff{height:100%;border-radius:4px}
+    .fn-row .fv{width:80px;text-align:right;font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--fg-primary)}
+
+    .agency-card{flex:1;min-width:0}
+    .ag-row{display:flex;flex-direction:column;gap:6px}
+    .ag-head{display:flex;justify-content:space-between;align-items:center}
+    .ag-name{font-size:14px;font-weight:500;color:var(--fg-primary)}
+    .ag-val{font-family:var(--font-mono);font-size:11px;color:var(--fg-muted)}
+    .ag-bar{width:100%;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+    .ag-fill{height:100%;border-radius:3px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item active" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>회원 통계</h1>
+        <p>회원 가입·활동·구매 분석</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="회원명, 사업자명 검색..."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#84c140"></div><div class="noti-body"><span class="noti-badge" style="background:#EEF7E2;color:#5a9229">사업자 승인 대기</span><span class="noti-time">10분 전</span><div class="noti-text">신규 복지용구사업소 가입 요청 3건</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#34C759"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">정산 완료</span><span class="noti-time">1시간 전</span><div class="noti-text">㈜베스트시니어 3월 정산 완료</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">서류 검토</span><span class="noti-time">3시간 전</span><div class="noti-text">복지용구 인정번호 검토 대기 3건</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-body">
+      <aside class="f-panel">
+        <button class="btn-dl"><i class="icon-download"></i>리포트 다운로드</button>
+        <div class="f-sec">
+          <div class="f-sec-lbl">기간 선택</div>
+          <div class="f-mk"><span class="mk-box"></span>오늘</div>
+          <div class="f-mk on"><span class="mk-box"></span>최근 7일</div>
+          <div class="f-mk on"><span class="mk-box"></span>최근 30일</div>
+          <div class="f-mk"><span class="mk-box"></span>최근 1년</div>
+          <label class="f-date"><i class="icon-calendar"></i><input type="month" value="2026-01"><span class="dash">—</span><input type="month" value="2026-04"></label>
+        </div>
+        <div class="f-sec">
+          <div class="f-sec-lbl">지표 선택</div>
+          <div class="f-mk on"><span class="mk-box"></span>신규 가입 추이</div>
+          <div class="f-mk on"><span class="mk-box"></span>사업자 유형 분포</div>
+          <div class="f-mk on"><span class="mk-box"></span>지역별 분포</div>
+          <div class="f-mk"><span class="mk-box"></span>객단가</div>
+          <div class="f-mk"><span class="mk-box"></span>재구매율</div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <div class="tab-row">
+          <a href="statistics.html" class="st-tab">매출 통계</a>
+          <div class="st-tab active">회원 통계</div>
+          <a href="statistics-revenue.html" class="st-tab">매출/정산</a>
+          <a href="statistics-operations.html" class="st-tab">운영 통계</a>
+        </div>
+
+        <div class="content">
+          <div class="top-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div class="stat-card"><div class="stat-label">신규 회원 (7일)</div><div class="stat-value">86명</div><div class="stat-trend up">+14.2%</div></div>
+            <div class="stat-card"><div class="stat-label">신규 회원 (30일)</div><div class="stat-value">412명</div><div class="stat-trend up">+8.5%</div></div>
+            <div class="stat-card"><div class="stat-label">활성 회원</div><div class="stat-value">2,148명</div><div class="stat-trend up">+6.1%</div></div>
+            <div class="stat-card"><div class="stat-label">사업자 비율</div><div class="stat-value">18.4%</div><div class="stat-trend up">+1.8%p</div></div>
+            <div class="stat-card"><div class="stat-label">평균 객단가</div><div class="stat-value">₩351,000</div><div class="stat-trend up">+5.4%</div></div>
+            <div class="stat-card"><div class="stat-label">재구매율</div><div class="stat-value">28.6%</div><div class="stat-trend">-0.2%p</div></div>
+            <div class="stat-card"><div class="stat-label">평균 보유 포인트</div><div class="stat-value">₩12,400</div><div class="stat-trend up">+3.1%</div></div>
+            <div class="stat-card"><div class="stat-label">탈퇴율</div><div class="stat-value">0.8%</div><div class="stat-trend up">-0.1%p</div></div>
+          </div>
+
+          <div class="pt-top-row">
+            <div class="chart-card funnel-card">
+              <h3>사업자 유형 분포</h3>
+              <div class="fn-body">
+                <div class="fn-row"><span class="fl">복지용구사업소</span><div class="ft"><div class="ff" style="width:100%;background:var(--accent)"></div></div><span class="fv">182 (46%)</span></div>
+                <div class="fn-row"><span class="fl">인터넷 사업소</span><div class="ft"><div class="ff" style="width:62%;background:#4B5563"></div></div><span class="fv">112 (28%)</span></div>
+                <div class="fn-row"><span class="fl">재가복지센터</span><div class="ft"><div class="ff" style="width:38%;background:#6B7280"></div></div><span class="fv">68 (17%)</span></div>
+                <div class="fn-row"><span class="fl">기타 관련업체</span><div class="ft"><div class="ff" style="width:20%;background:#9CA3AF"></div></div><span class="fv">36 (9%)</span></div>
+              </div>
+            </div>
+
+            <div class="chart-card agency-card">
+              <h3>지역별 회원 분포</h3>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">서울</span><span class="ag-val">682명 · 31.7%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:90%;background:var(--accent)"></div></div>
+              </div>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">경기</span><span class="ag-val">534명 · 24.9%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:72%;background:#4B5563"></div></div>
+              </div>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">인천</span><span class="ag-val">218명 · 10.1%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:54%;background:#6B7280"></div></div>
+              </div>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">부산</span><span class="ag-val">186명 · 8.7%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:43%;background:#9CA3AF"></div></div>
+              </div>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">대전</span><span class="ag-val">142명 · 6.6%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:36%;background:#B0BEC5"></div></div>
+              </div>
+              <div class="ag-row">
+                <div class="ag-head"><span class="ag-name">기타 지역</span><span class="ag-val">386명 · 18.0%</span></div>
+                <div class="ag-bar"><div class="ag-fill" style="width:50%;background:#CFD8DC"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 정보 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .info-layout{display:flex;flex:1;overflow:hidden}
+    .info-body{flex:1;overflow-y:auto;padding:28px 32px;display:flex;flex-direction:column;gap:28px}
+    .info-section h2{font-size:16px;font-weight:700;color:var(--fg-primary);margin-bottom:4px}
+    .info-section .section-desc{font-size:13px;color:var(--fg-muted);margin-bottom:20px}
+    .info-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+    .info-form-grid .full{grid-column:1/-1}
+    .file-upload-area{display:flex;gap:16px}
+    .file-upload-card{width:160px;height:100px;border:1px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--fg-muted);cursor:pointer;transition:border-color .15s}
+    .file-upload-card:hover{border-color:var(--accent)}
+    .file-upload-card .upload-icon{font-size:20px;color:var(--fg-muted)}
+    .file-upload-card .upload-ext{font-size:11px;color:var(--fg-muted)}
+    .bottom-bar .progress-bar{width:200px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <!-- TopBar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>내 정보</h1>
+        <p>관리자 계정 정보 및 비밀번호</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="검색.."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn" onclick="location.href='shipping.html'"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-layout">
+      <!-- Sub-nav -->
+      <div style="width:240px;padding:20px;border-right:1px solid var(--border);flex-shrink:0;background:var(--bg-card)">
+        <div class="sub-nav" style="width:100%">
+          <div class="sub-nav-item active" data-tab="account"><i class="icon-user sub-nav-icon"></i> 계정 정보</div>
+          <div class="sub-nav-item" data-tab="password"><i class="icon-lock sub-nav-icon"></i> 비밀번호 변경</div>
+          <div class="sub-nav-item" data-tab="history"><i class="icon-history sub-nav-icon"></i> 로그인 이력</div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Account -->
+      <div class="info-body" data-tab-panel="account">
+        <div class="info-section">
+          <h2>계정 정보</h2>
+          <div class="section-desc">관리자 계정의 기본 정보입니다</div>
+
+          <div class="info-form-grid">
+            <div class="form-group">
+              <label class="form-label">이름 <span class="required">*</span></label>
+              <input class="form-input" value="정민기">
+            </div>
+            <div class="form-group">
+              <label class="form-label">이메일 <span class="required">*</span></label>
+              <input class="form-input" type="email" id="contactEmail" value="admin@cozycare.co.kr">
+            </div>
+            <div class="form-group">
+              <label class="form-label">역할</label>
+              <input class="form-input" value="최고 관리자 (Super Admin)" readonly style="background:var(--bg-secondary);color:var(--fg-secondary)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">연락처 <span class="required">*</span></label>
+              <input class="form-input" id="contactTel" inputmode="numeric" maxlength="13" value="010-4521-8877">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Password -->
+      <div class="info-body" data-tab-panel="password" style="display:none">
+        <div class="info-section">
+          <h2>비밀번호 변경</h2>
+          <div class="section-desc">보안을 위해 정기적으로 비밀번호를 변경해 주세요</div>
+
+          <div class="info-form-grid">
+            <div class="form-group full">
+              <label class="form-label">현재 비밀번호 <span class="required">*</span></label>
+              <input class="form-input" type="password" placeholder="현재 비밀번호 입력">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">새 비밀번호 <span class="required">*</span></label>
+              <input class="form-input" type="password" placeholder="영문 + 숫자 + 특수문자 조합 8자 이상">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">새 비밀번호 확인 <span class="required">*</span></label>
+              <input class="form-input" type="password" placeholder="새 비밀번호 다시 입력">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Login History -->
+      <div class="info-body" data-tab-panel="history" style="display:none">
+        <div class="info-section">
+          <h2>최근 로그인 이력</h2>
+          <div class="section-desc">최근 5건의 로그인 기록입니다</div>
+
+          <div class="table-wrap" style="margin-top:8px">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>일시</th>
+                  <th>IP 주소</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-mono">2026-06-09 09:14:22</td>
+                  <td class="font-mono">211.234.108.42</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-08 18:51:07</td>
+                  <td class="font-mono">211.234.108.42</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-08 09:02:33</td>
+                  <td class="font-mono">211.234.108.42</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-07 14:28:55</td>
+                  <td class="font-mono">118.45.221.16</td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-06 10:11:48</td>
+                  <td class="font-mono">211.234.108.42</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar" id="bottomBar">
+      <div></div>
+      <div style="display:flex;gap:12px" id="bottomActions">
+        <button class="btn btn-secondary" id="btnCancel">취소</button>
+        <button class="btn btn-primary" id="btnSave" onclick="showSuccess('저장이 완료되었습니다','변경 사항이 저장되었습니다.')"><i class="icon-check" style="font-size:14px"></i> 저장하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  function activateTab(tabName) {
+    document.querySelectorAll('.sub-nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.tab === tabName);
+    });
+    document.querySelectorAll('[data-tab-panel]').forEach(panel => {
+      panel.style.display = panel.dataset.tabPanel === tabName ? '' : 'none';
+    });
+  }
+
+  function maskInput(el, pattern){
+    if(!el) return;
+    el.addEventListener('input', () => {
+      const digits = el.value.replace(/\D/g,'').slice(0, pattern.filter(n=>typeof n==='number').reduce((a,b)=>a+b,0));
+      let out = '', i = 0;
+      for (const seg of pattern){
+        if (i >= digits.length) break;
+        const take = digits.slice(i, i+seg);
+        out += (out ? '-' : '') + take;
+        i += seg;
+      }
+      el.value = out;
+    });
+  }
+  maskInput(document.getElementById('contactTel'), [3,4,4]);
+
+  document.querySelectorAll('.sub-nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      activateTab(item.dataset.tab);
+    });
+  });
+</script>
+</body>
+</html>

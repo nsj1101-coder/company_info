@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>민준 · 서연의 결혼 · PayDot Wedding</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-2: #2d2624;
+    --muted: #7a6e6c;
+    --line: #f0d8d2;
+    --paper: #ffffff;
+    --bg: #fbf3f0;
+    --bg-2: #fdf8f6;
+    --blush: #fde8e5;
+    --rose: #e8a39b;
+    --rose-deep: #c97070;
+    --paydot-blue: #2a348f;
+    --paydot-blue-deep: #1f266b;
+    --paydot-purple: #8a6daf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  a { text-decoration: none; color: inherit; }
+
+  /* ─── Top nav ─── */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .topbar .brand { display: flex; align-items: center; gap: 10px; }
+  .topbar .brand img { height: 26px; }
+  .top-actions { display: flex; gap: 10px; }
+  .pill-icon {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.86rem; font-weight: 600;
+    color: var(--ink);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.18s ease;
+  }
+  .pill-icon:hover { background: var(--blush); }
+
+  /* ─── Cover hero ─── */
+  .cover {
+    max-width: 1200px; margin: 28px auto 0;
+    padding: 0 16px;
+  }
+  .cover-inner {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    padding: 80px 60px 60px;
+    color: #fff;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,0.32), transparent 38%),
+      radial-gradient(circle at 84% 80%, rgba(255,255,255,0.18), transparent 42%),
+      linear-gradient(135deg, #f3c2bb 0%, #e8a39b 45%, #c97070 100%);
+  }
+  .cover-eyebrow {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .cover h1 {
+    font-size: clamp(2rem, 4.2vw, 3.4rem);
+    font-weight: 700; letter-spacing: -0.022em;
+    line-height: 1.18;
+    margin-bottom: 14px;
+  }
+  .cover h1 em {
+    font-style: italic; font-weight: 600;
+    opacity: 0.88;
+  }
+  .cover .cover-meta {
+    font-size: 1rem; opacity: 0.92;
+    line-height: 1.7;
+    max-width: 520px;
+  }
+  .cover-stats {
+    display: flex; gap: 28px;
+    margin-top: 28px;
+  }
+  .cover-stats .st { display: flex; flex-direction: column; }
+  .cover-stats .st .val {
+    font-size: 1.6rem; font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .cover-stats .st .lbl {
+    font-size: 0.82rem; opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* ─── Filter chips ─── */
+  .filter-row {
+    max-width: 1200px; margin: 28px auto 0;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 14px;
+  }
+  .chips {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    padding: 9px 17px;
+    background: #fff;
+    border: 1.4px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.88rem; font-weight: 600;
+    color: var(--ink);
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    white-space: nowrap;
+  }
+  .chip .ct {
+    font-size: 0.78rem; opacity: 0.6;
+    margin-left: 4px;
+  }
+  .chip.active {
+    background: var(--paydot-blue);
+    border-color: var(--paydot-blue);
+    color: #fff;
+  }
+  .chip.active .ct { opacity: 0.85; }
+  .sort-pick {
+    color: var(--muted);
+    font-size: 0.88rem; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  /* ─── Photo grid (masonry-ish) ─── */
+  .grid {
+    max-width: 1200px; margin: 26px auto 0;
+    padding: 0 28px 40px;
+    column-count: 4;
+    column-gap: 14px;
+  }
+  @media (max-width: 1100px) { .grid { column-count: 3; } }
+  @media (max-width: 760px)  { .grid { column-count: 2; } }
+  @media (max-width: 420px)  { .grid { column-count: 1; } }
+
+  .photo {
+    break-inside: avoid;
+    margin-bottom: 14px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 16px -10px rgba(201,112,112,0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+  .photo:hover { transform: translateY(-2px); box-shadow: 0 16px 28px -14px rgba(201,112,112,0.28); }
+  .photo-img {
+    width: 100%; display: block;
+  }
+  .photo-meta {
+    padding: 8px 12px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+  .photo-meta .who { display: flex; align-items: center; gap: 6px; }
+  .photo-meta .who .av {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--blush);
+    color: var(--rose-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800;
+  }
+  .photo-badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--paydot-blue); color: #fff;
+    font-size: 0.66rem; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+  }
+  .photo-badge.rose { background: var(--rose); }
+  .photo-badge.video { background: rgba(0,0,0,0.7); }
+
+  /* CSS-drawn placeholder photos */
+  .ph {
+    width: 100%; position: relative;
+  }
+  .ph::before {
+    content: ''; display: block; padding-top: var(--ratio, 100%);
+  }
+  .ph::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--bg, linear-gradient(135deg, #f8e0db, #c97070));
+    background-size: cover; background-position: center;
+  }
+  .ph-1 { --ratio: 130%; --bg: radial-gradient(circle at 30% 35%, rgba(255,255,255,0.7), transparent 30%), linear-gradient(160deg, #f8e0db, #e8a39b 55%, #c97070); }
+  .ph-2 { --ratio: 85%;  --bg: linear-gradient(150deg, #fdecea 0%, #e8a39b 55%, #a8645f 100%); }
+  .ph-3 { --ratio: 120%; --bg: radial-gradient(ellipse at 60% 25%, rgba(255,255,255,0.5), transparent 45%), linear-gradient(120deg, #f3e4d8, #d8a78a 55%, #8e5e44); }
+  .ph-4 { --ratio: 90%;  --bg: linear-gradient(135deg, #ecd9e8, #b693c6 55%, #6e548f); }
+  .ph-5 { --ratio: 115%; --bg: radial-gradient(circle at 70% 60%, rgba(255,255,255,0.45), transparent 40%), linear-gradient(160deg, #fde8e5, #e8a39b 55%, #c97070); }
+  .ph-6 { --ratio: 75%;  --bg: linear-gradient(150deg, #dde6f0, #889dc4 55%, #2a348f); }
+  .ph-7 { --ratio: 125%; --bg: radial-gradient(ellipse at 35% 40%, rgba(255,255,255,0.6), transparent 38%), linear-gradient(140deg, #f5d4cf, #c97070); }
+  .ph-8 { --ratio: 80%;  --bg: linear-gradient(140deg, #f3e4d8 0%, #cfa78a 60%, #8e5e44 100%); }
+  .ph-9 { --ratio: 110%; --bg: radial-gradient(circle at 25% 70%, rgba(255,255,255,0.5), transparent 36%), linear-gradient(135deg, #fde8e5, #b693c6); }
+  .ph-10{ --ratio: 95%;  --bg: linear-gradient(150deg, #fff5f2, #e8a39b 50%, #6e3d3d); }
+  .ph-11{ --ratio: 108%; --bg: radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.5), transparent 40%), linear-gradient(135deg, #ecd9e8, #6e548f); }
+  .ph-12{ --ratio: 88%;  --bg: linear-gradient(150deg, #f8e0db, #c97070 55%, #6e3d3d); }
+  .ph-13{ --ratio: 120%; --bg: linear-gradient(135deg, #dde6f0, #2a348f 70%, #1f266b); }
+  .ph-14{ --ratio: 78%;  --bg: linear-gradient(160deg, #fff5f2 0%, #f5d4cf 50%, #e8a39b 100%); }
+
+  /* ─── Floating actions ─── */
+  .floats {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; flex-direction: column; gap: 12px;
+    z-index: 20;
+  }
+  .float-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 22px; font-weight: 700;
+    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.28);
+    transition: transform 0.14s ease;
+  }
+  .float-btn:hover { transform: translateY(-2px) scale(1.04); }
+  .float-btn.qr { background: var(--paydot-blue); }
+  .float-btn.up { background: var(--rose-deep); }
+
+  /* ─── QR modal ─── */
+  .overlay {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(26,26,26,0.55);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .overlay.show { display: flex; animation: fade 0.2s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: #fff;
+    border-radius: 24px;
+    width: min(420px, 100%);
+    overflow: hidden;
+    animation: pop 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-head {
+    padding: 20px 24px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-title { font-size: 1.06rem; font-weight: 700; }
+  .modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted); font-size: 18px;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .modal-close:hover { background: var(--blush); color: var(--rose-deep); }
+  .modal-body {
+    padding: 32px 28px 28px;
+    text-align: center;
+  }
+
+  /* QR */
+  .mqr {
+    width: 200px; height: 200px;
+    margin: 0 auto 20px;
+    border: 10px solid #fff;
+    background: var(--bg-2);
+    border-radius: 18px;
+    position: relative;
+    box-shadow: 0 0 0 1px var(--line);
+  }
+  .mqr-grid {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+  }
+  .mqr-grid span { background: var(--ink); }
+  .mqr-grid span.off { background: transparent; }
+  .mqr-corner {
+    position: absolute;
+    width: 32px; height: 32px;
+    border: 4px solid var(--ink);
+    border-radius: 3px;
+  }
+  .mqr-corner::after {
+    content: '';
+    position: absolute; inset: 4px;
+    background: var(--ink);
+  }
+  .mqr-corner.tl { top: 6px; left: 6px; }
+  .mqr-corner.tr { top: 6px; right: 6px; }
+  .mqr-corner.bl { bottom: 6px; left: 6px; }
+
+  .mqr-info {
+    font-size: 0.88rem; color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+  .mqr-info strong { color: var(--ink); }
+  .mqr-link {
+    background: var(--bg-2);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.84rem; color: var(--paydot-blue);
+    word-break: break-all;
+    margin-bottom: 16px;
+  }
+  .mqr-actions { display: flex; gap: 8px; }
+  .mqr-actions button {
+    flex: 1;
+    padding: 11px 0;
+    border-radius: 12px;
+    font-size: 0.88rem; font-weight: 700;
+    transition: background 0.18s ease;
+  }
+  .mqr-actions .copy {
+    background: #fff;
+    border: 1.4px solid var(--line);
+    color: var(--ink);
+  }
+  .mqr-actions .copy:hover { border-color: var(--rose); }
+  .mqr-actions .share {
+    background: var(--paydot-blue); color: #fff;
+  }
+  .mqr-actions .share:hover { background: var(--paydot-blue-deep); }
+
+  /* Upload modal (hardware guest UX) */
+  .upload-area {
+    border: 2px dashed var(--rose);
+    border-radius: 16px;
+    background: var(--blush);
+    padding: 32px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    transition: background 0.18s ease;
+  }
+  .upload-area .ic {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--rose-deep);
+    font-size: 24px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .upload-area .ti {
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .upload-area .sub {
+    font-size: 0.86rem; color: var(--muted);
+  }
+  .upload-tag-pick {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .tag-chip {
+    background: #fff;
+    border: 1.4px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 13px;
+    font-size: 0.82rem; font-weight: 600;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .tag-chip.selected { background: var(--paydot-blue); border-color: var(--paydot-blue); color: #fff; }
+  .upload-cta {
+    width: 100%;
+    padding: 13px;
+    background: var(--paydot-blue); color: #fff;
+    border-radius: 12px;
+    font-size: 0.94rem; font-weight: 700;
+    transition: background 0.18s ease;
+  }
+  .upload-cta:hover { background: var(--paydot-blue-deep); }
+
+  @media (max-width: 720px) {
+    .cover-inner { padding: 56px 28px 44px; }
+    .filter-row { padding: 0 20px; }
+    .grid { padding: 0 20px 40px; }
+    .topbar-inner { padding: 12px 18px; }
+    .cover-stats { gap: 18px; }
+    .cover-stats .st .val { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/wedding/"><img src="/wedding/assets/logo/paydot_logo.png" alt="PayDot"></a>
+    <div class="top-actions">
+      <button class="pill-icon" id="openQr">◊ QR 보기</button>
+      <button class="pill-icon" id="openUpload">+ 사진 올리기</button>
+    </div>
+  </div>
+</div>
+
+<section class="cover">
+  <div class="cover-inner">
+    <span class="cover-eyebrow">PAYDOT WEDDING ALBUM</span>
+    <h1>민준 · 서연의<br><em>우리 둘의 약속, 그날의 모든 시선</em></h1>
+    <p class="cover-meta">
+      2026년 4월 6일 토요일 오후 1시 30분<br>
+      신라호텔 영빈관 2층 다이너스티홀
+    </p>
+    <div class="cover-stats">
+      <div class="st"><span class="val">324</span><span class="lbl">사진</span></div>
+      <div class="st"><span class="val">42</span><span class="lbl">동영상</span></div>
+      <div class="st"><span class="val">87</span><span class="lbl">참여 하객</span></div>
+      <div class="st"><span class="val">5</span><span class="lbl">보관함</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="filter-row">
+  <div class="chips" id="chips">
+    <button class="chip active" data-cat="all">전체 <span class="ct">324</span></button>
+    <button class="chip" data-cat="couple">신랑·신부 <span class="ct">38</span></button>
+    <button class="chip" data-cat="family">양가 가족 <span class="ct">96</span></button>
+    <button class="chip" data-cat="friend">친구 <span class="ct">128</span></button>
+    <button class="chip" data-cat="work">직장 동료 <span class="ct">42</span></button>
+    <button class="chip" data-cat="video">동영상 <span class="ct">42</span></button>
+  </div>
+  <div class="sort-pick">↑ 최신 순</div>
+</div>
+
+<div class="grid" id="grid">
+  <!-- 14 placeholder photo cards with varying aspect ratios and badges -->
+  <article class="photo">
+    <span class="photo-badge">NEW</span>
+    <div class="ph ph-1"></div>
+    <div class="photo-meta"><span class="who"><span class="av">현</span> 김현주 이모</span><span>방금 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-2"></div>
+    <div class="photo-meta"><span class="who"><span class="av">민</span> 민호 친구</span><span>3분 전</span></div>
+  </article>
+  <article class="photo">
+    <span class="photo-badge rose">신부 측</span>
+    <div class="ph ph-3"></div>
+    <div class="photo-meta"><span class="who"><span class="av">진</span> 진서 동기</span><span>8분 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-4"></div>
+    <div class="photo-meta"><span class="who"><span class="av">선</span> 선영 친구</span><span>12분 전</span></div>
+  </article>
+  <article class="photo">
+    <span class="photo-badge video">VIDEO 0:18</span>
+    <div class="ph ph-5"></div>
+    <div class="photo-meta"><span class="who"><span class="av">유</span> 유진 사촌</span><span>22분 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-6"></div>
+    <div class="photo-meta"><span class="who"><span class="av">석</span> 석호 회사</span><span>34분 전</span></div>
+  </article>
+  <article class="photo">
+    <span class="photo-badge">NEW</span>
+    <div class="ph ph-7"></div>
+    <div class="photo-meta"><span class="who"><span class="av">민</span> 민준 신랑</span><span>1시간 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-8"></div>
+    <div class="photo-meta"><span class="who"><span class="av">윤</span> 윤아 동생</span><span>1시간 전</span></div>
+  </article>
+  <article class="photo">
+    <span class="photo-badge rose">신랑 측</span>
+    <div class="ph ph-9"></div>
+    <div class="photo-meta"><span class="who"><span class="av">재</span> 재호 친구</span><span>2시간 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-10"></div>
+    <div class="photo-meta"><span class="who"><span class="av">서</span> 서연 신부</span><span>2시간 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-11"></div>
+    <div class="photo-meta"><span class="who"><span class="av">하</span> 하늘 동기</span><span>2시간 전</span></div>
+  </article>
+  <article class="photo">
+    <span class="photo-badge video">VIDEO 0:32</span>
+    <div class="ph ph-12"></div>
+    <div class="photo-meta"><span class="who"><span class="av">은</span> 은서 사촌</span><span>3시간 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-13"></div>
+    <div class="photo-meta"><span class="who"><span class="av">우</span> 우진 친구</span><span>3시간 전</span></div>
+  </article>
+  <article class="photo">
+    <div class="ph ph-14"></div>
+    <div class="photo-meta"><span class="who"><span class="av">미</span> 미라 회사</span><span>4시간 전</span></div>
+  </article>
+</div>
+
+<!-- Floating actions for mobile -->
+<div class="floats">
+  <button class="float-btn qr" id="floatQr" aria-label="QR 보기">◊</button>
+  <button class="float-btn up" id="floatUp" aria-label="사진 올리기">+</button>
+</div>
+
+<!-- QR modal -->
+<div class="overlay" id="overlayQr">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">앨범 QR과 링크</span>
+      <button class="modal-close" data-close>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="mqr" id="mqrBox">
+        <div class="mqr-grid" id="mqrGrid"></div>
+        <div class="mqr-corner tl"></div>
+        <div class="mqr-corner tr"></div>
+        <div class="mqr-corner bl"></div>
+      </div>
+      <p class="mqr-info">청첩장 또는 식장 입구에 두면 <strong>하객 누구나 가입 없이</strong> 사진을 올릴 수 있어요.</p>
+      <div class="mqr-link">paydot.wedding/a/MJ-SY-0406</div>
+      <div class="mqr-actions">
+        <button class="copy" id="mqrCopy">링크 복사</button>
+        <button class="share">친구에게 공유</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload modal -->
+<div class="overlay" id="overlayUp">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">사진 · 동영상 올리기</span>
+      <button class="modal-close" data-close>×</button>
+    </div>
+    <div class="modal-body" style="text-align: left;">
+      <div class="upload-area">
+        <div class="ic">↑</div>
+        <div class="ti">파일을 끌어다 놓거나 눌러서 선택</div>
+        <div class="sub">사진 · 동영상 · 최대 한 번에 30장</div>
+      </div>
+      <p style="font-size: 0.84rem; color: var(--muted); margin-bottom: 10px; font-weight: 600;">어느 보관함에 올릴까요?</p>
+      <div class="upload-tag-pick" id="upTags">
+        <button class="tag-chip selected">전체 공개</button>
+        <button class="tag-chip">신랑 측</button>
+        <button class="tag-chip">신부 측</button>
+        <button class="tag-chip">가족</button>
+        <button class="tag-chip">친구</button>
+        <button class="tag-chip">직장</button>
+      </div>
+      <button class="upload-cta">올리기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // chips filter (visual only)
+  document.getElementById('chips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+
+  // upload tag pick
+  document.getElementById('upTags').addEventListener('click', e => {
+    const chip = e.target.closest('.tag-chip');
+    if (!chip) return;
+    document.querySelectorAll('#upTags .tag-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+  });
+
+  // overlays
+  const overlayQr = document.getElementById('overlayQr');
+  const overlayUp = document.getElementById('overlayUp');
+  const openQr = () => overlayQr.classList.add('show');
+  const openUp = () => overlayUp.classList.add('show');
+  document.getElementById('openQr').addEventListener('click', openQr);
+  document.getElementById('floatQr').addEventListener('click', openQr);
+  document.getElementById('openUpload').addEventListener('click', openUp);
+  document.getElementById('floatUp').addEventListener('click', openUp);
+  document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => {
+    overlayQr.classList.remove('show');
+    overlayUp.classList.remove('show');
+  }));
+  document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => {
+    if (e.target === o) o.classList.remove('show');
+  }));
+
+  // qr copy stub
+  document.getElementById('mqrCopy').addEventListener('click', e => {
+    const t = e.target.textContent;
+    e.target.textContent = '복사되었습니다';
+    setTimeout(() => e.target.textContent = t, 1400);
+  });
+
+  // pseudo QR pattern
+  (function renderQR() {
+    const grid = document.getElementById('mqrGrid');
+    const N = 15;
+    const total = N * N;
+    const fr = [];
+    for (let i = 0; i < total; i++) {
+      const r = Math.floor(i/N), c = i%N;
+      // skip the 3 corner finder regions (top-left, top-right, bottom-left, each 4x4 incl border)
+      const inTL = r < 4 && c < 4;
+      const inTR = r < 4 && c >= N-4;
+      const inBL = r >= N-4 && c < 4;
+      const span = document.createElement('span');
+      if (inTL || inTR || inBL) {
+        span.classList.add('off');
+      } else {
+        const on = ((r*31 + c*17 + r*c*3) % 7) < 3;
+        if (!on) span.classList.add('off');
+      }
+      grid.appendChild(span);
+    }
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대시보드 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .dash-grid{display:flex;flex-direction:column;gap:16px;padding:0 24px 24px}
+    .tier{display:flex;gap:16px}
+    .stat-c{flex:1;min-width:0;border-radius:var(--radius-lg);padding:16px 20px;display:flex;align-items:center;gap:14px}
+    .stat-c .s-ic{width:40px;height:40px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .stat-c .s-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--fg-primary)}
+    .stat-c .s-chg{font-size:14px;font-weight:500;margin-left:8px}
+    .stat-c .s-lbl{font-size:14px;color:var(--fg-muted);margin-top:2px}
+    .panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .panel-h{padding:14px 16px;font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .panel-hr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 10px;font-size:14px}
+    .panel-hr .ph-t{font-weight:600;color:var(--fg-primary)}
+    .panel-hr .ph-s{color:var(--fg-muted)}
+    .donut-wrap{display:flex;align-items:center;gap:16px;padding:0 16px 16px;justify-content:center;flex:1}
+    .donut{width:165px;height:165px;border-radius:50%;position:relative;flex-shrink:0}
+    .donut::after{content:'';position:absolute;inset:17.5%;background:var(--bg-card);border-radius:50%}
+    .donut-lg{display:flex;flex-direction:column;gap:8px;min-width:120px}
+    .donut-lg .dl-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;color:var(--fg-primary)}
+    .donut-lg .dl-row .dl-l{display:flex;align-items:center;gap:6px}
+    .donut-lg .dl-d{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+    .donut-lg .dl-v{font-family:var(--font-mono);font-weight:600}
+    .bubbles{position:relative;width:273px;height:140px;flex-shrink:0}
+    .bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-weight:600}
+    .conv-row{display:flex;align-items:center;justify-content:space-between;font-size:14px;margin-bottom:4px}
+    .conv-row .cv-l{color:var(--fg-secondary)}
+    .conv-row .cv-v{font-family:var(--font-mono);font-size:18px;font-weight:700}
+    .dept-row{display:flex;align-items:center;gap:8px;font-size:14px}
+    .dept-row .dr-l{width:60px;color:var(--fg-secondary);flex-shrink:0}
+    .dept-row .dr-bar{flex:1;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+    .dept-row .dr-fill{height:100%;border-radius:3px}
+    .dept-row .dr-v{width:28px;text-align:right;font-family:var(--font-mono);font-weight:600;color:var(--fg-primary);flex-shrink:0}
+    .hosp-row{display:flex;align-items:center;gap:10px;padding:8px 16px}
+    .hosp-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+    .hosp-body{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+    .hosp-n{font-size:14px;font-weight:500;color:var(--fg-primary)}
+    .hosp-tags{display:flex;gap:4px}
+    .tag{padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500}
+    .hosp-d{font-family:var(--font-mono);font-size:13px;color:var(--fg-muted);flex-shrink:0}
+    .tl-item{display:flex;gap:14px;min-height:58px}
+    .tl-col{width:12px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+    .tl-dot{width:10px;height:10px;border-radius:50%}
+    .tl-bar{width:2px;flex:1;background:var(--border);margin-top:2px}
+    .tl-body{flex:1;display:flex;flex-direction:column;gap:3px}
+    .tl-top{display:flex;justify-content:space-between;align-items:center}
+    .tl-t{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .tl-tm{font-family:var(--font-mono);font-size:13px;color:var(--fg-muted)}
+    .tl-s{font-size:13px;color:var(--fg-muted)}
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+    .fade-scroll{position:relative;flex:1;min-height:0;overflow:hidden}
+    .fade-scroll .fs-body{display:flex;flex-direction:column}
+    .fade-scroll.has-overflow::after{content:'더보기';position:absolute;left:0;right:0;bottom:0;height:48px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:14px;font-weight:500;color:var(--fg-muted);background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,#ffffff 60%);pointer-events:none}
+    .tier-3{align-items:stretch}
+    .tier-3 > .panel,.tier-3 .conv-panel,.tier-3 .dept-panel{display:flex;flex-direction:column;min-height:0}
+  </style>
+</head>
+<body class="dashboard">
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item active" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>대시보드</h1>
+        <p>코지워커 SHOP 운영 현황을 한눈에 확인하세요</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="검색..."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#ef4444"></div><div class="noti-body"><span class="noti-badge" style="background:#FEE2E2;color:#ef4444">복지용구 검토</span><span class="noti-time">10분 전</span><div class="noti-text">김○○ 인정번호 서류 검토 요청</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#84c140"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">결제 완료</span><span class="noti-time">1시간 전</span><div class="noti-text">박○○ 휠체어 EZ-1 결제 완료</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">사업자 승인</span><span class="noti-time">3시간 전</span><div class="noti-text">㈜이로움파트너 신규 가입 대기</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="dash-grid">
+
+        <!-- Tier 1: Stat cards -->
+        <div class="tier">
+          <div class="stat-c" style="background:#EEFBF0;border:1px solid #C8F0CE">
+            <div class="s-ic"><i class="icon-wallet" style="color:var(--accent);font-size:18px"></i></div>
+            <div><div><span class="s-val">8,420,000원</span><span class="s-chg" style="color:var(--success)">↑12.4%</span></div><div class="s-lbl">오늘 매출</div></div>
+          </div>
+          <div class="stat-c" style="background:#F4FBE8;border:1px solid #D8EFB8">
+            <div class="s-ic"><i class="icon-shopping-cart" style="color:var(--accent);font-size:18px"></i></div>
+            <div><div><span class="s-val">24건</span><span class="s-chg" style="color:var(--success)">↑8건</span></div><div class="s-lbl">신규 주문</div></div>
+          </div>
+          <div class="stat-c" style="background:#FEE2E2;border:1px solid #FCA5A5">
+            <div class="s-ic"><i class="icon-shield-check" style="color:#ef4444;font-size:18px"></i></div>
+            <div><div><span class="s-val">7건</span><span class="s-chg" style="color:#ef4444">대기중</span></div><div class="s-lbl">복지용구 검토 대기</div></div>
+          </div>
+          <div class="stat-c" style="background:#FEE2E2;border:1px solid #FCA5A5">
+            <div class="s-ic"><i class="icon-user-check" style="color:#ef4444;font-size:18px"></i></div>
+            <div><div><span class="s-val">3건</span><span class="s-chg" style="color:#ef4444">승인 필요</span></div><div class="s-lbl">사업자 승인 대기</div></div>
+          </div>
+        </div>
+
+        <!-- Tier 2: Stacked bar chart + donut -->
+        <div class="tier">
+          <div class="panel" style="flex:1;min-width:0;display:flex;flex-direction:column">
+            <div class="panel-hr"><span class="ph-t">월별 매출 추이</span><span class="ph-s">복지용구 + 일반 (최근 6개월)</span></div>
+            <div style="padding:0 24px 20px;flex:1;display:flex;flex-direction:column;justify-content:center">
+              <svg viewBox="0 0 740 180" style="width:100%;height:200px;display:block" preserveAspectRatio="none">
+                <line x1="0" y1="0" x2="740" y2="0" stroke="#F3F4F6"/>
+                <line x1="0" y1="45" x2="740" y2="45" stroke="#F3F4F6"/>
+                <line x1="0" y1="90" x2="740" y2="90" stroke="#F3F4F6"/>
+                <line x1="0" y1="135" x2="740" y2="135" stroke="#F3F4F6"/>
+                <line x1="0" y1="180" x2="740" y2="180" stroke="#F3F4F6"/>
+                <!-- 11월 -->
+                <rect x="22" y="120" width="60" height="60" fill="#84c140"/>
+                <rect x="22" y="92" width="60" height="28" fill="#ef4444"/>
+                <!-- 12월 -->
+                <rect x="142" y="105" width="60" height="75" fill="#84c140"/>
+                <rect x="142" y="72" width="60" height="33" fill="#ef4444"/>
+                <!-- 1월 -->
+                <rect x="262" y="95" width="60" height="85" fill="#84c140"/>
+                <rect x="262" y="58" width="60" height="37" fill="#ef4444"/>
+                <!-- 2월 -->
+                <rect x="382" y="80" width="60" height="100" fill="#84c140"/>
+                <rect x="382" y="40" width="60" height="40" fill="#ef4444"/>
+                <!-- 3월 -->
+                <rect x="502" y="65" width="60" height="115" fill="#84c140"/>
+                <rect x="502" y="22" width="60" height="43" fill="#ef4444"/>
+                <!-- 4월 -->
+                <rect x="622" y="50" width="60" height="130" fill="#84c140"/>
+                <rect x="622" y="8" width="60" height="42" fill="#ef4444"/>
+              </svg>
+              <div style="display:flex;justify-content:space-between;padding:6px 30px 0;font-family:var(--font-mono);font-size:14px;color:#9CA3AF">
+                <span>11월</span><span>12월</span><span>1월</span><span>2월</span><span>3월</span><span style="color:#84c140;font-weight:600">4월</span>
+              </div>
+              <div style="display:flex;gap:16px;padding:12px 30px 0;font-size:13px;color:var(--fg-secondary)">
+                <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#ef4444"></span>복지용구</div>
+                <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#84c140"></span>일반</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;min-width:0;display:flex;flex-direction:column">
+            <div class="panel-h">매출 유형 분포</div>
+            <div class="donut-wrap">
+              <div class="donut" style="background:conic-gradient(#84c140 0 62%,#ef4444 62% 90%,#6B7280 90% 100%)"></div>
+              <div class="donut-lg">
+                <div class="dl-row"><div class="dl-l"><span class="dl-d" style="background:#84c140"></span>일반</div><span class="dl-v">62%</span></div>
+                <div class="dl-row"><div class="dl-l"><span class="dl-d" style="background:#ef4444"></span>복지용구</div><span class="dl-v">28%</span></div>
+                <div class="dl-row"><div class="dl-l"><span class="dl-d" style="background:#6B7280"></span>사업자</div><span class="dl-v">10%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier 3: left col (category bubble + dept) | right col (activity feed) -->
+        <div class="tier" style="align-items:stretch">
+          <!-- Left column -->
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
+            <!-- Category bubble -->
+            <div class="panel" style="display:flex;flex-direction:column">
+              <div class="panel-h">카테고리별 판매 분포</div>
+              <div style="display:flex;gap:12px;padding:0 16px 12px;justify-content:center;align-items:center;flex:1">
+                <div class="bubbles">
+                  <div class="bubble" style="left:11px;top:25px;width:88px;height:88px;background:#84c140;font-size:20px">48%</div>
+                  <div class="bubble" style="left:105px;top:3px;width:66px;height:66px;background:#4B5563;font-size:18px">22%</div>
+                  <div class="bubble" style="left:110px;top:71px;width:51px;height:51px;background:#6B7280;font-size:16px">12%</div>
+                  <div class="bubble" style="left:176px;top:36px;width:40px;height:40px;background:#9CA3AF;font-size:14px">8%</div>
+                  <div class="bubble" style="left:176px;top:80px;width:34px;height:34px;background:#D1D5DB;color:var(--fg-secondary);font-size:12px">10%</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--fg-secondary)">
+                  <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#84c140"></span>보행기</div>
+                  <div style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#4B5563"></span>휠체어</div>
+                  <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#6B7280"></span>목욕의자</div>
+                  <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#9CA3AF"></span>이동변기</div>
+                  <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#D1D5DB"></span>기타</div>
+                </div>
+              </div>
+            </div>
+            <!-- Conversion + Category bars -->
+            <div style="display:flex;gap:16px">
+              <div class="panel" style="flex:1;min-width:0;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0">
+                <div style="font-size:14px;font-weight:600">이달 주문 전환</div>
+                <div class="fade-scroll"><div class="fs-body" style="gap:10px">
+                  <div>
+                    <div class="conv-row"><span class="cv-l">장바구니 → 결제</span><span class="cv-v" style="color:#84c140">74%</span></div>
+                    <div class="progress-bar" style="height:4px"><div class="progress-fill" style="width:74%;background:#84c140"></div></div>
+                  </div>
+                  <div>
+                    <div class="conv-row"><span class="cv-l">복지용구 서류 → 승인</span><span class="cv-v" style="color:#ef4444">68%</span></div>
+                    <div class="progress-bar" style="height:4px"><div class="progress-fill" style="width:68%;background:#ef4444"></div></div>
+                  </div>
+                  <div>
+                    <div class="conv-row"><span class="cv-l">결제 → 배송완료</span><span class="cv-v" style="color:var(--warning)">52%</span></div>
+                    <div class="progress-bar" style="height:4px"><div class="progress-fill" style="width:52%;background:var(--warning)"></div></div>
+                  </div>
+                </div></div>
+              </div>
+              <div class="panel" style="flex:1;min-width:0;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0">
+                <div style="font-size:14px;font-weight:600">카테고리별 분포</div>
+                <div class="fade-scroll"><div class="fs-body" style="gap:10px">
+                  <div class="dept-row"><span class="dr-l">보행기</span><div class="dr-bar"><div class="dr-fill" style="width:96%;background:#84c140"></div></div><span class="dr-v">48</span></div>
+                  <div class="dept-row"><span class="dr-l">휠체어</span><div class="dr-bar"><div class="dr-fill" style="width:44%;background:#4B5563"></div></div><span class="dr-v">22</span></div>
+                  <div class="dept-row"><span class="dr-l">목욕의자</span><div class="dr-bar"><div class="dr-fill" style="width:24%;background:#9CA3AF"></div></div><span class="dr-v">12</span></div>
+                  <div class="dept-row"><span class="dr-l">이동변기</span><div class="dr-bar"><div class="dr-fill" style="width:16%;background:#D1D5DB"></div></div><span class="dr-v">8</span></div>
+                  <div class="dept-row"><span class="dr-l">전동침대</span><div class="dr-bar"><div class="dr-fill" style="width:12%;background:#D1D5DB"></div></div><span class="dr-v">6</span></div>
+                  <div class="dept-row"><span class="dr-l">미끄럼방지</span><div class="dr-bar"><div class="dr-fill" style="width:8%;background:#D1D5DB"></div></div><span class="dr-v">4</span></div>
+                  <div class="dept-row"><span class="dr-l">기타용품</span><div class="dr-bar"><div class="dr-fill" style="width:6%;background:#D1D5DB"></div></div><span class="dr-v">3</span></div>
+                </div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div style="flex:1;min-width:0;display:flex;gap:16px">
+            <!-- Recent products -->
+            <div class="panel" style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+              <div class="panel-h">베스트 판매 상품</div>
+              <div class="fade-scroll"><div class="fs-body" style="gap:8px;padding:0 0 8px">
+                <div class="hosp-row">
+                  <div class="hosp-logo" style="background:var(--accent-light)"><i class="icon-package" style="color:var(--accent)"></i></div>
+                  <div class="hosp-body"><div class="hosp-n">코지워커 카본로얄</div><div class="hosp-tags"><span class="tag" style="background:var(--accent-light);color:var(--accent)">보행기</span><span class="tag" style="background:#FEE2E2;color:#ef4444">복지용구</span></div></div>
+                  <span class="hosp-d">535,000</span>
+                </div>
+                <div class="hosp-row">
+                  <div class="hosp-logo" style="background:#EEFBF0"><i class="icon-package" style="color:#84c140"></i></div>
+                  <div class="hosp-body"><div class="hosp-n">파인더 와이드레드 P04</div><div class="hosp-tags"><span class="tag" style="background:var(--accent-light);color:var(--accent)">보행기</span><span class="tag" style="background:#FEE2E2;color:#ef4444">복지용구</span></div></div>
+                  <span class="hosp-d">420,000</span>
+                </div>
+                <div class="hosp-row">
+                  <div class="hosp-logo" style="background:#FFF3E0"><i class="icon-package" style="color:var(--warning)"></i></div>
+                  <div class="hosp-body"><div class="hosp-n">유로라이트</div><div class="hosp-tags"><span class="tag" style="background:var(--accent-light);color:var(--accent)">보행기</span></div></div>
+                  <span class="hosp-d">350,000</span>
+                </div>
+                <div class="hosp-row">
+                  <div class="hosp-logo" style="background:#E3F2FD"><i class="icon-package" style="color:#4B5563"></i></div>
+                  <div class="hosp-body"><div class="hosp-n">로얄쿠션</div><div class="hosp-tags"><span class="tag" style="background:var(--accent-light);color:var(--accent)">목욕의자</span></div></div>
+                  <span class="hosp-d">285,000</span>
+                </div>
+                <div class="hosp-row">
+                  <div class="hosp-logo" style="background:var(--accent-light)"><i class="icon-package" style="color:var(--accent)"></i></div>
+                  <div class="hosp-body"><div class="hosp-n">환희 FR01</div><div class="hosp-tags"><span class="tag" style="background:var(--accent-light);color:var(--accent)">휠체어</span><span class="tag" style="background:#FEE2E2;color:#ef4444">복지용구</span></div></div>
+                  <span class="hosp-d">195,000</span>
+                </div>
+              </div></div>
+            </div>
+            <!-- Activity feed -->
+            <div class="panel" style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0">
+              <div class="panel-h" style="padding:14px 16px 14px 12px">최근 활동</div>
+              <div class="fade-scroll"><div class="fs-body" style="padding:0 16px 0 24px">
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#ef4444"></div><div class="tl-bar"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">복지용구 서류 검토 요청</span><span class="tl-tm">15분 전</span></div><span class="tl-s">김○○ 인정번호 제출 - 보행기 카본로얄</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#84c140"></div><div class="tl-bar"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">결제 완료</span><span class="tl-tm">1시간 전</span></div><span class="tl-s">박○○ 휠체어 EZ-1 결제 완료</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#FF9500"></div><div class="tl-bar"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">사업자 신규 가입</span><span class="tl-tm">2시간 전</span></div><span class="tl-s">㈜이로움파트너 사업자 회원 신청</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#9CA3AF"></div><div class="tl-bar"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">결제 대기</span><span class="tl-tm">3시간 전</span></div><span class="tl-s">이○○ 유로라이트 결제 대기 중</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#84c140"></div><div class="tl-bar"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">배송 완료</span><span class="tl-tm">어제</span></div><span class="tl-s">최○○ 목욕의자 로얄쿠션 배송 완료</span></div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-col"><div class="tl-dot" style="background:#84c140"></div></div>
+                  <div class="tl-body"><div class="tl-top"><span class="tl-t">사업자 승인 완료</span><span class="tl-tm">2일 전</span></div><span class="tl-s">㈜가가온 복지용구사업소 승인</span></div>
+                </div>
+              </div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+(function(){
+  const update = () => {
+    document.querySelectorAll('.fade-scroll').forEach(el => {
+      const body = el.querySelector('.fs-body');
+      if (!body) return;
+      el.classList.toggle('has-overflow', body.scrollHeight > el.clientHeight + 1);
+    });
+  };
+  update();
+  window.addEventListener('resize', update);
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(update);
+    document.querySelectorAll('.fade-scroll').forEach(el => ro.observe(el));
+  }
+})();
+</script>
+</body>
+</html>

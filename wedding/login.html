@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayDot Wedding · 로그인</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #7a6e6c;
+    --line: #f0d8d2;
+    --paper: #ffffff;
+    --bg: #fbf3f0;
+    --blush: #fde8e5;
+    --rose: #e8a39b;
+    --rose-deep: #c97070;
+    --paydot-blue: #2a348f;
+    --paydot-purple: #8a6daf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 18% 8%, rgba(232,163,155,0.18), transparent 42%),
+      radial-gradient(circle at 84% 92%, rgba(138,109,175,0.14), transparent 42%),
+      var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px 16px;
+  }
+  .card {
+    width: 100%; max-width: 400px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 36px 32px;
+    box-shadow: 0 1px 0 rgba(26,26,26,0.04), 0 30px 60px -28px rgba(201,112,112,0.32);
+    border: 1px solid var(--line);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 32px;
+  }
+  .brand-logo {
+    height: 30px; width: auto; display: block;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: var(--blush); color: var(--rose-deep);
+    padding: 5px 11px; border-radius: 999px;
+    font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 1.6rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  p.sub {
+    color: var(--muted); font-size: 0.92rem;
+    margin-bottom: 28px;
+    line-height: 1.55;
+  }
+  label {
+    display: block;
+    font-size: 0.78rem; font-weight: 600; color: var(--muted);
+    margin: 14px 0 6px;
+    letter-spacing: 0.02em;
+  }
+  input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.4px solid var(--line);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(232,163,155,0.22);
+  }
+  .err {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #fdecec; color: #b03939;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    display: none;
+  }
+  .err.show { display: block; }
+  button.submit {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    background: var(--paydot-blue); color: #fff;
+    border: none; border-radius: 12px;
+    font-size: 0.96rem; font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  button.submit:hover:not(:disabled) { background: #1f266b; }
+  button.submit:active:not(:disabled) { transform: scale(0.99); }
+  button.submit:disabled { opacity: 0.6; cursor: progress; }
+  .footnote {
+    margin-top: 22px;
+    font-size: 0.78rem; color: var(--muted);
+    text-align: center;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <form class="card" id="login">
+    <div class="brand"><img src="/wedding/assets/logo/paydot_logo.png" alt="PayDot" class="brand-logo"></div>
+    <span class="eyebrow">PAYDOT WEDDING</span>
+    <h1>제안 미리보기</h1>
+    <p class="sub">전달드린 ID와 비밀번호로 입장해 주세요.</p>
+
+    <label for="username">ID</label>
+    <input id="username" name="username" type="text" autocomplete="username" required>
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+    <div id="err" class="err"></div>
+
+    <button class="submit" type="submit" id="submit">입장하기</button>
+
+    <div class="footnote">© 2026 PayDot Wedding · Demo Preview</div>
+  </form>
+
+<script>
+  const form = document.getElementById("login");
+  const errBox = document.getElementById("err");
+  const btn = document.getElementById("submit");
+
+  const showError = msg => { errBox.textContent = msg; errBox.classList.add("show"); };
+  const clearError = () => errBox.classList.remove("show");
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    clearError();
+    btn.disabled = true;
+    btn.textContent = "확인 중…";
+    try {
+      const res = await fetch("/wedding/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.username.value.trim(),
+          password: form.password.value,
+        }),
+        credentials: "same-origin",
+      });
+      if (res.ok) { window.location.href = "/wedding/"; return; }
+      if (res.status === 401) showError("ID 또는 비밀번호가 올바르지 않습니다.");
+      else showError("잠시 후 다시 시도해 주세요.");
+    } catch (e) {
+      showError("네트워크 오류가 발생했습니다.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "입장하기";
+    }
+  });
+</script>
+</body>
+</html>

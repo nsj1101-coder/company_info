@@ -1,0 +1,222 @@
+// 라린느 통합 ERP — Prisma 스키마
+// 엑셀(검토용_라린느_ERP_v45) 24개 시트 구조 기반. 01_시트분석.md 참조.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ── 사용자/권한 (부서별 메뉴 권한) ───────────────────────────
+model User {
+  id         Int      @id @default(autoincrement())
+  loginId    String   @unique
+  name       String
+  passwordHash String
+  role       String   @default("staff") // admin | sales | production | logistics | accounting | staff
+  department String?
+  createdAt  DateTime @default(now())
+}
+
+// ── 마스터: 고객 (고객관리) ──────────────────────────────────
+model Customer {
+  id       Int     @id @default(autoincrement())
+  code     String  @unique          // 고객코드 A##
+  name     String                   // 고객명
+  type     String?                  // 고객유형 (병원/기업/개인)
+  channel  String?                  // 판매채널
+  manager  String?                  // 담당자
+  phone    String?
+  email    String?
+  region   String?
+  note     String?
+  createdAt DateTime @default(now())
+}
+
+// ── 마스터: 상품/SKU (제품SKU) ───────────────────────────────
+model Product {
+  id        Int     @id @default(autoincrement())
+  sku       String  @unique
+  name      String                   // 상품명
+  category  String?                  // 제품 (상의/하의 등)
+  color     String?                  // 컬러
+  size      String?                  // 사이즈
+  cost      Int?                     // 원가 (KRW)
+  priceConsumer Int?                 // 소비자가
+  priceOnline   Int?                 // 온라인가격
+  priceB2B      Int?                 // B2B가격
+  priceDealer   Int?                 // 대리점가격
+  priceWholesaleUsd Float?           // 도매가(USD)
+  priceRetailUsd    Float?           // 판매가(USD)
+  priceWholesaleJpy Float?           // 도매가(엔화)
+  priceRetailJpy    Float?           // 판매가(엔화)
+  safeStock Int?     @default(0)      // 안전재고
+  createdAt DateTime @default(now())
+}
+
+// ── 원천 주문: 엑셀 업로드 수집 (카페_26 / 주문서_26) ─────────
+// 라린느가 Cafe24/스마트스토어/자사몰에서 내려받은 파일을 그대로 업로드 → 여기에 적재 → 정규화
+model RawOrder {
+  id            Int      @id @default(autoincrement())
+  batchId       Int?
+  batch         UploadBatch? @relation(fields: [batchId], references: [id])
+  sheetType     String   // cafe(카페_26) | offline(주문서_26)
+  source        String?  // 주문몰 (단독몰/통합몰/개인 등)
+  shipStatus    String?  // 출고여부
+  shipDate      String?  // 출고일
+  orderNo       String?  // 주문번호
+  orderedAt     String?  // 주문일시
+  ordererName   String?  // 주문자명
+  address       String?
+  payMethod     String?
+  payer         String?  // 결제자
+  productName   String?  // 주문상품명
+  option        String?  // 옵션
+  qty           Int?
+  optionPrice   Int?     // 옵션+판매가
+  purchaseAmount Int?    // 상품 구매금액
+  usedPoint     Int?
+  finalPayAmount Int?    // 총 실결제금액
+  refundAmount  Int?
+  totalPayAmount Int?    // 총 결제금액
+  phone         String?
+  // 자동분류 (엑셀 U~AB 대체)
+  orderMonth    String?  // YYYY-MM
+  channel       String?  // 채널분류
+  orderStatus   String?  // 주문상태 (접수/생산중/자수대기/출고완료/반품)
+  production    String?  // 생산
+  embroidery    String?  // 자수
+  returnFlag    String?  // 반품
+  customerCode  String?  // 고객코드 (매칭)
+  createdAt     DateTime @default(now())
+
+  @@index([orderNo])
+  @@index([channel])
+  @@index([orderStatus])
+}
+
+model UploadBatch {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  sheetType String
+  rowCount  Int      @default(0)
+  createdAt DateTime @default(now())
+  rows      RawOrder[]
+}
+
+// ── 주문 원장: 정규화 (주문관리) — 1행 = 1 라인아이템 ─────────
+model Order {
+  id           Int      @id @default(autoincrement())
+  orderNo      String                 // 주문번호
+  orderDate    DateTime?              // 주문일자
+  customerCode String?
+  customerName String?
+  customerType String?
+  channel      String?                // 판매채널 (온라인/B2B/대리점/방문/해외/자사몰/기타)
+  sku          String?
+  productName  String?
+  qty          Int      @default(0)
+  unitPrice    Int      @default(0)
+  totalAmount  Int      @default(0)   // 수량×단가
+  returnQty    Int      @default(0)
+  netQty       Int      @default(0)   // 순판매수량
+  status       String?                // 주문상태
+  createdAt    DateTime @default(now())
+
+  @@index([orderNo])
+  @@index([sku])
+  @@index([customerCode])
+  @@index([channel])
+  @@index([orderDate])
+}
+
+// ── 재고 (재고관리) ─────────────────────────────────────────
+model Inventory {
+  id           Int     @id @default(autoincrement())
+  sku          String  @unique
+  brand        String?
+  item         String?
+  season       String?
+  productName  String?
+  color        String?
+  size         String?
+  initialStock Int     @default(0)   // 초기재고
+  inbound      Int     @default(0)   // 입고
+  outbound     Int     @default(0)   // 출고
+  currentStock Int     @default(0)   // 현재재고 = 초기+입고-출고+반품
+  safeStock    Int     @default(0)   // 안전재고
+  status       String?               // 재고상태
+  shortageQty  Int     @default(0)   // 부족수량
+  recommendQty Int     @default(0)   // 발주권장수량
+  keepQty      Int     @default(0)   // 킵(예약)
+}
+
+// ── 생산 (생산관리) ─────────────────────────────────────────
+model ProductionOrder {
+  id            Int      @id @default(autoincrement())
+  prodNo        String                 // 생산번호 PRD-
+  orderManager  String?               // 주문담당
+  prodDate      DateTime?
+  sku           String?
+  brand         String?
+  productName   String?
+  color         String?
+  size          String?
+  orderQty      Int      @default(0)
+  prodQty       Int      @default(0)
+  defectQty     Int      @default(0)
+  inboundQty    Int      @default(0)
+  ceoConfirm    String?               // 대표님확인
+  expectedInDate DateTime?
+  inDate        DateTime?
+  prodManager   String?
+  factory       String?               // 공장 (본공장/외주)
+  note          String?
+  leadTime      Int?                  // 리드타임(일)
+  delayed       String?               // 지연여부
+  linkedOrderNo String?               // 연결주문번호
+  createdAt     DateTime @default(now())
+
+  @@index([sku])
+}
+
+// ── 발주 (발주관리) + 공급사 ────────────────────────────────
+model PurchaseOrder {
+  id             Int      @id @default(autoincrement())
+  poNo           String                 // 발주번호 PO-
+  poDate         DateTime?
+  sku            String?
+  productName    String?
+  orderQty       Int      @default(0)
+  supplier       String?               // 공급사
+  rawMaterial    String?               // 원부자재
+  processing     String?               // 임가공
+  fullPurchase   String?               // 완사입
+  expectedInDate DateTime?
+  inboundConfirm String?               // 입고확인
+  note           String?
+  createdAt      DateTime @default(now())
+
+  @@index([sku])
+}
+
+// ── 반품 (반품관리) ─────────────────────────────────────────
+model Return {
+  id          Int      @id @default(autoincrement())
+  returnNo    String                 // 반품번호 RTN-
+  returnDate  DateTime?
+  returnPlace String?               // 반품처
+  orderNo     String?
+  sku         String?
+  productName String?
+  color       String?
+  size        String?
+  returnQty   Int      @default(0)
+  reason      String?               // 반품사유
+  createdAt   DateTime @default(now())
+
+  @@index([sku])
+}

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>리조트피플 | 기술표 — Tech Stack &amp; Architecture</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #111317;
+    --gray-50: #fafafa;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #6b8e72;
+    --accent-deep: #455a4a;
+    --accent-soft: #dce5da;
+    --beige: #d6c4a7;
+    --beige-soft: #f0e8d8;
+    --ok: #16a34a;
+    --warn: #d97706;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  @page { size: 1600px 900px; margin: 0; }
+  html, body { background: #fafafa; font-family: 'Pretendard Variable', Pretendard, sans-serif; color: var(--ink); }
+
+  .page {
+    width: 1600px; height: 900px;
+    background: #fff;
+    padding: 50px 80px;
+    position: relative;
+    page-break-after: always;
+    break-after: page;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .header-band {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 24px;
+  }
+  .header-band .left {
+    font-size: 1.18rem; font-weight: 700; letter-spacing: 0.14em;
+  }
+  .header-band .left small {
+    display: block;
+    font-size: 0.74rem; font-weight: 400; font-style: italic;
+    color: var(--gray-500);
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+  .header-band .right {
+    font-size: 0.82rem; color: var(--gray-500); letter-spacing: 0.18em;
+  }
+
+  h1 {
+    font-size: 3rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; color: var(--accent-deep); }
+  p.sub {
+    font-size: 1.15rem; color: var(--gray-700);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 1180px;
+  }
+
+  /* Cover */
+  .cover-stage {
+    flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .cover-stage h1 { font-size: 5.4rem; line-height: 1.05; }
+  .cover-stage .lede { font-size: 1.4rem; color: var(--gray-700); line-height: 1.65; margin-top: 18px; max-width: 1100px; font-style: italic; }
+  .cover-stage .eyebrow {
+    font-size: 0.84rem; font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--accent-deep);
+    margin-bottom: 18px;
+  }
+
+  /* Stack table */
+  .stack {
+    display: grid;
+    grid-template-columns: 200px 1fr 1.4fr 220px;
+    border-top: 2px solid var(--ink);
+    margin-top: 8px;
+  }
+  .stack .sh {
+    padding: 12px 16px;
+    font-size: 0.84rem; font-weight: 700;
+    color: var(--gray-500);
+    letter-spacing: 0.16em;
+    border-bottom: 2px solid var(--ink);
+  }
+  .stack .sh.acc { color: var(--accent-deep); background: var(--accent-soft); }
+  .stack .sc {
+    padding: 12px 16px;
+    font-size: 1.02rem;
+    border-bottom: 1px solid var(--gray-200);
+    line-height: 1.55;
+  }
+  .stack .sc.cat { font-weight: 700; color: var(--ink); }
+  .stack .sc.acc { background: rgba(107,142,114,0.06); }
+  .stack .sc.tag { font-weight: 700; color: var(--accent-deep); font-family: monospace; font-size: 0.94rem; }
+  .stack .sc.use { color: var(--gray-700); font-size: 0.94rem; }
+
+  /* Architecture diagram */
+  .arch {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr 60px 1fr;
+    gap: 0;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .arch-block {
+    background: #fff;
+    border: 1.5px solid var(--gray-200);
+    padding: 18px 22px;
+    border-radius: 4px;
+    min-height: 140px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .arch-block.acc {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .arch-block.b {
+    background: var(--beige-soft);
+    border-color: var(--beige);
+  }
+  .arch-block .lab {
+    font-size: 0.74rem; font-weight: 700;
+    color: var(--accent-deep); letter-spacing: 0.14em;
+  }
+  .arch-block.b .lab { color: #8a7140; }
+  .arch-block h4 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.012em; }
+  .arch-block p { font-size: 0.9rem; color: var(--gray-700); line-height: 1.55; }
+  .arch-block ul {
+    list-style: none;
+    font-size: 0.88rem;
+    color: var(--gray-700);
+    line-height: 1.65;
+    margin-top: 4px;
+  }
+  .arch-block ul li::before { content: '· '; }
+  .arch-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-deep); font-size: 1.5rem; font-weight: 700;
+  }
+
+  /* Architecture grid (full layer) */
+  .arch-layers {
+    display: flex; flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+  }
+  .arch-layer {
+    background: #fff;
+    border-left: 4px solid var(--accent);
+    padding: 16px 22px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  .arch-layer.b { border-left-color: var(--beige); }
+  .arch-layer.g { border-left-color: var(--gray-500); }
+  .arch-layer .lname {
+    font-size: 0.82rem; font-weight: 700;
+    color: var(--accent-deep); letter-spacing: 0.14em;
+  }
+  .arch-layer.b .lname { color: #8a7140; }
+  .arch-layer.g .lname { color: var(--gray-700); }
+  .arch-layer .lcontent h4 {
+    font-size: 1.18rem; font-weight: 700; margin-bottom: 4px;
+  }
+  .arch-layer .lcontent p {
+    font-size: 0.96rem; color: var(--gray-700); line-height: 1.6;
+  }
+  .arch-layer .lcontent .tools {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .arch-layer .lcontent .tools span {
+    background: var(--gray-100);
+    padding: 3px 10px;
+    font-size: 0.82rem; font-weight: 600;
+    color: var(--gray-700);
+    border-radius: 3px;
+    font-family: monospace;
+  }
+  .arch-layer .lcontent .tools span.acc {
+    background: var(--accent-soft); color: var(--accent-deep);
+  }
+
+  /* Security & ops */
+  .ops {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 14px;
+  }
+  .ops-card {
+    background: #fff;
+    border-top: 4px solid var(--accent);
+    padding: 22px 22px 24px;
+  }
+  .ops-card.b { border-top-color: var(--beige); }
+  .ops-card.g { border-top-color: var(--gray-500); }
+  .ops-card .l {
+    font-size: 0.74rem; font-weight: 700;
+    color: var(--accent-deep); letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+  .ops-card.b .l { color: #8a7140; }
+  .ops-card.g .l { color: var(--gray-700); }
+  .ops-card h3 {
+    font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.012em;
+  }
+  .ops-card ul {
+    list-style: none;
+    font-size: 0.96rem;
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+  .ops-card ul li::before { content: '— '; opacity: 0.5; }
+
+  /* Decision matrix */
+  .decision {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 2px solid var(--ink);
+    margin-top: 12px;
+  }
+  .decision .dh {
+    padding: 12px 16px;
+    font-size: 0.84rem; font-weight: 700;
+    color: var(--gray-500);
+    letter-spacing: 0.14em;
+    border-bottom: 2px solid var(--ink);
+  }
+  .decision .dh.acc { color: var(--accent-deep); background: var(--accent-soft); }
+  .decision .dc {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    line-height: 1.55;
+  }
+  .decision .dc.lbl { font-weight: 700; color: var(--ink); }
+  .decision .dc.acc { background: rgba(107,142,114,0.06); }
+  .decision .dc strong { color: var(--accent-deep); }
+
+  .page-num {
+    position: absolute;
+    bottom: 24px; left: 80px;
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    letter-spacing: 0.16em;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">RESORTPEOPLE · TECH STACK
+      <small>Architecture &amp; Engineering Choices</small>
+    </div>
+    <div class="right">VOL.01 — 2026 / 06</div>
+  </div>
+  <div class="cover-stage">
+    <div class="eyebrow">TECHNOLOGY OVERVIEW</div>
+    <h1>한 코드베이스로<br><em>9개 지점</em>을 굴립니다.</h1>
+    <p class="lede">
+      Next.js 풀스택 · 멀티테넌트 PostgreSQL · 본사·지점 권한 분리 · 카카오 알림톡 · Vercel 호스팅.
+      <br><br>
+      운영 비용을 낮추고 향후 지점 확장이 콘텐츠 등록만으로 가능하도록, 안정성과 유연성을 모두 잡은 기술 스택을 선택했습니다.
+      각 선택의 근거와 대안까지 함께 정리합니다.
+    </p>
+  </div>
+</div>
+
+<!-- STACK TABLE -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">STACK COMPONENTS</div>
+    <div class="right">02 / 05</div>
+  </div>
+  <h1>리조트피플 1차 단위 <em>풀스택</em>.</h1>
+  <p class="sub">웹·어드민·백엔드·데이터·인프라 5개 레이어를 단일 풀스택으로 묶습니다. 1팀 운영이 가능한 구조로, 향후 유지보수 비용을 최소화합니다.</p>
+
+  <div class="stack">
+    <div class="sh">레이어</div>
+    <div class="sh acc">선택 기술</div>
+    <div class="sh">선택 근거</div>
+    <div class="sh">버전 · 비고</div>
+
+    <div class="sc cat">웹 프론트엔드</div>
+    <div class="sc acc tag">Next.js 16 (App Router)<br>React 19 · Tailwind 4</div>
+    <div class="sc use">정적 사전 빌드 + 어드민 갱신 시 자동 재생성(ISR). 모바일 첫 로드 1초 이내 보장. 시맨틱 마크업 + SEO 자동 적용.</div>
+    <div class="sc">Next 16, Tailwind 4.0</div>
+
+    <div class="sc cat">백엔드 API</div>
+    <div class="sc acc tag">Next.js Route Handlers<br>TypeScript</div>
+    <div class="sc use">웹과 동일 프로젝트 안에서 API 처리. 별도 백엔드 서버 불필요로 인프라 비용·복잡도 절감.</div>
+    <div class="sc">Node.js 22 LTS</div>
+
+    <div class="sc cat">데이터베이스</div>
+    <div class="sc acc tag">PostgreSQL 16<br>Prisma 7 ORM</div>
+    <div class="sc use">멀티테넌트 데이터를 row-level isolation으로 안전하게 분리. 마이그레이션·정합성 검증 자동화.</div>
+    <div class="sc">PostgreSQL 16, Prisma 7</div>
+
+    <div class="sc cat">인증·권한</div>
+    <div class="sc acc tag">NextAuth<br>JWT · 역할 기반</div>
+    <div class="sc use">본사·지점·일반 사용자 3개 역할을 분리. 모든 페이지·API 요청에 자동 권한 검증 미들웨어 적용.</div>
+    <div class="sc">NextAuth.js 5</div>
+
+    <div class="sc cat">이미지·미디어</div>
+    <div class="sc acc tag">AWS S3<br>Vercel Image 최적화</div>
+    <div class="sc use">강사·시설 사진 업로드. 모바일에 맞춰 자동 WebP 변환과 사이즈 압축. 로딩 시간 50% 절감.</div>
+    <div class="sc">S3 Standard, Next Image</div>
+
+    <div class="sc cat">알림 시스템</div>
+    <div class="sc acc tag">NHN Cloud 알림톡<br>SMS Fallback</div>
+    <div class="sc use">카카오 비즈니스 채널 인증 후 알림톡 5종 발송. 미수신 시 SMS로 자동 대체. 본사 단체 발송 큐.</div>
+    <div class="sc">NHN Cloud Toast</div>
+
+    <div class="sc cat">호스팅·배포</div>
+    <div class="sc acc tag">Vercel (웹·API)<br>AWS RDS (DB)</div>
+    <div class="sc use">Git push만으로 배포 자동화. 9개 지점 동시 트래픽도 자동 스케일. 한국 사용자에 가까운 인천 리전.</div>
+    <div class="sc">Vercel Pro, RDS db.t4g.small</div>
+
+    <div class="sc cat">모니터링</div>
+    <div class="sc acc tag">Sentry · Vercel Analytics</div>
+    <div class="sc use">에러 발생 시 자동 알림. 페이지별 모바일 로드 시간 추적. 리드 전환률 추적.</div>
+    <div class="sc">Sentry 무료 플랜</div>
+
+    <div class="sc cat">개발 협업</div>
+    <div class="sc acc tag">GitHub Actions · Slack</div>
+    <div class="sc use">PR 자동 빌드와 미리보기. 머지 시 자동 배포. 발주처와 Slack 채널 상시 운영.</div>
+    <div class="sc">GitHub + Slack</div>
+  </div>
+
+  <div class="page-num">02 / 05</div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">ARCHITECTURE</div>
+    <div class="right">03 / 05</div>
+  </div>
+  <h1 style="font-size: 2.8rem;">데이터 흐름과 <em>권한 분리</em>.</h1>
+  <p class="sub">9개 지점이 같은 코드베이스와 같은 DB를 공유하지만, 권한 매트릭스로 각자 자기 데이터만 보게 분리됩니다. 데이터 흐름은 사용자 → 페이지 → API → DB → 알림으로 단일 방향입니다.</p>
+
+  <div class="arch-layers">
+    <div class="arch-layer">
+      <div class="lname">LAYER 01 · CLIENT</div>
+      <div class="lcontent">
+        <h4>모바일 사용자 · 9개 지점 페이지</h4>
+        <p>지점별 고정 URL (예: resortpeople.com/r/mapo). 모바일 우선 반응형. PWA 캐시로 재방문 속도 최적.</p>
+        <div class="tools">
+          <span class="acc">Next.js 16</span><span class="acc">React 19</span><span>Tailwind 4</span><span>PWA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-layer b">
+      <div class="lname">LAYER 02 · ADMIN</div>
+      <div class="lcontent">
+        <h4>본사·지점 어드민 — 같은 코드, 다른 권한</h4>
+        <p>본사 로그인은 전체 9개 지점 콘텐츠 편집·통계 조회. 지점 로그인은 자기 지점 리드만. NextAuth로 역할 기반 라우팅.</p>
+        <div class="tools">
+          <span class="acc">NextAuth 5</span><span>역할 미들웨어</span><span>인라인 편집기 (Tiptap)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-layer g">
+      <div class="lname">LAYER 03 · API</div>
+      <div class="lcontent">
+        <h4>Next.js Route Handlers — 풀스택 통합</h4>
+        <p>웹과 어드민이 같은 API를 사용. 리드 등록, 할인 코드 발급, 콘텐츠 갱신, 통계 조회 모두 단일 API. 권한 미들웨어로 자동 검증.</p>
+        <div class="tools">
+          <span class="acc">Route Handlers</span><span>TypeScript</span><span>Zod 스키마 검증</span><span>Prisma Client</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-layer">
+      <div class="lname">LAYER 04 · DATA</div>
+      <div class="lcontent">
+        <h4>PostgreSQL — 멀티테넌트 row-level 분리</h4>
+        <p>모든 테이블에 branch_id 컬럼. 쿼리마다 사용자 역할 기반 필터 자동 적용. 본사는 branch_id 무조건, 지점은 자기 ID만.</p>
+        <div class="tools">
+          <span class="acc">PostgreSQL 16</span><span class="acc">Prisma 7</span><span>RLS (선택)</span><span>마이그레이션 관리</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-layer b">
+      <div class="lname">LAYER 05 · NOTIFY</div>
+      <div class="lcontent">
+        <h4>알림톡 · SMS · 이메일</h4>
+        <p>리드 등록 → 본사·지점 알림 + 고객에게 할인 코드 알림톡. 미수신 시 SMS 자동 대체. 본사가 월초 단체 발송 가능.</p>
+        <div class="tools">
+          <span class="acc">NHN Cloud 알림톡</span><span>SMS Fallback</span><span>Bull Queue</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">03 / 05</div>
+</div>
+
+<!-- DECISIONS -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">KEY DECISIONS</div>
+    <div class="right">04 / 05</div>
+  </div>
+  <h1 style="font-size: 2.6rem;">기술 선택 <em>근거와 대안</em>.</h1>
+  <p class="sub">각 기술이 왜 이 선택이며 어떤 대안이 가능한지, 향후 확장 시 어떤 변경이 가능한지를 정리합니다.</p>
+
+  <div class="decision">
+    <div class="dh">결정 영역</div>
+    <div class="dh acc">선택 · 우리가 권장</div>
+    <div class="dh">대안 · 향후 검토</div>
+
+    <div class="dc lbl">웹 프레임워크</div>
+    <div class="dc acc"><strong>Next.js 16 App Router</strong> — 정적 사전 빌드 + 어드민 갱신 시 ISR로 자동 재생성. 9개 지점에서 SEO가 안정적으로 동작.</div>
+    <div class="dc">Astro 또는 Remix — 더 가벼운 옵션이나 9개 지점 어드민 통합 시 NextAuth 같은 생태계 부재.</div>
+
+    <div class="dc lbl">데이터 분리 방식</div>
+    <div class="dc acc"><strong>Single DB · 멀티테넌트 컬럼</strong> — branch_id 컬럼 하나로 분리. 본사 통합 통계와 지점 격리를 동시에 보장. 운영 비용 가장 낮음.</div>
+    <div class="dc">지점별 DB 분리 — 강한 격리지만 9개 DB 운영 비용·통합 통계 작성 어려움.</div>
+
+    <div class="dc lbl">어드민 인터페이스</div>
+    <div class="dc acc"><strong>인라인 편집기 (Tiptap)</strong> — 페이지 위에서 바로 편집·미리보기. 본사가 의뢰 없이 매월 콘텐츠 갱신 가능.</div>
+    <div class="dc">CMS 분리 (Strapi, Sanity) — 더 강력하나 학습 곡선이 가파르고 본사 직접 운영에 부담.</div>
+
+    <div class="dc lbl">알림 발송</div>
+    <div class="dc acc"><strong>NHN Cloud 알림톡</strong> — 카카오 비즈니스 채널 인증 후 5종 템플릿 발송. 도착률 SMS보다 높음.</div>
+    <div class="dc">자체 SMS 발송 — 알림톡 미승인 시 fallback. 비용은 알림톡 대비 3배.</div>
+
+    <div class="dc lbl">호스팅</div>
+    <div class="dc acc"><strong>Vercel · 인천 리전</strong> — Git push 자동 배포, 9개 지점 동시 트래픽 자동 스케일. 모바일 첫 로드 1초 이내.</div>
+    <div class="dc">AWS ECS · 자체 운영 — 더 강력한 제어이나 운영 비용 증가, DevOps 인력 필요.</div>
+
+    <div class="dc lbl">이미지 관리</div>
+    <div class="dc acc"><strong>S3 + Vercel Image</strong> — 자동 WebP 변환 + 사이즈 압축. 본사가 원본만 올리면 자동 최적화.</div>
+    <div class="dc">자체 CDN 운영 — 비용 발생, 자동 최적화 미지원.</div>
+
+    <div class="dc lbl">결제 (PG)</div>
+    <div class="dc acc"><strong>1차 단위에서는 포함하지 않음</strong> — 리드 캡처 + 할인 코드만 운영. 매장 결제는 기존 POS 그대로.</div>
+    <div class="dc">2차 단위에서 토스페이먼츠 또는 KCP 연동 — 별도 견적, 약 400만 원 예상.</div>
+
+    <div class="dc lbl">확장성</div>
+    <div class="dc acc"><strong>10번째 지점부터 콘텐츠 등록만으로 추가</strong> — 1지점 셋업 30분 이내. 50만 원 / 지점.</div>
+    <div class="dc">지역별 분기 (예: 일본·중국 확장) — 다국어 처리 추가 시 별도 견적.</div>
+  </div>
+
+  <div class="page-num">04 / 05</div>
+</div>
+
+<!-- OPS & SECURITY -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">OPERATIONS &amp; SECURITY</div>
+    <div class="right">05 / 05</div>
+  </div>
+  <h1 style="font-size: 2.6rem;">운영·보안·확장.</h1>
+  <p class="sub">정식 오픈 이후 운영 단계에서 발주처가 안심할 수 있도록, 보안·백업·확장 정책을 명확히 정리합니다.</p>
+
+  <div class="ops">
+    <div class="ops-card">
+      <div class="l">OPERATIONS</div>
+      <h3>일상 운영</h3>
+      <ul>
+        <li>본사가 매월 콘텐츠 직접 갱신</li>
+        <li>지점장이 자기 지점 리드 응대</li>
+        <li>모니터링 자동화 (Sentry 알림)</li>
+        <li>월간 통계 리포트 자동 생성</li>
+        <li>오픈 후 2개월 무상 핫픽스</li>
+      </ul>
+    </div>
+    <div class="ops-card b">
+      <div class="l">SECURITY</div>
+      <h3>보안 정책</h3>
+      <ul>
+        <li>HTTPS 강제 (Let's Encrypt 자동 갱신)</li>
+        <li>본사·지점 권한 미들웨어 자동 검증</li>
+        <li>비밀번호 bcrypt 해시 저장</li>
+        <li>리드 개인정보 암호화 저장</li>
+        <li>관리자 접근 IP 화이트리스트 옵션</li>
+        <li>주 1회 DB 자동 백업 (AWS RDS 스냅샷)</li>
+      </ul>
+    </div>
+    <div class="ops-card g">
+      <div class="l">SCALE</div>
+      <h3>확장 시 대응</h3>
+      <ul>
+        <li>10번째 지점부터 콘텐츠 등록만</li>
+        <li>1지점 추가 셋업 30분 · 50만 원</li>
+        <li>트래픽 증가 시 Vercel 자동 스케일</li>
+        <li>DB 부하 시 RDS 인스턴스 업그레이드</li>
+        <li>2차 단위 결제 연동 별도 협의</li>
+        <li>다국어 확장 시 i18n 구조 추가</li>
+      </ul>
+    </div>
+  </div>
+
+  <h1 style="font-size: 1.8rem; margin-top: 32px;">운영 인수인계 — <em>발주처가 직접 할 수 있는 일</em>.</h1>
+  <div class="ops" style="margin-top: 14px;">
+    <div class="ops-card">
+      <div class="l">매월 갱신</div>
+      <h3 style="font-size: 1.18rem;">본사 콘텐츠 운영</h3>
+      <ul style="font-size: 0.92rem;">
+        <li>시간표 변경</li>
+        <li>이벤트 등록·만료</li>
+        <li>강사 카드 추가·교체</li>
+        <li>지점별 사진 갤러리 교체</li>
+        <li>알림톡 문구 수정</li>
+      </ul>
+    </div>
+    <div class="ops-card b">
+      <div class="l">일상 응대</div>
+      <h3 style="font-size: 1.18rem;">지점 리드 관리</h3>
+      <ul style="font-size: 0.92rem;">
+        <li>자기 지점 신규 리드 조회</li>
+        <li>응대 상태 변경</li>
+        <li>응대 메모 작성</li>
+        <li>리드 CSV 추출</li>
+        <li>월간 응대 통계 조회</li>
+      </ul>
+    </div>
+    <div class="ops-card g">
+      <div class="l">의뢰 영역</div>
+      <h3 style="font-size: 1.18rem;">우리가 처리</h3>
+      <ul style="font-size: 0.92rem;">
+        <li>신규 컴포넌트 추가</li>
+        <li>인터랙션·애니메이션 변경</li>
+        <li>지점 추가 셋업</li>
+        <li>결제 시스템 연동 (2차)</li>
+        <li>장애·심각 버그 대응</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-num">05 / 05</div>
+</div>
+
+</body>
+</html>

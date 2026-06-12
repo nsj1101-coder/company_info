@@ -1,0 +1,556 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum Role {
+  admin
+  biz
+  user
+}
+
+enum BizStatus {
+  pending
+  approved
+  rejected
+}
+
+enum BizStep {
+  submit
+  review
+  approve
+  reject
+}
+
+enum ProductStatus {
+  draft
+  published
+  hidden
+  soldout
+}
+
+enum OrderStatus {
+  doc_review
+  doc_approved
+  ready
+  shipping
+  delivered
+  confirmed
+  cancelled
+  refunded
+}
+
+enum ShippingStatus {
+  pending
+  in_transit
+  delivered
+}
+
+enum ReviewStatus {
+  pending
+  gov
+  approved
+  rejected
+}
+
+enum PointType {
+  earn
+  use
+  expire
+}
+
+enum NotificationChannel {
+  sms
+  kakao
+  email
+}
+
+enum PostType {
+  notice
+  event
+}
+
+enum TaxInvoiceStatus {
+  requested
+  issued
+  cancelled
+}
+
+enum QuoteStatus {
+  requested
+  quoted
+  ordered
+  rejected
+}
+
+enum InquiryStatus {
+  open
+  answered
+  closed
+}
+
+enum QnaStatus {
+  pending
+  answered
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  loginId        String?         @unique
+  password       String
+  name           String
+  phone          String?
+  zonecode       String?
+  roadAddress    String?
+  detailAddress  String?
+  role           Role            @default(user)
+  status         String          @default("active")
+  userType       String?
+  birthDate      String?
+  memo           String?
+  lastLoginAt    DateTime?
+  dormantAt      DateTime?
+  withdrawnAt    DateTime?
+  withdrawReason String?
+  points         Int             @default(0)
+  createdAt      DateTime        @default(now())
+  orders         Order[]
+  welfareReviews WelfareReview[]
+  loginLogs      LoginLog[]
+  reviews        ProductReview[]
+  qnas           ProductQna[]
+  inquiries      Inquiry[]
+}
+
+model LoginLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  ip        String?
+  userAgent String?
+  at        DateTime @default(now())
+}
+
+model BizMember {
+  id            Int           @id @default(autoincrement())
+  loginId       String        @unique
+  password      String
+  companyName   String
+  bizNo         String        @unique
+  owner         String
+  phone         String
+  email         String?
+  zonecode      String?
+  roadAddress   String?
+  detailAddress String?
+  businessType  String?
+  licenseUrl    String?
+  memo          String?
+  status        BizStatus     @default(pending)
+  approvedAt    DateTime?
+  rejectReason  String?
+  pointBalance  Int           @default(0)
+  creditLimit   Int           @default(0)
+  group         BizGroup?     @relation(fields: [groupId], references: [id])
+  groupId       Int?
+  createdAt     DateTime      @default(now())
+  products      Product[]
+  orders        Order[]
+  pointLogs     PointLog[]
+  approvals     BizApproval[]
+  settlements   Settlement[]
+  taxInvoices   TaxInvoice[]
+  quotes        Quote[]
+}
+
+model BizApproval {
+  id       Int       @id @default(autoincrement())
+  biz      BizMember @relation(fields: [bizId], references: [id])
+  bizId    Int
+  step     BizStep
+  reviewer String?
+  note     String?
+  at       DateTime  @default(now())
+}
+
+model Settlement {
+  id        Int       @id @default(autoincrement())
+  biz       BizMember @relation(fields: [bizId], references: [id])
+  bizId     Int
+  period    String
+  amount    Int
+  status    String    @default("pending")
+  settledAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  slug     String     @unique
+  name     String
+  parentId Int?
+  parent   Category?  @relation("CatTree", fields: [parentId], references: [id])
+  children Category[] @relation("CatTree")
+  order    Int        @default(0)
+  visible  Boolean    @default(true)
+  badge    String?
+  products Product[]
+}
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  code          String          @unique
+  name          String
+  category      Category        @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+  biz           BizMember?      @relation(fields: [bizId], references: [id])
+  bizId         Int?
+  bizOnly       Boolean         @default(false)
+  price         Int
+  welfarePrice  Int?
+  supplierPrice Int?
+  pointRate     Int?
+  manager       String?
+  stock         Int             @default(0)
+  status        ProductStatus   @default(draft)
+  thumbnail     String?
+  description   String?
+  detailContent String?
+  kcCert        String?
+  createdAt     DateTime        @default(now())
+  images        ProductImage[]
+  options       ProductOption[]
+  orderItems    OrderItem[]
+  reviews       ProductReview[]
+  qnas          ProductQna[]
+  quoteItems    QuoteItem[]
+  groupPrices   ProductGroupPrice[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  url       String
+  order     Int     @default(0)
+}
+
+model ProductOption {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  name      String
+  value     String
+}
+
+model Order {
+  id               Int            @id @default(autoincrement())
+  orderNo          String         @unique
+  buyer            User?          @relation(fields: [buyerId], references: [id])
+  buyerId          Int?
+  biz              BizMember?     @relation(fields: [bizId], references: [id])
+  bizId            Int?
+  status           OrderStatus    @default(ready)
+  totalPrice       Int
+  listPrice        Int?
+  insuranceSupport Int?
+  selfPay          Int?
+  paymentMethod    String?
+  cardInfo         String?
+  paidAt           DateTime?
+  memo             String?
+  createdAt        DateTime       @default(now())
+  items            OrderItem[]
+  shipping         Shipping?
+  welfareReview    WelfareReview?
+  events           OrderEvent[]
+  refund           Refund?
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     Int
+  product     Product @relation(fields: [productId], references: [id])
+  productId   Int
+  qty         Int
+  unitPrice   Int
+  optionLabel String?
+}
+
+model OrderEvent {
+  id      Int      @id @default(autoincrement())
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId Int
+  type    String
+  note    String?
+  at      DateTime @default(now())
+}
+
+model Refund {
+  id           Int       @id @default(autoincrement())
+  order        Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      Int       @unique
+  amount       Int
+  reason       String?
+  cause        String?
+  refundMethod String?
+  bankInfo     String?
+  status       String    @default("requested")
+  reviewer     String?
+  memo         String?
+  processedAt  DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model Shipping {
+  id            Int            @id @default(autoincrement())
+  order         Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId       Int            @unique
+  recipient     String?
+  phone         String?
+  zonecode      String?
+  roadAddress   String?
+  detailAddress String?
+  request       String?
+  courier       String?
+  trackingNo    String?
+  status        ShippingStatus @default(pending)
+  shippedAt     DateTime?
+  deliveredAt   DateTime?
+}
+
+model WelfareReview {
+  id         Int          @id @default(autoincrement())
+  order      Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int          @unique
+  buyer      User?        @relation(fields: [buyerId], references: [id])
+  buyerId    Int?
+  docUrl     String?
+  grade      String?
+  certNo     String?
+  status     ReviewStatus @default(pending)
+  reviewer   String?
+  note       String?
+  reviewedAt DateTime?
+  createdAt  DateTime     @default(now())
+}
+
+model PointLog {
+  id        Int       @id @default(autoincrement())
+  biz       BizMember @relation(fields: [bizId], references: [id])
+  bizId     Int
+  type      PointType
+  amount    Int
+  balance   Int
+  memo      String?
+  createdAt DateTime  @default(now())
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  scope     String   @default("global")
+  updatedAt DateTime @updatedAt
+}
+
+model AdminRole {
+  id          Int     @id @default(autoincrement())
+  key         String  @unique
+  name        String
+  permissions String
+  otpRequired Boolean @default(false)
+}
+
+model Notification {
+  id       Int                 @id @default(autoincrement())
+  audience String
+  channel  NotificationChannel
+  template String
+  sentAt   DateTime            @default(now())
+  memo     String?
+}
+
+// ---------- 운영 확장 기능 (CS / B2B / 마케팅 / 배송정책) ----------
+
+model ProductReview {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  authorName String
+  rating    Int      @default(5)
+  title     String?
+  content   String
+  imageUrl  String?
+  reply     String?
+  repliedAt DateTime?
+  status    String   @default("visible")
+  createdAt DateTime @default(now())
+}
+
+model ProductQna {
+  id         Int       @id @default(autoincrement())
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
+  authorName String
+  question   String
+  answer     String?
+  answeredBy String?
+  answeredAt DateTime?
+  secret     Boolean   @default(false)
+  status     QnaStatus @default(pending)
+  createdAt  DateTime  @default(now())
+}
+
+model Inquiry {
+  id         Int           @id @default(autoincrement())
+  user       User?         @relation(fields: [userId], references: [id])
+  userId     Int?
+  category   String        @default("일반")
+  title      String
+  content    String
+  authorName String
+  phone      String?
+  onBehalf   Boolean       @default(false)
+  answer     String?
+  answeredBy String?
+  answeredAt DateTime?
+  status     InquiryStatus @default(open)
+  createdAt  DateTime      @default(now())
+}
+
+model NotificationTemplate {
+  id        Int                 @id @default(autoincrement())
+  code      String              @unique
+  name      String
+  channel   NotificationChannel @default(kakao)
+  trigger   String?
+  content   String
+  enabled   Boolean             @default(true)
+  updatedAt DateTime            @updatedAt
+}
+
+model FaqCategory {
+  id    Int    @id @default(autoincrement())
+  name  String
+  order Int    @default(0)
+  faqs  Faq[]
+}
+
+model Faq {
+  id         Int         @id @default(autoincrement())
+  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  question   String
+  answer     String
+  order      Int         @default(0)
+  visible    Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  type      PostType @default(notice)
+  title     String
+  content   String
+  thumbnail String?
+  pinned    Boolean  @default(false)
+  startAt   DateTime?
+  endAt     DateTime?
+  views     Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model TaxInvoice {
+  id           Int              @id @default(autoincrement())
+  biz          BizMember        @relation(fields: [bizId], references: [id])
+  bizId        Int
+  period       String?
+  itemName     String?
+  supplyAmount Int
+  taxAmount    Int
+  totalAmount  Int
+  status       TaxInvoiceStatus @default(requested)
+  ntsNo        String?
+  issuedAt     DateTime?
+  memo         String?
+  createdAt    DateTime         @default(now())
+}
+
+model Quote {
+  id          Int         @id @default(autoincrement())
+  quoteNo     String      @unique
+  biz         BizMember   @relation(fields: [bizId], references: [id])
+  bizId       Int
+  title       String?
+  status      QuoteStatus @default(requested)
+  totalAmount Int         @default(0)
+  validUntil  DateTime?
+  memo        String?
+  createdAt   DateTime    @default(now())
+  items       QuoteItem[]
+}
+
+model QuoteItem {
+  id          Int      @id @default(autoincrement())
+  quote       Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  quoteId     Int
+  product     Product? @relation(fields: [productId], references: [id])
+  productId   Int?
+  productName String
+  qty         Int      @default(1)
+  unitPrice   Int      @default(0)
+}
+
+model BizGroup {
+  id           Int                 @id @default(autoincrement())
+  code         String              @unique
+  name         String
+  discountRate Int                 @default(0)
+  pointRate    Int?
+  memo         String?
+  createdAt    DateTime            @default(now())
+  members      BizMember[]
+  prices       ProductGroupPrice[]
+}
+
+model ProductGroupPrice {
+  id        Int      @id @default(autoincrement())
+  group     BizGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  price     Int
+
+  @@unique([groupId, productId])
+}
+
+model ShippingFeePolicy {
+  id            Int      @id @default(autoincrement())
+  name          String
+  baseFee       Int      @default(0)
+  freeThreshold Int?
+  jejuFee       Int      @default(0)
+  islandFee     Int      @default(0)
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
+
+model RemoteArea {
+  id       Int    @id @default(autoincrement())
+  zipFrom  String
+  zipTo    String
+  region   String
+  extraFee Int    @default(0)
+}

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 등록 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .reg-body{padding:0 24px 24px;max-width:1100px;margin:0 auto;width:100%}
+    .reg-title-area{margin-bottom:20px}
+    .reg-title-area h1{font-size:22px;font-weight:700;color:var(--fg-primary);margin-bottom:6px}
+    .reg-title-area p{font-size:14px;color:var(--fg-muted)}
+    .reg-form{display:flex;flex-direction:column;gap:16px}
+    .panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px}
+    .panel-title{font-size:16px;font-weight:700;color:var(--fg-primary);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+    .panel-title .num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700}
+    .color-chips{display:flex;gap:10px;flex-wrap:wrap}
+    .color-chip{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:20px;background:var(--bg-primary);cursor:pointer;font-size:13px}
+    .color-chip .dot{width:14px;height:14px;border-radius:50%}
+    .color-chip.selected{border-color:var(--accent);background:rgba(132,193,64,0.08)}
+    .img-drop{position:relative;border:2px dashed var(--border);border-radius:10px;padding:32px;text-align:center;color:var(--fg-muted);font-size:13px;cursor:pointer;transition:all .15s;overflow:hidden}
+    .img-drop:hover{border-color:var(--accent);background:rgba(132,193,64,0.04)}
+    .img-drop i{font-size:32px;display:block;margin-bottom:8px;color:var(--accent)}
+    .img-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .main-preview{margin-top:12px;display:none}
+    .main-preview.show{display:block}
+    .main-preview img{max-width:240px;border-radius:8px;border:1px solid var(--border)}
+    .main-preview .remove-btn{display:inline-flex;align-items:center;gap:4px;margin-left:10px;font-size:12px;color:#ef4444;cursor:pointer;vertical-align:top;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card)}
+    .img-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}
+    .img-slot{position:relative;aspect-ratio:1;border:1.5px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--fg-muted);font-size:20px;cursor:pointer;overflow:hidden}
+    .img-slot img{width:100%;height:100%;object-fit:cover}
+    .img-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .img-slot .slot-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:12px;cursor:pointer;z-index:2}
+    .img-slot.filled .slot-remove{display:flex}
+    .img-slot.filled{border-style:solid;border-color:var(--border)}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+    .toggle-row:last-child{border-bottom:0}
+    .toggle-row .label-area .l-title{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .toggle-row .label-area .l-desc{font-size:12px;color:var(--fg-muted);margin-top:3px}
+    .switch{position:relative;width:44px;height:24px;background:#ccc;border-radius:12px;cursor:pointer;transition:.2s}
+    .switch.on{background:var(--accent)}
+    .switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}
+    .switch.on::after{left:22px}
+    .editor-area{min-height:180px}
+    .point-hint{font-size:12px;color:var(--accent);margin-top:4px}
+    .reg-footer{display:flex;justify-content:flex-end;gap:10px;padding:20px 24px;max-width:1100px;margin:0 auto;width:100%;border-top:1px solid var(--border)}
+    .reg-footer .btn{min-width:120px;padding:12px 0;font-size:15px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item active" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>상품 등록</h1>
+        <p>새 코지워커 제품 또는 외부 복지용구를 등록합니다</p>
+      </div>
+      <div class="top-bar-right">
+        <a href="products.html" style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--fg-muted);text-decoration:none"><i class="icon-chevron-left" style="font-size:16px"></i> 상품 목록</a>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="reg-body">
+        <div class="reg-form">
+          <!-- 1. 기본 정보 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">1</span> 기본 정보</div>
+            <div class="form-group">
+              <label class="form-label">상품명 <span class="required">*</span></label>
+              <input class="form-input" placeholder="예: 코지워커 카본로얄파인더">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">모델번호 <span class="required">*</span></label>
+                <input class="form-input" placeholder="예: CW-P04">
+              </div>
+              <div class="form-group">
+                <label class="form-label">브랜드</label>
+                <input class="form-input" value="코지케어">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">카테고리 <span class="required">*</span></label>
+                <select class="form-select">
+                  <option>카테고리 선택</option>
+                  <option>보행기</option>
+                  <option>휠체어</option>
+                  <option>목욕의자</option>
+                  <option>이동변기</option>
+                  <option>전동침대</option>
+                  <option>미끄럼방지</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">담당자</label>
+                <select class="form-select">
+                  <option>담당자 선택</option>
+                  <option>김민수</option>
+                  <option>박서연</option>
+                  <option>이지훈</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 가격 정보 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">2</span> 가격 정보</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">정가 <span class="required">*</span></label>
+                <input class="form-input" placeholder="350,000" type="text" id="priceInput">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  복지부담금 (15% 자동)
+                  <span style="float:right;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--fg-muted)">자동 계산<span class="switch on" id="autoCalcSwitch" onclick="this.classList.toggle('on')" style="width:32px;height:18px"></span></span>
+                </label>
+                <input class="form-input" placeholder="52,500" id="welfareInput">
+                <span class="point-hint">정가의 15% 자동 계산, 직접 수정 가능</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">사업자 공급가</label>
+                <input class="form-input" placeholder="280,000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">적립 포인트</label>
+                <input class="form-input" placeholder="3,500">
+                <span class="point-hint">사업자 회원 주문 시 적립</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. 옵션 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">3</span> 옵션</div>
+            <div class="form-group">
+              <label class="form-label">색상 (최대 3개)</label>
+              <div class="color-chips" id="colorChips">
+                <div class="color-chip selected"><span class="dot" style="background:#dc2626"></span>레드</div>
+                <div class="color-chip selected"><span class="dot" style="background:#1f2937"></span>블랙</div>
+                <div class="color-chip"><span class="dot" style="background:#3b82f6"></span>블루</div>
+                <div class="color-chip"><span class="dot" style="background:#f59e0b"></span>옐로우</div>
+                <div class="color-chip"><span class="dot" style="background:#10b981"></span>그린</div>
+                <div class="color-chip"><span class="dot" style="background:#e5e7eb;border:1px solid #ccc"></span>실버</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">재고 수량 <span class="required">*</span></label>
+              <input class="form-input" placeholder="100" type="number">
+            </div>
+          </div>
+
+          <!-- 4. 이미지 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">4</span> 이미지</div>
+            <div class="form-group">
+              <label class="form-label">메인 이미지 <span class="required">*</span></label>
+              <div class="img-drop" id="mainDrop">
+                <i class="icon-upload-cloud"></i>
+                파일을 드래그하거나 클릭해서 업로드<br>
+                <span style="font-size:11px">JPG, PNG · 권장 1000×1000px</span>
+                <input type="file" id="mainImg" accept="image/*">
+              </div>
+              <div class="main-preview" id="mainPreview">
+                <img id="mainPreviewImg" alt="미리보기">
+                <span class="remove-btn" onclick="removeMain()"><i class="icon-x" style="font-size:12px"></i> 삭제</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">추가 이미지 (최대 5장)</label>
+              <div class="img-grid" id="subGrid">
+                <div class="img-slot" data-idx="0"><span class="slot-plus">+</span><input type="file" accept="image/*" class="sub-input"><span class="slot-remove" onclick="removeSub(event,0)">×</span></div>
+                <div class="img-slot" data-idx="1"><span class="slot-plus">+</span><input type="file" accept="image/*" class="sub-input"><span class="slot-remove" onclick="removeSub(event,1)">×</span></div>
+                <div class="img-slot" data-idx="2"><span class="slot-plus">+</span><input type="file" accept="image/*" class="sub-input"><span class="slot-remove" onclick="removeSub(event,2)">×</span></div>
+                <div class="img-slot" data-idx="3"><span class="slot-plus">+</span><input type="file" accept="image/*" class="sub-input"><span class="slot-remove" onclick="removeSub(event,3)">×</span></div>
+                <div class="img-slot" data-idx="4"><span class="slot-plus">+</span><input type="file" accept="image/*" class="sub-input"><span class="slot-remove" onclick="removeSub(event,4)">×</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. 상세 설명 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">5</span> 상세 설명</div>
+            <div class="form-group">
+              <label class="form-label">제품 상세</label>
+              <textarea class="form-textarea editor-area" placeholder="제품의 특징, 사용 방법, 주의사항 등을 입력하세요"></textarea>
+            </div>
+          </div>
+
+          <!-- 6. 노출 설정 -->
+          <div class="panel">
+            <div class="panel-title"><span class="num">6</span> 노출 설정</div>
+            <div class="toggle-row">
+              <div class="label-area">
+                <div class="l-title">상품 노출</div>
+                <div class="l-desc">쇼핑몰에 상품을 노출합니다</div>
+              </div>
+              <div class="switch on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="label-area">
+                <div class="l-title">복지용구 등록</div>
+                <div class="l-desc">공단 복지용구 코드로 등록된 상품 (인정번호 필요)</div>
+              </div>
+              <div class="switch on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="label-area">
+                <div class="l-title">사업자 전용</div>
+                <div class="l-desc">사업자 회원에게만 노출 (일반 회원 비공개)</div>
+              </div>
+              <div class="switch" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="reg-footer">
+          <button class="btn btn-secondary" onclick="navigateTo('products.html')">취소</button>
+          <button class="btn btn-secondary">임시저장</button>
+          <button class="btn btn-primary" onclick="showSuccess('등록이 완료되었습니다','신규 상품이 정상적으로 등록되었습니다.')"><i class="icon-check" style="font-size:16px"></i> 등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  // 정가 → 복지부담금 자동 계산 (15%)
+  const priceInput = document.getElementById('priceInput');
+  const welfareInput = document.getElementById('welfareInput');
+  const autoCalcSwitch = document.getElementById('autoCalcSwitch');
+  priceInput.addEventListener('input', function () {
+    const raw = this.value.replace(/[^0-9]/g, '');
+    if (raw) {
+      const num = parseInt(raw, 10);
+      this.value = num.toLocaleString('ko-KR');
+      if (autoCalcSwitch.classList.contains('on')) {
+        welfareInput.value = Math.round(num * 0.15).toLocaleString('ko-KR');
+      }
+    } else {
+      if (autoCalcSwitch.classList.contains('on')) welfareInput.value = '';
+    }
+  });
+
+  // 색상 칩 (최대 3)
+  document.querySelectorAll('#colorChips .color-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const selected = document.querySelectorAll('#colorChips .color-chip.selected');
+      if (chip.classList.contains('selected')) {
+        chip.classList.remove('selected');
+      } else if (selected.length < 3) {
+        chip.classList.add('selected');
+      }
+    });
+  });
+
+  // 메인 이미지 미리보기
+  const mainImg = document.getElementById('mainImg');
+  const mainPreview = document.getElementById('mainPreview');
+  const mainPreviewImg = document.getElementById('mainPreviewImg');
+  const mainDrop = document.getElementById('mainDrop');
+  mainImg.addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      mainPreviewImg.src = ev.target.result;
+      mainPreview.classList.add('show');
+      mainDrop.style.display = 'none';
+    };
+    r.readAsDataURL(f);
+  });
+  function removeMain() {
+    mainImg.value = '';
+    mainPreviewImg.src = '';
+    mainPreview.classList.remove('show');
+    mainDrop.style.display = '';
+  }
+  window.removeMain = removeMain;
+
+  // 추가 이미지 (5장)
+  document.querySelectorAll('#subGrid .img-slot').forEach(slot => {
+    const input = slot.querySelector('.sub-input');
+    input.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        const oldImg = slot.querySelector('img');
+        if (oldImg) oldImg.remove();
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        slot.insertBefore(img, slot.firstChild);
+        slot.classList.add('filled');
+        const plus = slot.querySelector('.slot-plus');
+        if (plus) plus.style.display = 'none';
+      };
+      r.readAsDataURL(f);
+    });
+  });
+  function removeSub(e, idx) {
+    e.stopPropagation();
+    const slot = document.querySelector(`#subGrid .img-slot[data-idx="${idx}"]`);
+    if (!slot) return;
+    const input = slot.querySelector('.sub-input');
+    const img = slot.querySelector('img');
+    if (input) input.value = '';
+    if (img) img.remove();
+    slot.classList.remove('filled');
+    const plus = slot.querySelector('.slot-plus');
+    if (plus) plus.style.display = '';
+  }
+  window.removeSub = removeSub;
+</script>
+</body>
+</html>

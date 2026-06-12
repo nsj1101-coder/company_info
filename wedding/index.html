@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayDot Wedding · 결혼식의 모든 순간을 한 앨범에</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-2: #2d2624;
+    --muted: #7a6e6c;
+    --line: #f0d8d2;
+    --paper: #ffffff;
+    --bg: #fbf3f0;
+    --bg-2: #fdf8f6;
+    --blush: #fde8e5;
+    --blush-2: #fbd5cf;
+    --rose: #e8a39b;
+    --rose-deep: #c97070;
+    --paydot-blue: #2a348f;
+    --paydot-blue-deep: #1f266b;
+    --paydot-purple: #8a6daf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ─── Top Nav ─── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251,243,240,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand-logo { height: 30px; width: auto; display: block; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-link {
+    color: var(--ink); opacity: 0.7;
+    font-size: 0.92rem; font-weight: 500;
+    transition: opacity 0.18s ease;
+  }
+  .nav-link:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--paydot-blue); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 600;
+    transition: background 0.18s ease, transform 0.1s ease;
+  }
+  .nav-cta:hover { background: var(--paydot-blue-deep); }
+  .nav-cta:active { transform: scale(0.98); }
+
+  /* ─── Hero ─── */
+  .hero {
+    max-width: 1200px; margin: 0 auto;
+    padding: 90px 28px 80px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero-copy .eyebrow {
+    display: inline-block; padding: 6px 13px;
+    background: #fff; color: var(--rose-deep);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    margin-bottom: 22px;
+  }
+  .hero-copy h1 {
+    font-size: clamp(2.4rem, 4.4vw, 3.6rem);
+    font-weight: 700; line-height: 1.16;
+    letter-spacing: -0.022em;
+    margin-bottom: 22px;
+    color: var(--ink);
+  }
+  .hero-copy h1 em {
+    font-style: normal;
+    color: var(--rose-deep);
+  }
+  .hero-copy .lede {
+    font-size: 1.1rem; line-height: 1.75;
+    color: var(--ink-2);
+    margin-bottom: 32px;
+    max-width: 480px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+  }
+  .hero-cta .primary {
+    background: var(--paydot-blue); color: #fff;
+    padding: 14px 26px; border-radius: 999px;
+    font-size: 1rem; font-weight: 700;
+    transition: background 0.18s ease, transform 0.1s ease;
+  }
+  .hero-cta .primary:hover { background: var(--paydot-blue-deep); }
+  .hero-cta .secondary {
+    color: var(--ink); opacity: 0.7;
+    font-size: 0.95rem; font-weight: 600;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 2px;
+    transition: opacity 0.18s ease;
+  }
+  .hero-cta .secondary:hover { opacity: 1; }
+
+  /* ─── Hero visual — polaroid stack ─── */
+  .hero-art {
+    position: relative;
+    aspect-ratio: 1.05;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .polaroid {
+    position: absolute;
+    width: 56%;
+    background: #fff;
+    border-radius: 4px;
+    padding: 14px 14px 36px;
+    box-shadow: 0 22px 50px -16px rgba(201,112,112,0.32);
+    transition: transform 0.4s ease;
+  }
+  .polaroid-inner {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background-size: cover; background-position: center;
+  }
+  .polaroid-cap {
+    position: absolute; bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem; font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .polaroid:nth-child(1) {
+    transform: rotate(-9deg) translate(-30%, 4%);
+    z-index: 1;
+  }
+  .polaroid:nth-child(1) .polaroid-inner {
+    background: linear-gradient(140deg, #f5d4cf 0%, #e8a39b 60%, #c97070 100%);
+  }
+  .polaroid:nth-child(2) {
+    transform: rotate(4deg) translate(0%, -6%);
+    z-index: 3;
+  }
+  .polaroid:nth-child(2) .polaroid-inner {
+    background:
+      radial-gradient(circle at 30% 35%, rgba(255,255,255,0.7), transparent 30%),
+      linear-gradient(160deg, #f8e9e3 0%, #e6c4b8 55%, #c79986 100%);
+  }
+  .polaroid:nth-child(3) {
+    transform: rotate(11deg) translate(34%, 8%);
+    z-index: 2;
+  }
+  .polaroid:nth-child(3) .polaroid-inner {
+    background:
+      radial-gradient(ellipse at 65% 30%, rgba(255,255,255,0.5), transparent 45%),
+      linear-gradient(135deg, #fde8e5 0%, #e8a39b 50%, #a86060 100%);
+  }
+  .heart-tag {
+    position: absolute;
+    top: -10px; right: 10%;
+    background: var(--paydot-blue); color: #fff;
+    padding: 8px 14px; border-radius: 999px;
+    font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 10px 24px -10px rgba(42,52,143,0.5);
+    z-index: 4;
+  }
+
+  /* ─── Section frame ─── */
+  .section {
+    max-width: 1200px; margin: 0 auto;
+    padding: 80px 28px;
+  }
+  .section.tint { background: var(--bg-2); border-radius: 32px; margin: 24px 16px; max-width: none; }
+  .section-head {
+    text-align: center; margin-bottom: 56px;
+  }
+  .section-eyebrow {
+    display: inline-block;
+    color: var(--rose-deep);
+    font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.16em;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    font-weight: 700; line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .section-head p {
+    margin-top: 14px;
+    color: var(--muted); font-size: 1.02rem;
+    max-width: 560px; margin-left: auto; margin-right: auto;
+    line-height: 1.7;
+  }
+
+  /* ─── Strengths (3 cards) ─── */
+  .strengths {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .strength {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 30px 26px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .strength:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 40px -22px rgba(201,112,112,0.28);
+  }
+  .strength-ic {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: var(--blush);
+    color: var(--rose-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700;
+    margin-bottom: 18px;
+  }
+  .strength.alt .strength-ic {
+    background: #ecf0ff; color: var(--paydot-blue);
+  }
+  .strength h3 {
+    font-size: 1.18rem; font-weight: 700;
+    letter-spacing: -0.012em;
+    margin-bottom: 8px;
+  }
+  .strength p {
+    color: var(--muted); font-size: 0.96rem; line-height: 1.7;
+  }
+
+  /* ─── Steps ─── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    counter-reset: step;
+  }
+  .step {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px 26px 28px;
+    position: relative;
+    border: 1px solid var(--line);
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    display: inline-block;
+    font-size: 0.78rem; font-weight: 800;
+    color: var(--rose-deep);
+    letter-spacing: 0.16em;
+    margin-bottom: 10px;
+  }
+  .step h4 {
+    font-size: 1.15rem; font-weight: 700;
+    letter-spacing: -0.012em;
+    margin-bottom: 8px;
+  }
+  .step p {
+    color: var(--muted); font-size: 0.96rem; line-height: 1.7;
+  }
+
+  /* ─── Pricing ─── */
+  .plans {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .plan {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 24px;
+    padding: 36px 32px;
+    position: relative;
+  }
+  .plan.featured {
+    border-color: var(--rose);
+    box-shadow: 0 30px 60px -28px rgba(232,163,155,0.4);
+  }
+  .plan-tag {
+    position: absolute;
+    top: 22px; right: 22px;
+    background: var(--rose); color: #fff;
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .plan h3 {
+    font-size: 1.34rem; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .plan .plan-sub {
+    color: var(--muted); font-size: 0.9rem;
+    margin-bottom: 22px;
+  }
+  .plan .price {
+    font-size: 2.2rem; font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .plan .price small {
+    font-size: 0.92rem; font-weight: 600;
+    color: var(--muted);
+  }
+  .plan .price-note {
+    font-size: 0.84rem; color: var(--muted);
+    margin-bottom: 26px;
+  }
+  .plan-cta {
+    display: block; width: 100%;
+    background: var(--ink); color: #fff;
+    padding: 14px; border-radius: 12px;
+    text-align: center;
+    font-size: 0.96rem; font-weight: 700;
+    margin-bottom: 26px;
+    transition: background 0.18s ease;
+  }
+  .plan.featured .plan-cta {
+    background: var(--paydot-blue);
+  }
+  .plan-cta:hover { background: var(--paydot-blue-deep); }
+  .plan ul {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .plan li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.95rem; color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .plan li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    margin-top: 3px;
+    border-radius: 50%;
+    background: var(--blush);
+    color: var(--rose-deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+  }
+  .plan li.check::before { content: '✓'; }
+  .plan li.cross::before { content: '–'; background: #efe6e4; color: var(--muted); }
+
+  /* ─── FAQ ─── */
+  .faq { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.18s ease;
+  }
+  .faq-item.open { border-color: var(--rose); }
+  .faq-q {
+    width: 100%;
+    padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 1rem; font-weight: 600;
+    color: var(--ink);
+    text-align: left;
+    line-height: 1.5;
+    gap: 12px;
+  }
+  .faq-q .chev {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blush); color: var(--rose-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    transition: transform 0.25s ease;
+  }
+  .faq-item.open .chev { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    padding: 0 24px;
+    color: var(--muted); font-size: 0.96rem; line-height: 1.8;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .faq-item.open .faq-a {
+    max-height: 280px;
+    padding: 0 24px 22px;
+  }
+
+  /* ─── CTA banner ─── */
+  .cta-banner {
+    max-width: 1200px;
+    margin: 24px 16px 80px;
+    border-radius: 32px;
+    background:
+      radial-gradient(circle at 18% 30%, rgba(255,255,255,0.5), transparent 45%),
+      linear-gradient(135deg, #f8c2bc 0%, #e8a39b 55%, #c97070 100%);
+    padding: 70px 60px;
+    text-align: center;
+    color: #fff;
+  }
+  .cta-banner h2 {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight: 700; letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 30px;
+  }
+  .cta-banner .cta-btn {
+    display: inline-block;
+    background: #fff; color: var(--rose-deep);
+    padding: 16px 32px; border-radius: 999px;
+    font-size: 1rem; font-weight: 800;
+    transition: transform 0.12s ease;
+  }
+  .cta-banner .cta-btn:hover { transform: scale(1.03); }
+
+  /* ─── Footer ─── */
+  footer {
+    background: #f5e9e5;
+    padding: 40px 28px;
+    border-top: 1px solid var(--line);
+  }
+  .foot-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
+    color: var(--muted); font-size: 0.84rem;
+    line-height: 1.7;
+  }
+  .foot-inner .foot-brand { display: flex; align-items: center; gap: 12px; }
+  .foot-inner .foot-brand img { height: 24px; }
+  .foot-links { display: flex; gap: 18px; }
+  .foot-links a { color: var(--muted); transition: color 0.18s ease; }
+  .foot-links a:hover { color: var(--ink); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 60px 24px 50px; gap: 40px; }
+    .hero-art { aspect-ratio: 1.4; max-width: 420px; margin: 0 auto; }
+    .strengths { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; }
+    .cta-banner { padding: 50px 28px; margin: 16px 12px 50px; }
+    .topbar-inner { padding: 14px 20px; }
+    .nav-link { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/wedding/"><img src="/wedding/assets/logo/paydot_logo.png" alt="PayDot" class="brand-logo"></a>
+    <div class="nav-right">
+      <a href="#how" class="nav-link">서비스 소개</a>
+      <a href="#pricing" class="nav-link">요금</a>
+      <a href="/wedding/create" class="nav-cta">앨범 만들기</a>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">PAYDOT WEDDING</span>
+    <h1>결혼식의 모든 순간을,<br><em>한 앨범에 모아두세요.</em></h1>
+    <p class="lede">
+      신랑·신부가 보지 못한 각도까지,<br>
+      하객의 시선으로 채우는 결혼 앨범.<br>
+      PayDot이 결제 인프라 수준의 안전함으로 평생 보관해 드립니다.
+    </p>
+    <div class="hero-cta">
+      <a href="/wedding/create" class="primary">무료로 앨범 만들기</a>
+      <a href="#how" class="secondary">사용 방법 보기</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <span class="heart-tag">PayDot 보장</span>
+    <div class="polaroid"><div class="polaroid-inner"></div><span class="polaroid-cap">2026 · 04 · 06</span></div>
+    <div class="polaroid"><div class="polaroid-inner"></div><span class="polaroid-cap">우리의 약속</span></div>
+    <div class="polaroid"><div class="polaroid-inner"></div><span class="polaroid-cap">하객 스냅</span></div>
+  </div>
+</section>
+
+<section class="section tint" id="why">
+  <div class="section-head">
+    <span class="section-eyebrow">WHY PAYDOT WEDDING</span>
+    <h2>결제사가 만드는 앨범, 무엇이 다른가</h2>
+    <p>PayDot이 11년 결제 인프라를 운영하며 쌓아온 보안과 안정성을 결혼 앨범에 그대로 옮겼습니다.</p>
+  </div>
+  <div class="strengths">
+    <div class="strength">
+      <div class="strength-ic">◆</div>
+      <h3>결제급 보관 안정성</h3>
+      <p>금융 결제와 같은 등급의 암호화·이중 백업으로 사진 한 장도 사라지지 않도록 관리합니다.</p>
+    </div>
+    <div class="strength alt">
+      <div class="strength-ic">◇</div>
+      <h3>관계 별로 분리된 보관함</h3>
+      <p>양가 가족·친구·직장 동료로 나눠 따로 모아둘 수 있어, 사진을 찾을 때 헤매지 않습니다.</p>
+    </div>
+    <div class="strength">
+      <div class="strength-ic">◉</div>
+      <h3>결혼식이 끝나도 사라지지 않게</h3>
+      <p>유효기간 만료 후에도 별도 결제 없이 보관 연장이 가능합니다. 평생 1회 결제만 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="section-head">
+    <span class="section-eyebrow">HOW IT WORKS</span>
+    <h2>준비는 가볍게, 사진은 빠짐없이</h2>
+    <p>가입부터 첫 사진이 모이기까지 평균 4분 걸립니다. 청첩장에 QR만 함께 넣어주시면 끝.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <h4>앨범과 표지 만들기</h4>
+      <p>신랑·신부 이름, 예식 일시, 표지 스타일만 선택하면 곧바로 앨범이 발급됩니다.</p>
+    </div>
+    <div class="step">
+      <h4>청첩장과 함께 QR 전달</h4>
+      <p>발급된 QR을 모바일 청첩장이나 식장 입구에 두기만 하면 됩니다. 별도 안내는 필요 없어요.</p>
+    </div>
+    <div class="step">
+      <h4>사진은 자동으로 모이게</h4>
+      <p>하객은 가입·앱 설치 없이 QR을 찍어 바로 사진을 올립니다. 부부는 한 곳에서 받아 보기만 하면 됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section tint" id="pricing">
+  <div class="section-head">
+    <span class="section-eyebrow">PRICING</span>
+    <h2>평생 단 한 번 결제하면 충분합니다</h2>
+    <p>구독 없이 일회성 결제만 받습니다. 결혼식이 끝나도 추가 요금 없이 보관됩니다.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <h3>Free</h3>
+      <p class="plan-sub">먼저 체험해 보고 결정하세요</p>
+      <div class="price">0<small>원</small></div>
+      <p class="price-note">카드 등록 없이 시작</p>
+      <a href="/wedding/create" class="plan-cta">무료로 시작</a>
+      <ul>
+        <li class="check">앨범 1개 생성</li>
+        <li class="check">사진 업로드 1GB</li>
+        <li class="check">7일 보관</li>
+        <li class="cross">관계 별 보관함 분리</li>
+        <li class="cross">워터마크 제거</li>
+      </ul>
+    </div>
+    <div class="plan featured">
+      <span class="plan-tag">RECOMMENDED</span>
+      <h3>Forever</h3>
+      <p class="plan-sub">평생 단 한 번만 결제</p>
+      <div class="price">29,900<small>원</small></div>
+      <p class="price-note">결혼식 한 달 전에 결제하면 충분</p>
+      <a href="/wedding/create" class="plan-cta">Forever 시작</a>
+      <ul>
+        <li class="check">앨범 최대 5개</li>
+        <li class="check">사진 + 동영상 50GB</li>
+        <li class="check">평생 보관 (만료 없음)</li>
+        <li class="check">관계 별 보관함 분리</li>
+        <li class="check">워터마크 제거</li>
+        <li class="check">원본 고화질 다운로드</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="section-head">
+    <span class="section-eyebrow">FAQ</span>
+    <h2>가장 자주 듣는 질문</h2>
+  </div>
+  <div class="faq" id="faqList">
+    <div class="faq-item">
+      <button class="faq-q">PayDot 결제 회원이 아니어도 사용할 수 있나요?<span class="chev">+</span></button>
+      <div class="faq-a">네, 가능합니다. PayDot 결제 서비스와 PayDot Wedding은 별도 서비스로, 결제 회원 가입 없이도 앨범을 만들고 운영할 수 있습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">하객도 회원 가입을 해야 하나요?<span class="chev">+</span></button>
+      <div class="faq-a">아니요. 하객은 QR을 찍거나 링크를 누르면 바로 사진을 올릴 수 있습니다. 회원 가입과 앱 설치 모두 필요하지 않습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">사진은 어디에 어떻게 저장되나요?<span class="chev">+</span></button>
+      <div class="faq-a">PayDot 결제 시스템과 동일한 등급의 클라우드 인프라(AWS Seoul + GCP Tokyo 이중화)에 암호화 상태로 보관됩니다. 신랑·신부 외에는 누구도 원본에 접근할 수 없습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">결혼식이 끝난 다음에도 사진을 받을 수 있나요?<span class="chev">+</span></button>
+      <div class="faq-a">네, 앨범은 식후에도 계속 열려 있어 늦게 도착한 사진까지 받을 수 있습니다. Forever 플랜의 경우 보관 기한이 별도로 없습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">양가 가족과 친구 사진을 따로 모을 수 있나요?<span class="chev">+</span></button>
+      <div class="faq-a">Forever 플랜은 한 결혼식 안에서 보관함을 여러 개로 나눌 수 있습니다. 신랑 측 가족, 신부 측 가족, 친구, 직장 동료 등 관계 별로 분리해 보관 가능합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">청첩장 모임 사진부터 먼저 모으고 싶어요. 가능한가요?<span class="chev">+</span></button>
+      <div class="faq-a">앨범 생성 후 바로 QR이 발급되어 결혼식 전 청첩장 모임, 본식 리허설, 스튜디오 촬영 사진까지 같은 앨범에 모아둘 수 있습니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <h2>평생 기억하고 싶은 그 날의<br>모든 시선을, 한 앨범에.</h2>
+  <a href="/wedding/create" class="cta-btn">무료로 앨범 만들기 →</a>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-brand"><img src="/wedding/assets/logo/paydot_logo.png" alt="PayDot"></div>
+      <div style="margin-top: 10px;">PayDot Wedding · 결혼식 앨범 서비스</div>
+      <div>© 2026 PayDot. All rights reserved.</div>
+    </div>
+    <div class="foot-links">
+      <a href="#">이용약관</a>
+      <a href="#">개인정보처리방침</a>
+      <a href="#">서비스 문의</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ accordion
+  document.getElementById('faqList').addEventListener('click', e => {
+    const btn = e.target.closest('.faq-q');
+    if (!btn) return;
+    const item = btn.parentElement;
+    document.querySelectorAll('.faq-item').forEach(i => { if (i !== item) i.classList.remove('open'); });
+    item.classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>

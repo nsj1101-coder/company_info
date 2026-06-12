@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 검색 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+
+    .hs-layout{display:flex;flex:1;min-height:0;overflow:hidden}
+    .hs-filter{width:240px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+    .hs-filter-header{display:flex;align-items:center;justify-content:space-between}
+    .hs-filter-header .fh-title{font-size:16px;font-weight:700;color:var(--fg-primary)}
+    .hs-reset{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);font-size:11px;font-weight:600;color:var(--fg-secondary);cursor:pointer}
+    .hs-reset i{font-size:12px}
+    .hs-section{display:flex;flex-direction:column;gap:10px}
+    .hs-section-label{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .hs-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .hs-chip{display:inline-flex;align-items:center;height:30px;padding:6px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg-card);color:var(--fg-secondary);font-size:12px;font-weight:500;cursor:pointer}
+    .hs-chip.active{background:var(--accent);border-color:var(--accent);color:var(--fg-inverse);font-weight:700}
+    .hs-check-list{display:flex;flex-direction:column;gap:10px}
+    .hs-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg-primary);cursor:pointer}
+    .hs-check .cb{width:16px;height:16px;border-radius:3px;border:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .hs-check.checked .cb{background:var(--fg-primary);border-color:var(--fg-primary)}
+    .hs-check.checked.accent .cb{background:var(--accent);border-color:var(--accent)}
+    .hs-check .cb i{font-size:10px;color:#fff;display:none}
+    .hs-check.checked .cb i{display:inline-block}
+    .hs-check.checked .lbl{font-weight:500}
+
+    .hs-list{width:320px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+    .hs-list-header{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border)}
+    .hs-list-title{display:flex;align-items:center;gap:8px}
+    .hs-list-title .lt{font-size:16px;font-weight:700;color:var(--fg-primary)}
+    .hs-list-count{background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px}
+    .hs-list-search{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);color:var(--fg-muted);font-size:14px}
+    .hs-list-items{flex:1;overflow-y:auto}
+    .hs-card{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border-light);cursor:pointer;align-items:flex-start}
+    .hs-card:hover{background:var(--bg-secondary)}
+    .hs-card.selected{background:#F9F9FF}
+    .hs-card .hc-av{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+    .hs-card .hc-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+    .hs-card .hc-name{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .hs-card .hc-meta{font-size:12px;color:var(--fg-secondary)}
+    .hs-card .hc-tags{display:flex;flex-wrap:wrap;gap:4px}
+    .hs-tag{padding:4px 8px;border-radius:9999px;font-size:12px;font-weight:600;line-height:1}
+    .hs-tag.accent{background:var(--accent-light);color:var(--accent)}
+    .hs-tag.warning{background:#FFF7ED;color:var(--warning)}
+    .hs-tag.success{background:#ECFDF5;color:#059669}
+    .hs-tag.info{background:#EFF6FF;color:#2563EB}
+    .hs-mgmt-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);display:flex;align-items:center;justify-content:center;color:var(--fg-secondary);cursor:pointer;flex-shrink:0}
+
+    .hs-detail-wrap{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg-card);overflow:hidden}
+    .hs-detail{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+    .hs-img-row{display:flex;gap:12px;height:160px;flex-shrink:0}
+    .hs-img{flex:1;border-radius:var(--radius-sm);background-size:cover;background-position:center}
+    .hs-img.img1{background-image:url('../assets/admin/img/generated-1776044203736.png')}
+    .hs-img.img2{background-image:url('../assets/admin/img/generated-1776044221333.png')}
+    .hs-name-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .hs-name{font-size:20px;font-weight:700;color:var(--fg-primary)}
+    .hs-action-row{display:flex;align-items:center;gap:8px}
+    .hs-btn-wa{display:inline-flex;align-items:center;gap:6px;height:34px;padding:6px 12px;border-radius:6px;background:#25D366;color:#fff;font-size:13px;font-weight:600;border:none;cursor:pointer}
+    .hs-btn-sec{display:inline-flex;align-items:center;gap:6px;height:34px;padding:6px 12px;border-radius:6px;background:var(--bg-card);color:var(--fg-secondary);font-size:13px;font-weight:600;border:1px solid var(--border);cursor:pointer}
+    .hs-addr{font-size:14px;color:var(--fg-secondary)}
+    .hs-badges{display:flex;flex-wrap:wrap;gap:8px}
+    .hs-bdg{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:9999px;border:1px solid var(--border);background:var(--bg-secondary);font-size:12px;font-weight:600;color:var(--fg-secondary)}
+    .hs-bdg i{font-size:14px}
+    .hs-d-label{font-size:15px;font-weight:700;color:var(--fg-primary)}
+    .hs-desc{font-size:14px;line-height:1.6;color:var(--fg-secondary)}
+    .hs-map{width:100%;height:140px;border-radius:var(--radius-sm);background:url('../assets/admin/img/generated-1776047895332.png') center/cover no-repeat}
+    .hs-addr-row{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--fg-secondary)}
+    .hs-addr-row i{font-size:18px;color:var(--fg-muted)}
+    .hs-divider{height:1px;background:var(--border-light)}
+    .hs-dept-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .hs-dept-search{width:200px;height:40px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:6px;padding:6px 10px;color:var(--fg-muted);font-size:14px}
+    .hs-dept-list{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+    .hs-dept-row{display:flex;justify-content:space-between;align-items:center;height:40px;padding:10px 14px;border-bottom:1px solid var(--border-light)}
+    .hs-dept-row:last-child{border-bottom:none}
+    .hs-dept-row.all{background:#F9F9FF}
+    .hs-dept-left{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg-primary)}
+    .hs-dept-right{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-muted)}
+    .hs-dept-right i{font-size:16px}
+
+    .hs-intake{height:56px;background:var(--fg-primary);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    .hs-intake-left{color:var(--fg-inverse);font-size:14px;font-weight:500}
+    .hs-intake-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--radius-sm);background:var(--accent);color:var(--fg-inverse);font-size:14px;font-weight:600;border:none;cursor:pointer}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item active" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>상품 검색</h1>
+        <p>고급 검색 및 일괄 작업</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="상품명·모델번호 검색..."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#3B43DB"></div><div class="noti-body"><span class="noti-badge" style="background:#EEEFFC;color:#3B43DB">신규 주문</span><span class="noti-time">10분 전</span><div class="noti-text">김○○ 회원이 카본로얄파인더를 주문했습니다</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#34C759"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">복지용구 승인</span><span class="noti-time">1시간 전</span><div class="noti-text">박○○ 인정번호 확인 완료</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">재고 알림</span><span class="noti-time">3시간 전</span><div class="noti-text">로얄쿠션 재고 20개 미만</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hs-layout">
+      <aside class="hs-filter">
+        <div class="hs-filter-header">
+          <span class="fh-title">검색 조건</span>
+          <button class="hs-reset"><i class="icon-rotate-ccw"></i>초기화</button>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">상품명</span>
+          <div style="display:flex;align-items:center;height:36px;border:1px solid var(--border);border-radius:6px;padding:0 10px;background:var(--bg-card);font-size:13px;color:var(--fg-muted)">예: 카본로얄파인더</div>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">모델번호</span>
+          <div style="display:flex;align-items:center;height:36px;border:1px solid var(--border);border-radius:6px;padding:0 10px;background:var(--bg-card);font-size:13px;color:var(--fg-muted)">예: P04 / FR01</div>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">카테고리</span>
+          <div class="hs-chips">
+            <span class="hs-chip active">전체</span>
+            <span class="hs-chip">보행기</span>
+            <span class="hs-chip">휠체어</span>
+            <span class="hs-chip">목욕의자</span>
+            <span class="hs-chip">이동변기</span>
+            <span class="hs-chip">전동침대</span>
+            <span class="hs-chip">미끄럼방지</span>
+            <span class="hs-chip">기타용품</span>
+          </div>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">가격대</span>
+          <div class="hs-check-list">
+            <label class="hs-check"><span class="cb"><i class="icon-check"></i></span><span class="lbl">전체</span></label>
+            <label class="hs-check checked"><span class="cb"><i class="icon-check"></i></span><span class="lbl">~ 200,000원</span></label>
+            <label class="hs-check"><span class="cb"><i class="icon-check"></i></span><span class="lbl">200,000 ~ 350,000원</span></label>
+            <label class="hs-check"><span class="cb"><i class="icon-check"></i></span><span class="lbl">350,000 ~ 535,000원</span></label>
+          </div>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">등록일</span>
+          <div style="display:flex;align-items:center;height:36px;border:1px solid var(--border);border-radius:6px;padding:0 10px;background:var(--bg-card);font-size:13px;color:var(--fg-muted)">YYYY-MM-DD ~ YYYY-MM-DD</div>
+        </div>
+        <div class="hs-section">
+          <span class="hs-section-label">복지용구 여부</span>
+          <div class="hs-check-list">
+            <label class="hs-check"><span class="cb"><i class="icon-check"></i></span><span class="lbl">전체</span></label>
+            <label class="hs-check checked accent"><span class="cb"><i class="icon-check"></i></span><span class="lbl">복지용구</span></label>
+            <label class="hs-check"><span class="cb"><i class="icon-check"></i></span><span class="lbl">일반 상품</span></label>
+          </div>
+        </div>
+      </aside>
+
+      <section class="hs-list">
+        <div class="hs-list-header">
+          <div class="hs-list-title">
+            <span class="lt">검색 결과</span>
+            <span class="hs-list-count">0개</span>
+          </div>
+          <i class="icon-external-link" style="color:var(--fg-muted);font-size:16px"></i>
+        </div>
+        <div class="hs-list-search">
+          <i class="icon-search"></i>
+          <span>조건을 입력 후 검색해주세요</span>
+        </div>
+        <div class="hs-list-items">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;color:var(--fg-muted);text-align:center">
+            <i class="icon-search" style="font-size:40px;color:var(--border)"></i>
+            <div style="font-size:14px;font-weight:600;color:var(--fg-secondary)">검색 결과가 없습니다</div>
+            <div style="font-size:13px">왼쪽 검색 조건을 입력하고<br>검색 버튼을 눌러주세요</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hs-detail-wrap" id="hsDetail" style="display:none">
+        <div class="hs-detail">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:12px;color:var(--fg-muted);text-align:center">
+            <i class="icon-package" style="font-size:48px;color:var(--border)"></i>
+            <div style="font-size:15px;font-weight:600;color:var(--fg-secondary)">상품을 선택해주세요</div>
+            <div style="font-size:13px">검색 결과에서 상품을 클릭하면<br>상세 정보가 표시됩니다</div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="hs-intake" id="hsIntake" style="display:none">
+      <span class="hs-intake-left">0개 상품 선택됨</span>
+      <button class="hs-intake-btn">일괄 작업<i class="icon-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  // Hospital card selection
+  document.querySelectorAll('.hs-list .hs-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.hs-mgmt-btn')) return;
+      document.querySelectorAll('.hs-list .hs-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('hsDetail').style.display = '';
+      // Reset department checks + hide intake when switching hospitals
+      document.querySelectorAll('#hsDetail .hs-check').forEach(c => c.classList.remove('checked'));
+      updateIntake();
+    });
+  });
+
+  // Department check toggle
+  function updateIntake(){
+    const items = document.querySelectorAll('#hsDetail .hs-dept-row:not([data-role="all"]) .hs-check');
+    const count = Array.from(items).filter(c => c.classList.contains('checked')).length;
+    const bar = document.getElementById('hsIntake');
+    if (count > 0) {
+      bar.style.display = '';
+      bar.querySelector('.hs-intake-left').textContent = count + '개 카테고리 선택됨';
+    } else {
+      bar.style.display = 'none';
+    }
+    // Sync 전체 check state
+    const allRow = document.querySelector('#hsDetail .hs-dept-row[data-role="all"] .hs-check');
+    if (allRow) allRow.classList.toggle('checked', items.length > 0 && count === items.length);
+  }
+  document.querySelectorAll('#hsDetail .hs-dept-row .hs-check').forEach(chk => {
+    chk.addEventListener('click', (e) => {
+      e.preventDefault();
+      const row = chk.closest('.hs-dept-row');
+      if (row.dataset.role === 'all') {
+        const willCheck = !chk.classList.contains('checked');
+        document.querySelectorAll('#hsDetail .hs-dept-row:not([data-role="all"]) .hs-check').forEach(c => {
+          c.classList.toggle('checked', willCheck);
+        });
+      } else {
+        chk.classList.toggle('checked');
+      }
+      updateIntake();
+    });
+  });
+</script>
+</body>
+</html>

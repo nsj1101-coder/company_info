@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>공예 갤러리 쇼핑몰 | WBS — 6주 작업 분해 구조</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root {
+    --ink: #2d2620;
+    --bg: #f5efe6;
+    --sand-50: #f9f4ea;
+    --sand-100: #f0e8d8;
+    --sand-200: #e8ddc9;
+    --sand-500: #8a7f70;
+    --sand-700: #5a4e3e;
+    --accent: #c9a96e;
+    --accent-deep: #8b6f47;
+    --accent-soft: #e8ddc9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  @page { size: 1600px 900px; margin: 0; }
+  html, body { background: #f5efe6; font-family: 'Pretendard Variable', Pretendard, sans-serif; color: var(--ink); }
+
+  .page {
+    width: 1600px; height: 900px;
+    background: #fff;
+    padding: 44px 72px;
+    position: relative;
+    page-break-after: always;
+    break-after: page;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .header-band {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 24px;
+  }
+  .header-band .left {
+    font-size: 1.18rem; font-weight: 700; letter-spacing: 0.14em;
+  }
+  .header-band .left small {
+    display: block;
+    font-size: 0.74rem; font-weight: 400; font-style: italic;
+    color: var(--sand-500);
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+  .header-band .right {
+    font-size: 0.82rem; color: var(--sand-500); letter-spacing: 0.18em;
+  }
+
+  h1 {
+    font-size: 3.5rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; color: var(--accent-deep); }
+  p.sub {
+    font-size: 1.15rem; color: var(--sand-700);
+    line-height: 1.6;
+    margin-bottom: 22px;
+    max-width: 1180px;
+  }
+
+  .cover-stage {
+    flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .cover-stage .eyebrow {
+    font-size: 0.84rem; font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--accent-deep);
+    margin-bottom: 18px;
+  }
+  .cover-stage h1 { font-size: 5.4rem; line-height: 1.05; }
+  .cover-stage .lede {
+    font-size: 1.35rem;
+    color: var(--sand-700);
+    line-height: 1.65;
+    margin-top: 18px;
+    max-width: 1100px;
+    font-style: italic;
+  }
+  .cover-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    border-top: 2px solid var(--ink);
+    padding-top: 22px;
+    margin-top: 60px;
+  }
+  .cover-meta .c .lbl {
+    font-size: 0.74rem; font-weight: 700;
+    color: var(--sand-500);
+    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+  .cover-meta .c .val {
+    font-size: 1.32rem; font-weight: 700;
+  }
+
+  /* Summary */
+  .summary {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .summary .s {
+    background: #fff;
+    border-top: 4px solid var(--accent);
+    padding: 16px 18px 18px;
+  }
+  .summary .s.alt { border-top-color: var(--accent-deep); }
+  .summary .s.alt2 { border-top-color: var(--sand-500); }
+  .summary .s.acc { background: var(--accent-soft); border-top-color: var(--accent-deep); }
+  .summary .s .l {
+    font-size: 0.74rem; font-weight: 700;
+    color: var(--accent-deep); letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+  .summary .s.alt2 .l { color: var(--sand-700); }
+  .summary .s h3 {
+    font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.012em;
+  }
+  .summary .s .desc {
+    font-size: 0.9rem; color: var(--sand-700);
+    line-height: 1.6;
+  }
+
+  /* Gantt */
+  .gantt {
+    display: grid;
+    grid-template-columns: 260px repeat(6, 1fr);
+    border-top: 2px solid var(--ink);
+    margin-top: 12px;
+    background: var(--sand-200);
+    gap: 1px;
+  }
+  .gantt .gh {
+    background: var(--sand-50);
+    padding: 8px;
+    font-size: 0.82rem; font-weight: 700;
+    color: var(--sand-700);
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+  .gantt .gh.tk {
+    padding: 8px 14px;
+    text-align: left;
+    letter-spacing: 0.16em;
+  }
+  .gantt .gr {
+    background: #fff;
+    padding: 8px 14px;
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .gantt .gr small {
+    display: block;
+    font-size: 0.74rem; font-weight: 400;
+    color: var(--sand-500);
+    margin-top: 1px;
+    font-style: italic;
+  }
+  .gantt .gc {
+    background: #fff;
+    position: relative;
+  }
+  .gantt .gc .bar {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    height: 18px;
+    left: 6%; right: 6%;
+  }
+  .gantt .gc .bar.core { background: var(--accent); }
+  .gantt .gc .bar.ai { background: var(--accent-deep); }
+  .gantt .gc .bar.alt { background: var(--sand-500); }
+  .gantt .gc .bar.qa { background: var(--ink); }
+
+  /* Detail */
+  .detail {
+    display: grid;
+    grid-template-columns: 70px 200px 1fr 100px 200px 90px;
+    border-top: 2px solid var(--ink);
+    margin-top: 12px;
+  }
+  .detail .dh {
+    padding: 10px 12px;
+    font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--sand-500);
+    border-bottom: 2px solid var(--ink);
+    text-transform: uppercase;
+  }
+  .detail .dc {
+    padding: 10px 12px;
+    font-size: 0.94rem;
+    border-bottom: 1px solid var(--sand-200);
+    line-height: 1.55;
+  }
+  .detail .dc.id { font-weight: 700; color: var(--accent-deep); font-family: monospace; }
+  .detail .dc.phase {
+    font-weight: 700; color: var(--ink);
+  }
+  .detail .dc.week { font-weight: 600; color: var(--sand-700); }
+  .detail .dc.hour { text-align: right; font-weight: 700; color: var(--ink); font-family: monospace; }
+
+  /* Resources */
+  .res {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 18px;
+  }
+  .res .left, .res .right { background: #fff; }
+  .res h4 {
+    font-size: 0.84rem; font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--sand-500);
+    margin-bottom: 10px;
+  }
+  .res .left .roles {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--sand-200);
+    border-top: 2px solid var(--ink);
+  }
+  .res .left .role {
+    background: #fff;
+    padding: 18px;
+  }
+  .res .left .role .rn {
+    font-size: 0.74rem; font-weight: 700;
+    color: var(--accent-deep); letter-spacing: 0.14em;
+    margin-bottom: 4px;
+  }
+  .res .left .role h3 {
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .res .left .role ul {
+    list-style: none;
+    font-size: 0.94rem;
+    color: var(--sand-700);
+    line-height: 1.65;
+  }
+  .res .left .role ul li::before { content: '— '; opacity: 0.5; }
+
+  .risk-table {
+    border-top: 2px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    background: #fff;
+  }
+  .risk-table .rth {
+    padding: 10px 14px;
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--sand-500);
+    letter-spacing: 0.16em;
+    border-bottom: 2px solid var(--ink);
+  }
+  .risk-table .rtc {
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--sand-200);
+    line-height: 1.55;
+  }
+  .risk-table .rtc.high { background: rgba(180,80,80,0.08); color: #8a3939; font-weight: 700; }
+  .risk-table .rtc.mid { background: rgba(201,169,110,0.18); color: var(--accent-deep); font-weight: 700; }
+  .risk-table .rtc.low { background: rgba(138,127,112,0.12); color: var(--sand-700); font-weight: 700; }
+
+  .page-num {
+    position: absolute;
+    bottom: 24px; left: 72px;
+    font-size: 0.82rem;
+    color: var(--sand-500);
+    letter-spacing: 0.16em;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">CRAFT GALLERY · WBS
+      <small>Work Breakdown Structure — 6 Weeks</small>
+    </div>
+    <div class="right">VOL.01 — 2026 / 06</div>
+  </div>
+  <div class="cover-stage">
+    <div class="eyebrow">WORK BREAKDOWN STRUCTURE</div>
+    <h1>6주 · 30일 · <em>AI 시뮬레이션 정식 오픈</em></h1>
+    <p class="lede">
+      베이지 샌드톤의 갤러리형 쇼핑몰과 Gemini API 기반 AI 색상 시뮬레이션 엔진을 6주 안에 정식 오픈합니다.
+      <br><br>
+      본 문서는 일정·작업 단위·투입 시간·담당 롤·산출물을 분해한 WBS이며,
+      견적서 별첨 자료로 제출됩니다. 배송 자동화와 QA 인수인계 단계는 본 단가 외 별도 협의 영역입니다.
+    </p>
+  </div>
+  <div class="cover-meta">
+    <div class="c">
+      <div class="lbl">DURATION</div>
+      <div class="val">6주 (30 영업일)</div>
+    </div>
+    <div class="c">
+      <div class="lbl">PHASE</div>
+      <div class="val">4단계 · 20 작업 항목</div>
+    </div>
+    <div class="c">
+      <div class="lbl">EFFORT</div>
+      <div class="val">총 약 320시간</div>
+    </div>
+    <div class="c">
+      <div class="lbl">TEAM</div>
+      <div class="val">3명 동시 투입</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE OVERVIEW -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">PHASE OVERVIEW</div>
+    <div class="right">02 / 04</div>
+  </div>
+  <h1 style="font-size: 2.6rem; margin-bottom: 6px;">4단계 · <em>각 단계의 코어 산출물</em></h1>
+  <p class="sub" style="margin-bottom: 14px; font-size: 1.05rem;">
+    6주를 4단계로 나눕니다. 각 단계는 독립적으로 평가 가능한 산출물을 갖고, 단계 종료 시 발주처 확인 후 다음 단계로 진행합니다.
+  </p>
+  <div class="summary">
+    <div class="s">
+      <div class="l">PHASE 1 · W1</div>
+      <h3>DESIGN</h3>
+      <div class="desc">베이지 샌드톤 디자인 시스템. 와이어프레임. DB 스키마. 작가·작품·주문 모델. 권한 매트릭스.</div>
+    </div>
+    <div class="s alt">
+      <div class="l">PHASE 2 · W2–W3</div>
+      <h3>GALLERY CORE</h3>
+      <div class="desc">갤러리 메인. 작품 상세. 작가 페이지. 공용 컴포넌트 라이브러리. 모바일 반응형.</div>
+    </div>
+    <div class="s acc">
+      <div class="l">PHASE 3 · W3–W5</div>
+      <h3>AI + COMMERCE</h3>
+      <div class="desc">AI 색상 시뮬레이션. Gemini 연동 + 캐싱. 토스페이먼츠 결제. 작가·본사 어드민. 주문 관리.</div>
+    </div>
+    <div class="s alt2">
+      <div class="l">PHASE 4 · W6</div>
+      <h3>LAUNCH</h3>
+      <div class="desc">시나리오 검증. 본사 운영자 온보딩. 정식 오픈. 인수인계 매뉴얼.</div>
+    </div>
+  </div>
+
+  <h4 style="font-size: 0.82rem; font-weight: 700; letter-spacing: 0.16em; color: var(--sand-500); margin: 18px 0 8px;">GANTT — 6주 일정</h4>
+  <div class="gantt">
+    <div class="gh tk">작업 (Workstream)</div>
+    <div class="gh">W1</div><div class="gh">W2</div><div class="gh">W3</div>
+    <div class="gh">W4</div><div class="gh">W5</div><div class="gh">W6</div>
+
+    <div class="gr">기획 · 와이어 · 디자인 시스템<small>UX · 디자인</small></div>
+    <div class="gc"><div class="bar core"></div></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"></div>
+
+    <div class="gr">DB 스키마 · 권한 매트릭스<small>백엔드</small></div>
+    <div class="gc"><div class="bar alt"></div></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"></div>
+
+    <div class="gr">갤러리 메인 · 작품 상세 · 작가 페이지<small>프론트엔드</small></div>
+    <div class="gc"></div><div class="gc"><div class="bar core"></div></div><div class="gc"><div class="bar core"></div></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div>
+
+    <div class="gr">AI 색상 시뮬레이션 (Gemini · 캐싱)<small>풀스택 핵심</small></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"><div class="bar ai"></div></div><div class="gc"><div class="bar ai"></div></div>
+    <div class="gc"></div><div class="gc"></div>
+
+    <div class="gr">토스페이먼츠 결제 + 주문 관리<small>풀스택</small></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"><div class="bar core"></div></div>
+    <div class="gc"></div><div class="gc"></div>
+
+    <div class="gr">작가 어드민 · 본사 어드민<small>풀스택</small></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"><div class="bar alt"></div></div>
+    <div class="gc"><div class="bar alt"></div></div><div class="gc"></div>
+
+    <div class="gr">시나리오 검증 · 정식 오픈 · 인수인계<small>전 팀</small></div>
+    <div class="gc"></div><div class="gc"></div><div class="gc"></div><div class="gc"></div>
+    <div class="gc"></div><div class="gc"><div class="bar qa"></div></div>
+  </div>
+
+  <div class="page-num">02 / 04</div>
+</div>
+
+<!-- DETAIL TASKS -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">TASK BREAKDOWN</div>
+    <div class="right">03 / 04</div>
+  </div>
+  <h1 style="font-size: 2.2rem;">20개 작업 항목 · <em>총 약 320시간</em></h1>
+  <p class="sub" style="margin-bottom: 12px; font-size: 1rem;">단계별 세부 작업과 투입 시간, 담당 롤을 정리합니다. ★ 표시는 단계 종료 기준이 되는 마일스톤 산출물입니다. 배송 자동화는 본 단가 외 별도 협의입니다.</p>
+
+  <div class="detail" style="margin-top: 4px;">
+    <div class="dh">ID</div>
+    <div class="dh">PHASE</div>
+    <div class="dh">TASK</div>
+    <div class="dh">EFFORT</div>
+    <div class="dh">ROLE</div>
+    <div class="dh">WEEK</div>
+
+    <div class="dc id">T-01</div><div class="dc phase">P1 Design</div><div class="dc">베이지 샌드톤 디자인 시스템 확정 (컬러·타이포·여백·토큰)</div><div class="dc hour">22h</div><div class="dc">디자이너</div><div class="dc week">W1</div>
+    <div class="dc id">T-02</div><div class="dc phase">P1 Design</div><div class="dc">갤러리 메인·상세·작가 페이지 와이어프레임</div><div class="dc hour">16h</div><div class="dc">디자이너</div><div class="dc week">W1</div>
+    <div class="dc id">T-03</div><div class="dc phase">P1 Design</div><div class="dc">DB 스키마 (작가·작품·색상 옵션·주문) + 권한 매트릭스 ★</div><div class="dc hour">16h</div><div class="dc">백엔드</div><div class="dc week">W1</div>
+    <div class="dc id">T-04</div><div class="dc phase">P1 Design</div><div class="dc">본사·작가 어드민 화면 와이어프레임</div><div class="dc hour">10h</div><div class="dc">디자이너</div><div class="dc week">W1</div>
+
+    <div class="dc id">T-05</div><div class="dc phase">P2 Core</div><div class="dc">Next.js 셋업 + 인증 + 공용 컴포넌트 라이브러리</div><div class="dc hour">22h</div><div class="dc">풀스택</div><div class="dc week">W2</div>
+    <div class="dc id">T-06</div><div class="dc phase">P2 Core</div><div class="dc">갤러리 메인 페이지 (큐레이션·작가 컬렉션·작품 그리드)</div><div class="dc hour">20h</div><div class="dc">풀스택</div><div class="dc week">W2</div>
+    <div class="dc id">T-07</div><div class="dc phase">P2 Core</div><div class="dc">작품 상세 페이지 + 작가 페이지 + 모바일 반응형 ★</div><div class="dc hour">26h</div><div class="dc">풀스택</div><div class="dc week">W2–W3</div>
+    <div class="dc id">T-08</div><div class="dc phase">P2 Core</div><div class="dc">이미지 업로드 + 작품 등록 폼 골격</div><div class="dc hour">12h</div><div class="dc">풀스택</div><div class="dc week">W3</div>
+
+    <div class="dc id">T-09</div><div class="dc phase">P3 AI</div><div class="dc">색상 영역 마스크 지정 UI (작가 어드민)</div><div class="dc hour">18h</div><div class="dc">풀스택</div><div class="dc week">W3</div>
+    <div class="dc id">T-10</div><div class="dc phase">P3 AI</div><div class="dc">Gemini API 연동 + 이미지 편집 프롬프트 설계</div><div class="dc hour">22h</div><div class="dc">풀스택</div><div class="dc week">W3–W4</div>
+    <div class="dc id">T-11</div><div class="dc phase">P3 AI</div><div class="dc">생성 결과 캐싱 (S3 또는 동등 스토리지 + DB 매핑) ★</div><div class="dc hour">18h</div><div class="dc">풀스택</div><div class="dc week">W4</div>
+    <div class="dc id">T-12</div><div class="dc phase">P3 AI</div><div class="dc">색상 팔레트 선택 UI + 실시간 미리보기 (고객 화면)</div><div class="dc hour">16h</div><div class="dc">풀스택</div><div class="dc week">W4</div>
+
+    <div class="dc id">T-13</div><div class="dc phase">P3 Commerce</div><div class="dc">토스페이먼츠 결제창 v2 연동 (비회원 결제 포함)</div><div class="dc hour">18h</div><div class="dc">풀스택</div><div class="dc week">W4</div>
+    <div class="dc id">T-14</div><div class="dc phase">P3 Commerce</div><div class="dc">주문 생성 + 선택 색상 정보 함께 저장 ★</div><div class="dc hour">14h</div><div class="dc">풀스택</div><div class="dc week">W4</div>
+    <div class="dc id">T-15</div><div class="dc phase">P3 Commerce</div><div class="dc">주문 알림 이메일 + 본사·작가 통보</div><div class="dc hour">10h</div><div class="dc">풀스택</div><div class="dc week">W5</div>
+
+    <div class="dc id">T-16</div><div class="dc phase">P3 Admin</div><div class="dc">본사 어드민 (작가 승인·작품 검수·정산 집계·통계) ★</div><div class="dc hour">26h</div><div class="dc">풀스택</div><div class="dc week">W4–W5</div>
+    <div class="dc id">T-17</div><div class="dc phase">P3 Admin</div><div class="dc">작가 어드민 (작품 등록·색상 영역·주문 조회·정산)</div><div class="dc hour">22h</div><div class="dc">풀스택</div><div class="dc week">W5</div>
+    <div class="dc id">T-18</div><div class="dc phase">P3 Admin</div><div class="dc">큐레이션 에디토리얼 인라인 편집기</div><div class="dc hour">14h</div><div class="dc">풀스택</div><div class="dc week">W5</div>
+
+    <div class="dc id">T-19</div><div class="dc phase">P4 Launch</div><div class="dc">시나리오 검증 (구매·등록·승인·정산 흐름)</div><div class="dc hour">14h</div><div class="dc">전 팀</div><div class="dc week">W6</div>
+    <div class="dc id">T-20</div><div class="dc phase">P4 Launch</div><div class="dc">본사 운영자 온보딩 세션 + 인수인계 매뉴얼 ★</div><div class="dc hour">14h</div><div class="dc">PM + 풀스택</div><div class="dc week">W6</div>
+  </div>
+
+  <div class="page-num">03 / 04</div>
+</div>
+
+<!-- RESOURCES + RISK -->
+<div class="page">
+  <div class="header-band">
+    <div class="left">RESOURCES &amp; RISK</div>
+    <div class="right">04 / 04</div>
+  </div>
+  <h1 style="font-size: 2.4rem;">투입 인력과 <em>주요 리스크</em>.</h1>
+  <p class="sub">3명이 동시 투입되어 6주 안에 정식 오픈합니다. 주요 리스크는 사전 인지하여 협의 경로를 마련해 둡니다.</p>
+
+  <div class="res">
+    <div class="left">
+      <h4>TEAM (6주 동시 투입)</h4>
+      <div class="roles">
+        <div class="role">
+          <div class="rn">ROLE 01 · PM</div>
+          <h3>PM 겸 백엔드</h3>
+          <ul>
+            <li>요구사항·일정 총괄</li>
+            <li>DB 설계·권한 매트릭스</li>
+            <li>발주처 단일 창구</li>
+            <li>Gemini 비용 관리</li>
+            <li>약 80시간 (전체)</li>
+          </ul>
+        </div>
+        <div class="role">
+          <div class="rn">ROLE 02 · 풀스택</div>
+          <h3>풀스택 (메인)</h3>
+          <ul>
+            <li>갤러리·작품·결제 페이지</li>
+            <li>Gemini AI 시뮬레이션 엔진</li>
+            <li>작가·본사 어드민 핵심</li>
+            <li>주문·정산 모듈</li>
+            <li>약 200시간 (W2–W6)</li>
+          </ul>
+        </div>
+        <div class="role">
+          <div class="rn">ROLE 03 · 디자인</div>
+          <h3>디자이너 · QA</h3>
+          <ul>
+            <li>베이지 샌드톤 디자인 (W1)</li>
+            <li>시나리오 검증 (W6)</li>
+            <li>운영 매뉴얼 시각화</li>
+            <li>약 40시간 (전반·후반)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <h4>MAJOR RISKS</h4>
+      <div class="risk-table">
+        <div class="rth">리스크</div>
+        <div class="rth">레벨</div>
+        <div class="rth">대응</div>
+
+        <div class="rtc">Gemini API 응답 품질이 작품 종류 (도자기·금속·섬유)별로 다름</div>
+        <div class="rtc high">HIGH</div>
+        <div class="rtc">W3에 대표 작품 3종 (도자기·금속·섬유)으로 사전 검증. 품질 미달 시 프롬프트 보정 또는 마스크 정밀화로 대응.</div>
+
+        <div class="rtc">작가가 색상 영역 마스크를 잘못 지정해 결과가 어색함</div>
+        <div class="rtc mid">MID</div>
+        <div class="rtc">작가 어드민에 자동 마스크 추천 + 실시간 미리보기. 본사 검수 단계에서 마스크 품질 확인 후 게재.</div>
+
+        <div class="rtc">AI 호출 비용이 예상보다 증가 (캐시 적중률 낮음)</div>
+        <div class="rtc mid">MID</div>
+        <div class="rtc">색상 팔레트를 사전 정의된 12색으로 제한해 조합 수를 통제. 월 모니터링 리포트 본사 공유.</div>
+
+        <div class="rtc">토스페이먼츠 가맹 심사 지연</div>
+        <div class="rtc mid">MID</div>
+        <div class="rtc">W1에 가맹 신청 동시 진행. 평균 3에서 5 영업일 소요. 심사 중에는 결제 흐름만 모킹.</div>
+
+        <div class="rtc">해외 결제·배송 자동화 추가 요청 발생</div>
+        <div class="rtc low">LOW</div>
+        <div class="rtc">2차 단위 별도 견적 명시. 1차 코드 베이스에서 확장 가능 구조 유지.</div>
+
+        <div class="rtc">작가 작품 사진 품질이 시뮬레이션에 부적합</div>
+        <div class="rtc low">LOW</div>
+        <div class="rtc">작가 어드민에 등록 가이드 (해상도·배경·조명) 제공. 본사 검수 단계에서 재촬영 요청 가능.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">04 / 04</div>
+</div>
+
+</body>
+</html>

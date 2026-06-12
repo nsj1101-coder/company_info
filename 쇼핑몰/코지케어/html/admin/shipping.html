@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>송장 입력 · 알림 발송 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .noti-page{padding:24px 28px;display:flex;flex-direction:column;gap:16px}
+    .noti-stats{display:flex;gap:12px;font-size:13px;color:var(--fg-muted)}
+    .noti-stats span{font-family:var(--font-mono);font-weight:600;color:var(--fg-primary)}
+    .noti-list{display:flex;flex-direction:column;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .noti-list-item{display:flex;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border-light);align-items:flex-start;transition:background .1s}
+    .noti-list-item:last-child{border-bottom:none}
+    .noti-list-item:hover{background:var(--bg-secondary)}
+    .noti-list-item.unread{background:rgba(238,239,252,.15)}
+    .noti-list-item.read .noti-dot{background:var(--border)!important}
+    .noti-list-item.read .noti-icon-circle{background:var(--border-light)!important}
+    .noti-list-item.read .noti-icon-circle i{color:var(--fg-muted)!important}
+    .noti-list-item.read .noti-type{background:var(--border-light)!important;color:var(--fg-muted)!important}
+    .noti-list-item.read .noti-msg,.noti-list-item.read .noti-time{color:var(--fg-muted)!important}
+    .noti-list-item.read .noti-mark-btn{display:none}
+    .noti-list-item .noti-dot{width:8px;height:8px;border-radius:50%;margin-top:7px;flex-shrink:0}
+    .noti-list-item .noti-icon-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .noti-list-item .noti-content{flex:1;min-width:0}
+    .noti-list-item .noti-content-top{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+    .noti-list-item .noti-type{display:inline-flex;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+    .noti-list-item .noti-time{font-size:12px;color:var(--fg-muted);font-family:var(--font-mono)}
+    .noti-list-item .noti-msg{font-size:14px;color:var(--fg-primary);line-height:1.5}
+    .noti-list-item .noti-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .noti-mark-btn{font-size:13px;color:var(--accent);cursor:pointer;font-weight:500;white-space:nowrap}
+    .noti-pagination{display:flex;align-items:center;justify-content:center;padding-top:8px;position:relative}
+    .noti-pagination .page-info{position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:13px;color:var(--fg-muted);font-family:var(--font-mono)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item active" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <!-- TopBar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>송장 입력 · 알림 발송</h1>
+        <p>출고 송장 입력 및 자동 문자 발송</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="주문번호 · 구매자 검색"></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#84c140"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#84c140">출고 대기</span><span class="noti-time">10분 전</span><div class="noti-text">송장 입력이 필요한 주문 12건이 있습니다</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="noti-page" data-tab-container>
+        <!-- Stats -->
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="noti-stats">출고 대기 <span>12</span>건 · 오늘 발송 <span>34</span>건 · 발송 실패 <span>1</span>건</div>
+        </div>
+
+        <!-- 출고 대기 주문 목록 -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">출고 대기 주문</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-secondary"><i class="icon-download" style="font-size:14px"></i> CSV 다운로드</button>
+              <button class="btn btn-primary"><i class="icon-send" style="font-size:14px"></i> 일괄 발송</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:40px"><input type="checkbox"></th>
+                  <th>주문번호</th>
+                  <th>구매자</th>
+                  <th>상품</th>
+                  <th>연락처</th>
+                  <th style="width:340px">송장 입력</th>
+                  <th style="width:120px">처리</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260608-0142</td>
+                  <td>김영순</td>
+                  <td>코지워커 카본로얄파인더</td>
+                  <td class="font-mono">010-2341-7788</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260608-0141</td>
+                  <td>박정희</td>
+                  <td>와이드레드 P04</td>
+                  <td class="font-mono">010-8821-3344</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260608-0139</td>
+                  <td>이복순</td>
+                  <td>유로라이트</td>
+                  <td class="font-mono">010-3456-1122</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1" value="612889034521">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260608-0136</td>
+                  <td>최말순</td>
+                  <td>로얄쿠션</td>
+                  <td class="font-mono">010-7788-2255</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260607-0128</td>
+                  <td>정금자</td>
+                  <td>환희 FR01</td>
+                  <td class="font-mono">010-5566-9988</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td class="font-mono">CZ-20260607-0125</td>
+                  <td>임옥분</td>
+                  <td>코지워커 클래식</td>
+                  <td class="font-mono">010-9911-4477</td>
+                  <td>
+                    <div style="display:flex;gap:6px">
+                      <select class="form-select" style="width:110px"><option>CJ대한통운</option><option>한진택배</option><option>롯데택배</option><option>우체국택배</option></select>
+                      <input class="form-input" placeholder="송장번호" style="flex:1">
+                    </div>
+                  </td>
+                  <td><button class="btn btn-primary" style="padding:6px 10px">저장+발송</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 발송 이력 -->
+        <div class="panel" style="margin-top:16px">
+          <div class="panel-header">
+            <div class="panel-title">발송 이력</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select class="form-select" style="width:120px"><option>전체 채널</option><option>SMS</option><option>카카오</option></select>
+              <select class="form-select" style="width:120px"><option>전체 상태</option><option>발송 성공</option><option>발송 실패</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>일시</th>
+                  <th>구매자</th>
+                  <th>채널</th>
+                  <th>내용 요약</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-mono">2026-06-09 14:22</td>
+                  <td>이복순</td>
+                  <td><span class="badge badge-active">카카오</span></td>
+                  <td>[코지케어] 유로라이트 상품이 출고되었습니다. 송장번호 612889034521</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-09 14:18</td>
+                  <td>김순자</td>
+                  <td><span class="badge badge-active">카카오</span></td>
+                  <td>[코지케어] 로얄와이드 상품이 출고되었습니다. 송장번호 489221007734</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-09 13:55</td>
+                  <td>박두례</td>
+                  <td><span class="badge badge-gray">SMS</span></td>
+                  <td>[코지케어] 코지워커 컴팩트 상품이 출고되었습니다. 송장번호 778820114488</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-09 13:42</td>
+                  <td>최영자</td>
+                  <td><span class="badge badge-active">카카오</span></td>
+                  <td>[코지케어] 복지용구 인정번호 확인 완료, 출고 준비 중입니다</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-09 11:08</td>
+                  <td>정말순</td>
+                  <td><span class="badge badge-gray">SMS</span></td>
+                  <td>[코지케어] 카본로얄파인더 상품이 출고되었습니다. 송장번호 332119886655</td>
+                  <td><span class="badge" style="background:#FEE2E2;color:#ef4444">발송 실패</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-09 10:31</td>
+                  <td>임덕순</td>
+                  <td><span class="badge badge-active">카카오</span></td>
+                  <td>[코지케어] 환희 FR01 상품이 출고되었습니다. 송장번호 224488003311</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+                <tr>
+                  <td class="font-mono">2026-06-08 17:54</td>
+                  <td>김복희</td>
+                  <td><span class="badge badge-gray">SMS</span></td>
+                  <td>[코지케어] 목욕의자 상품이 출고되었습니다. 송장번호 998877665544</td>
+                  <td><span class="badge" style="background:#EEFBF0;color:#16a34a">발송 성공</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="noti-pagination">
+            <div class="page-info">1–7 / 142</div>
+            <div class="pagination">
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn"><i class="icon-chevron-right" style="font-size:14px"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+</body>
+</html>

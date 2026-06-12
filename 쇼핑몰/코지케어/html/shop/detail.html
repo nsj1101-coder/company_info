@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코지워커 카본로얄파인더 — 코지워커 SHOP</title>
+<link rel="stylesheet" href="../common.css?v=20260610c">
+<style>
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--gray-500);
+    padding: 20px 0;
+  }
+  .breadcrumb a:hover { color: var(--gray-900); }
+  .breadcrumb .sep { margin: 0 8px; color: var(--gray-300); }
+
+  .detail-wrap {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+
+  .gallery .main-img {
+    aspect-ratio: 1;
+    background: var(--gray-100);
+    border-radius: var(--r-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery .main-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* 모바일 가로 스와이프 갤러리 */
+  .gallery .swipe-track { display: none; }
+  .gallery .swipe-dots { display: none; }
+  @media (max-width: 720px) {
+    .gallery .main-img { display: none; }
+    .gallery .thumbs { display: none; }
+    .gallery .swipe-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin: 0 -16px;
+      padding: 0 16px;
+      gap: 8px;
+    }
+    .gallery .swipe-track::-webkit-scrollbar { display: none; }
+    .gallery .swipe-slide {
+      flex: 0 0 100%;
+      aspect-ratio: 1;
+      background: var(--gray-100);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      scroll-snap-align: center;
+      position: relative;
+    }
+    .gallery .swipe-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .gallery .swipe-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .gallery .swipe-dots .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+    .gallery .swipe-dots .dot.active {
+      background: var(--green-700);
+      width: 18px;
+      border-radius: 999px;
+    }
+  }
+  .gallery .img-action-row {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .gallery .img-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-700);
+    box-shadow: var(--shadow-sm);
+  }
+  .gallery .img-btn:hover { color: var(--red-500); }
+  .gallery .thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .gallery .thumb {
+    aspect-ratio: 1;
+    background: var(--gray-100);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    border: 2px solid transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+  .gallery .thumb.active { border-color: var(--green-700); }
+
+  .info-area .brand-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .info-area h1 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .info-area .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gray-500);
+    font-size: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .info-area .rating-row .stars { color: var(--warning); font-weight: 700; }
+
+  /* 사양 표 */
+  .spec-list {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--r-md);
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 13px;
+  }
+  .spec-list .row {
+    display: flex;
+    padding: 6px 0;
+  }
+  .spec-list .row .k {
+    width: 90px;
+    color: var(--gray-500);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .spec-list .row .v {
+    flex: 1;
+    color: var(--gray-900);
+    font-weight: 600;
+  }
+
+  .option-block { margin-bottom: 20px; }
+  .option-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-700);
+    margin-bottom: 10px;
+  }
+  .color-list {
+    display: flex;
+    gap: 10px;
+  }
+  .color-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .color-chip:hover { border-color: var(--gray-400); }
+  .color-chip.active { border-color: var(--gray-900); border-width: 2px; background: #fff; color: var(--gray-900); }
+  .color-chip .dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-300);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6);
+  }
+
+  .price-box { box-sizing: border-box; }
+
+  .info-popup {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 3px solid var(--green-600);
+    padding: 12px 14px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.6;
+    display: none;
+  }
+  .info-popup.show { display: block; }
+
+  .price-box {
+    border: 1px solid var(--gray-200);
+    background: #fff;
+  }
+  .price-box.welfare-box { background: #fff; }
+  .price-box.biz-box { background: #fff; }
+
+  .biz-hint {
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    color: var(--gray-700);
+    text-align: center;
+  }
+  .biz-hint a {
+    color: var(--biz-navy);
+    font-weight: 700;
+  }
+  .biz-hint.hidden { display: none; }
+
+  .detail-shots {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 32px auto;
+    max-width: 720px;
+  }
+  .detail-shots img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--r-md);
+    background: var(--gray-100);
+  }
+  @media (max-width: 720px) {
+    .detail-shots { grid-template-columns: 1fr; max-width: none; }
+  }
+
+  .action-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .action-row .like-big {
+    width: 56px;
+    height: 56px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    background: #fff;
+  }
+  .action-row .like-big:hover { color: var(--red-500); border-color: var(--red-500); }
+
+  .mobile-cta-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--gray-200);
+    padding: 10px 16px;
+    display: none;
+    gap: 8px;
+    z-index: 50;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .mobile-cta-bar .btn { flex: 1; }
+
+  .detail-content {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .detail-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--gray-100);
+    margin-bottom: 32px;
+    position: sticky;
+    top: 73px;
+    background: #fff;
+    z-index: 10;
+  }
+  .detail-tabs .tab {
+    padding: 16px 24px;
+    font-weight: 700;
+    color: var(--gray-500);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .detail-tabs .tab.active { color: var(--green-700); border-color: var(--green-700); }
+
+  .detail-body {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--r-lg);
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .detail-body h3 { font-size: 24px; margin-bottom: 16px; }
+  .detail-body p { color: var(--gray-600); max-width: 600px; margin: 0 auto 16px; }
+  .detail-body .placeholder {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4 / 5;
+    background: var(--gray-200);
+    margin: 32px auto;
+    border-radius: var(--r-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    color: var(--gray-400);
+  }
+
+  @media (max-width: 1024px) {
+    .detail-wrap { grid-template-columns: 1fr; gap: 32px; }
+  }
+  @media (max-width: 720px) {
+    .breadcrumb { font-size: 12px; padding: 12px 0; }
+    .info-area h1 { font-size: 20px; line-height: 1.35; }
+    .gallery .main-img { font-size: 100px; border-radius: var(--r-md); }
+    .gallery .img-btn { width: 36px; height: 36px; }
+    .gallery .thumb { font-size: 22px; }
+    .mobile-cta-bar { display: flex; }
+    body { padding-bottom: 80px; }
+    .detail-tabs { top: 60px; overflow-x: auto; }
+    .detail-tabs .tab { padding: 12px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
+    .detail-body { padding: 32px 16px; }
+    .detail-body h3 { font-size: 18px; }
+    .price-box { padding: 16px; }
+    .price-box .price-row strong { font-size: 18px; }
+    .spec-list { font-size: 12px; padding: 12px 14px; }
+    .spec-list .row .k { width: 70px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span><span class="hide-mobile">📢 </span>장기요양 인정자 <strong>15% 부담금</strong>으로 구매 가능합니다</span>
+  <a href="../auth/biz-login.html" class="biz-link">사업자 로그인 →</a>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="mobile-toggle" aria-label="메뉴">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <a href="../index.html" class="logo">
+      <img src="../logo.png?v=20260610c" class="logo-img" alt="CozyCare">
+    </a>
+    <nav class="gnb">
+      <a href="list.html">전체상품</a>
+      <a href="list.html">보행기</a>
+      <a href="list.html">휠체어</a>
+      <a href="list.html">이동/욕실</a>
+      <a href="list.html">기획전</a>
+      <a href="../info/welfare-guide.html">복지용구 안내</a>
+    </nav>
+    <div class="header-actions">
+      <a href="../auth/biz-login.html" class="biz-cta-btn">사업자 로그인</a>
+      <button class="icon-btn" aria-label="검색">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+      <a href="../mypage/index.html" class="icon-btn" aria-label="마이">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      </a>
+      <a href="cart.html" class="icon-btn" aria-label="장바구니">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span class="badge">2</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="../index.html">홈</a><span class="sep">/</span>
+    <a href="list.html">전체상품</a><span class="sep">/</span>
+    <a href="list.html">보행기</a><span class="sep">/</span>
+    <span>카본로얄파인더</span>
+  </div>
+
+  <div class="detail-wrap">
+
+    <div class="gallery">
+      <!-- PC 메인 이미지 -->
+      <div class="main-img">
+        <img src="../images/products/carbon-royal.jpg?v=20260610c" alt="코지워커 카본로얄파인더">
+        <div class="img-action-row">
+          <button class="img-btn" aria-label="찜">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg>
+          </button>
+          <button class="img-btn" aria-label="공유">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </button>
+          <button class="img-btn" aria-label="영상">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- PC 썸네일 -->
+      <div class="thumbs">
+        <div class="thumb active" style="background:url('../images/products/carbon-royal.jpg') center/cover;"></div>
+        <div class="thumb" style="background:url('../images/products/wide-red-p04.jpg') center/cover;"></div>
+        <div class="thumb" style="background:url('../images/products/royal-cushion.jpg') center/cover;"></div>
+        <div class="thumb" style="background:url('../images/products/royal-wide.jpg') center/cover;"></div>
+        <div class="thumb" style="background:url('../images/products/eurolight.jpg') center/cover;"></div>
+      </div>
+      <!-- 모바일 가로 스와이프 갤러리 -->
+      <div class="swipe-track" id="swipeTrack">
+        <div class="swipe-slide"><img src="../images/products/carbon-royal.jpg?v=20260610c" alt=""></div>
+        <div class="swipe-slide"><img src="../images/products/wide-red-p04.jpg?v=20260610c" alt=""></div>
+        <div class="swipe-slide"><img src="../images/products/royal-cushion.jpg?v=20260610c" alt=""></div>
+        <div class="swipe-slide"><img src="../images/products/royal-wide.jpg?v=20260610c" alt=""></div>
+        <div class="swipe-slide"><img src="../images/products/eurolight.jpg?v=20260610c" alt=""></div>
+      </div>
+      <div class="swipe-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+    <script>
+      // 모바일 스와이프 도트 sync
+      (function(){
+        var track = document.getElementById('swipeTrack');
+        var dots = document.querySelectorAll('.swipe-dots .dot');
+        if (!track || !dots.length) return;
+        track.addEventListener('scroll', function(){
+          var idx = Math.round(track.scrollLeft / track.clientWidth);
+          dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+        });
+      })();
+    </script>
+
+    <div class="info-area">
+      <div class="brand-row">
+        <span class="badge-tag badge-best">BEST</span>
+        <span class="badge-tag badge-welfare">복지용구</span>
+        <span class="badge-tag" style="background:var(--gray-100); color:var(--gray-700);">당일출고</span>
+      </div>
+      <h1>코지워커 카본로얄파인더 — 카본 프레임 4륜 보행기</h1>
+      <div class="rating-row">
+        <span class="stars">★★★★★</span>
+        <strong style="color:var(--gray-900)">4.8</strong>
+        <span>· 124개 리뷰</span>
+        <span style="color:var(--gray-300)">|</span>
+        <span>누적 1,842건 구매</span>
+      </div>
+
+      <!-- 사양 -->
+      <div class="spec-list">
+        <div class="row"><div class="k">모델명</div><div class="v">카본로얄파인더 P04</div></div>
+        <div class="row"><div class="k">프레임</div><div class="v">카본 합금 (경량 + 고강성)</div></div>
+        <div class="row"><div class="k">무게</div><div class="v">약 6.2kg</div></div>
+        <div class="row"><div class="k">최대하중</div><div class="v">100kg</div></div>
+        <div class="row"><div class="k">접이</div><div class="v">원터치 폴딩</div></div>
+        <div class="row"><div class="k">의료기기 인증</div><div class="v">KFDA 의료기기 신고번호 보유</div></div>
+      </div>
+
+      <!-- 색상 선택 -->
+      <div class="option-block">
+        <label class="option-label">색상 — <span style="color:var(--gray-400); font-weight:500;">선택한 색상에 따라 사진이 변경됩니다</span></label>
+        <div class="color-list">
+          <div class="color-chip active"><span class="dot" style="background:#111"></span>블랙</div>
+          <div class="color-chip"><span class="dot" style="background:#1e40af"></span>네이비</div>
+          <div class="color-chip"><span class="dot" style="background:#dc2626"></span>레드</div>
+        </div>
+      </div>
+
+      <!-- 비-사업자 기본 가격박스 (SELECT 1) -->
+      <div class="price-box welfare-box" id="defaultPriceBox">
+        <div class="price-row">
+          <span class="price-label">복지용구 15% 부담금</span>
+          <span><strong>52,500</strong>원
+            <button class="info-btn" onclick="document.getElementById('pop-welfare').classList.toggle('show')">
+              <svg class="icon" style="width:12px; height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              안내
+            </button>
+          </span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">비급여 일반 구매가</span>
+          <span><strong style="color:var(--gray-900);">350,000</strong>원</span>
+        </div>
+        <div id="pop-welfare" class="info-popup">
+          ※ 장기요양 인정번호와 인정서가 필요합니다. 구매 시 서류 제출 → 공단 확인 → 부담금(15%) 결제 순으로 진행되며,
+          결제는 관계사 <strong>㈜베스트시니어</strong>에서 처리됩니다.
+        </div>
+        <div class="cta-row">
+          <span class="label-buy">구매하기</span>
+          <a href="checkout-welfare.html" class="btn btn-welfare btn-lg">복지용구 구매</a>
+          <a href="checkout-normal.html" class="btn btn-normal btn-lg">일반 구매</a>
+        </div>
+      </div>
+
+      <!-- 사업자 가격박스 (SELECT 3) — 기본 숨김, JS로 토글 -->
+      <div class="price-box biz-box" id="bizPriceBox" style="display:none;">
+        <div class="price-row">
+          <span class="price-label">급여가 / 판매가</span>
+          <strong style="color:var(--gray-500); font-size:16px; font-weight:600; text-decoration:line-through;">350,000원</strong>
+        </div>
+        <div class="price-row">
+          <span class="price-label">공급가</span>
+          <strong style="color:var(--biz-navy);">252,000원</strong>
+        </div>
+        <div class="price-row">
+          <span class="price-label">적립포인트</span>
+          <strong style="color:var(--biz-gold); font-size:18px;">+ 7,000 P</strong>
+        </div>
+        <div class="price-row" style="border-top:1px solid var(--gray-300); margin-top:6px; padding-top:12px;">
+          <span class="price-label" style="font-weight:700; color:var(--gray-900);">결제 금액</span>
+          <strong style="color:var(--biz-navy); font-size:24px;">252,000원</strong>
+        </div>
+        <div class="cta-row">
+          <span class="label-buy">수량</span>
+          <div style="display:flex; align-items:center; gap:6px; border:1.5px solid var(--gray-200); border-radius:var(--r-sm); padding:0 6px; background:#fff;">
+            <button style="width:32px; height:40px; font-size:18px; color:var(--gray-500);">−</button>
+            <span style="min-width:32px; text-align:center; font-weight:700;">1</span>
+            <button style="width:32px; height:40px; font-size:18px; color:var(--gray-500);">+</button>
+          </div>
+          <a href="../biz/cart.html" class="btn btn-primary btn-lg" style="flex:1;">구매하기</a>
+        </div>
+      </div>
+
+      <!-- 사업자 안내 -->
+      <div class="biz-hint" id="bizHint">
+        <a href="../auth/biz-login.html">★ 사업자로 로그인</a>하시면 공급가·적립 포인트로 구매하실 수 있어요.
+      </div>
+
+      <div class="action-row">
+        <button class="like-big">
+          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg>
+        </button>
+        <a href="cart.html" class="btn btn-ghost btn-lg" style="flex:1;">장바구니 담기</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-content">
+    <div class="detail-tabs">
+      <a class="tab active">상품정보</a>
+      <a class="tab">사양</a>
+      <a class="tab">리뷰 (124)</a>
+      <a class="tab">Q&amp;A</a>
+      <a class="tab">배송·반품</a>
+    </div>
+    <div class="detail-body">
+      <h3>스스로 걷는 즐거움을 다시.</h3>
+      <p>의료기기 인증 · 카본 합금 프레임으로 6.2kg 초경량. 좌석 + 장바구니가 일체화된 4륜 보행기로 외출과 휴식을 한번에 해결합니다.</p>
+      <div class="detail-shots">
+        <img src="../images/products/carbon-royal.jpg?v=20260610c" alt="">
+        <img src="../images/products/royal-cushion.jpg?v=20260610c" alt="">
+        <img src="../images/products/royal-wide.jpg?v=20260610c" alt="">
+      </div>
+      <p>좌우 손잡이는 신장에 맞춰 5단계 조절 가능. 양손 잠금식 브레이크로 안전한 정지.</p>
+    </div>
+  </div>
+
+</main>
+
+<div class="mobile-cta-bar">
+  <button class="like-big" style="width:48px; height:48px;">
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg>
+  </button>
+  <a href="checkout-welfare.html" class="btn btn-welfare">복지용구</a>
+  <a href="checkout-normal.html" class="btn btn-normal">일반구매</a>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="corp-info"><strong>주식회사 코지케어</strong>대표 · 홍길동 | 1588-0000<br>복지용구 결제 위탁 · ㈜베스트시니어</div>
+      </div>
+      <div><h4>쇼핑</h4><ul><li><a href="list.html">전체 상품</a></li><li><a href="../info/welfare-guide.html">복지용구 안내</a></li></ul></div>
+      <div><h4>고객 지원</h4><ul><li><a href="../info/faq.html">FAQ</a></li><li><a href="../mypage/orders.html">주문 조회</a></li></ul></div>
+      <div><h4>사업자</h4><ul><li><a href="../auth/biz-login.html">사업자 로그인</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">© 2026 주식회사 코지케어 · All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var isBiz = new URLSearchParams(location.search).get('biz') === '1';
+  if (isBiz) {
+    document.getElementById('defaultPriceBox').style.display = 'none';
+    document.getElementById('bizPriceBox').style.display = '';
+    var hint = document.getElementById('bizHint');
+    if (hint) hint.classList.add('hidden');
+  }
+})();
+</script>
+
+</body>
+</html>

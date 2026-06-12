@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문 관리 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar{background:#fff}
+    .order-toolbar{display:flex;align-items:center;gap:12px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+    .order-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 24px;background:#fff;flex-shrink:0}
+    .order-tab{padding:12px 18px;font-size:14px;color:var(--fg-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
+    .order-tab.active{color:var(--accent);font-weight:600;border-bottom-color:var(--accent)}
+    .order-tab .tab-count{font-family:var(--font-mono);font-size:12px;font-weight:700;background:var(--bg-secondary);color:var(--fg-secondary);padding:2px 8px;border-radius:9999px;margin-left:6px}
+    .order-tab.active .tab-count{background:var(--accent-light);color:var(--accent)}
+    .filter-bar{display:flex;align-items:center;gap:10px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+    .filter-bar .form-input,.filter-bar .form-select{height:38px;font-size:13px}
+    .filter-bar .filter-search{flex:1;min-width:200px;max-width:320px}
+    .order-body{flex:1;overflow-y:auto;padding:0;background:var(--bg-card)}
+    .order-table-wrap{background:#fff}
+    .badge-type{display:inline-flex;align-items:center;padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:.2px}
+    .badge-type.welfare{background:#FEE2E2;color:#ef4444}
+    .badge-type.general{background:#E5E7EB;color:#4B5563}
+    .badge-type.biz{background:#DCFCE7;color:#16a34a}
+    .badge-status{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:12px;font-weight:600;color:#fff}
+    .badge-status.prep{background:#f59e0b}
+    .badge-status.delivering{background:#3b82f6}
+    .badge-status.done{background:#84c140}
+    .badge-status.confirmed{background:#46782b}
+    .order-num{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent);cursor:pointer}
+    .order-num:hover{text-decoration:underline}
+    .amount{font-family:var(--font-mono);font-weight:600}
+    .date-cell{font-family:var(--font-mono);font-size:12px;color:var(--fg-muted)}
+    .data-table tbody tr{cursor:pointer}
+    .data-table tbody tr:hover{background:#fafafa}
+    .row-actions{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end;flex-wrap:nowrap}
+    .row-actions .form-select,.row-actions .form-input{height:30px;font-size:12px;padding:0 8px}
+    .row-actions .btn{height:30px;padding:0 10px;font-size:12px}
+    .invoice-box{display:inline-flex;align-items:center;gap:4px}
+    .invoice-box .form-select{width:88px}
+    .invoice-box .form-input{width:110px}
+    .status-select{width:110px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item active" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <!-- TopBar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>주문 관리</h1>
+        <p>복지용구·일반·사업자 주문 통합 관리</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="주문번호, 구매자 검색.."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn" onclick="location.href='shipping.html'"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+        </div>
+        <button class="btn-icon" title="설정"><i class="icon-settings" style="font-size:16px;color:var(--fg-secondary)"></i></button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="order-tabs">
+      <div class="order-tab active" data-tab="all">전체 <span class="tab-count">24</span></div>
+      <div class="order-tab" data-tab="welfare">복지용구 <span class="tab-count">9</span></div>
+      <div class="order-tab" data-tab="general">일반 <span class="tab-count">11</span></div>
+      <div class="order-tab" data-tab="biz">사업자 <span class="tab-count">4</span></div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <select class="form-select" style="width:140px">
+        <option>전체 기간</option>
+        <option>오늘</option>
+        <option>최근 7일</option>
+        <option>최근 30일</option>
+        <option>이번 달</option>
+      </select>
+      <select class="form-select" style="width:160px">
+        <option>전체 상태</option>
+        <option>상품 준비중</option>
+        <option>배송중</option>
+        <option>배송 완료</option>
+        <option>구매 확정</option>
+      </select>
+      <select class="form-select" style="width:140px">
+        <option>전체 카테고리</option>
+        <option>보행기</option>
+        <option>휠체어</option>
+        <option>목욕의자</option>
+        <option>이동변기</option>
+        <option>전동침대</option>
+        <option>미끄럼방지</option>
+        <option>기타용품</option>
+      </select>
+      <div class="search-box filter-search"><i class="icon-search search-icon"></i><input type="text" placeholder="주문번호 / 구매자 / 상품명"></div>
+      <button class="btn btn-secondary"><i class="icon-filter" style="font-size:14px"></i> 필터 적용</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-secondary"><i class="icon-download" style="font-size:14px"></i> 엑셀 다운로드</button>
+    </div>
+
+    <!-- Order Table -->
+    <div class="order-body">
+      <div class="order-table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:40px;text-align:center"><div class="custom-checkbox" data-role="all" data-group="orders"></div></th>
+              <th>주문번호</th>
+              <th>구매자</th>
+              <th>유형</th>
+              <th>상품</th>
+              <th style="text-align:right">금액</th>
+              <th>상태</th>
+              <th>결제일</th>
+              <th style="width:420px;text-align:right">관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0024'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0024</span></td>
+              <td>김영자</td>
+              <td><span class="badge-type welfare">복지</span></td>
+              <td>카본로얄파인더</td>
+              <td style="text-align:right"><span class="amount">52,500원</span></td>
+              <td><span class="badge-status prep">상품 준비중</span></td>
+              <td><span class="date-cell">2026.06.09 14:32</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option>배송중</option><option>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0024" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0023'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0023</span></td>
+              <td>박정수</td>
+              <td><span class="badge-type general">일반</span></td>
+              <td>휠체어 EZ-1</td>
+              <td style="text-align:right"><span class="amount">450,000원</span></td>
+              <td><span class="badge-status delivering">배송중</span></td>
+              <td><span class="date-cell">2026.06.09 14:18</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option selected>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="6291...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option selected>배송중</option><option>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0023" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0022'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0022</span></td>
+              <td>㈜이로움파트너</td>
+              <td><span class="badge-type biz">사업자</span></td>
+              <td>카본로얄파인더 × 12</td>
+              <td style="text-align:right"><span class="amount">2,160,000원</span></td>
+              <td><span class="badge-status prep">상품 준비중</span></td>
+              <td><span class="date-cell">2026.06.09 13:55</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option>배송중</option><option>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0022" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0021'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0021</span></td>
+              <td>이순희</td>
+              <td><span class="badge-type welfare">복지</span></td>
+              <td>유로라이트</td>
+              <td style="text-align:right"><span class="amount">33,750원</span></td>
+              <td><span class="badge-status done">배송 완료</span></td>
+              <td><span class="date-cell">2026.06.09 13:40</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option>CJ대한통운</option><option selected>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="4710...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option>배송중</option><option selected>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0021" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0020'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0020</span></td>
+              <td>최광호</td>
+              <td><span class="badge-type general">일반</span></td>
+              <td>미끄럼방지 목욕의자</td>
+              <td style="text-align:right"><span class="amount">90,000원</span></td>
+              <td><span class="badge-status confirmed">구매 확정</span></td>
+              <td><span class="date-cell">2026.06.09 12:12</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option selected>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="3382...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option>배송중</option><option>배송 완료</option><option selected>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0020" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0019'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0019</span></td>
+              <td>정명자</td>
+              <td><span class="badge-type welfare">복지</span></td>
+              <td>로얄쿠션</td>
+              <td style="text-align:right"><span class="amount">40,500원</span></td>
+              <td><span class="badge-status delivering">배송중</span></td>
+              <td><span class="date-cell">2026.06.09 11:08</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option>CJ대한통운</option><option>롯데택배</option><option selected>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="5821...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option selected>배송중</option><option>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0019" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0018'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0018</span></td>
+              <td>㈜가가온</td>
+              <td><span class="badge-type biz">사업자</span></td>
+              <td>유로라이트 × 24</td>
+              <td style="text-align:right"><span class="amount">3,888,000원</span></td>
+              <td><span class="badge-status delivering">배송중</span></td>
+              <td><span class="date-cell">2026.06.09 10:55</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option selected>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="9023...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option selected>배송중</option><option>배송 완료</option><option>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0018" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+            <tr onclick="location.href='order-detail.html?id=CZ20260609-0017'">
+              <td style="text-align:center" onclick="event.stopPropagation()"><div class="custom-checkbox" data-role="item" data-group="orders"></div></td>
+              <td><span class="order-num">#CZ20260609-0017</span></td>
+              <td>임봉기</td>
+              <td><span class="badge-type general">일반</span></td>
+              <td>환희 FR01</td>
+              <td style="text-align:right"><span class="amount">195,000원</span></td>
+              <td><span class="badge-status confirmed">구매 확정</span></td>
+              <td><span class="date-cell">2026.06.09 09:30</span></td>
+              <td onclick="event.stopPropagation()">
+                <div class="row-actions">
+                  <span class="invoice-box">
+                    <select class="form-select"><option>택배사</option><option>CJ대한통운</option><option selected>롯데택배</option><option>한진택배</option><option>우체국</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호" value="1147...">
+                    <button class="btn btn-secondary">저장</button>
+                  </span>
+                  <select class="form-select status-select"><option>상품 준비중</option><option>배송중</option><option>배송 완료</option><option selected>구매 확정</option></select>
+                  <a href="order-detail.html?id=CZ20260609-0017" class="btn btn-dark">상세</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-top:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--fg-muted);font-family:var(--font-mono)">1–8 / 24</div>
+        <div class="pagination">
+          <button class="page-btn"><i class="icon-chevron-left" style="font-size:14px"></i></button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn"><i class="icon-chevron-right" style="font-size:14px"></i></button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /main-content -->
+</div><!-- /app -->
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  document.querySelectorAll('.order-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

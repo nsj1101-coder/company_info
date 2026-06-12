@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 목록 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .hl-layout{display:flex;height:100%;min-height:0}
+    .hl-pagination{position:relative;display:flex;align-items:center;justify-content:center;padding:16px 24px;border-top:1px solid var(--border-light)}
+    .hl-pagination .page-info{position:absolute;left:24px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--fg-muted);font-family:var(--font-mono)}
+    .hl-filter{width:240px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+    .hl-add-btn{width:100%;background:#111827;color:#fff;border:0;border-radius:var(--radius-sm);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
+    .hl-add-btn i{font-size:16px}
+    .hl-tabs{display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+    .hl-tabs .hl-tab{flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--fg-secondary);background:var(--bg-card);cursor:pointer;border-left:1px solid var(--border)}
+    .hl-tabs .hl-tab:first-child{border-left:0}
+    .hl-tabs .hl-tab.active{background:var(--accent);color:#fff;font-weight:600;border-left-color:var(--accent)}
+    .hl-divider{height:1px;background:var(--border-light);margin:0 -4px}
+    .hl-filter-section{display:flex;flex-direction:column;gap:10px}
+    .hl-filter-label{font-size:14px;font-weight:600;color:var(--fg-muted)}
+    .hl-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg-primary);cursor:pointer}
+    .hl-check .custom-checkbox{width:16px;height:16px;border-radius:3px}
+    .hl-check.active{font-weight:500}
+
+    .hl-table-area{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-card)}
+    .hl-info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;flex-shrink:0}
+    .hl-info-text{font-size:14px;color:var(--fg-muted)}
+    .hl-sort{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:14px;font-weight:500;color:var(--fg-secondary);cursor:pointer}
+    .hl-sort i{font-size:14px}
+
+    .hl-card{background:var(--bg-card);overflow:auto;flex:1;min-height:0}
+    .hl-table{width:100%;border-collapse:collapse}
+    .hl-table thead th{background:var(--bg-secondary);height:44px;padding:0 12px;font-size:14px;font-weight:600;color:var(--fg-muted);text-align:center;border-bottom:1px solid var(--border-light);white-space:nowrap}
+    .hl-table thead th:first-child{padding-left:24px}
+    .hl-table thead th:last-child{padding-right:24px}
+    .hl-table tbody td{height:52px;padding:0 12px;font-size:14px;color:var(--fg-primary);border-bottom:1px solid var(--border-light);vertical-align:middle;text-align:center}
+    .hl-table tbody td:first-child{padding-left:24px}
+    .hl-table tbody td:last-child{padding-right:24px}
+    .hl-table tbody td .hl-actions{justify-content:center}
+    .hl-table tbody tr.selected{background:#F9F9FF;box-shadow:0 4px 12px rgba(0,0,0,.1);position:relative;z-index:1}
+    .hl-table tbody tr.selected .grip-handle,
+    .hl-table tbody tr.selected .hl-mono{color:var(--accent)}
+    .hl-table tbody tr:hover:not(.selected){background:var(--bg-secondary)}
+    .grip-handle{color:var(--fg-muted);cursor:grab;font-size:16px;display:inline-flex}
+    .grip-handle:active{cursor:grabbing}
+    .hl-table tbody tr.dragging{opacity:.4}
+    .hl-table tbody tr.drag-over-top td{box-shadow:inset 0 2px 0 0 var(--accent)}
+    .hl-table tbody tr.drag-over-bottom td{box-shadow:inset 0 -2px 0 0 var(--accent)}
+    .hl-mono{font-family:var(--font-mono);font-weight:600;color:var(--fg-primary)}
+    .hl-name{font-weight:500;color:var(--fg-primary)}
+    .hl-dept{color:var(--fg-secondary)}
+    .hl-stars{font-family:var(--font-mono);color:var(--fg-muted);letter-spacing:1px}
+    .hl-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:13px;font-weight:500}
+    .hl-badge.active{background:var(--accent-light);color:var(--accent)}
+    .hl-badge.inactive{background:#FFEBEE;color:var(--danger)}
+    .hl-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+    .hl-actions button{background:transparent;border:0;color:var(--fg-muted);cursor:pointer;padding:4px;display:inline-flex;border-radius:4px}
+    .hl-actions button:hover{background:var(--border-light);color:var(--fg-primary)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item active" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <!-- TopBar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>상품 목록</h1>
+        <p>코지워커 시리즈 + 복지용구 카테고리별 관리</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="상품명·모델번호 검색.."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn" onclick="location.href='shipping.html'"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-scroll" style="overflow:hidden;background:var(--bg-card)">
+      <div class="hl-layout">
+        <!-- Left Filter Panel -->
+        <aside class="hl-filter">
+          <a href="product-register.html" class="hl-add-btn"><i class="icon-plus"></i>상품 추가</a>
+
+          <div class="hl-tabs" data-tab-container>
+            <div class="hl-tab active" data-tab="all">전체</div>
+            <div class="hl-tab" data-tab="visible">노출</div>
+            <div class="hl-tab" data-tab="hidden">비노출</div>
+          </div>
+
+          <div class="hl-divider"></div>
+
+          <div class="hl-filter-section">
+            <div class="hl-filter-label">카테고리</div>
+            <label class="hl-check"><div class="custom-checkbox" data-role="all" data-group="dept"></div>전체</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>보행기</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>휠체어</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>목욕의자</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>이동변기</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>전동침대</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>미끄럼방지</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="dept"></div>기타용품</label>
+          </div>
+
+          <div class="hl-filter-section">
+            <div class="hl-filter-label">복지용구 여부</div>
+            <label class="hl-check"><div class="custom-checkbox" data-role="all" data-group="welfare"></div>전체</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="welfare"></div>복지용구</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="welfare"></div>일반 상품</label>
+          </div>
+
+          <div class="hl-filter-section">
+            <div class="hl-filter-label">노출 상태</div>
+            <label class="hl-check"><div class="custom-checkbox" data-role="all" data-group="visible"></div>전체</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="visible"></div>노출</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="visible"></div>비노출</label>
+            <label class="hl-check"><div class="custom-checkbox" data-role="item" data-group="visible"></div>품절</label>
+          </div>
+        </aside>
+
+        <!-- Right Table Area -->
+        <div class="hl-table-area">
+          <div class="hl-info-bar">
+            <span class="hl-info-text">총 8개 상품 · 드래그하여 순서 변경</span>
+            <button class="hl-sort"><i class="icon-arrow-up-down"></i>추천순</button>
+          </div>
+
+          <div class="hl-card">
+            <table class="hl-table" id="hlTable">
+              <thead>
+                <tr>
+                  <th style="width:24px"></th>
+                  <th style="width:24px"><div class="custom-checkbox" data-role="all" data-group="product"></div></th>
+                  <th style="width:60px">사진</th>
+                  <th style="width:200px">상품명</th>
+                  <th style="width:110px">카테고리</th>
+                  <th style="width:110px">정가</th>
+                  <th style="width:120px">복지부담금</th>
+                  <th style="width:80px">재고</th>
+                  <th style="width:90px">노출</th>
+                  <th>액션</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">카본로얄파인더</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">350,000원</td>
+                  <td class="hl-mono">52,500원</td>
+                  <td class="hl-mono">24</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">와이드레드 P04</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">250,000원</td>
+                  <td class="hl-mono">37,500원</td>
+                  <td class="hl-mono">48</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">유로라이트</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">225,000원</td>
+                  <td class="hl-mono">33,750원</td>
+                  <td class="hl-mono">32</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">로얄쿠션</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">270,000원</td>
+                  <td class="hl-mono">40,500원</td>
+                  <td class="hl-mono">18</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">로얄와이드</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">290,000원</td>
+                  <td class="hl-mono">43,500원</td>
+                  <td class="hl-mono">27</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">환희 FR01</span></td>
+                  <td class="hl-dept">보행기</td>
+                  <td class="hl-mono">195,000원</td>
+                  <td class="hl-mono">29,250원</td>
+                  <td class="hl-mono">64</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">휠체어 EZ-1</span></td>
+                  <td class="hl-dept">휠체어</td>
+                  <td class="hl-mono">450,000원</td>
+                  <td class="hl-mono">—</td>
+                  <td class="hl-mono">12</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+                <tr>
+                  <td><i class="icon-grip-vertical grip-handle"></i></td>
+                  <td><div class="custom-checkbox" data-role="item" data-group="product"></div></td>
+                  <td><div style="width:36px;height:36px;border-radius:6px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;color:var(--accent)"><i class="icon-package"></i></div></td>
+                  <td><span class="hl-name">미끄럼방지 목욕의자</span></td>
+                  <td class="hl-dept">목욕의자</td>
+                  <td class="hl-mono">90,000원</td>
+                  <td class="hl-mono">13,500원</td>
+                  <td class="hl-mono">86</td>
+                  <td><span class="hl-badge active">노출</span></td>
+                  <td><div class="hl-actions"><button><i class="icon-pencil"></i></button><button><i class="icon-trash-2"></i></button></div></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="hl-pagination">
+              <span class="page-info">1–8 / 8</span>
+              <div class="pagination">
+                <button class="page-btn"><i class="icon-chevron-left" style="font-size:14px"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn"><i class="icon-chevron-right" style="font-size:14px"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  document.querySelectorAll('.hl-tabs .hl-tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      t.parentElement.querySelectorAll('.hl-tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const filter = t.dataset.tab; // all | visible | hidden
+      document.querySelectorAll('#hlTable tbody tr').forEach(row => {
+        const badge = row.querySelector('.hl-badge');
+        if (!badge) return;
+        const status = badge.classList.contains('active') ? 'visible' : 'hidden';
+        row.style.display = (filter === 'all' || filter === status) ? '' : 'none';
+      });
+    });
+  });
+
+  (function(){
+    const tbody = document.querySelector('#hlTable tbody');
+    if(!tbody) return;
+
+    function renumber(){
+      Array.from(tbody.rows).forEach((r,i)=>{
+        const cell = r.cells[2];
+        if(cell) cell.textContent = (i+1);
+      });
+    }
+
+    // Arrow up/down: swap with adjacent row
+    tbody.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.hl-actions button');
+      if(!btn) return;
+      const row = btn.closest('tr');
+      const isUp = !!btn.querySelector('.icon-arrow-up');
+      if(isUp && row.previousElementSibling){
+        tbody.insertBefore(row, row.previousElementSibling);
+      } else if(!isUp && row.nextElementSibling){
+        tbody.insertBefore(row.nextElementSibling, row);
+      }
+      renumber();
+    });
+
+    // Drag-and-drop via grip handle
+    let dragRow = null;
+
+    Array.from(tbody.rows).forEach(row=>{
+      const grip = row.querySelector('.grip-handle');
+      if(grip) grip.addEventListener('mousedown', ()=> row.setAttribute('draggable','true'));
+      row.addEventListener('dragstart', (e)=>{
+        dragRow = row;
+        row.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        try{ e.dataTransfer.setData('text/plain',''); }catch(_){}
+      });
+      row.addEventListener('dragend', ()=>{
+        row.classList.remove('dragging');
+        row.removeAttribute('draggable');
+        tbody.querySelectorAll('.drag-over-top,.drag-over-bottom').forEach(r=>r.classList.remove('drag-over-top','drag-over-bottom'));
+        dragRow = null;
+        renumber();
+      });
+      row.addEventListener('dragover', (e)=>{
+        if(!dragRow || dragRow===row) return;
+        e.preventDefault();
+        const rect = row.getBoundingClientRect();
+        const before = (e.clientY - rect.top) < rect.height/2;
+        row.classList.toggle('drag-over-top', before);
+        row.classList.toggle('drag-over-bottom', !before);
+      });
+      row.addEventListener('dragleave', ()=>{
+        row.classList.remove('drag-over-top','drag-over-bottom');
+      });
+      row.addEventListener('drop', (e)=>{
+        if(!dragRow || dragRow===row) return;
+        e.preventDefault();
+        const rect = row.getBoundingClientRect();
+        const before = (e.clientY - rect.top) < rect.height/2;
+        tbody.insertBefore(dragRow, before ? row : row.nextElementSibling);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

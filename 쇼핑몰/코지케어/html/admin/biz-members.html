@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사업자 회원 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+
+    .bot-area{display:flex;flex:1;min-height:0;overflow:hidden}
+    .filter-side{width:240px;flex-shrink:0;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px;padding:20px;overflow-y:auto}
+    .filter-side .add-btn{width:100%;background:var(--fg-primary);color:var(--fg-inverse);border:none;border-radius:var(--radius-sm);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+    .filter-side .add-btn i{font-size:16px}
+    .seg-tab{display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+    .seg-tab .st{flex:1;height:36px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--fg-secondary);background:var(--bg-card);cursor:pointer;border-left:1px solid var(--border)}
+    .seg-tab .st:first-child{border-left:none}
+    .seg-tab .st.active{background:var(--accent);color:var(--fg-inverse);font-weight:600}
+    .region-sec{display:flex;flex-direction:column;gap:10px}
+    .region-sec .rg-title{font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .region-sec .rg-row{display:flex;align-items:center;justify-content:space-between}
+    .region-sec .rg-row .rg-l{font-size:14px;color:var(--fg-secondary)}
+    .region-sec .rg-row .rg-v{font-family:var(--font-mono);font-size:14px;color:var(--fg-muted)}
+
+    .table-wrap{flex:1;min-width:0;background:var(--bg-card);display:flex;flex-direction:column;overflow:hidden}
+    .info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 24px}
+    .info-bar .info-txt{font-size:14px;color:var(--fg-muted)}
+    .sort-frame{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);font-size:14px;font-weight:500;color:var(--fg-secondary);cursor:pointer}
+    .sort-frame i{font-size:14px}
+    .ag-table-scroll{flex:1;overflow-y:auto}
+    .ag-table{width:100%;border-collapse:collapse;table-layout:fixed}
+    .ag-table thead th{background:var(--bg-secondary);height:44px;padding:0 0 0 12px;font-size:14px;font-weight:600;color:var(--fg-muted);text-align:left;border-bottom:1px solid var(--border-light);white-space:nowrap}
+    .ag-table thead th:first-child{padding-left:24px;width:28px}
+    .ag-table thead th:last-child{padding-right:24px;text-align:center}
+    .ag-table tbody td{height:52px;padding:0 0 0 12px;font-size:14px;color:var(--fg-primary);border-bottom:1px solid var(--border-light);vertical-align:middle}
+    .ag-table tbody td:first-child{padding-left:24px;width:28px}
+    .ag-table tbody td:last-child{padding-right:24px}
+    .ag-table tbody tr.selected{background:#F9F9FF}
+    .ag-ck{width:16px;height:16px;border:1.5px solid var(--border);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;vertical-align:middle}
+    .ag-ck.on{background:var(--accent);border-color:var(--accent);color:#fff}
+    .ag-ck.on::after{content:'';width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+    .ag-name{display:inline-flex;align-items:center;gap:10px;font-weight:500}
+    .ag-av{width:32px;height:32px;border-radius:50%;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ag-av i{color:var(--accent);font-size:16px}
+    .ag-country,.ag-mgr{color:var(--fg-secondary);font-weight:400}
+    .ag-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:14px;font-weight:500}
+    .ag-badge.on{background:var(--accent-light);color:var(--accent)}
+    .ag-badge.off{background:#FFEBEE;color:var(--danger)}
+    .ag-num{font-family:var(--font-mono);font-weight:500;color:var(--fg-primary)}
+    .ag-date{font-family:var(--font-mono);color:var(--fg-muted)}
+    .ag-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+    .ag-actions i{color:var(--fg-muted);font-size:16px;cursor:pointer}
+
+    .ag-pag{display:flex;align-items:center;justify-content:center;position:relative;height:48px;padding:0 24px;border-top:1px solid var(--border-light);flex-shrink:0}
+    .ag-pag .pag-info{position:absolute;left:24px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--fg-muted)}
+    .ag-pag .pag-btns{display:flex;align-items:center;gap:4px}
+    .ag-pag .pb{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:14px;color:var(--fg-secondary);border:none;background:none;cursor:pointer}
+    .ag-pag .pb.bd{border:1px solid var(--border)}
+    .ag-pag .pb.active{background:var(--accent);color:#fff;font-weight:600}
+    .ag-pag .pb i{font-size:16px;color:var(--fg-muted)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item active" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>사업자 회원</h1>
+        <p>승인된 사업자 회원 거래 현황</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="상호·사업자번호 검색..."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#3B43DB"></div><div class="noti-body"><span class="noti-badge" style="background:#EEEFFC;color:#3B43DB">신규 사업자 신청</span><span class="noti-time">10분 전</span><div class="noti-text">광주실버몰 사업자 등록 신청이 접수되었습니다</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#34C759"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">포인트 정산</span><span class="noti-time">1시간 전</span><div class="noti-text">㈜시니어라이프 5월 포인트 정산 완료</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">도매 주문</span><span class="noti-time">3시간 전</span><div class="noti-text">㈜이로움파트너 카본로얄파인더 12대 주문</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bot-area">
+      <aside class="filter-side">
+        <button class="add-btn" onclick="navigateTo('biz-register.html')"><i class="icon-plus"></i>사업자 추가</button>
+        <div class="seg-tab" id="agencyStatusTabs">
+          <div class="st active" data-status="all">전체</div>
+          <div class="st" data-status="on">활성</div>
+          <div class="st" data-status="off">정지</div>
+        </div>
+        <div class="region-sec">
+          <div class="rg-title">사업자 유형</div>
+          <div class="rg-row"><span class="rg-l">복지용구사업소</span><span class="rg-v">3</span></div>
+          <div class="rg-row"><span class="rg-l">인터넷 사업소</span><span class="rg-v">2</span></div>
+          <div class="rg-row"><span class="rg-l">재가복지센터</span><span class="rg-v">2</span></div>
+          <div class="rg-row"><span class="rg-l">기타 관련업체</span><span class="rg-v">1</span></div>
+        </div>
+      </aside>
+
+      <div class="table-wrap">
+        <div class="info-bar">
+          <span class="info-txt">총 8개 사업자</span>
+          <button class="sort-frame"><i class="icon-arrow-up-down"></i>누적매출순</button>
+        </div>
+        <div class="ag-table-scroll">
+          <table class="ag-table">
+            <colgroup>
+              <col style="width:52px">
+              <col style="width:18%">
+              <col style="width:90px">
+              <col style="width:130px">
+              <col style="width:130px">
+              <col style="width:110px">
+              <col style="width:130px">
+              <col style="width:100px">
+              <col style="width:90px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th><span class="ag-ck"></span></th>
+                <th>상호</th>
+                <th>대표</th>
+                <th>유형</th>
+                <th>사업자번호</th>
+                <th>승인일</th>
+                <th>누적매출</th>
+                <th>포인트</th>
+                <th>상태</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>㈜이로움파트너</span></td>
+                <td class="ag-mgr">정명석</td>
+                <td><span class="ag-badge on">복지용구사업소</span></td>
+                <td class="ag-num">845-22-01234</td>
+                <td class="ag-date">2024.08.12</td>
+                <td class="ag-num">12,840,000원</td>
+                <td class="ag-num">38,500P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr class="selected">
+                <td><span class="ag-ck on"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>㈜가가온</span></td>
+                <td class="ag-mgr">김민지</td>
+                <td><span class="ag-badge on">인터넷 사업소</span></td>
+                <td class="ag-num">612-33-22156</td>
+                <td class="ag-date">2025.01.08</td>
+                <td class="ag-num">9,650,000원</td>
+                <td class="ag-num">28,800P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>서울케어</span></td>
+                <td class="ag-mgr">박상훈</td>
+                <td><span class="ag-badge on">재가복지센터</span></td>
+                <td class="ag-num">421-44-87654</td>
+                <td class="ag-date">2025.03.20</td>
+                <td class="ag-num">5,420,000원</td>
+                <td class="ag-num">16,200P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>㈜시니어라이프</span></td>
+                <td class="ag-mgr">최영주</td>
+                <td><span class="ag-badge on">복지용구사업소</span></td>
+                <td class="ag-num">234-12-93847</td>
+                <td class="ag-date">2024.11.15</td>
+                <td class="ag-num">18,900,000원</td>
+                <td class="ag-num">56,500P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>부산복지센터</span></td>
+                <td class="ag-mgr">강지훈</td>
+                <td><span class="ag-badge on">재가복지센터</span></td>
+                <td class="ag-num">109-23-94852</td>
+                <td class="ag-date">2025.02.04</td>
+                <td class="ag-num">3,210,000원</td>
+                <td class="ag-num">9,500P</td>
+                <td><span class="ag-badge off">정지</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>대전메디샵</span></td>
+                <td class="ag-mgr">임혜수</td>
+                <td><span class="ag-badge on">인터넷 사업소</span></td>
+                <td class="ag-num">305-44-12930</td>
+                <td class="ag-date">2025.04.19</td>
+                <td class="ag-num">6,830,000원</td>
+                <td class="ag-num">20,400P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>㈜케어매니아</span></td>
+                <td class="ag-mgr">한준호</td>
+                <td><span class="ag-badge on">기타 관련업체</span></td>
+                <td class="ag-num">729-56-83749</td>
+                <td class="ag-date">2024.12.02</td>
+                <td class="ag-num">7,210,000원</td>
+                <td class="ag-num">21,500P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+              <tr>
+                <td><span class="ag-ck"></span></td>
+                <td><span class="ag-name"><span class="ag-av"><i class="icon-store"></i></span>광주실버몰</span></td>
+                <td class="ag-mgr">송미경</td>
+                <td><span class="ag-badge on">복지용구사업소</span></td>
+                <td class="ag-num">588-66-72938</td>
+                <td class="ag-date">2025.05.25</td>
+                <td class="ag-num">2,140,000원</td>
+                <td class="ag-num">6,400P</td>
+                <td><span class="ag-badge on">활성</span></td>
+                <td><div class="ag-actions"><i class="icon-pencil"></i><i class="icon-ellipsis"></i></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ag-pag">
+          <span class="pag-info">1-8 / 8</span>
+          <div class="pag-btns">
+            <button class="pb bd"><i class="icon-chevron-left"></i></button>
+            <button class="pb active">1</button>
+            <button class="pb bd"><i class="icon-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="agencyRegisterModal">
+  <div class="modal-content" style="width:520px;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)">
+      <div style="font-size:18px;font-weight:700;color:var(--fg-primary);font-family:'Pretendard',sans-serif">사업자 회원 등록</div>
+      <i class="icon-x" style="font-size:20px;color:var(--fg-muted);cursor:pointer" onclick="closeModal('agencyRegisterModal')"></i>
+    </div>
+    <div style="padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">상호 <span class="required">*</span></label>
+          <input class="form-input" type="text" placeholder="사업자 상호">
+        </div>
+        <div class="form-group">
+          <label class="form-label">유형 <span class="required">*</span></label>
+          <select class="form-select"><option value="">유형 선택</option><option>복지용구사업소</option><option>인터넷 사업소</option><option>재가복지센터</option><option>기타 관련업체</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">대표 <span class="required">*</span></label>
+          <input class="form-input" type="text" placeholder="대표자 이름">
+        </div>
+        <div class="form-group">
+          <label class="form-label">사업자번호 <span class="required">*</span></label>
+          <input class="form-input" type="text" placeholder="000-00-00000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">대표 연락처</label>
+        <input class="form-input" type="text" placeholder="이메일 또는 전화번호">
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;padding:16px 24px;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary" style="flex:1;height:44px" onclick="closeModal('agencyRegisterModal')">취소</button>
+      <button class="btn btn-primary" style="flex:1;height:44px" onclick="closeModal('agencyRegisterModal');showSuccess('등록이 완료되었습니다','사업자 회원이 정상적으로 등록되었습니다.')">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+  (function(){
+    const tabs = document.querySelectorAll('#agencyStatusTabs .st');
+    const rows = document.querySelectorAll('.ag-table tbody tr');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.status;
+        rows.forEach(r => {
+          const badge = r.querySelector('.ag-badge');
+          if (!badge) return;
+          const status = badge.classList.contains('on') ? 'on' : 'off';
+          r.style.display = (filter === 'all' || filter === status) ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

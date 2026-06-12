@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카테고리 관리 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .cat-wrap{display:flex;flex-direction:column;gap:16px;padding:0 24px 24px}
+    .cat-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .cat-toolbar-left{font-size:14px;color:var(--fg-muted)}
+    .cat-toolbar-left b{color:var(--fg-primary);font-weight:600;font-family:var(--font-mono)}
+    .cat-toolbar-right{display:flex;gap:8px}
+    .cat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .cat-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border-light)}
+    .cat-row:last-child{border-bottom:0}
+    .cat-row:hover{background:var(--bg-secondary)}
+    .cat-grip{color:var(--fg-muted);cursor:grab;font-size:18px;flex-shrink:0}
+    .cat-grip:active{cursor:grabbing}
+    .cat-order{font-family:var(--font-mono);font-size:13px;color:var(--fg-muted);width:24px;text-align:center;flex-shrink:0}
+    .cat-icon{width:36px;height:36px;border-radius:8px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--accent);font-size:18px}
+    .cat-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+    .cat-name{font-size:15px;font-weight:600;color:var(--fg-primary)}
+    .cat-meta{font-size:13px;color:var(--fg-muted)}
+    .cat-meta .cm-count{font-family:var(--font-mono);color:var(--fg-secondary);font-weight:500}
+    .cat-status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-secondary);flex-shrink:0}
+    .cat-actions{display:flex;gap:6px;flex-shrink:0}
+    .cat-actions .btn{padding:6px 12px;font-size:13px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item active" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>카테고리 관리</h1>
+        <p>상품 카테고리 추가 · 수정 · 노출 관리</p>
+      </div>
+      <div class="top-bar-right">
+        <button class="btn btn-secondary"><i class="icon-arrow-up-down"></i>일괄 정렬 저장</button>
+        <button class="btn btn-secondary"><i class="icon-eye"></i>노출 일괄 변경</button>
+        <button class="btn btn-dark"><i class="icon-plus"></i>카테고리 추가</button>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="cat-wrap">
+
+        <div class="cat-toolbar">
+          <div class="cat-toolbar-left">총 <b>7</b>개 카테고리 · 노출 <b>7</b>개 · 비노출 <b>0</b>개</div>
+          <div class="cat-toolbar-right">
+            <button class="btn btn-secondary btn-sm"><i class="icon-grip-vertical"></i>드래그로 순서 변경</button>
+          </div>
+        </div>
+
+        <div class="cat-card">
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">1</span>
+            <div class="cat-icon"><i class="icon-footprints"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">보행기</div>
+              <div class="cat-meta"><span class="cm-count">32</span>개 상품 · 슬러그 /walker</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">2</span>
+            <div class="cat-icon"><i class="icon-armchair"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">휠체어</div>
+              <div class="cat-meta"><span class="cm-count">28</span>개 상품 · 슬러그 /wheelchair</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">3</span>
+            <div class="cat-icon"><i class="icon-bath"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">목욕의자</div>
+              <div class="cat-meta"><span class="cm-count">14</span>개 상품 · 슬러그 /bath-chair</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">4</span>
+            <div class="cat-icon"><i class="icon-toilet"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">이동변기</div>
+              <div class="cat-meta"><span class="cm-count">9</span>개 상품 · 슬러그 /portable-toilet</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">5</span>
+            <div class="cat-icon"><i class="icon-bed-double"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">전동침대</div>
+              <div class="cat-meta"><span class="cm-count">12</span>개 상품 · 슬러그 /electric-bed</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">6</span>
+            <div class="cat-icon"><i class="icon-shield"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">미끄럼방지</div>
+              <div class="cat-meta"><span class="cm-count">21</span>개 상품 · 슬러그 /anti-slip</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+          <div class="cat-row" draggable="true">
+            <i class="icon-grip-vertical cat-grip"></i>
+            <span class="cat-order">7</span>
+            <div class="cat-icon"><i class="icon-package"></i></div>
+            <div class="cat-body">
+              <div class="cat-name">기타용품</div>
+              <div class="cat-meta"><span class="cm-count">132</span>개 상품 · 슬러그 /etc</div>
+            </div>
+            <div class="cat-status">
+              <span>노출</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-secondary">수정</button>
+              <button class="btn btn-ghost" onclick="openModal('deleteModal')">삭제</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">카테고리를 삭제하시겠습니까?</div><div class="modal-desc">카테고리에 포함된 상품은 [기타용품]으로 이동됩니다.<br>삭제된 카테고리는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+<script>
+document.querySelectorAll('.toggle-switch').forEach(t => {
+  t.addEventListener('click', () => t.classList.toggle('active'));
+});
+</script>
+</body>
+</html>

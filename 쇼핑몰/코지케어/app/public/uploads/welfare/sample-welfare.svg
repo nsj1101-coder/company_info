@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="794" height="1123" viewBox="0 0 794 1123" font-family="'Pretendard','Malgun Gothic',sans-serif">
+  <rect width="794" height="1123" fill="#ffffff"/>
+  <rect x="0" y="0" width="794" height="10" fill="#1f6feb"/>
+  <text x="397" y="92" text-anchor="middle" font-size="34" font-weight="800" fill="#111827" letter-spacing="6">장기요양인정서</text>
+  <text x="397" y="124" text-anchor="middle" font-size="15" fill="#6b7280">National Health Insurance Service · 국민건강보험공단</text>
+  <line x1="64" y1="150" x2="730" y2="150" stroke="#e5e7eb" stroke-width="2"/>
+
+  <text x="64" y="200" font-size="18" font-weight="700" fill="#1f6feb">■ 수급자 정보</text>
+  <g font-size="16" fill="#374151">
+    <rect x="64" y="216" width="666" height="46" fill="#f8fafc" stroke="#e5e7eb"/>
+    <text x="84" y="245" fill="#6b7280">성명</text>
+    <text x="210" y="245" font-weight="600" fill="#111827">김○○ (대리수령: 이로움파트너)</text>
+    <line x1="397" y1="216" x2="397" y2="262" stroke="#e5e7eb"/>
+    <text x="417" y="245" fill="#6b7280">생년월일</text>
+    <text x="540" y="245" font-weight="600" fill="#111827">1948-03-○○</text>
+
+    <rect x="64" y="262" width="666" height="46" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="84" y="291" fill="#6b7280">장기요양인정번호</text>
+    <text x="240" y="291" font-weight="700" fill="#111827" font-family="monospace">L2025-1036</text>
+    <line x1="397" y1="262" x2="397" y2="308" stroke="#e5e7eb"/>
+    <text x="417" y="291" fill="#6b7280">장기요양등급</text>
+    <text x="540" y="291" font-weight="700" fill="#1f6feb">5등급</text>
+
+    <rect x="64" y="308" width="666" height="46" fill="#f8fafc" stroke="#e5e7eb"/>
+    <text x="84" y="337" fill="#6b7280">유효기간</text>
+    <text x="210" y="337" font-weight="600" fill="#111827">2026-01-01 ~ 2027-12-31</text>
+    <line x1="397" y1="308" x2="397" y2="354" stroke="#e5e7eb"/>
+    <text x="417" y="337" fill="#6b7280">인정일자</text>
+    <text x="540" y="337" font-weight="600" fill="#111827">2025-12-20</text>
+  </g>
+
+  <text x="64" y="412" font-size="18" font-weight="700" fill="#1f6feb">■ 복지용구 급여 내역</text>
+  <g font-size="15">
+    <rect x="64" y="428" width="666" height="40" fill="#1f6feb"/>
+    <text x="100" y="454" fill="#ffffff" font-weight="600">품목</text>
+    <text x="420" y="454" fill="#ffffff" font-weight="600">연 한도액</text>
+    <text x="600" y="454" fill="#ffffff" font-weight="600">본인부담률</text>
+    <rect x="64" y="468" width="666" height="42" fill="#ffffff" stroke="#e5e7eb"/>
+    <text x="100" y="495" fill="#374151">이동변기 / 보행보조차 (와이드 보행기)</text>
+    <text x="420" y="495" fill="#374151" font-family="monospace">1,600,000원</text>
+    <text x="610" y="495" fill="#16a34a" font-weight="700">15%</text>
+    <rect x="64" y="510" width="666" height="42" fill="#f8fafc" stroke="#e5e7eb"/>
+    <text x="100" y="537" fill="#374151">기타 복지용구</text>
+    <text x="420" y="537" fill="#374151" font-family="monospace">한도 내</text>
+    <text x="610" y="537" fill="#16a34a" font-weight="700">15%</text>
+  </g>
+
+  <rect x="64" y="600" width="666" height="120" rx="10" fill="#f0f7ff" stroke="#bcd8ff"/>
+  <text x="90" y="640" font-size="16" font-weight="700" fill="#1f6feb">공단 확인 결과</text>
+  <text x="90" y="672" font-size="15" fill="#374151">· 장기요양 인정 및 복지용구 급여 대상자임을 확인함.</text>
+  <text x="90" y="698" font-size="15" fill="#374151">· 본인부담금 15% 적용 대상 (감경 해당 없음).</text>
+
+  <text x="397" y="800" text-anchor="middle" font-size="17" fill="#374151">위 사람은 노인장기요양보험법에 따른 장기요양 수급자임을 증명합니다.</text>
+  <text x="397" y="864" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">2025년 12월 20일</text>
+  <text x="397" y="912" text-anchor="middle" font-size="24" font-weight="800" fill="#111827" letter-spacing="2">국민건강보험공단 이사장</text>
+
+  <g>
+    <circle cx="610" cy="900" r="46" fill="none" stroke="#d33" stroke-width="3"/>
+    <text x="610" y="893" text-anchor="middle" font-size="13" fill="#d33" font-weight="700">국민건강</text>
+    <text x="610" y="912" text-anchor="middle" font-size="13" fill="#d33" font-weight="700">보험공단인</text>
+  </g>
+
+  <line x1="64" y1="1000" x2="730" y2="1000" stroke="#e5e7eb"/>
+  <text x="64" y="1030" font-size="12" fill="#9ca3af">※ 본 문서는 코지케어 영업 데모용 샘플 서류이며 실제 효력이 없습니다.</text>
+  <text x="64" y="1050" font-size="12" fill="#9ca3af">담당자 업로드 · 문서번호 WR-225 · 검토자 관리자 · 상태 공단 확인 완료</text>
+</svg>

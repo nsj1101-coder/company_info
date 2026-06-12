@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주문 상세 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar{background:#fff}
+    .od-grid{display:grid;grid-template-columns:1fr 320px;gap:16px;padding:0 24px 24px}
+    .od-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+    .od-side{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:16px}
+    .panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .panel-h{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border-light);font-size:14px;font-weight:600;color:var(--fg-primary)}
+    .panel-b{padding:18px 20px}
+    .info-row{display:flex;gap:14px;padding:8px 0;font-size:14px;border-bottom:1px dashed var(--border-light)}
+    .info-row:last-child{border-bottom:none}
+    .info-row .lbl{width:110px;color:var(--fg-muted);flex-shrink:0}
+    .info-row .val{flex:1;color:var(--fg-primary);font-weight:500}
+    .badge-type{display:inline-flex;align-items:center;padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:.2px;margin-left:8px}
+    .badge-type.welfare{background:#FEE2E2;color:#ef4444}
+    .badge-type.general{background:#E5E7EB;color:#4B5563}
+    .badge-type.biz{background:#DCFCE7;color:#16a34a}
+    .stepper{display:flex;align-items:center;padding:20px 24px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);margin:0 24px 16px}
+    .step{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+    .step .s-num{width:32px;height:32px;border-radius:50%;background:#E5E7EB;color:#9CA3AF;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:14px;z-index:1}
+    .step .s-lbl{font-size:13px;color:var(--fg-muted);font-weight:500}
+    .step.active .s-num{background:var(--accent);color:#fff}
+    .step.active .s-lbl{color:var(--fg-primary);font-weight:600}
+    .step.done .s-num{background:var(--success);color:#fff}
+    .step.done .s-lbl{color:var(--fg-secondary)}
+    .step:not(:last-child)::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:2px;background:#E5E7EB;z-index:0}
+    .step.done:not(:last-child)::after{background:var(--success)}
+    .prod-row{display:flex;gap:16px;align-items:center}
+    .prod-thumb{width:88px;height:88px;border-radius:8px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .prod-body{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+    .prod-n{font-size:15px;font-weight:600;color:var(--fg-primary)}
+    .prod-opt{font-size:13px;color:var(--fg-muted)}
+    .prod-meta{display:flex;gap:18px;font-size:13px;color:var(--fg-secondary)}
+    .prod-meta b{font-family:var(--font-mono);color:var(--fg-primary)}
+    .prod-sum{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--fg-primary);text-align:right}
+    .pay-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px dashed var(--border-light)}
+    .pay-row:last-child{border-bottom:none;border-top:1px solid var(--border);margin-top:6px;padding-top:14px;font-weight:700}
+    .pay-row .pv{font-family:var(--font-mono);font-weight:600}
+    .pay-row .pv.neg{color:#ef4444}
+    .pay-row .pv.acc{color:var(--accent);font-size:16px}
+    .ship-form{display:flex;gap:8px;align-items:center;margin-top:10px}
+    .ship-form .form-select{width:140px}
+    .ship-form .form-input{flex:1}
+    .doc-list{display:flex;flex-direction:column;gap:8px}
+    .doc-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-secondary);border-radius:var(--radius-sm);font-size:14px}
+    .doc-item i{color:var(--accent);font-size:18px}
+    .doc-item .d-n{flex:1;color:var(--fg-primary);font-weight:500}
+    .doc-item a{color:var(--accent);font-size:13px;font-weight:600;text-decoration:none}
+    .od-tl-item{display:flex;gap:12px;min-height:48px}
+    .od-tl-col{width:10px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+    .od-tl-dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .od-tl-dot.muted{background:#D1D5DB}
+    .od-tl-bar{width:2px;flex:1;background:var(--border);margin-top:2px}
+    .od-tl-body{flex:1;display:flex;flex-direction:column;gap:2px;padding-bottom:14px}
+    .od-tl-t{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .od-tl-tm{font-family:var(--font-mono);font-size:12px;color:var(--fg-muted)}
+    .action-btns{display:flex;flex-direction:column;gap:8px}
+    .action-btns .btn{width:100%}
+    textarea.form-input{resize:vertical;min-height:90px;font-family:inherit;line-height:1.5}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item active" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>주문 상세 #CZ20260609-0024</h1>
+        <p>코지워커 카본로얄파인더 · 김영자 · 2026-06-09 14:32</p>
+      </div>
+      <div class="top-bar-right">
+        <a href="orders.html" class="btn btn-secondary btn-sm"><i class="icon-arrow-left"></i>목록으로</a>
+        <button class="btn btn-dark btn-sm"><i class="icon-printer"></i>PDF 출력</button>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step active"><div class="s-num">1</div><div class="s-lbl">상품 준비중</div></div>
+        <div class="step"><div class="s-num">2</div><div class="s-lbl">배송중</div></div>
+        <div class="step"><div class="s-num">3</div><div class="s-lbl">배송 완료</div></div>
+        <div class="step"><div class="s-num">4</div><div class="s-lbl">구매 확정</div></div>
+      </div>
+
+      <div class="od-grid">
+        <!-- Left column -->
+        <div class="od-col">
+          <!-- 주문 정보 -->
+          <div class="panel">
+            <div class="panel-h"><span>주문 정보</span><span class="badge-type welfare">복지용구</span></div>
+            <div class="panel-b">
+              <div class="info-row"><span class="lbl">주문번호</span><span class="val" style="font-family:var(--font-mono)">CZ20260609-0024</span></div>
+              <div class="info-row"><span class="lbl">주문일시</span><span class="val" style="font-family:var(--font-mono)">2026-06-09 14:32:18</span></div>
+              <div class="info-row"><span class="lbl">주문 유형</span><span class="val">복지용구 (공단 지원 85%)</span></div>
+              <div class="info-row"><span class="lbl">총 결제금액</span><span class="val" style="font-family:var(--font-mono);font-size:16px;color:var(--accent);font-weight:700">80,250원</span></div>
+            </div>
+          </div>
+
+          <!-- 상품 정보 -->
+          <div class="panel">
+            <div class="panel-h"><span>상품 정보</span></div>
+            <div class="panel-b">
+              <div class="prod-row">
+                <div class="prod-thumb"><i class="icon-package" style="color:var(--accent);font-size:36px"></i></div>
+                <div class="prod-body">
+                  <div class="prod-n">코지워커 카본로얄파인더 P05</div>
+                  <div class="prod-opt">옵션: 색상 - 와인레드 / 사이즈 - M</div>
+                  <div class="prod-meta"><span>수량 <b>1개</b></span><span>단가 <b>535,000원</b></span></div>
+                </div>
+                <div class="prod-sum">535,000원</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 배송 정보 -->
+          <div class="panel">
+            <div class="panel-h"><span>배송 정보</span></div>
+            <div class="panel-b">
+              <div class="info-row"><span class="lbl">수령인</span><span class="val">김영자</span></div>
+              <div class="info-row"><span class="lbl">연락처</span><span class="val" style="font-family:var(--font-mono)">010-3247-9821</span></div>
+              <div class="info-row"><span class="lbl">주소</span><span class="val">(06234) 서울특별시 강남구 테헤란로 152, 101동 1402호</span></div>
+              <div class="info-row"><span class="lbl">요청사항</span><span class="val">부재 시 경비실에 맡겨주세요</span></div>
+              <div class="info-row" style="align-items:center">
+                <span class="lbl">송장번호</span>
+                <div class="val" style="display:flex;flex-direction:column;gap:4px">
+                  <div class="ship-form">
+                    <select class="form-select"><option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국</option><option>로젠택배</option></select>
+                    <input type="text" class="form-input" placeholder="송장번호 입력">
+                    <button class="btn btn-primary btn-sm" style="white-space:nowrap"><i class="icon-send"></i>저장 + 문자발송</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 결제 정보 -->
+          <div class="panel">
+            <div class="panel-h"><span>결제 정보</span></div>
+            <div class="panel-b">
+              <div class="pay-row"><span>정가</span><span class="pv">535,000원</span></div>
+              <div class="pay-row"><span>공단 지원 (85%)</span><span class="pv neg">-454,750원</span></div>
+              <div class="pay-row"><span>본인 부담금 (15%)</span><span class="pv">80,250원</span></div>
+              <div class="pay-row"><span>결제수단</span><span class="pv" style="font-family:inherit">신용카드 (신한 1234-****-****-5678)</span></div>
+              <div class="pay-row"><span>결제일시</span><span class="pv">2026-06-09 14:32:45</span></div>
+              <div class="pay-row"><span>최종 결제금액</span><span class="pv acc">80,250원</span></div>
+            </div>
+          </div>
+
+          <!-- 복지용구 서류 -->
+          <div class="panel">
+            <div class="panel-h"><span>복지용구 서류</span><span class="badge badge-success">공단 확인 완료</span></div>
+            <div class="panel-b">
+              <div class="info-row"><span class="lbl">장기요양 인정번호</span><span class="val" style="font-family:var(--font-mono)">L0001-2024-7823541</span></div>
+              <div class="info-row"><span class="lbl">등급</span><span class="val">3등급 (재가급여)</span></div>
+              <div class="info-row"><span class="lbl">유효기간</span><span class="val" style="font-family:var(--font-mono)">2024-08-01 ~ 2026-07-31</span></div>
+              <div class="info-row"><span class="lbl">첨부서류</span>
+                <div class="val">
+                  <div class="doc-list">
+                    <div class="doc-item"><i class="icon-file-text"></i><span class="d-n">장기요양인정서.pdf</span><a href="#">보기</a><a href="#">다운로드</a></div>
+                    <div class="doc-item"><i class="icon-file-text"></i><span class="d-n">복지용구급여확인서.pdf</span><a href="#">보기</a><a href="#">다운로드</a></div>
+                    <div class="doc-item"><i class="icon-file-image"></i><span class="d-n">신분증사본.jpg</span><a href="#">보기</a><a href="#">다운로드</a></div>
+                  </div>
+                </div>
+              </div>
+              <div class="info-row"><span class="lbl">공단확인 결과</span><span class="val" style="color:var(--success);font-weight:600">승인 완료 (2026-06-09 14:30:12)</span></div>
+            </div>
+          </div>
+
+          <!-- 메모 -->
+          <div class="panel">
+            <div class="panel-h"><span>관리자 메모</span></div>
+            <div class="panel-b">
+              <textarea class="form-input" placeholder="내부 관리용 메모를 입력하세요">고객 요청으로 부재 시 경비실 보관. 14:30 전화 통화 완료.</textarea>
+              <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn btn-primary btn-sm">메모 저장</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="od-side">
+          <div class="panel">
+            <div class="panel-h"><span>주문 상태 변경</span></div>
+            <div class="panel-b" style="display:flex;flex-direction:column;gap:10px">
+              <select class="form-select">
+                <option>상품 준비중</option>
+                <option>배송중</option>
+                <option>배송 완료</option>
+                <option>구매 확정</option>
+              </select>
+              <button class="btn btn-primary"><i class="icon-check"></i>변경 적용</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h"><span>액션</span></div>
+            <div class="panel-b">
+              <div class="action-btns">
+                <button class="btn btn-secondary"><i class="icon-refund" style="display:none"></i><i class="icon-rotate-ccw"></i>환불 처리</button>
+                <button class="btn btn-secondary"><i class="icon-package-x"></i>반품 접수</button>
+                <button class="btn btn-dark"><i class="icon-message-square"></i>고객에게 메시지</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h"><span>타임라인</span></div>
+            <div class="panel-b">
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot"></div><div class="od-tl-bar"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">주문 접수</span><span class="od-tl-tm">06-09 14:32:18</span></div>
+              </div>
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot"></div><div class="od-tl-bar"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">결제 완료</span><span class="od-tl-tm">06-09 14:32:45</span></div>
+              </div>
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot"></div><div class="od-tl-bar"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">서류 확인 (공단 승인)</span><span class="od-tl-tm">06-09 14:30:12</span></div>
+              </div>
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot muted"></div><div class="od-tl-bar"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">출고 대기</span><span class="od-tl-tm">예정</span></div>
+              </div>
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot muted"></div><div class="od-tl-bar"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">배송 시작</span><span class="od-tl-tm">예정</span></div>
+              </div>
+              <div class="od-tl-item">
+                <div class="od-tl-col"><div class="od-tl-dot muted"></div></div>
+                <div class="od-tl-body"><span class="od-tl-t">배송 완료</span><span class="od-tl-tm">예정</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Modals -->
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+</body>
+</html>

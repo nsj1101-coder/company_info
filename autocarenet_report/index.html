@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<meta name="robots" content="noindex" />
+<title>Auto Care Net 리뉴얼 · DB 마이그레이션 — 실행 일정 (MaxImpact)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root{
+    --orange:#FF5722; --orange-l:#FF8A4C; --orange-soft:#FFF1EB;
+    --ink:#15181d; --ink2:#2a2f37; --gray:#6b7280; --gray-l:#9aa1ab;
+    --line:#ececec; --line2:#f3f3f3; --bg:#fff; --soft:#fafafa;
+    --font:'Inter','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.65;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  a{color:inherit}
+
+  /* top bar */
+  .topbar{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(8px);z-index:20}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.02em}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+  .topbar .meta{font-size:12.5px;color:var(--gray);font-weight:500}
+
+  /* eyebrow */
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--ink2);text-transform:uppercase}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+  .kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+
+  /* hero */
+  .hero{padding:64px 0 40px}
+  .hero h1{font-size:46px;line-height:1.08;font-weight:800;letter-spacing:-.025em;margin:22px 0 18px}
+  .hero h1 .o{color:var(--orange)}
+  .hero .lead{font-size:17px;color:#3d434c;max-width:680px;line-height:1.7}
+  .factline{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;border-top:1px solid var(--line)}
+  .fact{flex:1;min-width:140px;padding:18px 0 4px;padding-right:20px;border-right:1px solid var(--line2)}
+  .fact:last-child{border-right:0}
+  .fact .v{font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .fact .v .u{color:var(--orange)}
+  .fact .k{font-size:12.5px;color:var(--gray);font-weight:500;margin-top:2px}
+
+  section{padding:46px 0;border-top:1px solid var(--line)}
+  .head{margin-bottom:26px}
+  .head h2{font-size:28px;font-weight:800;letter-spacing:-.025em;margin-top:10px}
+  .head p{color:var(--gray);font-size:15px;margin-top:8px;max-width:720px}
+
+  /* approach */
+  .lead-card{font-size:16.5px;line-height:1.8;color:#2d323a;max-width:860px}
+  .lead-card b{color:var(--ink);font-weight:700}
+  .lead-card .o{color:var(--orange);font-weight:700}
+
+  /* scope */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  .scope .lbl{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;color:var(--ink)}
+  .scope .lbl.inc{color:var(--orange)}
+  .scope ul{list-style:none;display:flex;flex-direction:column}
+  .scope li{font-size:14.5px;color:#33383f;padding:11px 0 11px 22px;position:relative;border-bottom:1px solid var(--line2)}
+  .scope li:last-child{border-bottom:0}
+  .scope li::before{content:'';position:absolute;left:0;top:18px;width:9px;height:2px;border-radius:1px}
+  .scope.inc li::before{background:var(--orange);width:9px;height:9px;border-radius:2px;top:14px}
+  .scope.exc li{color:var(--gray)}
+  .scope.exc li::before{background:var(--gray-l)}
+
+  /* gantt */
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:16px;font-size:13px;color:#475569}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-weight:600}
+  .swatch{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .gantt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:14px}
+  .gantt{min-width:700px}
+  .grow{display:grid;grid-template-columns:210px repeat(6,1fr);align-items:center}
+  .ghead{background:var(--soft);border-bottom:1px solid var(--line);font-size:12px;font-weight:700;color:var(--ink)}
+  .ghead>div{padding:12px 10px;text-align:center;border-left:1px solid var(--line2)}
+  .ghead>div:first-child{text-align:left;border-left:0;font-weight:800;letter-spacing:.02em}
+  .gphase{background:var(--ink);color:#fff;font-size:11.5px;font-weight:700;padding:8px 14px;letter-spacing:.04em;text-transform:uppercase}
+  .grow.task{border-bottom:1px solid var(--line2)}
+  .grow.task:last-child{border-bottom:0}
+  .tname{padding:11px 14px;font-size:13px;font-weight:600;color:#22262c;position:sticky;left:0;background:#fff;border-right:1px solid var(--line);z-index:1}
+  .track{grid-column:2 / span 6;position:relative;height:40px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(100%/6 - 1px),var(--line2) calc(100%/6 - 1px),var(--line2) calc(100%/6))}
+  .bar{position:absolute;top:10px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;letter-spacing:.02em}
+  .bar.front{background:var(--orange)}
+  .bar.data{background:var(--ink2)}
+  .gnote{font-size:12px;color:var(--gray-l);margin-top:10px}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:2px 40px}
+  .step{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line2)}
+  .step .n{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--orange-soft);color:var(--orange);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .step .t{font-size:14px;color:#33383f;padding-top:2px}
+  .step .t b{color:var(--ink);font-weight:700}
+
+  /* tags */
+  .tags{display:flex;flex-wrap:wrap;gap:9px}
+  .tag{border:1px solid var(--line);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;color:#33383f;background:#fff}
+
+  /* prereq list */
+  .plist{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+  .plist .pi{font-size:14.5px;color:#33383f;padding:13px 0 13px 22px;position:relative;border-bottom:1px solid var(--line2)}
+  .plist .pi::before{content:'';position:absolute;left:0;top:19px;width:7px;height:7px;border-radius:50%;background:var(--orange)}
+
+  /* risk */
+  .risk{display:flex;flex-direction:column;gap:0}
+  .risk .r{font-size:14.5px;color:#33383f;padding:16px 0 16px 20px;border-bottom:1px solid var(--line2);position:relative}
+  .risk .r:last-child{border-bottom:0}
+  .risk .r::before{content:'';position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:2px;background:var(--orange)}
+  .risk .r b{color:var(--ink);font-weight:700}
+
+  /* callout */
+  .callout{margin-top:6px;background:var(--ink);color:#e9ebef;border-radius:16px;padding:30px 32px}
+  .callout .kicker{color:var(--orange-l)}
+  .callout h3{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;margin:10px 0 10px}
+  .callout p{font-size:15px;line-height:1.75;color:#c4c8cf;max-width:760px}
+  .callout p b{color:#fff}
+
+  footer{padding:34px 0 56px;border-top:1px solid var(--line);margin-top:8px}
+  footer .f{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;color:var(--gray);font-size:12.5px}
+  footer .brand{font-size:15px}
+
+  @media (max-width:760px){
+    .wrap{padding:0 18px}
+    .hero{padding:42px 0 30px}
+    .hero h1{font-size:31px}
+    .hero .lead{font-size:15.5px}
+    .head h2{font-size:22px}
+    .cols,.steps,.plist{grid-template-columns:1fr;gap:0}
+    .cols{gap:36px}
+    .fact{min-width:46%;flex:0 0 50%;border-right:0;padding-right:0}
+    .topbar .meta{display:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span>MaxImpact</div>
+      <div class="meta">Auto Care Net · 리뉴얼 &amp; 마이그레이션 제안</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="wrap hero">
+    <span class="eyebrow"><span class="dot"></span>Proposal · Work Schedule</span>
+    <h1>Auto Care Net 디자인 리뉴얼과<br /><span class="o">데이터베이스 마이그레이션</span></h1>
+    <p class="lead">레거시 ASP.NET WebForms 사이트의 화면을 반응형으로 새로 짓고, 약 200개 테이블의 데이터를 안전하게 이행합니다. 기획·설계·실사부터 컷오버까지 한 팀이 6주 안에 책임집니다.</p>
+    <div class="factline">
+      <div class="fact"><div class="v">6<span class="u">주</span></div><div class="k">총 수행 기간</div></div>
+      <div class="fact"><div class="v">25<span class="u">+</span></div><div class="k">핵심 리뉴얼 화면</div></div>
+      <div class="fact"><div class="v">200<span class="u">개</span></div><div class="k">마이그레이션 테이블</div></div>
+      <div class="fact"><div class="v">2<span class="u">트랙</span></div><div class="k">디자인 · 데이터 병행</div></div>
+    </div>
+  </div>
+
+  <!-- APPROACH -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Approach</div>
+        <h2>기능은 유지하고, 디자인과 데이터를 새로 짓습니다</h2>
+      </div>
+      <p class="lead-card">
+        6주에 맞추기 위해 백엔드 비즈니스 로직 전면 재작성은 범위에서 제외합니다. 대신
+        <b>① 핵심 사용자 화면의 반응형 디자인 리뉴얼</b>과 <b>② 200개 테이블 데이터의 안전한 이행·검증</b>,
+        두 트랙을 <span class="o">병렬</span>로 진행합니다. 신규 프론트엔드에 얇은 API 레이어를 두어
+        기존 데이터와 로직을 그대로 재사용함으로써 위험과 공수를 최소화하는 구조입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Scope</div>
+        <h2>작업 범위</h2>
+      </div>
+      <div class="cols">
+        <div class="scope inc">
+          <div class="lbl inc">포함 사항</div>
+          <ul>
+            <li>핵심 화면 25개+ 반응형 디자인 리뉴얼</li>
+            <li>디자인 시스템 (컬러 · 타이포 · 컴포넌트)</li>
+            <li>200개 테이블 데이터 마이그레이션 및 검증</li>
+            <li>결제 · 본인인증 · SMS · 지도 외부 연동 재연결</li>
+            <li>.aspx → 신규 URL 301 리다이렉트 및 SEO 이관</li>
+            <li>컷오버 리허설과 오픈 후 안정화</li>
+          </ul>
+        </div>
+        <div class="scope exc">
+          <div class="lbl">제외 사항 · 2차 또는 별도</div>
+          <ul>
+            <li>CMS 관리자 · 총판 포털 디자인 리뉴얼</li>
+            <li>신규 기능 개발 및 비즈니스 로직 변경</li>
+            <li>DB 스키마 전면 재설계 (정규화 재구성)</li>
+            <li>대규모 성능 튜닝 · BI / 데이터마트</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WBS -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">WBS Schedule</div>
+        <h2>6주 작업 일정</h2>
+        <p>두 트랙을 병렬로 진행합니다. 데이터 트랙은 1주차부터 착수해 5주차까지 반복 검증하고, 디자인·프론트 트랙은 시안 확정 후 3–4주차에 집중 개발합니다.</p>
+      </div>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--orange)"></i>디자인 · 프론트 · 연동 트랙</span>
+        <span><i class="swatch" style="background:var(--ink2)"></i>데이터 · 마이그레이션 트랙</span>
+      </div>
+      <div class="gantt-scroll">
+        <div class="gantt">
+          <div class="grow ghead"><div>작업 (WBS)</div><div>1주</div><div>2주</div><div>3주</div><div>4주</div><div>5주</div><div>6주</div></div>
+
+          <div class="gphase">1. 착수 · 정밀 실사</div>
+          <div class="grow task"><div class="tname">1.1 킥오프 · 환경 셋업</div><div class="track"><span class="bar front" style="left:1%;width:14.6%">1주</span></div></div>
+          <div class="grow task"><div class="tname">1.2 스키마 · SP · 연동 인벤토리</div><div class="track"><span class="bar data" style="left:1%;width:14.6%">1주</span></div></div>
+          <div class="grow task"><div class="tname">1.3 활성 테이블 · 데이터 프로파일링</div><div class="track"><span class="bar data" style="left:1%;width:14.6%">1주</span></div></div>
+          <div class="grow task"><div class="tname">1.4 IA · 와이어프레임</div><div class="track"><span class="bar front" style="left:1%;width:23%">1주~</span></div></div>
+
+          <div class="gphase">2. 디자인 · 마이그레이션 기반</div>
+          <div class="grow task"><div class="tname">2.1 디자인 시스템 · 핵심 시안 확정</div><div class="track"><span class="bar front" style="left:9%;width:23%">1–2주</span></div></div>
+          <div class="grow task"><div class="tname">2.2 API 계약 정의</div><div class="track"><span class="bar front" style="left:17.6%;width:14.6%">2주</span></div></div>
+          <div class="grow task"><div class="tname">2.3 스키마 이행 스크립트 · 1차 ETL</div><div class="track"><span class="bar data" style="left:17.6%;width:14.6%">2주</span></div></div>
+
+          <div class="gphase">3. 개발 · 연동</div>
+          <div class="grow task"><div class="tname">3.1 홈 · 가맹점 검색 / 상세</div><div class="track"><span class="bar front" style="left:34.3%;width:14.6%">3주</span></div></div>
+          <div class="grow task"><div class="tname">3.2 회원 · 로그인 · 마이페이지</div><div class="track"><span class="bar front" style="left:34.3%;width:14.6%">3주</span></div></div>
+          <div class="grow task"><div class="tname">3.3 포인트 · 견적 · 리뷰 · 프로모션</div><div class="track"><span class="bar front" style="left:51%;width:14.6%">4주</span></div></div>
+          <div class="grow task"><div class="tname">3.4 외부 연동 (결제·인증·SMS·지도)</div><div class="track"><span class="bar front" style="left:34.3%;width:31.3%">3–4주</span></div></div>
+          <div class="grow task"><div class="tname">3.5 2차 ETL · 정합성 검증</div><div class="track"><span class="bar data" style="left:34.3%;width:31.3%">3–4주</span></div></div>
+
+          <div class="gphase">4. 통합 · QA</div>
+          <div class="grow task"><div class="tname">4.1 통합 · 크로스브라우징 · 모바일 QA</div><div class="track"><span class="bar front" style="left:67.6%;width:14.6%">5주</span></div></div>
+          <div class="grow task"><div class="tname">4.2 마이그레이션 리허설 1차</div><div class="track"><span class="bar data" style="left:67.6%;width:14.6%">5주</span></div></div>
+
+          <div class="gphase">5. UAT · 컷오버</div>
+          <div class="grow task"><div class="tname">5.1 UAT · 리허설 2차 (다운타임 측정)</div><div class="track"><span class="bar data" style="left:84.3%;width:10%">6주</span></div></div>
+          <div class="grow task"><div class="tname">5.2 URL 리다이렉트 · 최종 컷오버</div><div class="track"><span class="bar data" style="left:84.3%;width:14.6%">6주</span></div></div>
+        </div>
+      </div>
+      <p class="gnote">가로로 스크롤하면 전체 주차를 볼 수 있습니다. 1주차 정밀 실사 결과(활성 테이블 비율·저장프로시저 의존도)에 따라 세부 일정은 조정됩니다.</p>
+    </div>
+  </section>
+
+  <!-- MIGRATION -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Data Migration</div>
+        <h2>마이그레이션 절차</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div class="t"><b>분석</b> — DDL 추출, 테이블별 행수·최종수정으로 활성 / 로그 / 백업 / 미사용 분류</div></div>
+        <div class="step"><div class="n">2</div><div class="t"><b>매핑</b> — 원본·목표 컬럼/타입/한글 콜레이션 매핑, 식별자·시퀀스 처리</div></div>
+        <div class="step"><div class="n">3</div><div class="t"><b>이행</b> — 스테이징에 멱등 스크립트로 반복 적재(ETL)</div></div>
+        <div class="step"><div class="n">4</div><div class="t"><b>검증</b> — 행수 대조·체크섬, 회원·가맹점·포인트·결제 정합성, FK 무결성</div></div>
+        <div class="step"><div class="n">5</div><div class="t"><b>리허설</b> — 운영 사본으로 2회 이행하며 다운타임 측정</div></div>
+        <div class="step"><div class="n">6</div><div class="t"><b>컷오버</b> — 읽기전용 전환 → 증분 이행 → 전환 → 검증 → 오픈 (롤백 상비)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERABLES -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Deliverables</div>
+        <h2>주요 산출물</h2>
+      </div>
+      <div class="tags">
+        <span class="tag">실사 보고서 (스키마·SP·연동 인벤토리)</span>
+        <span class="tag">디자인 시스템 + 핵심 화면 시안</span>
+        <span class="tag">반응형 프론트엔드 + API 소스</span>
+        <span class="tag">마이그레이션 스크립트 · 검증 리포트</span>
+        <span class="tag">컷오버 런북 · 롤백 가이드</span>
+        <span class="tag">URL 리다이렉트 매핑표</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREREQ -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Prerequisites</div>
+        <h2>착수 전 필요한 자료</h2>
+      </div>
+      <div class="plist">
+        <div class="pi">DB 스키마 DDL 덤프 + 테이블별 행수 + ERD + SP/뷰/트리거 목록</div>
+        <div class="pi">기존 소스코드(코드비하인드) 접근 권한</div>
+        <div class="pi">외부 연동 목록·계정 (결제·본인인증·SMS·지도·소셜)</div>
+        <div class="pi">운영 데이터 사본 + 다운타임 허용 범위</div>
+        <div class="pi">목표 인프라 / DB 엔진 결정</div>
+        <div class="pi">디자인 방향 레퍼런스</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISK -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <div class="kicker">Risk &amp; Control</div>
+        <h2>핵심 리스크와 관리 방안</h2>
+      </div>
+      <div class="risk">
+        <div class="r">WebForms는 부분 전환이 불가능합니다. 핵심 화면을 <b>신규 구축</b>으로 처리하고 범위를 고정합니다.</div>
+        <div class="r">비즈니스 로직이 <b>저장프로시저</b>에 흩어져 있을 수 있습니다. API 레이어로 재사용하되 의존도는 1주차 실사로 확정합니다.</div>
+        <div class="r">200개 테이블 중 실가동 비율은 미확인 상태입니다. 본 계획은 <b>활성 120개 이하</b>를 가정하며 실사 후 일정을 조정합니다.</div>
+        <div class="r"><b>데이터 정합성이 일정보다 우선</b>입니다. 검증을 통과하지 못하면 컷오버를 연기하고 롤백 플랜을 상비합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTRACT NOTE -->
+  <section>
+    <div class="wrap">
+      <div class="callout">
+        <div class="kicker">Recommended</div>
+        <h3>1주차 정밀 실사를 별도 단계로 진행하는 것을 권장합니다</h3>
+        <p>스키마·소스·연동을 먼저 확인한 뒤 잔여 5주의 범위·일정·금액을 확정 계약(SOW)으로 체결하는 구조입니다.
+        <b>고객은 검증된 근거로 신뢰</b>를, <b>수행팀은 안전한 범위</b>를 확보합니다. 막연한 추정 대신 실측으로 시작합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap f">
+      <div class="brand"><span class="dot"></span>MaxImpact</div>
+      <div>Auto Care Net 리뉴얼 · DB 마이그레이션 실행 일정 · 세부 일정은 1주차 실사 후 확정</div>
+    </div>
+  </footer>
+
+</body>
+</html>

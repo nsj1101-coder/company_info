@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>포인트 이력 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    .sidebar-user .su-av{width:36px;height:36px;border-radius:50%;background:var(--fg-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+    .su-name-row{display:flex;align-items:center;gap:6px}
+    .su-name{font-size:13px;font-weight:600;color:var(--fg-primary)}
+    .su-tag{background:var(--accent-light);color:var(--accent);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+    .su-mail{font-size:12px;color:var(--fg-muted);margin-top:2px}
+
+    .pt-grid{display:flex;flex-direction:column;gap:16px;padding:16px 24px 0}
+    .tier{display:flex;gap:16px}
+    .stat-c{flex:1;min-width:0;border-radius:var(--radius-lg);padding:16px 20px;display:flex;align-items:center;gap:14px}
+    .stat-c .s-ic{width:40px;height:40px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .stat-c .s-val{font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--fg-primary)}
+    .stat-c .s-chg{font-size:14px;font-weight:500;margin-left:8px}
+    .stat-c .s-lbl{font-size:14px;color:var(--fg-muted);margin-top:2px}
+
+    .filter-bar{display:flex;gap:10px;align-items:center;padding:0 24px;flex-wrap:wrap}
+    .filter-bar .f-sel{height:38px;padding:0 32px 0 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") right 10px center no-repeat;font-size:14px;color:var(--fg-primary);appearance:none;cursor:pointer}
+    .filter-bar .f-date{display:flex;align-items:center;gap:6px;padding:0 12px;height:38px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--fg-secondary);font-family:var(--font-mono)}
+    .filter-bar .f-date i{color:var(--fg-muted);font-size:14px}
+    .filter-bar .f-date input{border:none;outline:none;background:transparent;font:inherit;color:var(--fg-secondary);padding:0;width:120px}
+    .filter-bar .f-date .dash{color:var(--fg-muted)}
+    .filter-bar .f-search{flex:1;min-width:180px;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card)}
+    .filter-bar .f-search i{color:var(--fg-muted);font-size:16px}
+    .filter-bar .f-search input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--fg-primary)}
+
+    .table-wrap{flex:1;min-width:0;background:var(--bg-card);display:flex;flex-direction:column;margin:0 24px 24px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .info-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border-light)}
+    .info-bar .info-txt{font-size:14px;color:var(--fg-muted)}
+    .sort-frame{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);font-size:14px;font-weight:500;color:var(--fg-secondary);cursor:pointer}
+    .sort-frame i{font-size:14px}
+    .ag-table-scroll{flex:1;overflow-y:auto}
+    .ag-table{width:100%;border-collapse:collapse;table-layout:fixed}
+    .ag-table thead th{background:var(--bg-secondary);height:44px;padding:0 0 0 12px;font-size:14px;font-weight:600;color:var(--fg-muted);text-align:left;border-bottom:1px solid var(--border-light);white-space:nowrap}
+    .ag-table thead th:first-child{padding-left:24px}
+    .ag-table thead th:last-child{padding-right:24px}
+    .ag-table tbody td{height:52px;padding:0 0 0 12px;font-size:14px;color:var(--fg-primary);border-bottom:1px solid var(--border-light);vertical-align:middle}
+    .ag-table tbody td:first-child{padding-left:24px}
+    .ag-table tbody td:last-child{padding-right:24px}
+    .ag-date{font-family:var(--font-mono);color:var(--fg-muted)}
+    .ag-name{font-weight:500}
+    .ag-badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:14px;font-weight:500}
+    .ag-badge.earn{background:var(--accent-light);color:var(--accent)}
+    .ag-badge.use{background:#FFEBEE;color:var(--danger)}
+    .ag-num{font-family:var(--font-mono);font-weight:600}
+    .ag-num.earn{color:var(--accent)}
+    .ag-num.use{color:var(--danger)}
+    .ag-num.bal{color:var(--fg-primary);font-weight:500}
+    .ag-order{font-family:var(--font-mono);font-size:13px;color:var(--fg-secondary)}
+    .ag-memo{color:var(--fg-secondary)}
+
+    .ag-pag{display:flex;align-items:center;justify-content:center;position:relative;height:48px;padding:0 24px;border-top:1px solid var(--border-light);flex-shrink:0}
+    .ag-pag .pag-info{position:absolute;left:24px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--fg-muted)}
+    .ag-pag .pag-btns{display:flex;align-items:center;gap:4px}
+    .ag-pag .pb{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:14px;color:var(--fg-secondary);border:none;background:none;cursor:pointer}
+    .ag-pag .pb.bd{border:1px solid var(--border)}
+    .ag-pag .pb.active{background:var(--accent);color:#fff;font-weight:600}
+    .ag-pag .pb i{font-size:16px;color:var(--fg-muted)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-logo"><img src="../logo.png?v=20260610c" class="logo-image" alt="코지케어"><span class="logo-text">코지케어</span></a>
+    <div class="sidebar-toggle"><button id="sidebarToggle"><i class="icon-panel-left-close"></i></button></div>
+    <a href="my-info.html" class="sidebar-user">
+      <div class="su-av">AD</div>
+      <div class="user-info">
+        <div class="su-name-row"><span class="su-name">관리자</span></div>
+        <div class="su-mail">admin@코지케어.co.kr</div>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section"><span class="sidebar-section-label">개요</span></div>
+      <a href="dashboard.html" class="nav-item" data-page="dashboard"><i class="icon-layout-dashboard nav-icon"></i><span class="nav-label">대시보드</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">상품</span></div>
+      <a href="products.html" class="nav-item" data-page="products"><i class="icon-package nav-icon"></i><span class="nav-label">상품 목록</span><span class="nav-badge brand">248</span></a>
+      <a href="product-register.html" class="nav-item" data-page="product-add"><i class="icon-plus nav-icon"></i><span class="nav-label">상품 등록</span></a>
+      <a href="categories.html" class="nav-item" data-page="categories"><i class="icon-folder nav-icon"></i><span class="nav-label">카테고리</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">주문 · 결제</span></div>
+      <a href="orders.html" class="nav-item" data-page="orders"><i class="icon-shopping-cart nav-icon"></i><span class="nav-label">주문 관리</span><span class="nav-badge">24</span></a>
+      <a href="welfare-review.html" class="nav-item" data-page="welfare"><i class="icon-shield-check nav-icon"></i><span class="nav-label">복지용구 검토</span><span class="nav-badge">7</span></a>
+      <a href="shipping.html" class="nav-item" data-page="shipping"><i class="icon-truck nav-icon"></i><span class="nav-label">송장 · 알림</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">회원 · 사업자</span></div>
+      <a href="users.html" class="nav-item" data-page="members"><i class="icon-users nav-icon"></i><span class="nav-label">일반 회원</span></a>
+      <a href="biz-members.html" class="nav-item" data-page="biz"><i class="icon-handshake nav-icon"></i><span class="nav-label">사업자 회원</span></a>
+      <a href="biz-approval.html" class="nav-item" data-page="biz-approval"><i class="icon-user-check nav-icon"></i><span class="nav-label">사업자 승인</span><span class="nav-badge">3</span></a>
+      <a href="points.html" class="nav-item active" data-page="points"><i class="icon-coins nav-icon"></i><span class="nav-label">포인트 이력</span></a>
+
+      <div class="sidebar-section"><span class="sidebar-section-label">설정</span></div>
+      <a href="statistics.html" class="nav-item" data-page="stats"><i class="icon-chart-bar nav-icon"></i><span class="nav-label">매출 통계</span></a>
+      <a href="settings.html" class="nav-item" data-page="settings"><i class="icon-settings nav-icon"></i><span class="nav-label">사이트 설정</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="sidebar-logout" onclick="openModal('logoutModal')"><i class="icon-log-out logout-icon"></i><span class="logout-label">로그아웃</span></button>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <h1>포인트 이력</h1>
+        <p>사업자 회원 포인트 적립·사용 내역</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="search-box"><i class="icon-search search-icon"></i><input type="text" placeholder="사업자명·주문번호 검색..."></div>
+        <div class="bell-wrapper">
+          <button class="bell-btn"><i class="icon-bell" style="color:#4B5563;font-size:18px"></i><span class="bell-dot"></span></button>
+          <div class="noti-dropdown">
+            <div class="noti-header"><span class="noti-title">알림</span><span class="noti-read-all">모두 읽음</span></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#84c140"></div><div class="noti-body"><span class="noti-badge" style="background:#EEFBF0;color:#34C759">포인트 적립</span><span class="noti-time">15분 전</span><div class="noti-text">㈜이로움파트너 +5,000P 적립</div></div></div>
+            <div class="noti-item unread"><div class="noti-dot" style="background:#ef4444"></div><div class="noti-body"><span class="noti-badge" style="background:#FEE2E2;color:#ef4444">포인트 사용</span><span class="noti-time">1시간 전</span><div class="noti-text">서울케어 -10,000P 사용</div></div></div>
+            <div class="noti-item"><div class="noti-dot" style="background:#FF9500"></div><div class="noti-body"><span class="noti-badge" style="background:#FFF8EE;color:#FF9500">월 정산</span><span class="noti-time">어제</span><div class="noti-text">5월 포인트 정산 리포트 생성</div></div></div>
+            <a href="shipping.html" class="noti-footer">알림 센터 전체 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-scroll" style="display:flex;flex-direction:column">
+      <div class="pt-grid">
+        <div class="tier">
+          <div class="stat-c" style="background:#EEFBF0;border:1px solid #C8F0CE">
+            <div class="s-ic"><i class="icon-coins" style="color:var(--accent);font-size:18px"></i></div>
+            <div><div><span class="s-val">2,840,500P</span></div><div class="s-lbl">누적 적립</div></div>
+          </div>
+          <div class="stat-c" style="background:#F4FBE8;border:1px solid #D8EFB8">
+            <div class="s-ic"><i class="icon-trending-up" style="color:var(--accent);font-size:18px"></i></div>
+            <div><div><span class="s-val">184,500P</span><span class="s-chg" style="color:var(--success)">↑이번 달</span></div><div class="s-lbl">이번 달 적립</div></div>
+          </div>
+          <div class="stat-c" style="background:#FEE2E2;border:1px solid #FCA5A5">
+            <div class="s-ic"><i class="icon-trending-down" style="color:#ef4444;font-size:18px"></i></div>
+            <div><div><span class="s-val">42,300P</span><span class="s-chg" style="color:#ef4444">사용</span></div><div class="s-lbl">이번 달 사용</div></div>
+          </div>
+          <div class="stat-c" style="background:#F3F4F6;border:1px solid #E5E7EB">
+            <div class="s-ic"><i class="icon-wallet" style="color:#4B5563;font-size:18px"></i></div>
+            <div><div><span class="s-val">1,920,400P</span></div><div class="s-lbl">잔여 포인트</div></div>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <label class="f-date"><i class="icon-calendar"></i><input type="date" value="2026-06-01"><span class="dash">—</span><input type="date" value="2026-06-09"></label>
+          <select class="f-sel">
+            <option>전체 사업자</option>
+            <option>㈜이로움파트너</option>
+            <option>㈜가가온</option>
+            <option>서울케어</option>
+            <option>㈜시니어라이프</option>
+            <option>부산복지센터</option>
+            <option>대전메디샵</option>
+            <option>㈜케어매니아</option>
+            <option>광주실버몰</option>
+          </select>
+          <select class="f-sel">
+            <option>전체 구분</option>
+            <option>적립</option>
+            <option>사용</option>
+          </select>
+          <div class="f-search"><i class="icon-search"></i><input type="text" placeholder="사업자명·주문번호 검색"></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="info-bar">
+          <span class="info-txt">총 10건</span>
+          <button class="sort-frame"><i class="icon-arrow-up-down"></i>최신순</button>
+        </div>
+        <div class="ag-table-scroll">
+          <table class="ag-table">
+            <colgroup>
+              <col style="width:160px">
+              <col style="width:18%">
+              <col style="width:90px">
+              <col style="width:110px">
+              <col style="width:170px">
+              <col style="width:110px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>일시</th>
+                <th>사업자명</th>
+                <th>구분</th>
+                <th>금액</th>
+                <th>관련 주문</th>
+                <th>잔액</th>
+                <th>메모</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="ag-date">2026-06-09 14:32</td>
+                <td class="ag-name">㈜이로움파트너</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+5,000P</td>
+                <td class="ag-order">#CZ20260609-0022</td>
+                <td class="ag-num bal">38,500P</td>
+                <td class="ag-memo">카본로얄 12개 구매</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-09 11:15</td>
+                <td class="ag-name">㈜가가온</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+12,000P</td>
+                <td class="ag-order">#CZ20260609-0018</td>
+                <td class="ag-num bal">28,800P</td>
+                <td class="ag-memo">유로라이트 24개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-08 16:20</td>
+                <td class="ag-name">서울케어</td>
+                <td><span class="ag-badge use">사용</span></td>
+                <td class="ag-num use">-10,000P</td>
+                <td class="ag-order">#CZ20260608-0011</td>
+                <td class="ag-num bal">16,200P</td>
+                <td class="ag-memo">휠체어 EZ-1 1개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-08 09:42</td>
+                <td class="ag-name">㈜시니어라이프</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+18,000P</td>
+                <td class="ag-order">#CZ20260608-0007</td>
+                <td class="ag-num bal">56,500P</td>
+                <td class="ag-memo">카본로얄 5개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-07 17:38</td>
+                <td class="ag-name">부산복지센터</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+3,200P</td>
+                <td class="ag-order">#CZ20260607-0019</td>
+                <td class="ag-num bal">9,500P</td>
+                <td class="ag-memo">환희 FR01 4개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-07 14:12</td>
+                <td class="ag-name">대전메디샵</td>
+                <td><span class="ag-badge use">사용</span></td>
+                <td class="ag-num use">-5,400P</td>
+                <td class="ag-order">#CZ20260607-0014</td>
+                <td class="ag-num bal">20,400P</td>
+                <td class="ag-memo">적립금 사용</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-06 11:55</td>
+                <td class="ag-name">㈜케어매니아</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+6,800P</td>
+                <td class="ag-order">#CZ20260606-0021</td>
+                <td class="ag-num bal">21,500P</td>
+                <td class="ag-memo">로얄쿠션 3개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-06 10:30</td>
+                <td class="ag-name">광주실버몰</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+2,100P</td>
+                <td class="ag-order">#CZ20260606-0017</td>
+                <td class="ag-num bal">6,400P</td>
+                <td class="ag-memo">환희 FR01 2개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-05 15:48</td>
+                <td class="ag-name">㈜이로움파트너</td>
+                <td><span class="ag-badge earn">적립</span></td>
+                <td class="ag-num earn">+8,500P</td>
+                <td class="ag-order">#CZ20260605-0024</td>
+                <td class="ag-num bal">33,500P</td>
+                <td class="ag-memo">로얄와이드 4개</td>
+              </tr>
+              <tr>
+                <td class="ag-date">2026-06-05 12:20</td>
+                <td class="ag-name">㈜가가온</td>
+                <td><span class="ag-badge use">사용</span></td>
+                <td class="ag-num use">-15,000P</td>
+                <td class="ag-order">#CZ20260605-0013</td>
+                <td class="ag-num bal">16,800P</td>
+                <td class="ag-memo">적립금 사용</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ag-pag">
+          <span class="pag-info">1-10 / 10</span>
+          <div class="pag-btns">
+            <button class="pb bd"><i class="icon-chevron-left"></i></button>
+            <button class="pb active">1</button>
+            <button class="pb bd"><i class="icon-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="unsavedModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FFF8EE"><i class="icon-alert-triangle" style="color:#FF9500;font-size:24px"></i></div><div class="modal-title">저장하지 않은 변경사항이 있습니다</div><div class="modal-desc">이 페이지를 떠나면 변경사항이 사라집니다.<br>정말 나가시겠습니까?</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('unsavedModal')">나가기</button><button class="btn btn-dark" onclick="closeModal('unsavedModal')">저장 후 나가기</button></div></div></div>
+<div class="modal-overlay" id="logoutModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#F3F4F6"><i class="icon-log-out" style="color:#4B5563;font-size:24px"></i></div><div class="modal-title">로그아웃 하시겠습니까?</div><div class="modal-desc">다시 로그인이 필요합니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('logoutModal')">취소</button><button class="btn btn-dark" onclick="doLogout()">로그아웃</button></div></div></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-trash-2" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">정말 삭제하시겠습니까?</div><div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('deleteModal')">취소</button><button class="btn btn-danger" onclick="closeModal('deleteModal')">삭제</button></div></div></div>
+<div class="modal-overlay" id="successModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#EEFBF0"><i class="icon-check-circle" style="color:#34C759;font-size:24px"></i></div><div class="modal-title">등록이 완료되었습니다</div><div class="modal-desc">목록 페이지로 이동하거나 상세보기 할 수 있습니다.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('successModal')">목록으로</button><button class="btn btn-primary" onclick="closeModal('successModal')">상세보기</button></div></div></div>
+<div class="modal-overlay" id="errorModal"><div class="modal-content" style="width:400px"><div class="modal-icon" style="background:#FEE2E2"><i class="icon-alert-circle" style="color:#FF3B30;font-size:24px"></i></div><div class="modal-title">일시적인 오류가 발생했습니다</div><div class="modal-desc">서비스 이용 중 오류가 발생했습니다.<br>잠시 후 다시 시도해주세요.</div><div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('errorModal')">닫기</button><button class="btn btn-danger" onclick="closeModal('errorModal')">다시 시도</button></div></div></div>
+
+<script src="../assets/admin/js/common.js?v=20260610c"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 추가 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    body{background:var(--bg-primary)}
+    .reg-wrap{display:flex;flex-direction:column;min-height:100vh}
+    .reg-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card)}
+    .reg-header .back-link{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--fg-primary);cursor:pointer;text-decoration:none}
+    .reg-header .cancel-btn{font-size:14px;color:var(--fg-muted);cursor:pointer;font-weight:500}
+    .reg-top{padding:24px 28px;background:var(--bg-card);border-bottom:1px solid var(--border)}
+    .reg-top h1{font-size:22px;font-weight:700;color:var(--fg-primary);margin:0}
+    .reg-top p{font-size:14px;color:var(--fg-muted);margin:6px 0 0}
+    .reg-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:32px 20px;overflow-y:auto}
+    .reg-form{width:100%;max-width:560px;display:flex;flex-direction:column;gap:20px}
+    .reg-footer-split{display:flex;justify-content:center;gap:16px;padding:24px}
+    .reg-footer-split .btn{min-width:160px;padding:14px 0;font-size:16px}
+  </style>
+</head>
+<body>
+  <div class="reg-wrap">
+    <div class="reg-header">
+      <a href="users.html" class="back-link"><i class="icon-chevron-left" style="font-size:18px"></i> 회원 목록으로</a>
+      <span class="cancel-btn" onclick="location.href='users.html'">취소</span>
+    </div>
+
+    <div class="reg-top">
+      <h1>회원 추가</h1>
+      <p>관리자가 직접 회원을 추가합니다</p>
+    </div>
+
+    <div class="reg-body">
+      <div class="reg-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">이름 <span class="required">*</span></label>
+            <input class="form-input" placeholder="예: 김영자">
+          </div>
+          <div class="form-group">
+            <label class="form-label">사용자 구분 <span class="required">*</span></label>
+            <select class="form-select">
+              <option value="">선택</option>
+              <option>본인</option>
+              <option>보호자</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">이메일 <span class="required">*</span></label>
+            <input class="form-input" type="email" placeholder="example@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">연락처 <span class="required">*</span></label>
+            <input class="form-input" placeholder="010-0000-0000">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">생년월일</label>
+            <input class="form-input" type="date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">우편번호</label>
+            <input class="form-input" placeholder="00000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">주소</label>
+          <input class="form-input" placeholder="기본 주소">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">상세 주소</label>
+          <input class="form-input" placeholder="동·호수 등 상세 주소">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">메모</label>
+          <textarea class="form-textarea" placeholder="관리용 메모를 입력하세요 (구매 성향, 특이사항 등)"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="reg-footer-split">
+      <button class="btn btn-secondary" onclick="location.href='users.html'">취소</button>
+      <button class="btn btn-primary" onclick="alert('회원이 등록되었습니다');location.href='users.html'"><i class="icon-check" style="font-size:16px"></i> 등록</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 - 코지케어 Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@0.460.0/font/lucide.css">
+  <link rel="stylesheet" href="../assets/admin/css/common.css?v=20260610c">
+  <script>document.documentElement.classList.add("preload");if(localStorage.getItem("sidebar-collapsed")==="true"){document.documentElement.classList.add("sidebar-collapsed")}</script>
+  <style>
+    body{background:#fff;overflow:hidden}
+    .login-wrap{display:flex;height:100vh}
+    .login-left{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px}
+    .login-form{width:100%;max-width:400px;display:flex;flex-direction:column;gap:24px}
+    .login-form h1{font-size:28px;font-weight:700;color:var(--fg-primary)}
+    .login-form .login-sub{font-size:14px;color:var(--fg-secondary);margin-top:-16px}
+    .login-right{width:50%;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+    .login-right .brand-icon{color:#fff;font-size:56px}
+    .login-right .brand-name{color:#fff;font-size:40px;font-weight:700}
+    .login-right .brand-sub{color:rgba(255,255,255,.75);font-size:16px}
+    .login-keep{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--fg-secondary)}
+    .login-keep input{width:16px;height:16px;accent-color:var(--accent)}
+    .login-links{display:flex;align-items:center;justify-content:space-between}
+    .login-links a{font-size:13px;color:var(--accent);font-weight:500}
+    .login-lang{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-muted);margin-top:32px}
+    .login-lang span.active{color:var(--fg-primary);font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-left">
+      <div class="login-form">
+        <h1>로그인</h1>
+        <p class="login-sub">코지케어 어드민 계정으로 로그인하세요</p>
+        <div class="form-group">
+          <label class="form-label">이메일</label>
+          <input type="email" class="form-input" placeholder="admin@cozycare.co.kr" value="admin@cozycare.co.kr">
+        </div>
+        <div class="form-group">
+          <label class="form-label">비밀번호</label>
+          <input type="password" class="form-input" value="••••••••">
+        </div>
+        <div class="login-links">
+          <label class="login-keep"><input type="checkbox" checked> 로그인 상태 유지</label>
+          <a href="#">비밀번호 찾기</a>
+        </div>
+        <a href="dashboard.html" class="btn btn-primary" style="width:100%;text-align:center;padding:14px 0;font-size:16px">로그인</a>
+        <div class="login-foot" style="margin-top:24px;font-size:12px;color:var(--fg-muted);text-align:center">주식회사 코지케어 · 어드민 콘솔</div>
+      </div>
+    </div>
+    <div class="login-right">
+      <img src="../logo.png?v=20260610c" alt="코지케어" style="width:80px;height:80px;object-fit:contain;border-radius:14px;background:rgba(255,255,255,0.95);padding:8px;">
+      <div class="brand-name">코지케어</div>
+      <div class="brand-sub">노인 복지용구 쇼핑몰 어드민</div>
+    </div>
+  </div>
+  <script src="../assets/admin/js/common.js?v=20260610c"></script>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사업자 회원가입 — 코지워커 SHOP</title>
+<link rel="stylesheet" href="../common.css?v=20260610c">
+<style>
+  .biz-wrap {
+    min-height: 100vh;
+    background: var(--biz-navy);
+    padding: 40px 20px;
+  }
+  .biz-container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .biz-head {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 32px;
+  }
+  .biz-head .logo {
+    color: #fff;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .biz-head .logo .logo-mark {
+    background: var(--biz-gold);
+    color: var(--biz-navy);
+  }
+  .biz-head .badge-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(202,138,4,0.15);
+    color: var(--biz-gold);
+    padding: 6px 14px;
+    border-radius: var(--r-pill);
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .biz-head h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .biz-head h1 .gold { color: var(--biz-gold); }
+  .biz-head p {
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+  }
+
+  /* 혜택 박스 */
+  .benefit-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .benefit-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-md);
+    padding: 16px 14px;
+    text-align: center;
+    color: #fff;
+  }
+  .benefit-card .ico {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .benefit-card .ttl { font-weight: 700; font-size: 13px; }
+  .benefit-card .desc { font-size: 11px; opacity: 0.65; margin-top: 2px; }
+
+  /* 폼 카드 */
+  .form-card {
+    background: #fff;
+    border-radius: var(--r-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 스텝 */
+  .stepper-biz {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  .stepper-biz .step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stepper-biz .num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--gray-100);
+    color: var(--gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .stepper-biz .name { font-size: 13px; color: var(--gray-500); font-weight: 600; }
+  .stepper-biz .step.active .num { background: var(--biz-navy); color: var(--biz-gold); }
+  .stepper-biz .step.active .name { color: var(--gray-900); }
+  .stepper-biz .step.done .num { background: var(--success); color: #fff; }
+  .stepper-biz .line {
+    flex: 1;
+    height: 2px;
+    background: var(--gray-100);
+    margin: 0 8px;
+  }
+  .stepper-biz .step.done + .line { background: var(--success); }
+
+  .form-card h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .form-card .h-sub {
+    color: var(--gray-500);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  /* 사업자 유형 그리드 */
+  .biz-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .biz-type-card {
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--r-md);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #fff;
+  }
+  .biz-type-card:hover { border-color: var(--biz-navy); }
+  .biz-type-card.active {
+    border-color: var(--biz-navy);
+    background: var(--biz-navy);
+    color: #fff;
+  }
+  .biz-type-card .type-ico {
+    width: 36px; height: 36px;
+    background: var(--gray-100);
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .biz-type-card.active .type-ico { background: rgba(255,255,255,0.15); }
+  .biz-type-card .type-info .ttl { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .biz-type-card .type-info .desc { font-size: 12px; opacity: 0.7; line-height: 1.4; }
+
+  /* 파일 업로드 */
+  .upload-biz {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--r-md);
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+  }
+  .upload-biz:hover {
+    border-color: var(--biz-navy);
+    background: #fff;
+  }
+  .upload-biz .up-ico {
+    width: 60px; height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--biz-navy);
+    box-shadow: var(--shadow-sm);
+  }
+  .upload-biz .up-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .upload-biz .up-desc { font-size: 13px; color: var(--gray-500); }
+  .upload-biz.uploaded {
+    border-style: solid;
+    border-color: var(--success);
+    background: #fff;
+  }
+  .upload-biz.uploaded .up-ico { color: var(--success); }
+
+  /* 안내 박스 */
+  .biz-info-box {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--biz-gold);
+    border-radius: var(--r-sm);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-top: 20px;
+  }
+  .biz-info-box strong { color: var(--biz-gold); }
+
+  /* 폼 그리드 */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .btn-biz {
+    background: var(--biz-navy);
+    color: #fff;
+  }
+  .btn-biz:hover { background: #1e293b; }
+  .btn-biz.gold {
+    background: var(--biz-gold);
+    color: var(--biz-navy);
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 20px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+  }
+  .back-link a { color: rgba(255,255,255,0.9); font-weight: 600; }
+  .back-link a:hover { color: #fff; }
+
+  @media (max-width: 720px) {
+    .biz-wrap { padding: 24px 16px; }
+    .biz-head h1 { font-size: 24px; }
+    .form-card { padding: 24px; }
+    .benefit-row { grid-template-columns: 1fr; }
+    .biz-type-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .stepper-biz .name { display: none; }
+    .stepper-biz .step.active .name { display: block; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="biz-wrap">
+  <div class="biz-container">
+
+    <!-- 헤더 -->
+    <div class="biz-head">
+      <a href="../index.html" class="logo">
+        <img src="../logo.png?v=20260610c" alt="코지워커 SHOP" style="height:34px; filter:brightness(0) invert(1);">
+      </a>
+      <div class="badge-line">★ BUSINESS PARTNER PROGRAM ★</div>
+      <h1>사업자 회원가입</h1>
+      <p>코지케어와 함께하시는 <span class="gold" style="font-weight:700;">파트너 전용</span> 혜택을 받으세요</p>
+    </div>
+
+    <!-- 혜택 -->
+    <div class="benefit-row">
+      <div class="benefit-card">
+        <div class="ico">💰</div>
+        <div class="ttl">공급가 적용</div>
+        <div class="desc">사업자 전용 도매가</div>
+      </div>
+      <div class="benefit-card">
+        <div class="ico">🎁</div>
+        <div class="ttl">누적 포인트</div>
+        <div class="desc">구매 시 자동 적립</div>
+      </div>
+      <div class="benefit-card">
+        <div class="ico">📊</div>
+        <div class="ttl">정산 명세서</div>
+        <div class="desc">월별 다운로드</div>
+      </div>
+    </div>
+
+    <!-- 폼 카드 -->
+    <div class="form-card">
+
+      <!-- 스텝 -->
+      <div class="stepper-biz">
+        <div class="step done"><div class="num">✓</div><div class="name">기본 정보</div></div>
+        <div class="line"></div>
+        <div class="step done"><div class="num">✓</div><div class="name">사업자 유형</div></div>
+        <div class="line"></div>
+        <div class="step active"><div class="num">3</div><div class="name">등록증 첨부</div></div>
+      </div>
+
+      <h2>사업자 정보 입력</h2>
+      <p class="h-sub">사업자등록증과 일치하는 정보를 입력해주세요.</p>
+
+      <!-- 기본 정보 -->
+      <div class="form-grid">
+        <div class="form-row full">
+          <label class="form-label">상호명 (회사명) <span class="required">*</span></label>
+          <input type="text" class="form-input" placeholder="㈜코지케어 파트너">
+        </div>
+        <div class="form-row">
+          <label class="form-label">대표자명 <span class="required">*</span></label>
+          <input type="text" class="form-input" placeholder="홍길동">
+        </div>
+        <div class="form-row">
+          <label class="form-label">사업자등록번호 <span class="required">*</span></label>
+          <input type="text" class="form-input" placeholder="000-00-00000">
+        </div>
+        <div class="form-row full">
+          <label class="form-label">사업장 주소 <span class="required">*</span></label>
+          <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <input type="text" class="form-input" placeholder="우편번호" style="max-width:140px;">
+            <button class="btn btn-outline">주소 검색</button>
+          </div>
+          <input type="text" class="form-input" placeholder="기본 주소" style="margin-bottom:8px;">
+          <input type="text" class="form-input" placeholder="상세 주소">
+        </div>
+        <div class="form-row">
+          <label class="form-label">대표 전화 <span class="required">*</span></label>
+          <input type="text" class="form-input" placeholder="02-0000-0000">
+        </div>
+        <div class="form-row">
+          <label class="form-label">담당자 휴대전화 <span class="required">*</span></label>
+          <input type="text" class="form-input" placeholder="010-0000-0000">
+        </div>
+        <div class="form-row full">
+          <label class="form-label">이메일 (로그인 ID) <span class="required">*</span></label>
+          <input type="email" class="form-input" placeholder="partner@example.com">
+        </div>
+        <div class="form-row">
+          <label class="form-label">비밀번호 <span class="required">*</span></label>
+          <input type="password" class="form-input" placeholder="영문+숫자 8자 이상">
+        </div>
+        <div class="form-row">
+          <label class="form-label">비밀번호 확인 <span class="required">*</span></label>
+          <input type="password" class="form-input" placeholder="다시 입력">
+        </div>
+      </div>
+
+      <!-- 사업자 유형 -->
+      <div class="form-row" style="margin-top:12px;">
+        <label class="form-label">사업자 유형 <span class="required">*</span></label>
+        <div class="biz-type-grid">
+          <div class="biz-type-card active">
+            <div class="type-ico">🏥</div>
+            <div class="type-info">
+              <div class="ttl">복지용구사업소</div>
+              <div class="desc">공단 등록 복지용구 판매소</div>
+            </div>
+          </div>
+          <div class="biz-type-card">
+            <div class="type-ico">🌐</div>
+            <div class="type-info">
+              <div class="ttl">인터넷 사업소</div>
+              <div class="desc">온라인 판매 채널</div>
+            </div>
+          </div>
+          <div class="biz-type-card">
+            <div class="type-ico">🏠</div>
+            <div class="type-info">
+              <div class="ttl">재가복지센터</div>
+              <div class="desc">방문 요양/돌봄 기관</div>
+            </div>
+          </div>
+          <div class="biz-type-card">
+            <div class="type-ico">📦</div>
+            <div class="type-info">
+              <div class="ttl">기타 관련업체</div>
+              <div class="desc">도매·유통·기타</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 사업자등록증 첨부 -->
+      <div class="form-row">
+        <label class="form-label">사업자등록증 첨부 <span class="required">*</span></label>
+        <div class="upload-biz uploaded">
+          <div class="up-ico">
+            <svg class="icon" style="width:28px;height:28px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="up-title">사업자등록증_코지케어파트너.jpg</div>
+          <div class="up-desc">1.8 MB · 업로드 완료 — 다시 선택하려면 클릭</div>
+        </div>
+        <div class="form-hint" style="margin-top:8px;">JPG · PNG · PDF (최대 10MB) — 전체 내용이 선명하게 보이는 사진/스캔본</div>
+      </div>
+
+      <!-- 안내 박스 -->
+      <div class="biz-info-box">
+        <strong>승인까지 1~2 영업일 소요됩니다.</strong><br>
+        제출하신 사업자등록증을 코지케어가 검토한 후 승인 메일을 보내드립니다.
+        승인 완료 후 사업자 전용 가격(공급가)과 적립 포인트 혜택을 이용하실 수 있습니다.
+      </div>
+
+      <!-- 약관 -->
+      <div class="agree-list" style="margin-top:20px;">
+        <label class="agree-item" style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" style="width:18px; height:18px; accent-color:var(--biz-navy);">
+            <span><span style="color:var(--welfare-red); font-weight:700;">[필수]</span> 전체 약관에 동의합니다</span>
+          </span>
+        </label>
+        <label class="agree-item" style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" style="width:18px; height:18px; accent-color:var(--biz-navy);">
+            <span><span style="color:var(--welfare-red); font-weight:700;">[필수]</span> 사업자 회원 이용약관 동의</span>
+          </span>
+          <a href="#" style="color:var(--gray-400); font-size:12px;">보기 ›</a>
+        </label>
+        <label class="agree-item" style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" style="width:18px; height:18px; accent-color:var(--biz-navy);">
+            <span><span style="color:var(--welfare-red); font-weight:700;">[필수]</span> 개인정보 수집·이용 동의</span>
+          </span>
+          <a href="#" style="color:var(--gray-400); font-size:12px;">보기 ›</a>
+        </label>
+      </div>
+
+      <!-- 버튼 -->
+      <div style="display:flex; gap:8px; margin-top:32px;">
+        <a href="biz-login.html" class="btn btn-ghost btn-lg" style="flex:1;">취소</a>
+        <a href="#" class="btn btn-biz gold btn-lg" style="flex:2;">사업자 등록 신청하기</a>
+      </div>
+    </div>
+
+    <p class="back-link">
+      이미 사업자 회원이신가요? <a href="biz-login.html">사업자 로그인</a>
+      <span style="margin: 0 8px; opacity: 0.3;">|</span>
+      일반 회원이신가요? <a href="signup.html">일반 회원가입</a>
+    </p>
+
+  </div>
+</div>
+
+</body>
+</html>
