@@ -14,13 +14,13 @@ export default async function UploadPage() {
   return (
     <>
       <div className="panel">
-        <div className="ph"><h3>채널 주문 수집 (엑셀 업로드)</h3><span className="hint">— Cafe24·스마트스토어·자사몰 다운로드 파일을 그대로 업로드</span></div>
+        <div className="ph"><h3>채널 주문 수집</h3><span className="hint">— 채널 동기화(데모) 또는 쇼핑몰 다운로드 엑셀 업로드</span></div>
         <div style={{ padding: 18 }}><Uploader /></div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 18 }}>
         <div className="panel">
-          <div className="ph"><h3>업로드 이력</h3></div>
+          <div className="ph"><h3>수집·동기화 이력</h3></div>
           <div className="tablewrap">
             <table className="dt">
               <thead><tr><th>파일</th><th>유형</th><th className="num">건수</th><th>일시</th></tr></thead>
