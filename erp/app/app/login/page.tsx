@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { BASE } from "@/lib/base";
 
 export default function Login() {
   const r = useRouter();
@@ -12,7 +13,7 @@ export default function Login() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setErr(""); setBusy(true);
-    const res = await fetch("/api/login", {
+    const res = await fetch(`${BASE}/api/login`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ loginId: id, password: pw }),
     });

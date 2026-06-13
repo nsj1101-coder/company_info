@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { BASE } from "@/lib/base";
 
 type Result = { ok: boolean; inserted?: number; newCustomers?: number; sample?: { orderNo?: string; payer?: string; product?: string; qty?: number; amount?: number }[]; error?: string };
 
@@ -17,7 +18,7 @@ export default function Uploader() {
     const fd = new FormData();
     fd.append("file", file);
     fd.append("sheetType", sheetType);
-    const r = await fetch("/api/orders/upload", { method: "POST", body: fd });
+    const r = await fetch(`${BASE}/api/orders/upload`, { method: "POST", body: fd });
     const j: Result = await r.json();
     setBusy(false); setRes(j);
     if (j.ok) router.refresh();
@@ -33,7 +34,7 @@ export default function Uploader() {
         <input type="file" accept=".xlsx,.xls,.csv" onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           style={{ fontSize: 13 }} />
         <button className="btn primary" disabled={!file || busy} onClick={upload}>
-          {busy ? "업로드 중…" : "📥 업로드 & 수집"}
+          {busy ? "업로드 중…" : "업로드 & 수집"}
         </button>
       </div>
       <p style={{ fontSize: 12.5, color: "var(--sub)", marginTop: 10 }}>
@@ -48,7 +49,7 @@ export default function Uploader() {
       {res && res.ok && (
         <div style={{ marginTop: 14 }}>
           <div style={{ padding: "10px 14px", background: "#e6f4ea", color: "#137a4b", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
-            ✅ {res.inserted}건 수집 완료 · 신규 고객 {res.newCustomers}명 자동등록
+            {res.inserted}건 수집 완료 · 신규 고객 {res.newCustomers}명 자동등록
           </div>
           {res.sample && res.sample.length > 0 && (
             <div className="tablewrap" style={{ marginTop: 12, border: "1px solid var(--line)", borderRadius: 10 }}>

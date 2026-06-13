@@ -1,39 +1,40 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { BASE } from "@/lib/base";
 
-type NavItem = { href: string; label: string; ic: string; roles?: string[] };
+type NavItem = { href: string; label: string; roles?: string[] };
 type Grp = { grp: string; items: NavItem[] };
 
 const MENU: Grp[] = [
-  { grp: "", items: [{ href: "/", label: "대시보드", ic: "📊" }] },
+  { grp: "", items: [{ href: "/", label: "대시보드" }] },
   {
     grp: "주문 / 출고",
     items: [
-      { href: "/orders", label: "통합 주문", ic: "🧾" },
-      { href: "/orders/upload", label: "채널 주문 수집", ic: "📥" },
-      { href: "/shipping", label: "출고 관리", ic: "🚚" },
+      { href: "/orders", label: "통합 주문" },
+      { href: "/orders/upload", label: "채널 주문 수집" },
+      { href: "/shipping", label: "출고 관리" },
     ],
   },
   {
     grp: "운영",
     items: [
-      { href: "/production", label: "생산 관리", ic: "🏭", roles: ["admin", "production"] },
-      { href: "/purchase", label: "발주·구매", ic: "🛒", roles: ["admin", "production", "accounting"] },
-      { href: "/inventory", label: "재고 관리", ic: "📦" },
-      { href: "/returns", label: "반품 관리", ic: "↩" },
+      { href: "/production", label: "생산 관리", roles: ["admin", "production"] },
+      { href: "/purchase", label: "발주·구매", roles: ["admin", "production", "accounting"] },
+      { href: "/inventory", label: "재고 관리" },
+      { href: "/returns", label: "반품 관리" },
     ],
   },
   {
     grp: "기준정보",
     items: [
-      { href: "/products", label: "상품 / SKU", ic: "👕" },
-      { href: "/customers", label: "고객 관리", ic: "👤" },
+      { href: "/products", label: "상품 / SKU" },
+      { href: "/customers", label: "고객 관리" },
     ],
   },
   {
     grp: "분석",
-    items: [{ href: "/analytics", label: "정산·분석", ic: "📈", roles: ["admin", "accounting"] }],
+    items: [{ href: "/analytics", label: "정산·분석", roles: ["admin", "accounting"] }],
   },
 ];
 
@@ -55,7 +56,7 @@ export default function Shell({
   const title = TITLES.find(([p]) => (p === "/" ? path === "/" : path.startsWith(p)))?.[1] ?? "";
 
   async function logout() {
-    await fetch("/api/logout", { method: "POST" });
+    await fetch(`${BASE}/api/logout`, { method: "POST" });
     router.push("/login");
   }
 
@@ -71,7 +72,7 @@ export default function Shell({
             {g.grp && <div className="grp">{g.grp}</div>}
             {g.items.filter(can).map((it) => (
               <Link key={it.href} href={it.href} className={"nav" + (active(it.href) ? " on" : "")}>
-                <span className="ic">{it.ic}</span> {it.label}
+                {it.label}
               </Link>
             ))}
           </div>

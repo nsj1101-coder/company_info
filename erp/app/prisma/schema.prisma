@@ -2,7 +2,8 @@
 // 엑셀(검토용_라린느_ERP_v45) 24개 시트 구조 기반. 01_시트분석.md 참조.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
