@@ -61,7 +61,11 @@ export default function Shell({
   }
 
   const can = (it: NavItem) => !it.roles || it.roles.includes(session.role);
-  const active = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+  // 가장 구체적인(긴) 경로 하나만 active — /orders 와 /orders/upload 중복 점등 방지
+  const activeHref = MENU.flatMap((g) => g.items.map((i) => i.href))
+    .filter((h) => (h === "/" ? path === "/" : path === h || path.startsWith(h + "/")))
+    .sort((a, b) => b.length - a.length)[0];
+  const active = (href: string) => href === activeHref;
 
   return (
     <div className="shell">

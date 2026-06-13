@@ -27,6 +27,10 @@ export default function Uploader() {
   return (
     <div>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <a className="btn ghost" href={`${BASE}/api/orders/template`} download style={{ textDecoration: "none" }}>
+          ⬇ 엑셀 양식 다운로드
+        </a>
+        <span style={{ width: 1, height: 24, background: "var(--line)" }} />
         <select className="f" value={sheetType} onChange={(e) => setSheetType(e.target.value)}>
           <option value="cafe">온라인 3몰 (Cafe24·스마트스토어·자사몰)</option>
           <option value="offline">오프라인 주문서 (B2B·전화·방문)</option>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<title>AutoCareNet 리뉴얼 시안 V1 · 추차닷넷 스타일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root{
+    --main:#42518A; --main-d:#33406e; --main-l:#5d6bab;
+    --point:#15B364; --point-d:#0f9150; --point-soft:#e7f8ee;
+    --ink:#16181d; --gray:#5b616e; --gray-l:#8b919c;
+    --line:#eceef2; --bg:#fff; --soft:#f6f7f9; --soft2:#eef0f5;
+    --r:16px;
+    --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.5;letter-spacing:-.02em;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer;transition:.15s}
+  .btn-point{background:var(--point);color:#fff}
+  .btn-point:hover{background:var(--point-d)}
+  .btn-main{background:var(--main);color:#fff}
+  .btn-ghost{background:#fff;color:var(--main);border:1.5px solid var(--line)}
+
+  /* ===== Top utility ===== */
+  .util{background:var(--main-d);color:#cdd3ea;font-size:12.5px}
+  .util .wrap{display:flex;justify-content:flex-end;align-items:center;gap:18px;height:36px}
+  .util a{color:#cdd3ea}
+  .util a:hover{color:#fff}
+
+  /* ===== Header ===== */
+  header{position:sticky;top:0;z-index:50;background:var(--main);color:#fff}
+  .head{display:flex;align-items:center;gap:28px;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.04em}
+  .logo .mark{width:34px;height:34px;border-radius:9px;background:var(--point);display:grid;place-items:center;color:#fff;font-size:18px}
+  nav.gnb{display:flex;gap:4px;flex:1}
+  nav.gnb a{padding:9px 13px;border-radius:9px;font-weight:600;font-size:15px;color:#dfe3f2}
+  nav.gnb a:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav.gnb a.on{color:#fff;font-weight:700}
+  .head .cta{display:flex;gap:8px}
+  .head .cta .btn{height:40px;padding:0 16px;font-size:14px}
+
+  /* ===== Hero ===== */
+  .hero{background:linear-gradient(135deg,#42518A 0%,#33406e 60%,#2a3559 100%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-80px;width:480px;height:480px;background:radial-gradient(circle,rgba(21,179,100,.35),transparent 65%);border-radius:50%}
+  .hero .wrap{position:relative;padding:64px 20px 72px;z-index:1}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(21,179,100,.18);color:#7ff0b0;border:1px solid rgba(21,179,100,.4);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:20px}
+  .hero h1{font-size:52px;line-height:1.1;font-weight:900;letter-spacing:-.045em}
+  .hero h1 .pt{color:var(--point);}
+  .hero p{margin-top:18px;font-size:18px;color:#c8cee6;font-weight:500;max-width:560px}
+
+  /* search card */
+  .search{margin-top:36px;background:#fff;border-radius:20px;padding:22px;box-shadow:0 30px 60px -20px rgba(20,24,40,.5);max-width:880px}
+  .search .tabs{display:flex;gap:6px;margin-bottom:16px}
+  .search .tabs button{flex:0 0 auto;padding:9px 16px;border-radius:999px;border:none;background:var(--soft2);color:var(--gray);font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
+  .search .tabs button.on{background:var(--main);color:#fff}
+  .search .row{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:10px}
+  .search .fld{display:flex;flex-direction:column;gap:5px}
+  .search .fld label{font-size:12px;font-weight:700;color:var(--gray-l);padding-left:4px}
+  .search select,.search input{height:52px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);background:#fff}
+  .search .go{height:52px;align-self:flex-end;padding:0 30px;font-size:16px}
+
+  /* stat strip */
+  .stats{display:flex;gap:40px;margin-top:34px}
+  .stats .s b{display:block;font-size:30px;font-weight:900;color:#fff;letter-spacing:-.03em}
+  .stats .s span{font-size:13.5px;color:#aab2d6;font-weight:600}
+
+  /* ===== Category chips ===== */
+  .cats{padding:48px 0 8px}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+  .sec-head h2{font-size:27px;font-weight:900;letter-spacing:-.035em}
+  .sec-head a{color:var(--gray);font-weight:700;font-size:14px}
+  .catgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+  .cat{background:var(--soft);border:1px solid var(--line);border-radius:var(--r);padding:20px 14px;text-align:center;transition:.15s;cursor:pointer}
+  .cat:hover{border-color:var(--main-l);background:#fff;box-shadow:0 14px 30px -16px rgba(66,81,138,.45);transform:translateY(-3px)}
+  .cat .ic{width:48px;height:48px;border-radius:13px;margin:0 auto 11px;display:grid;place-items:center;font-size:24px;background:#fff;border:1px solid var(--line)}
+  .cat:hover .ic{background:var(--point-soft)}
+  .cat span{font-size:14px;font-weight:700;color:var(--ink)}
+
+  /* ===== Feature cards (핵심기능) ===== */
+  .feat{padding:52px 0}
+  .featgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .fcard{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;transition:.18s}
+  .fcard:hover{box-shadow:0 24px 48px -24px rgba(20,24,40,.4);transform:translateY(-4px)}
+  .fcard .top{padding:26px 24px;color:#fff;position:relative}
+  .fcard.a .top{background:linear-gradient(135deg,#42518A,#5d6bab)}
+  .fcard.b .top{background:linear-gradient(135deg,#15B364,#0f9150)}
+  .fcard.c .top{background:linear-gradient(135deg,#33406e,#42518A)}
+  .fcard .top .tag{font-size:12px;font-weight:700;opacity:.85}
+  .fcard .top h3{font-size:23px;font-weight:900;margin-top:8px;letter-spacing:-.03em}
+  .fcard .body{padding:22px 24px 26px}
+  .fcard .body p{color:var(--gray);font-size:14.5px;line-height:1.6}
+  .fcard .body .go{margin-top:16px;display:inline-flex;color:var(--main);font-weight:800;font-size:14px}
+
+  /* ===== Shop list ===== */
+  .shops{padding:8px 0 56px}
+  .shopgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .shop{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;transition:.15s}
+  .shop:hover{box-shadow:0 18px 36px -22px rgba(20,24,40,.4);transform:translateY(-3px)}
+  .shop .thumb{height:130px;background:linear-gradient(135deg,#eef0f5,#dfe3ef);position:relative}
+  .shop .thumb .badge{position:absolute;left:12px;top:12px;background:var(--point);color:#fff;font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:7px}
+  .shop .info{padding:15px 16px 18px}
+  .shop .info h4{font-size:16px;font-weight:800;letter-spacing:-.02em}
+  .shop .info .meta{margin-top:5px;font-size:13px;color:var(--gray-l);font-weight:600}
+  .shop .info .rate{margin-top:10px;display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700}
+  .shop .info .rate .star{color:#ffb020}
+  .shop .info .rate .cnt{color:var(--gray-l);font-weight:600}
+
+  /* ===== Benefit feed ===== */
+  .benefit{background:var(--soft);padding:54px 0}
+  .bengrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .ben{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;transition:.15s}
+  .ben:hover{transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(20,24,40,.35)}
+  .ben .ic{width:44px;height:44px;border-radius:12px;background:var(--point-soft);display:grid;place-items:center;font-size:22px;margin-bottom:14px}
+  .ben h4{font-size:17px;font-weight:800}
+  .ben p{margin-top:7px;font-size:13.5px;color:var(--gray);line-height:1.55}
+
+  /* ===== VIP CTA ===== */
+  .vip{padding:60px 0}
+  .vipbox{background:linear-gradient(120deg,#42518A,#2a3559);border-radius:26px;padding:52px 56px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:30px;position:relative;overflow:hidden}
+  .vipbox::after{content:"";position:absolute;right:40px;top:-40px;width:280px;height:280px;background:radial-gradient(circle,rgba(21,179,100,.4),transparent 65%);border-radius:50%}
+  .vipbox .l{position:relative;z-index:1}
+  .vipbox .tag{color:var(--point);font-weight:800;font-size:14px}
+  .vipbox h2{font-size:34px;font-weight:900;margin-top:10px;letter-spacing:-.035em;line-height:1.2}
+  .vipbox p{margin-top:12px;color:#c8cee6;font-size:16px}
+  .vipbox .btn{height:56px;padding:0 34px;font-size:17px;position:relative;z-index:1;white-space:nowrap}
+
+  /* ===== Footer ===== */
+  footer{background:#1b1f2b;color:#9aa1b4;font-size:13.5px;padding:48px 0 40px}
+  .foot{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:30px}
+  footer .flogo{font-weight:900;font-size:20px;color:#fff;letter-spacing:-.04em;margin-bottom:14px}
+  footer p{line-height:1.7}
+  footer h5{color:#fff;font-size:14px;font-weight:800;margin-bottom:12px}
+  footer ul{list-style:none}
+  footer ul li{margin-bottom:8px}
+  footer ul a:hover{color:#fff}
+  .copy{border-top:1px solid #2c3142;margin-top:34px;padding-top:22px;font-size:12.5px;color:#6f768a}
+
+  @media(max-width:980px){
+    nav.gnb{display:none}
+    .hero h1{font-size:36px}
+    .search .row{grid-template-columns:1fr 1fr}
+    .catgrid{grid-template-columns:repeat(3,1fr)}
+    .featgrid,.shopgrid,.bengrid{grid-template-columns:1fr 1fr}
+    .foot{grid-template-columns:1fr}
+    .vipbox{flex-direction:column;align-items:flex-start;padding:36px 28px}
+  }
+</style>
+</head>
+<body>
+
+<!-- 상단 유틸 -->
+<div class="util"><div class="wrap">
+  <a href="#">로그인</a><a href="#">회원가입</a><a href="#">마이페이지</a><a href="#">고객센터 1544-1930</a>
+</div></div>
+
+<!-- 헤더 -->
+<header><div class="wrap head">
+  <a class="logo" href="#"><span class="mark">🔧</span>AutoCareNet</a>
+  <nav class="gnb">
+    <a class="on" href="#">정비업체 찾기</a>
+    <a href="#">안전점검표</a>
+    <a href="#">작업견적서</a>
+    <a href="#">중고·수입차</a>
+    <a href="#">혜택·쿠폰</a>
+    <a href="#">VIP 클럽</a>
+    <a href="#">리뷰</a>
+  </nav>
+  <div class="cta">
+    <a class="btn btn-ghost" href="#" style="color:#fff;border-color:rgba(255,255,255,.35);background:transparent">업체 등록</a>
+    <a class="btn btn-point" href="#">무료 견적받기</a>
+  </div>
+</div></header>
+
+<!-- 히어로 -->
+<section class="hero"><div class="wrap">
+  <span class="eyebrow">● 전국 정비 네트워크 · 모범업체 29곳 인증</span>
+  <h1>믿을 수 있는 정비소,<br><span class="pt">한 번에</span> 찾고 비교하세요</h1>
+  <p>지역·차종별 정비업체 검색부터 실시간 견적, 안전점검까지. 검증된 모범업체와 투명한 리뷰로 안심하고 맡기세요.</p>
+
+  <div class="search">
+    <div class="tabs">
+      <button class="on">정비업체 찾기</button>
+      <button>1급정비공장</button>
+      <button>수입차 정비</button>
+      <button>중고차</button>
+    </div>
+    <div class="row">
+      <div class="fld"><label>지역</label><select><option>세종 / 충북 전체</option><option>서울</option><option>경기</option></select></div>
+      <div class="fld"><label>서비스</label><select><option>전체 서비스</option><option>정비/수리</option><option>세차/디테일</option><option>타이어</option></select></div>
+      <div class="fld"><label>차량 브랜드</label><select><option>전체</option><option>현대</option><option>기아</option><option>벤츠</option></select></div>
+      <button class="btn btn-point go">검색</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="s"><b>1,200+</b><span>등록 정비업체</span></div>
+    <div class="s"><b>29</b><span>인증 모범업체</span></div>
+    <div class="s"><b>8,400+</b><span>실사용자 리뷰</span></div>
+    <div class="s"><b>4.8★</b><span>평균 만족도</span></div>
+  </div>
+</div></section>
+
+<!-- 카테고리 -->
+<section class="cats"><div class="wrap">
+  <div class="sec-head"><h2>어떤 서비스가 필요하세요?</h2><a href="#">전체 카테고리 →</a></div>
+  <div class="catgrid">
+    <div class="cat"><div class="ic">🔧</div><span>정비·수리</span></div>
+    <div class="cat"><div class="ic">🚗</div><span>바디·판금</span></div>
+    <div class="cat"><div class="ic">🫧</div><span>세차·디테일</span></div>
+    <div class="cat"><div class="ic">🪟</div><span>자동차 유리</span></div>
+    <div class="cat"><div class="ic">🔊</div><span>알람·오디오</span></div>
+    <div class="cat"><div class="ic">⚙️</div><span>트랜스미션</span></div>
+    <div class="cat"><div class="ic">🛞</div><span>타이어·얼라인</span></div>
+    <div class="cat"><div class="ic">🔍</div><span>검사·점검</span></div>
+    <div class="cat"><div class="ic">💨</div><span>머플러·배기</span></div>
+    <div class="cat"><div class="ic">🚙</div><span>중고차</span></div>
+    <div class="cat"><div class="ic">✨</div><span>새 차</span></div>
+    <div class="cat"><div class="ic">🔑</div><span>렌터카</span></div>
+  </div>
+</div></section>
+
+<!-- 핵심 기능 -->
+<section class="feat"><div class="wrap">
+  <div class="sec-head"><h2>AutoCareNet 핵심 서비스</h2></div>
+  <div class="featgrid">
+    <div class="fcard a"><div class="top"><div class="tag">SAFETY CHECK</div><h3>안전점검표</h3></div>
+      <div class="body"><p>정비 전후 차량 상태를 217개 항목으로 꼼꼼히 점검하고, 사진과 함께 기록을 남겨 투명하게 관리합니다.</p><a class="go" href="#">점검표 작성하기 →</a></div></div>
+    <div class="fcard b"><div class="top"><div class="tag">ESTIMATE</div><h3>작업 견적서</h3></div>
+      <div class="body"><p>차량·정비 항목별 표준 견적을 자동 계산. 합계·세금까지 산출해 PDF로 받아보고 업체와 바로 비교하세요.</p><a class="go" href="#">견적 받기 →</a></div></div>
+    <div class="fcard c"><div class="top"><div class="tag">CERTIFIED</div><h3>29 모범업체 프로샵</h3></div>
+      <div class="body"><p>까다로운 기준을 통과한 인증 정비업체. 1급정비공장·수입차 전문점까지 안심하고 선택하세요.</p><a class="go" href="#">인증업체 보기 →</a></div></div>
+  </div>
+</div></section>
+
+<!-- 추천 업체 -->
+<section class="shops"><div class="wrap">
+  <div class="sec-head"><h2>인기 정비업체</h2><a href="#">더보기 →</a></div>
+  <div class="shopgrid">
+    <div class="shop"><div class="thumb"><span class="badge">모범업체</span></div><div class="info"><h4>동남모터스</h4><div class="meta">세종 · 종합정비</div><div class="rate"><span class="star">★★★★★</span><b>4.9</b><span class="cnt">(132)</span></div></div></div>
+    <div class="shop"><div class="thumb"><span class="badge">1급공장</span></div><div class="info"><h4>카케어마스터 하진모터스</h4><div class="meta">충주 · 수입차 전문</div><div class="rate"><span class="star">★★★★★</span><b>4.8</b><span class="cnt">(98)</span></div></div></div>
+    <div class="shop"><div class="thumb"><span class="badge">모범업체</span></div><div class="info"><h4>금호광택카마스타</h4><div class="meta">청주 · 광택/디테일</div><div class="rate"><span class="star">★★★★★</span><b>4.7</b><span class="cnt">(76)</span></div></div></div>
+    <div class="shop"><div class="thumb"><span class="badge">프로샵</span></div><div class="info"><h4>Elim Motors</h4><div class="meta">세종 · 종합정비</div><div class="rate"><span class="star">★★★★☆</span><b>4.6</b><span class="cnt">(54)</span></div></div></div>
+  </div>
+</div></section>
+
+<!-- 혜택 -->
+<section class="benefit"><div class="wrap">
+  <div class="sec-head"><h2>회원 전용 혜택</h2><a href="#">전체 혜택 →</a></div>
+  <div class="bengrid">
+    <div class="ben"><div class="ic">🎁</div><h4>무료 서비스</h4><p>엔진오일·기본점검 등 제휴 업체의 무료 서비스를 받아보세요.</p></div>
+    <div class="ben"><div class="ic">🎫</div><h4>전자 쿠폰</h4><p>모바일로 발급받아 바로 사용하는 정비 할인 쿠폰.</p></div>
+    <div class="ben"><div class="ic">🔥</div><h4>할인 서비스</h4><p>기간 한정 핫딜로 합리적인 가격에 정비받으세요.</p></div>
+    <div class="ben"><div class="ic">⭐</div><h4>보너스 포인트</h4><p>이용할수록 쌓이는 포인트로 다음 정비를 더 저렴하게.</p></div>
+  </div>
+</div></section>
+
+<!-- VIP -->
+<section class="vip"><div class="wrap">
+  <div class="vipbox">
+    <div class="l">
+      <div class="tag">VIP 오토케어클럽</div>
+      <h2>연 7만원으로 1년 내내<br>프리미엄 케어를 누리세요</h2>
+      <p>정기 점검 · 우선 예약 · 추가 적립 · 전용 상담까지 한 번에.</p>
+    </div>
+    <a class="btn btn-point" href="#">VIP 멤버십 가입하기</a>
+  </div>
+</div></section>
+
+<!-- 푸터 -->
+<footer><div class="wrap">
+  <div class="foot">
+    <div>
+      <div class="flogo">AutoCareNet</div>
+      <p>오토케어넷(주) · 대표 유근봉<br>세종특별자치시 장군면 장기초교길 76-17, 3동<br>사업자등록번호 415-88-00710 · 통신판매업 제2025-세종-0239호<br>TEL 1544-1930 · autocarenet@gmail.com</p>
+    </div>
+    <div><h5>서비스</h5><ul>
+      <li><a href="#">정비업체 찾기</a></li><li><a href="#">안전점검표</a></li><li><a href="#">작업견적서</a></li><li><a href="#">중고·수입차</a></li><li><a href="#">명함</a></li>
+    </ul></div>
+    <div><h5>고객지원</h5><ul>
+      <li><a href="#">VIP 회원</a></li><li><a href="#">자주하는 질문</a></li><li><a href="#">문의하기</a></li><li><a href="#">개인정보처리방침</a></li><li><a href="#">이용약관</a></li>
+    </ul></div>
+  </div>
+  <div class="copy">Copyright ⓒ AutoCareNet.com. All Rights Reserved.</div>
+</div></footer>
+
+</body>
+</html>
