@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { num } from "@/lib/format";
 import { SearchForm, Pager } from "@/components/Toolbar";
+import InventoryEdit from "@/components/InventoryEdit";
 
 export const dynamic = "force-dynamic";
 const PER = 50;
@@ -34,7 +35,7 @@ export default async function Inventory({ searchParams }: { searchParams: Promis
         </div>
         <div className="tablewrap">
           <table className="dt">
-            <thead><tr><th>SKU</th><th>제품명</th><th>컬러</th><th>사이즈</th><th className="num">현재고</th><th className="num">안전재고</th><th className="num">부족</th><th className="num">권장발주</th><th>상태</th></tr></thead>
+            <thead><tr><th>SKU</th><th>제품명</th><th>컬러</th><th>사이즈</th><th className="num">현재고</th><th className="num">안전재고</th><th className="num">부족</th><th className="num">권장발주</th><th>상태</th><th>조정</th></tr></thead>
             <tbody>
               {rows.map((i) => (
                 <tr key={i.id}>
@@ -46,9 +47,10 @@ export default async function Inventory({ searchParams }: { searchParams: Promis
                   <td className="num">{i.shortageQty > 0 ? num(i.shortageQty) : "-"}</td>
                   <td className="num">{i.recommendQty > 0 ? num(i.recommendQty) : "-"}</td>
                   <td><span className={"badge " + badge(i.status)}>{i.status ?? "-"}</span></td>
+                  <td><InventoryEdit id={i.id} currentStock={i.currentStock} safeStock={i.safeStock} /></td>
                 </tr>
               ))}
-              {rows.length === 0 && <tr><td colSpan={9} style={{ textAlign: "center", padding: 30, color: "var(--sub)" }}>결과 없음</td></tr>}
+              {rows.length === 0 && <tr><td colSpan={10} style={{ textAlign: "center", padding: 30, color: "var(--sub)" }}>결과 없음</td></tr>}
             </tbody>
           </table>
         </div>

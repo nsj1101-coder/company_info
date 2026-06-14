@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<title>Auto Care Net 리뉴얼 — 시안 / WBS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root{
+    --main:#42518A; --main-d:#33406E; --main-soft:#EEF0F8;
+    --point:#15B364; --point-d:#0F9150; --point-soft:#E7F8EE;
+    --ink:#16181D; --gray:#5B616E; --line:#ECEEF2; --soft:#F6F7F9;
+    --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);color:var(--ink);background:#ffffff;
+    min-height:100vh;line-height:1.55;letter-spacing:-.02em;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px}
+  a{text-decoration:none;color:inherit}
+  .logo{height:54px;width:auto;margin-bottom:28px;background:#fff}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--point-soft);color:var(--point-d);
+    border:1px solid #bdeacf;padding:7px 15px;border-radius:999px;font-size:13px;font-weight:800;margin-bottom:20px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--point)}
+  h1{font-size:40px;font-weight:900;letter-spacing:-.04em;color:var(--main-d);text-align:center;line-height:1.18}
+  .sub{margin-top:14px;font-size:17px;color:var(--gray);font-weight:500;text-align:center;max-width:560px}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px;width:100%;max-width:760px}
+  .card{display:flex;flex-direction:column;justify-content:space-between;gap:22px;
+    background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px 28px;
+    box-shadow:0 24px 50px -28px rgba(20,24,40,.28);transition:.18s;min-height:188px}
+  .card:hover{transform:translateY(-5px);box-shadow:0 32px 60px -26px rgba(66,81,138,.4);border-color:var(--main)}
+  .card .tag{font-size:13px;font-weight:800;letter-spacing:.04em}
+  .card .big{font-size:34px;font-weight:900;letter-spacing:-.03em;color:var(--main-d);margin-top:6px}
+  .card .desc{font-size:14px;color:var(--gray);font-weight:500;margin-top:6px}
+  .card .arrow{align-self:flex-end;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+    font-size:20px;font-weight:700;background:var(--main-soft);color:var(--main);transition:.18s}
+  .card:hover .arrow{background:var(--point);color:#fff}
+  .card.a .tag{color:var(--main)} .card.b .tag{color:var(--point-d)}
+
+  .wbs{margin-top:18px;width:100%;max-width:760px}
+  .wbs a{display:flex;align-items:center;justify-content:space-between;gap:18px;
+    background:linear-gradient(120deg,var(--main),var(--main-d));color:#fff;
+    border-radius:22px;padding:24px 30px;transition:.18s;box-shadow:0 24px 50px -28px rgba(66,81,138,.55)}
+  .wbs a:hover{transform:translateY(-4px);box-shadow:0 32px 60px -26px rgba(66,81,138,.6)}
+  .wbs .l .tag{font-size:13px;font-weight:800;color:#a9e8c6;letter-spacing:.04em}
+  .wbs .l .ttl{font-size:22px;font-weight:900;letter-spacing:-.03em;margin-top:4px}
+  .wbs .l .desc{font-size:13.5px;color:#c8cee6;font-weight:500;margin-top:3px}
+  .wbs .arrow{width:48px;height:48px;border-radius:50%;background:var(--point);display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+
+  .foot{margin-top:40px;font-size:12.5px;color:#9aa0ac;text-align:center}
+  @media(max-width:640px){
+    h1{font-size:30px} .cards{grid-template-columns:1fr}
+    .wbs a{flex-direction:row} .wbs .l .ttl{font-size:19px}
+  }
+</style>
+</head>
+<body>
+  <img class="logo" src="https://autocarenet.com/images/logo.jpg" alt="Auto Care Net" />
+  <span class="eyebrow"><span class="dot"></span>MaxImpact × Auto Care Net</span>
+  <h1>Auto Care Net 리뉴얼 시안</h1>
+  <p class="sub">메인 페이지 디자인 두 가지 방향(A안·B안)과 프로젝트 실행 계획(WBS)을 확인하세요.</p>
+
+  <div class="cards">
+    <a class="card a" href="a.html">
+      <div>
+        <div class="tag">DESIGN OPTION</div>
+        <div class="big">A안</div>
+        <div class="desc">히어로 비주얼 + 진행중 혜택 카드형<br>마켓플레이스 스타일</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+    <a class="card b" href="b.html">
+      <div>
+        <div class="tag">DESIGN OPTION</div>
+        <div class="big">B안</div>
+        <div class="desc">배너 + 대형 검색바 + 혜택 모아보기<br>클린 라이트 스타일</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+
+  <div class="wbs">
+    <a href="wbs.html">
+      <div class="l">
+        <div class="tag">PROJECT PLAN</div>
+        <div class="ttl">WBS · 실행 일정</div>
+        <div class="desc">Auto Care Net 디자인 리뉴얼과 데이터베이스 마이그레이션</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+
+  <div class="foot">© 2026 MaxImpact · 내부 검토용 (noindex)</div>
+</body>
+</html>

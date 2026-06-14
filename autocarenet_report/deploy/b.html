@@ -1,0 +1,934 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">오토케어넷 - 믿을 수 있는 자동차 정비 플랫폼</title>
+    <style vid="5">
+        
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+        :root {
+            
+            --color-main: #42518A;
+            --color-point: #15B364;
+            --color-main-dark: #33406E;
+            --color-main-soft: #EEF0F8;
+            --color-point-soft: #E7F8EE;
+            --color-star: #FFB020;
+            --color-ink: #16181D;
+            --color-gray: #5B616E;
+            --color-gray-light: #9AA0AC;
+            --color-line: #ECEEF2;
+            --color-bg-soft: #F6F7F9;
+            --color-white: #FFFFFF;
+            
+            
+            --color-input-bg: #EFF1F5;
+            --color-placeholder: #AAB4BF;
+
+            
+            --radius-card: 16px;
+            --radius-btn: 12px;
+            --radius-input: 8px;
+            --radius-pill: 999px;
+
+            
+            --space-container: 1200px;
+            --space-section: 80px;
+            --space-element: 24px;
+        }
+
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            color: var(--color-ink);
+            background-color: var(--color-white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button, input, select {
+            border: none;
+            background: none;
+            font-family: inherit;
+            color: inherit;
+            outline: none;
+        }
+
+        button {
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        
+        .container {
+            max-width: var(--space-container);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        
+        .text-h1 { font-size: 40px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; }
+        .text-h2 { font-size: 24px; font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+        .text-body-lg { font-size: 18px; font-weight: 500; }
+        .text-body { font-size: 16px; font-weight: 400; }
+        .text-body-sm { font-size: 14px; font-weight: 400; color: var(--color-gray); }
+        .text-caption { font-size: 12px; font-weight: 400; color: var(--color-gray-light); }
+
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--radius-btn);
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-point);
+            color: var(--color-white);
+        }
+        .btn-primary:hover {
+            background-color: #129E58;
+        }
+
+        .btn-secondary {
+            background-color: var(--color-main-soft);
+            color: var(--color-main);
+        }
+        .btn-secondary:hover {
+            background-color: #DDE2F2;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--color-gray);
+        }
+        .btn-ghost:hover {
+            background-color: var(--color-bg-soft);
+            color: var(--color-ink);
+        }
+
+        
+        .form-control {
+            background-color: var(--color-input-bg);
+            height: 48px;
+            border-radius: var(--radius-input);
+            padding: 0 16px;
+            font-size: 15px;
+            width: 100%;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .form-control::placeholder {
+            color: var(--color-placeholder);
+        }
+        .form-control:focus {
+            border-color: var(--color-point);
+            background-color: var(--color-white);
+        }
+        
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .select-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239AA0AC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+        }
+        .form-select {
+            appearance: none;
+            cursor: pointer;
+            color: var(--color-ink);
+        }
+
+        
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: var(--color-white);
+            border-bottom: 1px solid var(--color-line);
+            z-index: 1000;
+            height: 72px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+        }
+
+        .header-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--color-main);
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header-logo::before {
+            content: none;
+        }
+        .header-logo img {
+            height: 36px;
+            width: auto;
+            display: block;
+        }
+
+        .gnb {
+            display: flex;
+            gap: 32px;
+            height: 100%;
+            align-items: center;
+        }
+
+        .gnb-item {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-ink);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .gnb-item:hover {
+            color: var(--color-main);
+        }
+
+        .gnb-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--color-main);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--color-gray);
+            font-weight: 500;
+        }
+
+        .auth-links a:hover {
+            color: var(--color-ink);
+        }
+
+        .auth-divider {
+            width: 1px;
+            height: 12px;
+            background-color: var(--color-line);
+            margin: auto 0;
+        }
+
+        
+        .section-hero {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .hero-banner {
+            background-color: var(--color-bg-soft);
+            border-radius: 24px;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            padding: 64px;
+            position: relative;
+            overflow: hidden;
+            background-image: linear-gradient(to right, rgba(246, 247, 249, 1) 0%, rgba(246, 247, 249, 0.8) 50%, rgba(246, 247, 249, 0) 100%), url('https://images.unsplash.com/photo-1625047509168-a7026f36de04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: right center;
+            border: 1px solid var(--color-line);
+        }
+
+        .hero-content {
+            max-width: 500px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--color-main);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hero-subtitle::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-point);
+        }
+
+        .hero-title {
+            margin-bottom: 24px;
+            color: var(--color-ink);
+        }
+
+        
+        .vehicle-widget {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-line);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin-top: -40px; 
+            position: relative;
+            z-index: 10;
+        }
+
+        .widget-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .widget-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-gray);
+            padding-left: 4px;
+        }
+
+        .vehicle-widget .btn {
+            height: 48px;
+            padding: 0 40px;
+            flex-shrink: 0;
+        }
+
+        
+        .section-search {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .big-search-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .big-search-input {
+            width: 100%;
+            height: 64px;
+            border-radius: var(--radius-pill);
+            background-color: var(--color-input-bg);
+            border: 1px solid transparent;
+            padding: 0 32px 0 64px;
+            font-size: 18px;
+            color: var(--color-ink);
+            transition: all 0.2s;
+        }
+
+        .big-search-input::placeholder {
+            color: var(--color-placeholder);
+        }
+
+        .big-search-input:focus {
+            border-color: var(--color-point);
+            background-color: var(--color-white);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            stroke: var(--color-gray);
+            pointer-events: none;
+        }
+        
+        .search-btn-inside {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            height: 48px;
+            border-radius: var(--radius-pill);
+        }
+
+        
+        .section-categories {
+            padding: 40px 0 60px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 32px 16px;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            cursor: pointer;
+            group: category;
+        }
+
+        .category-icon-bg {
+            width: 72px;
+            height: 72px;
+            border-radius: 24px;
+            background-color: var(--color-bg-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-line);
+            transition: all 0.2s;
+        }
+
+        .category-item:hover .category-icon-bg {
+            background-color: var(--color-point-soft);
+            border-color: var(--color-point-soft);
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            stroke: var(--color-main);
+            stroke-width: 1.5;
+            transition: stroke 0.2s;
+        }
+
+        .category-item:hover .category-icon {
+            stroke: var(--color-point);
+        }
+
+        .category-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            word-break: keep-all;
+        }
+
+        
+        .section-benefits {
+            padding: 60px 0;
+            background-color: var(--color-bg-soft);
+            border-top: 1px solid var(--color-line);
+            border-bottom: 1px solid var(--color-line);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .benefit-card {
+            background-color: var(--color-white);
+            border-radius: var(--radius-card);
+            border: 1px solid var(--color-line);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: var(--color-bg-soft);
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: var(--color-point-soft);
+            color: var(--color-point);
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: var(--radius-pill);
+            align-self: flex-start;
+        }
+        
+        .card-badge.coupon { background-color: #FFF4E5; color: #FF8A00; }
+        .card-badge.event { background-color: var(--color-main-soft); color: var(--color-main); }
+        .card-badge.discount { background-color: #FCE8E8; color: #E53935; }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-ink);
+            line-height: 1.4;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--color-gray);
+            margin-top: 4px;
+        }
+
+        
+        .section-partners {
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .partner-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            align-items: center;
+            opacity: 0.6;
+        }
+        
+        .partner-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--color-gray);
+            letter-spacing: -1px;
+        }
+
+        
+        .footer {
+            margin-top: 40px;
+        }
+
+        .footer-top {
+            background-color: var(--color-white);
+            border-top: 1px solid var(--color-line);
+            padding: 40px 0;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-gray);
+            margin-bottom: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .info-item {
+            font-size: 13px;
+            color: var(--color-gray);
+            position: relative;
+        }
+
+        .info-item:not(:last-child)::after {
+            content: '|';
+            position: absolute;
+            right: -10px;
+            color: var(--color-line);
+        }
+
+        .footer-bottom {
+            background-color: var(--color-main-dark);
+            padding: 40px 0;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quick-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .quick-links a:hover {
+            color: var(--color-white);
+        }
+
+        .copyright {
+            font-size: 12px;
+        }
+
+        
+        .floating-chatbot {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-point);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(21, 179, 100, 0.3); 
+            transition: transform 0.2s;
+        }
+        
+        .floating-chatbot:hover {
+            transform: scale(1.05);
+        }
+
+        .chatbot-icon {
+            width: 28px;
+            height: 28px;
+            stroke: var(--color-white);
+        }
+    </style>
+</head>
+<body vid="6">
+
+    
+    <header class="header" vid="7">
+        <div class="container" vid="8">
+            <div class="header-logo" vid="9"><img src="https://autocarenet.com/images/logo.jpg" alt="오토케어넷"></div>
+            
+            <nav class="gnb" vid="10">
+                <a href="#" class="gnb-item active" vid="11">홈</a>
+                <a href="#" class="gnb-item" vid="12">정비업체 찾기</a>
+                <a href="#" class="gnb-item" vid="13">중고자동차</a>
+                <a href="#" class="gnb-item" vid="14">모범업체 프로샵</a>
+                <a href="#" class="gnb-item" style="display:flex; align-items:center; gap:4px;" vid="15">
+                    서비스 더보기
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vid="16"><polyline points="6 9 12 15 18 9" vid="17"></polyline></svg>
+                </a>
+            </nav>
+
+            <div class="header-actions" vid="18">
+                <div class="auth-links" vid="19">
+                    <a href="#" vid="20">로그인</a>
+                    <div class="auth-divider" vid="21"></div>
+                    <a href="#" vid="22">회원가입</a>
+                </div>
+                <button class="btn btn-primary" vid="23">무료 견적받기</button>
+            </div>
+        </div>
+    </header>
+
+    <main vid="24">
+        
+        <section class="section-hero container" vid="25">
+            <div class="hero-banner" vid="26">
+                <div class="hero-content" vid="27">
+                    <div class="hero-subtitle" vid="28">오토케어넷 인증</div>
+                    <h1 class="text-h1 hero-title" vid="29">믿을 수 있는 정비소,<br vid="30">한 번에 찾고 비교하세요</h1>
+                    <p class="text-body-lg" style="color: var(--color-gray); margin-bottom: 32px;" vid="31">지역·차종별 정비업체 검색부터<br vid="32">실시간 견적, 안전점검까지 완벽하게.</p>
+                </div>
+            </div>
+
+            
+            <div class="vehicle-widget" vid="33">
+                <div class="widget-group" vid="34">
+                    <span class="widget-label" vid="35">연식</span>
+                    <div class="select-wrapper" vid="36">
+                        <select class="form-control form-select" vid="37">
+                            <option vid="38">2026</option>
+                            <option selected="" vid="39">2025</option>
+                            <option vid="40">2024</option>
+                            <option vid="41">2023</option>
+                            <option vid="42">2022</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="widget-group" vid="43">
+                    <span class="widget-label" vid="44">제조사</span>
+                    <div class="select-wrapper" vid="45">
+                        <select class="form-control form-select" vid="46">
+                            <option value="" disabled="" selected="" vid="47">제조사 선택</option>
+                            <option vid="48">현대</option>
+                            <option vid="49">기아</option>
+                            <option vid="50">제네시스</option>
+                            <option vid="51">BMW</option>
+                            <option vid="52">벤츠</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="widget-group" vid="53">
+                    <span class="widget-label" vid="54">모델</span>
+                    <div class="select-wrapper" vid="55">
+                        <select class="form-control form-select" vid="56">
+                            <option value="" disabled="" selected="" vid="57">모델 선택</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-main" style="background-color: var(--color-main); color: white;" vid="58">내 차량 가입하기</button>
+            </div>
+        </section>
+
+        
+        <section class="section-search container" vid="59">
+            <div class="big-search-wrapper" vid="60">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vid="61">
+                    <circle cx="11" cy="11" r="8" vid="62"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" vid="63"></line>
+                </svg>
+                <input type="text" class="big-search-input" placeholder="원하시는 서비스나 지역, 정비소를 검색해보세요." vid="64">
+                <button class="btn btn-primary search-btn-inside" vid="65">검색</button>
+            </div>
+        </section>
+
+        
+                <section class="section-categories container">
+            <div class="category-grid">
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    </div>
+                    <span class="category-name">자동차 정비</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                    </div>
+                    <span class="category-name">바디 샵/공장</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg>
+                    </div>
+                    <span class="category-name">세차/세부정보</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><path d="M6 4v4"/><path d="M10 4v4"/></svg>
+                    </div>
+                    <span class="category-name">자동차 유리</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    </div>
+                    <span class="category-name">알람/스테레오</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <span class="category-name">트랜스미션</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2.5"/></svg>
+                    </div>
+                    <span class="category-name">타이어/얼라인먼트</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+                    </div>
+                    <span class="category-name">검사 점검 테스트</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+                    </div>
+                    <span class="category-name">머플러/배기장치</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                    </div>
+                    <span class="category-name">중고자동차</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.06A2 2 0 0 0 8.5 12.6L3.4 11.3a.4.4 0 0 1 0-.78L8.5 9.2a2 2 0 0 0 1.44-1.44L11.24 2.6a.4.4 0 0 1 .78 0l1.3 5.16A2 2 0 0 0 14.76 9.2l5.1 1.32a.4.4 0 0 1 0 .78l-5.1 1.3a2 2 0 0 0-1.44 1.46l-1.3 5.16a.4.4 0 0 1-.78 0z"/><path d="M19 17v4"/><path d="M21 19h-4"/></svg>
+                    </div>
+                    <span class="category-name">새 자동차</span>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon-bg">
+                        <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+                    </div>
+                    <span class="category-name">렌트 자동차</span>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="section-benefits" vid="144">
+            <div class="container" vid="145">
+                <div class="section-header" vid="146">
+                    <h2 class="text-h2" vid="147">오토케어넷 혜택 모아보기</h2>
+                    <a href="#" class="text-body-sm" style="font-weight: 500;" vid="148">전체보기 &gt;</a>
+                </div>
+
+                <div class="card-grid" vid="149">
+                    <div class="benefit-card" vid="150">
+                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60" alt="무료 서비스" class="card-image" vid="151">
+                        <div class="card-content" vid="152">
+                            <span class="card-badge" vid="153">무료 서비스 (0)</span>
+                            <h3 class="card-title" vid="154">엔진오일 교환 시 워셔액 무료 보충</h3>
+                            <p class="card-desc" vid="155">가까운 지정 정비소에서 혜택을 확인하세요.</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card" vid="156">
+                        <img src="https://images.unsplash.com/photo-1553260168-69b041873e65?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60" alt="전자 쿠폰" class="card-image" vid="157">
+                        <div class="card-content" vid="158">
+                            <span class="card-badge coupon" vid="159">전자 쿠폰 (0)</span>
+                            <h3 class="card-title" vid="160">첫 가입 기념 1만원 정비 할인 쿠폰</h3>
+                            <p class="card-desc" vid="161">내 보관함에서 쿠폰을 바로 다운로드 하세요.</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card" vid="162">
+                        <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60" alt="이벤트" class="card-image" vid="163">
+                        <div class="card-content" vid="164">
+                            <span class="card-badge event" vid="165">이벤트 (0)</span>
+                            <h3 class="card-title" vid="166">봄맞이 무상 안전점검 캠페인</h3>
+                            <p class="card-desc" vid="167">타이어, 브레이크 등 10개 항목 무상 점검</p>
+                        </div>
+                    </div>
+
+                    <div class="benefit-card" vid="168">
+                        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60" alt="할인 서비스" class="card-image" vid="169">
+                        <div class="card-content" vid="170">
+                            <span class="card-badge discount" vid="171">할인 서비스 (0)</span>
+                            <h3 class="card-title" vid="172">타이어 4짝 교체 시 휠 얼라인먼트 반값</h3>
+                            <p class="card-desc" vid="173">제휴 프로샵 한정 특가 할인을 놓치지 마세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    
+    <footer class="footer" vid="179">
+        <div class="footer-top" vid="180">
+            <div class="container" vid="181">
+                <div class="footer-info" vid="182">
+                    <div class="footer-logo" vid="183">오토케어넷(주)</div>
+                    <div class="info-row" vid="184">
+                        <span class="info-item" vid="185">대표: 유근봉</span>
+                        <span class="info-item" vid="186">사업자등록번호: 415-88-00710</span>
+                        <span class="info-item" vid="187">통신판매업신고: 제2025-세종-0239호</span>
+                    </div>
+                    <div class="info-row" vid="188">
+                        <span class="info-item" vid="189">TEL: 1544-1930</span>
+                        <span class="info-item" vid="190">FAX: (044) 865-5375</span>
+                        <span class="info-item" vid="191">E-mail: autocarenet@gmail.com</span>
+                    </div>
+                    <div class="info-row" vid="192">
+                        <span class="info-item" vid="193">세종특별자치시 장군면 장기초교길 76-17 3동</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom" vid="194">
+            <div class="container" vid="195">
+                <div class="quick-links" vid="196">
+                    <a href="#" vid="197">집</a>
+                    <a href="#" vid="198">내 자동차 정보</a>
+                    <a href="#" vid="199">보너스 포인트</a>
+                    <a href="#" vid="200">상대 차량</a>
+                    <a href="#" vid="201">무료 서비스</a>
+                    <a href="#" vid="202">E-쿠폰</a>
+                    <a href="#" vid="203">할인 서비스</a>
+                    <a href="#" vid="204">상품권</a>
+                    <a href="#" vid="205">명함</a>
+                    <a href="#" vid="206">VIP 회원</a>
+                    <a href="#" vid="207">자주하는 질문</a>
+                    <a href="#" vid="208">문의</a>
+                    <a href="#" style="font-weight: 700; color: var(--color-white);" vid="209">개인 정보 정책</a>
+                    <a href="#" vid="210">이용 약관</a>
+                </div>
+                <div class="copyright" vid="211">
+                    <p style="margin-bottom: 8px;" vid="212">오토케어넷 에 게시된 모든 자료 및 컨텐츠의 권리는 사이트 운영자에게 있으며 사전 승인없이 타 사이트에서 이용할 수 없습니다.</p>
+                    <p vid="213">Copyrights ⓒ AutoCareNet.com . ALL RIGHTS RESERVED. © 2025 Autocarenet. 판권 소유.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <div class="floating-chatbot" vid="214">
+        <svg class="chatbot-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vid="215">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" vid="216"></path>
+        </svg>
+    </div>
+
+
+</body></html>

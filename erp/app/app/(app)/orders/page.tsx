@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { won, num, ymd } from "@/lib/format";
 import { Pager } from "@/components/Toolbar";
 import { StatusBadge } from "../page";
+import OrderActions from "@/components/OrderActions";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -50,7 +51,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
       </div>
       <div className="tablewrap">
         <table className="dt">
-          <thead><tr><th>주문번호</th><th>일자</th><th>채널</th><th>고객</th><th>상품</th><th className="num">수량</th><th className="num">단가</th><th className="num">금액</th><th>상태</th></tr></thead>
+          <thead><tr><th>주문번호</th><th>일자</th><th>채널</th><th>고객</th><th>상품</th><th className="num">수량</th><th className="num">단가</th><th className="num">금액</th><th>상태</th><th>처리</th></tr></thead>
           <tbody>
             {rows.map((o) => (
               <tr key={o.id}>
@@ -63,9 +64,10 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
                 <td className="num">{won(o.unitPrice)}</td>
                 <td className="num">{won(o.totalAmount)}</td>
                 <td><StatusBadge s={o.status} /></td>
+                <td><OrderActions id={o.id} status={o.status} /></td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={9} style={{ textAlign: "center", padding: 30, color: "var(--sub)" }}>결과 없음</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={10} style={{ textAlign: "center", padding: 30, color: "var(--sub)" }}>결과 없음</td></tr>}
           </tbody>
         </table>
       </div>
