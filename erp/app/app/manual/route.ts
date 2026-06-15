@@ -15,15 +15,15 @@ const HTML = `<!DOCTYPE html>
 <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
-:root{--ink:#16181d;--sub:#5b616e;--muted:#9aa0ac;--line:#e6e8ec;--bg:#fff;--soft:#f6f7f9;--brand:#2f3a8f;--brand-50:#eef0fb;--ok:#137a4b;--ok-50:#e7f6ee;--warn:#b45309;--warn-50:#fef6e7;--danger:#c5221f;}
+:root{--ink:#16181d;--sub:#5b616e;--muted:#9aa0ac;--line:#e6e8ec;--bg:#fff;--soft:#f6f7f9;--brand:#16181d;--brand-50:#f1f2f4;--ok:#137a4b;--ok-50:#e7f6ee;--warn:#b45309;--warn-50:#fef6e7;--danger:#c5221f;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;color:var(--ink);line-height:1.75;background:var(--soft);-webkit-font-smoothing:antialiased;}
 .page{max-width:1080px;margin:0 auto;background:#fff;}
 /* cover */
 .cover{background:#111;color:#fff;padding:80px 64px 56px;}
-.cover .badge{display:inline-block;border:1px solid rgba(255,255,255,.35);color:#cdd2e6;padding:5px 14px;border-radius:20px;font-size:12px;letter-spacing:.08em;margin-bottom:26px;}
+.cover .badge{display:inline-block;border:1px solid rgba(255,255,255,.35);color:#cfcfcf;padding:5px 14px;border-radius:20px;font-size:12px;letter-spacing:.08em;margin-bottom:26px;}
 .cover h1{font-size:42px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
-.cover h1 b{color:#aab2ff;}
+.cover h1 b{color:#fff;}
 .cover p{color:rgba(255,255,255,.55);font-size:16px;margin-top:12px;}
 .cover .meta{display:flex;gap:48px;margin-top:48px;padding-top:28px;border-top:1px solid rgba(255,255,255,.12);flex-wrap:wrap;}
 .cover .meta div{font-size:13px;color:rgba(255,255,255,.5);}
@@ -34,7 +34,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-s
 .login .row{display:flex;gap:36px;flex-wrap:wrap;}
 .login .row div{font-size:14px;}
 .login .row b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px;font-weight:600;}
-.login .row code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);padding:3px 8px;border-radius:6px;font-size:13.5px;}
+.login .row code{font-family:inherit;font-weight:600;background:var(--soft);padding:3px 8px;border-radius:6px;font-size:13.5px;}
 .body{padding:48px 64px 80px;}
 /* toc */
 .toc{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:48px;}
@@ -57,7 +57,7 @@ li{margin-bottom:7px;font-size:15px;}
 li b{color:var(--ink);}
 .callout{display:flex;gap:12px;padding:14px 16px;border-radius:10px;margin:16px 0;font-size:14.5px;}
 .callout .ic{flex-shrink:0;font-weight:800;}
-.callout.next{background:var(--brand-50);color:#27306a;}
+.callout.next{background:var(--brand-50);color:#16181d;}
 .callout.tip{background:var(--ok-50);color:#0f5c39;}
 .callout.warn{background:var(--warn-50);color:#7a4708;}
 table.kv{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
@@ -66,13 +66,13 @@ table.kv th{background:var(--soft);color:var(--sub);font-weight:600;width:200px;
 /* flow diagram */
 .flow{background:#111;border-radius:14px;padding:30px;color:#fff;margin:20px 0;}
 .flow .step{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
-.flow .num{width:30px;height:30px;border-radius:50%;background:#aab2ff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.flow .box{background:#1e2233;border:1px solid #2c3350;border-radius:10px;padding:12px 16px;flex:1;}
+.flow .num{width:30px;height:30px;border-radius:50%;background:#fff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.flow .box{background:#1e1e1e;border:1px solid #353535;border-radius:10px;padding:12px 16px;flex:1;}
 .flow .box b{color:#fff;}
-.flow .box span{color:#9aa3c7;font-size:13.5px;}
+.flow .box span{color:#a8a8a8;font-size:13.5px;}
 .flow .arrow{text-align:left;color:#6b73a0;margin:2px 0 2px 14px;font-size:14px;}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-.chip{background:#1e2233;border:1px solid #2c3350;border-radius:8px;padding:6px 12px;font-size:13px;color:#cdd2e6;}
+.chip{background:#222;border:1px solid #3a3a3a;border-radius:8px;padding:6px 12px;font-size:13px;color:#dcdcdc;}
 .scen{border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:20px;background:#fff;}
 .scen .tag{display:inline-block;background:#111;color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px;}
 .scen h4{font-size:17px;margin-bottom:10px;}
@@ -80,10 +80,34 @@ table.kv th{background:var(--soft);color:var(--sub);font-weight:600;width:200px;
 .scen ol li{counter-increment:s;position:relative;padding-left:34px;margin-bottom:9px;}
 .scen ol li::before{content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;background:var(--brand-50);color:var(--brand);border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .foot{background:#111;color:rgba(255,255,255,.6);padding:32px 64px;font-size:13px;text-align:center;}
+.foot .demo-note{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13.5px;line-height:1.7;}
+/* ── 진입 인트로 (블랙 레이어 상하 분할) ── */
+#intro{position:fixed;inset:0;z-index:9999;}
+#intro .half{position:absolute;left:0;right:0;height:50%;background:#0a0a0a;display:flex;justify-content:center;overflow:hidden;will-change:transform;}
+#intro .top{top:0;align-items:flex-end;}
+#intro .bottom{bottom:0;align-items:flex-start;}
+#intro .t{color:#fff;font-weight:700;font-size:clamp(19px,3.6vw,32px);letter-spacing:-.01em;text-align:center;padding:0 24px;opacity:0;}
+#intro .top .t{transform:translateY(-18px);animation:introIn .9s .3s cubic-bezier(.2,.7,.2,1) forwards;}
+#intro .bottom .t{transform:translateY(18px);animation:introIn .9s .45s cubic-bezier(.2,.7,.2,1) forwards;}
+@keyframes introIn{from{opacity:0;filter:blur(10px);}to{opacity:1;filter:blur(0);}}
+#intro .line{position:absolute;left:50%;top:50%;width:min(440px,72vw);height:1px;background:rgba(255,255,255,.55);transform:translate(-50%,-50%) scaleX(0);transform-origin:center;animation:introLine .9s .55s cubic-bezier(.2,.7,.2,1) forwards;}
+@keyframes introLine{to{transform:translate(-50%,-50%) scaleX(1);}}
+#intro.open .top{transform:translateY(-100%);transition:transform 1.05s cubic-bezier(.76,0,.24,1);}
+#intro.open .bottom{transform:translateY(100%);transition:transform 1.05s cubic-bezier(.76,0,.24,1);}
+#intro.open .t,#intro.open .line{opacity:0;transition:opacity .45s ease;}
+#intro.hidden{display:none;}
+@media(prefers-reduced-motion:reduce){#intro{display:none;}}
 @media(max-width:760px){.cover,.body,.login,.foot{padding-left:22px;padding-right:22px;}.login{margin-left:22px;margin-right:22px;}.toc-grid{grid-template-columns:1fr;}.cover h1{font-size:30px;}}
 </style>
 </head>
 <body>
+
+<div id="intro" aria-hidden="true">
+  <div class="half top"><div class="t">환영합니다, 라린느 담당자님</div></div>
+  <div class="half bottom"><div class="t">사용 매뉴얼을 보여드리겠습니다.</div></div>
+  <div class="line"></div>
+</div>
+
 <div class="page">
 
 <div class="cover">
@@ -354,9 +378,19 @@ table.kv th{background:var(--soft);color:var(--sub);font-weight:600;width:200px;
 <div class="foot">
   라린느 통합 ERP 사용 매뉴얼 · MVP v1.0 · 데이터 기준: 검토용_라린느_ERP_v45<br/>
   © 2026 MaxImpact. 이 매뉴얼은 현재 MVP 기준이며 기능 추가 시 함께 업데이트됩니다.
+  <div class="demo-note">디자인과 가시성 고도화는 프로젝트 계약 이후에 진행 됩니다.<br/>현재는 데모 버전인 것을 감안하여 확인 부탁드립니다.</div>
 </div>
 
 </div>
+
+<script>
+(function(){
+  var i=document.getElementById('intro');
+  if(!i) return;
+  setTimeout(function(){ i.classList.add('open'); }, 2300);
+  setTimeout(function(){ i.classList.add('hidden'); }, 3450);
+})();
+</script>
 </body>
 </html>`;
 

@@ -38,7 +38,7 @@ export default function Login() {
           <input type="password" value={pw} onChange={(e) => setPw(e.target.value)}
             style={{ width: "100%", padding: "12px 13px", border: "1.4px solid #e6e8ec", borderRadius: 10, fontSize: 14, outlineColor: "#111" }} />
 
-          {err && <div style={{ marginTop: 14, padding: "9px 12px", background: "#f6f7f9", color: "#c5221f", borderRadius: 8, fontSize: 13 }}>{err}</div>}
+          {err && <div style={{ marginTop: 14, padding: "9px 12px", background: "#f1f2f4", color: "#16181d", border: "1px solid #d6d8de", borderRadius: 8, fontSize: 13 }}>{err}</div>}
 
           <button type="submit" disabled={busy}
             style={{ width: "100%", marginTop: 24, padding: 14, background: "#111", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: busy ? "progress" : "pointer" }}>

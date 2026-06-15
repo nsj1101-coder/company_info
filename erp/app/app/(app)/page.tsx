@@ -138,5 +138,5 @@ export function StatusBadge({ s }: { s: string | null }) {
 }
 
 function barColor(s: string) {
-  return ({ 출고완료: "#137a4b", "반품/취소": "#c5221f", 생산중: "#b45309", 자수대기: "#b45309" } as Record<string, string>)[s] ?? "var(--brand)";
+  return ({ 출고완료: "#16181d", "반품/취소": "#b8bcc4", 생산중: "#6b7280", 자수대기: "#9aa0ac" } as Record<string, string>)[s] ?? "var(--brand)";
 }

@@ -50,7 +50,7 @@ export default async function Analytics() {
       <div className="panel">
         <div className="ph"><h3>채널별 {costReady ? "손익 (P&L)" : "매출"}</h3><span className="hint">{costReady ? "— 원가는 상품마스터 매칭 기준 추정" : "— 통합 주문 기준"}</span></div>
         {!costReady && (
-          <div style={{ margin: "0 16px 12px", padding: "9px 13px", background: "#fef6e7", color: "#92600a", borderRadius: 8, fontSize: 12.5 }}>
+          <div style={{ margin: "0 16px 12px", padding: "9px 13px", background: "#f1f2f4", color: "#4b5159", border: "1px solid #e2e4e8", borderRadius: 8, fontSize: 12.5 }}>
             ※ 손익(원가·이익) 분석은 <b>주문↔상품 SKU 매칭</b> 후 산출됩니다. 현재 원본 데이터의 SKU 체계가 채널마다 달라 매칭률이 낮습니다 — <b>SKU 표준화(2차 과제)</b> 완료 시 채널별 원가·마진이 자동 표기됩니다.
           </div>
         )}
@@ -96,7 +96,7 @@ export default async function Analytics() {
             <div className="barwrap">
               {(["VIP", "우수", "일반"] as const).map((g) => {
                 const mx = Math.max(1, grades.VIP, grades.우수, grades.일반);
-                const cls = g === "VIP" ? "#c5221f" : g === "우수" ? "#b45309" : "#2f3a8f";
+                const cls = g === "VIP" ? "#16181d" : g === "우수" ? "#6b7280" : "#9aa0ac";
                 return <div className="bar" key={g}><span className="lbl">{g}</span><span className="track"><span className="fill" style={{ width: `${(grades[g] / mx) * 100}%`, background: cls }} /></span><span className="amt">{num(grades[g])}명</span></div>;
               })}
             </div>

@@ -51,7 +51,7 @@ export default function Uploader() {
       {/* ── 채널 동기화 (데모) ── */}
       <div style={{ marginBottom: 22, padding: 16, border: "1px solid var(--line)", borderRadius: 12, background: "var(--brand-50)" }}>
         <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>채널 자동 동기화</div>
-        <div style={{ fontSize: 12.5, color: "var(--warn)", background: "#fef6e7", padding: "8px 12px", borderRadius: 8, marginBottom: 12 }}>
+        <div style={{ fontSize: 12.5, color: "#4b5159", background: "#f1f2f4", border: "1px solid #e2e4e8", padding: "8px 12px", borderRadius: 8, marginBottom: 12 }}>
           ※ 데모 사이트이므로 실제 API 통신은 되지 않습니다. 데이터 동기화 테스트 시나리오를 보기 위한 버튼입니다.
         </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -63,11 +63,11 @@ export default function Uploader() {
         </div>
 
         {sync && !sync.ok && (
-          <div style={{ marginTop: 12, padding: "9px 13px", background: "#fdecec", color: "#b03939", borderRadius: 8, fontSize: 13 }}>동기화 실패: {sync.error}</div>
+          <div style={{ marginTop: 12, padding: "9px 13px", background: "#f1f2f4", color: "#16181d", border: "1px solid #d6d8de", borderRadius: 8, fontSize: 13 }}>동기화 실패: {sync.error}</div>
         )}
         {sync && sync.ok && (
           <div style={{ marginTop: 12 }}>
-            <div style={{ padding: "9px 13px", background: "#e6f4ea", color: "#137a4b", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
+            <div style={{ padding: "9px 13px", background: "#16181d", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
               {sync.channel}에서 {sync.inserted}건 동기화 완료 · 고객 노성준({sync.customer?.code}) 누적 {sync.customer?.cumulative.toLocaleString()}원 → 등급 {sync.customer?.grade}
             </div>
             <div className="tablewrap" style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 10 }}>
@@ -109,13 +109,13 @@ export default function Uploader() {
       </p>
 
       {res && !res.ok && (
-        <div style={{ marginTop: 14, padding: "10px 14px", background: "#fdecec", color: "#b03939", borderRadius: 8, fontSize: 13 }}>
+        <div style={{ marginTop: 14, padding: "10px 14px", background: "#f1f2f4", color: "#16181d", border: "1px solid #d6d8de", borderRadius: 8, fontSize: 13 }}>
           업로드 실패: {res.error === "empty" ? "유효한 주문 행이 없습니다." : res.error === "parse_failed" ? "엑셀을 읽을 수 없습니다." : res.error}
         </div>
       )}
       {res && res.ok && (
         <div style={{ marginTop: 14 }}>
-          <div style={{ padding: "10px 14px", background: "#e6f4ea", color: "#137a4b", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
+          <div style={{ padding: "10px 14px", background: "#16181d", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
             {res.inserted}건 수집 완료 · 신규 고객 {res.newCustomers}명 자동등록
           </div>
           {res.sample && res.sample.length > 0 && (
