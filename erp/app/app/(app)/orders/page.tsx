@@ -45,7 +45,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
           <button className="btn ghost">검색</button>
         </form>
       </div>
-      <div style={{ padding: "0 16px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ padding: "16px 16px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}><span style={{ fontSize: 12, color: "var(--sub)", width: 40 }}>채널</span>{chips("channel", channels.map((c) => c.channel), sp.channel)}</div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}><span style={{ fontSize: 12, color: "var(--sub)", width: 40 }}>상태</span>{chips("status", statuses.map((s) => s.status), sp.status)}</div>
       </div>

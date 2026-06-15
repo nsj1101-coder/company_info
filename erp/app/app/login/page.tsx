@@ -23,22 +23,38 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}>
-      <form onSubmit={submit} style={{ width: 380, background: "#fff", borderRadius: 16, padding: "38px 34px", border: "1px solid var(--line)", boxShadow: "0 24px 50px -28px rgba(47,58,143,.3)" }}>
-        <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 4, display: "flex", alignItems: "center", gap: 9 }}>
-          <img src={`${BASE}/logo.png`} alt="LALUNE" style={{ height: 22 }} /> 통합 ERP
+    <div style={{ minHeight: "100vh", display: "flex", background: "#fff" }}>
+      {/* 좌: 로그인 폼 */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 24px" }}>
+        <form onSubmit={submit} style={{ width: "100%", maxWidth: 340 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 800, margin: "0 0 6px", color: "#111" }}>로그인</h1>
+          <p style={{ color: "#9aa0ac", fontSize: 13, margin: "0 0 30px" }}>라린느 통합 ERP에 오신 것을 환영합니다.</p>
+
+          <label style={{ display: "block", fontSize: 12.5, color: "#5b616e", fontWeight: 600, marginBottom: 6 }}>아이디</label>
+          <input value={id} onChange={(e) => setId(e.target.value)} autoFocus
+            style={{ width: "100%", padding: "12px 13px", border: "1.4px solid #e6e8ec", borderRadius: 10, fontSize: 14, marginBottom: 14, outlineColor: "#111" }} />
+
+          <label style={{ display: "block", fontSize: 12.5, color: "#5b616e", fontWeight: 600, marginBottom: 6 }}>비밀번호</label>
+          <input type="password" value={pw} onChange={(e) => setPw(e.target.value)}
+            style={{ width: "100%", padding: "12px 13px", border: "1.4px solid #e6e8ec", borderRadius: 10, fontSize: 14, outlineColor: "#111" }} />
+
+          {err && <div style={{ marginTop: 14, padding: "9px 12px", background: "#f6f7f9", color: "#c5221f", borderRadius: 8, fontSize: 13 }}>{err}</div>}
+
+          <button type="submit" disabled={busy}
+            style={{ width: "100%", marginTop: 24, padding: 14, background: "#111", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: busy ? "progress" : "pointer" }}>
+            {busy ? "확인 중…" : "로그인"}
+          </button>
+          <p style={{ marginTop: 18, fontSize: 12, color: "#9aa0ac", textAlign: "center" }}>데모 계정: admin / admin1234</p>
+        </form>
+      </div>
+
+      {/* 우: 브랜드 패널 (블랙) */}
+      <div className="login-brand" style={{ flex: 1, background: "#111", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+        <div style={{ background: "#fff", borderRadius: 18, padding: "26px 34px", boxShadow: "0 20px 60px -20px rgba(0,0,0,.5)" }}>
+          <img src={`${BASE}/logo.png`} alt="LALUNE" style={{ height: 26, display: "block" }} />
         </div>
-        <p style={{ color: "var(--sub)", fontSize: 13, margin: "8px 0 24px" }}>의류 제조·유통 통합 업무 시스템</p>
-        <label style={{ fontSize: 12.5, color: "var(--sub)", fontWeight: 600 }}>아이디</label>
-        <input className="f" value={id} onChange={(e) => setId(e.target.value)} style={{ width: "100%", marginTop: 6, marginBottom: 14 }} autoFocus />
-        <label style={{ fontSize: 12.5, color: "var(--sub)", fontWeight: 600 }}>비밀번호</label>
-        <input className="f" type="password" value={pw} onChange={(e) => setPw(e.target.value)} style={{ width: "100%", marginTop: 6 }} />
-        {err && <div style={{ marginTop: 14, padding: "9px 12px", background: "#fdecec", color: "#b03939", borderRadius: 8, fontSize: 13 }}>{err}</div>}
-        <button className="btn primary" disabled={busy} style={{ width: "100%", marginTop: 22, justifyContent: "center", padding: 13 }}>
-          {busy ? "확인 중…" : "로그인"}
-        </button>
-        <p style={{ marginTop: 18, fontSize: 12, color: "var(--sub)", textAlign: "center" }}>데모 계정: admin / admin1234</p>
-      </form>
+        <div style={{ color: "#fff", fontWeight: 800, fontSize: 24, letterSpacing: "-0.5px" }}>통합 ERP</div>
+      </div>
     </div>
   );
 }

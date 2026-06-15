@@ -98,3 +98,6 @@ input.f:focus, select.f:focus { outline: 2px solid var(--brand-50); border-color
   .side { position: fixed; left: -224px; z-index: 50; transition: left .2s; }
   .kpis { grid-template-columns: repeat(2, 1fr); }
 }
+@media (max-width: 780px) {
+  .login-brand { display: none !important; }
+}
