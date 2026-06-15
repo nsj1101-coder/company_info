@@ -101,3 +101,12 @@ input.f:focus, select.f:focus { outline: 2px solid var(--brand-50); border-color
 @media (max-width: 780px) {
   .login-brand { display: none !important; }
 }
+
+/* 파일 선택 버튼 스타일 */
+.fileinput { font-size: 13px; color: var(--sub); }
+.fileinput::file-selector-button {
+  margin-right: 10px; padding: 8px 14px; border: none; border-radius: 8px;
+  background: var(--brand); color: #fff; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+}
+.fileinput::file-selector-button:hover { background: var(--brand-600); }

@@ -92,14 +92,14 @@ export default function Uploader() {
       <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>엑셀 업로드</div>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
         <a className="btn ghost" href={`${BASE}/api/orders/template`} download style={{ textDecoration: "none" }}>
-          ⬇ 엑셀 양식 다운로드
+          ⬇ Cafe24 엑셀 양식 다운로드
         </a>
         <span style={{ width: 1, height: 24, background: "var(--line)" }} />
         <select className="f" value={sheetType} onChange={(e) => setSheetType(e.target.value)}>
           <option value="cafe">온라인 주문 (쇼핑몰 다운로드 파일)</option>
           <option value="offline">오프라인 주문서 (B2B·전화·방문)</option>
         </select>
-        <input type="file" accept=".xlsx,.xls,.csv" onChange={(e) => setFile(e.target.files?.[0] ?? null)} style={{ fontSize: 13 }} />
+        <input className="fileinput" type="file" accept=".xlsx,.xls,.csv" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
         <button className="btn primary" disabled={!file || busy} onClick={upload}>
           {busy ? "업로드 중…" : "업로드 & 수집"}
         </button>
