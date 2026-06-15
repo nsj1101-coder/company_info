@@ -5,7 +5,7 @@ import { BASE } from "@/lib/base";
 
 export default function Login() {
   const r = useRouter();
-  const [id, setId] = useState("admin");
+  const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -44,7 +44,6 @@ export default function Login() {
             style={{ width: "100%", marginTop: 24, padding: 14, background: "#111", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: busy ? "progress" : "pointer" }}>
             {busy ? "확인 중…" : "로그인"}
           </button>
-          <p style={{ marginTop: 18, fontSize: 12, color: "#9aa0ac", textAlign: "center" }}>데모 계정: admin / admin1234</p>
         </form>
       </div>
 
