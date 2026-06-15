@@ -25,8 +25,8 @@ export default function Login() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}>
       <form onSubmit={submit} style={{ width: 380, background: "#fff", borderRadius: 16, padding: "38px 34px", border: "1px solid var(--line)", boxShadow: "0 24px 50px -28px rgba(47,58,143,.3)" }}>
-        <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 4 }}>
-          <span style={{ background: "var(--brand)", color: "#fff", borderRadius: 6, padding: "2px 9px", fontSize: 15 }}>LALUNE</span> 통합 ERP
+        <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 4, display: "flex", alignItems: "center", gap: 9 }}>
+          <img src={`${BASE}/logo.png`} alt="LALUNE" style={{ height: 22 }} /> 통합 ERP
         </div>
         <p style={{ color: "var(--sub)", fontSize: 13, margin: "8px 0 24px" }}>의류 제조·유통 통합 업무 시스템</p>
         <label style={{ fontSize: 12.5, color: "var(--sub)", fontWeight: 600 }}>아이디</label>

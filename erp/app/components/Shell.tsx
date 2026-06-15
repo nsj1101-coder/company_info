@@ -70,7 +70,9 @@ export default function Shell({
   return (
     <div className="shell">
       <nav className="side">
-        <div className="brand"><b>LALUNE</b> 통합 ERP</div>
+        <div className="brand">
+          <img src={`${BASE}/logo.png`} alt="LALUNE" style={{ height: 16, background: "#fff", padding: "5px 8px", borderRadius: 5 }} /> 통합 ERP
+        </div>
         {MENU.map((g, i) => (
           <div key={i}>
             {g.grp && <div className="grp">{g.grp}</div>}
