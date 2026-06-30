@@ -1,0 +1,30 @@
+.wrap {
+  padding: 8px 16px 0;
+}
+.group {
+  font-size: 13px;
+  font-weight: 800;
+  margin: 18px 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.today {
+  color: #fff;
+  background: var(--ink);
+  font-size: 10.5px;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2px 14px;
+}
+.empty {
+  text-align: center;
+  color: var(--sub);
+  padding: 90px 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}

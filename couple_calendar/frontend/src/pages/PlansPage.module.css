@@ -1,0 +1,72 @@
+.wrap {
+  padding: 12px 16px;
+}
+.add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.add input {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  border-radius: 11px;
+  padding: 12px 14px;
+  font-size: 14px;
+}
+.add input:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+.add button {
+  background: var(--ink);
+  color: #fff;
+  font-weight: 800;
+  padding: 0 18px;
+  border-radius: 11px;
+  font-size: 14px;
+}
+.item {
+  background: #fff;
+  border-radius: 13px;
+  padding: 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--line-2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.done .check {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.text {
+  flex: 1;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.done .text {
+  color: var(--line-2);
+  text-decoration: line-through;
+}
+.del {
+  color: var(--line-2);
+  font-size: 16px;
+  padding: 4px;
+}
+.empty {
+  text-align: center;
+  color: var(--sub);
+  padding: 60px 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.6;
+}

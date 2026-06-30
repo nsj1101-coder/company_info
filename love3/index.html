@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>너는 사랑을 어떻게 이해하는 사람일까? — INTP 연애 질문지</title>
+<meta name="description" content="20개의 질문으로 들여다보는, 내가 연애에서 진짜 중요하게 보는 것. INTP도 끝까지 풀 수 있는 담백한 연애 질문지." />
+<meta name="theme-color" content="#F4F1EB" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="너는 사랑을 어떻게 이해하는 사람일까?" />
+<meta property="og:description" content="20개의 질문으로 들여다보는, 내가 연애에서 진짜 중요하게 보는 것. 담백한 연애 질문지." />
+<meta property="og:url" content="https://love3.kr/" />
+<meta property="og:image" content="https://love3.kr/og.png" />
+<meta property="og:site_name" content="love3.kr" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+<style>
+  :root{
+    --bg:#F4F1EB;
+    --ink:#1C1A17;
+    --muted:#7A736B;
+    --line:#E4DED4;
+    --surface:#FFFFFF;
+    --accent:#B0493C;
+    --accent-ink:#8E392E;
+    --accent-soft:#F2DED8;
+    --radius:16px;
+    --maxw:520px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100svh;
+    overflow-x:hidden;
+    word-break:keep-all;
+  }
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 22px;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+  }
+  /* top progress */
+  .topbar{
+    position:sticky;top:0;z-index:5;
+    background:linear-gradient(var(--bg) 70%, rgba(244,241,235,0));
+    padding-top:16px;
+  }
+  .progress{
+    height:3px;width:100%;background:var(--line);border-radius:99px;overflow:hidden;
+  }
+  .progress > i{
+    display:block;height:100%;width:0%;
+    background:var(--accent);border-radius:99px;
+    transition:width .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .progress-meta{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:12.5px;color:var(--muted);letter-spacing:.02em;
+    margin-top:9px;min-height:18px;
+  }
+  .back{
+    border:0;background:none;color:var(--muted);font:inherit;font-size:13px;
+    padding:2px 0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+  }
+  .back:disabled{opacity:0;pointer-events:none}
+  .back:hover{color:var(--ink)}
+
+  main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 0 34px}
+
+  .fade{animation:fade .42s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* ---- intro ---- */
+  .intro{text-align:left}
+  .kicker{font-size:12.5px;letter-spacing:.22em;color:var(--accent);font-weight:600;text-transform:uppercase}
+  .intro h1{
+    font-size:clamp(27px,7.6vw,36px);line-height:1.32;font-weight:700;
+    margin:16px 0 0;letter-spacing:-.02em;
+  }
+  .intro p.lead{color:var(--muted);font-size:15.5px;margin:18px 0 0;max-width:30em}
+  .specs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 0}
+  .spec{font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:6px 13px;background:var(--surface)}
+  .start{margin-top:34px}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font:inherit;
+    width:100%;padding:17px 20px;border-radius:14px;
+    background:var(--accent);color:#fff;font-size:16px;font-weight:600;letter-spacing:.01em;
+    transition:transform .12s ease, background .2s ease;
+  }
+  .btn:hover{background:var(--accent-ink)}
+  .btn:active{transform:scale(.985)}
+  .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{background:#fbfaf7;border-color:#d6cfc3}
+  .btn-row{display:flex;gap:10px;margin-top:12px}
+  .btn-row .btn{flex:1}
+
+  /* ---- question ---- */
+  .qnum{font-size:13px;color:var(--accent);font-weight:600;letter-spacing:.04em}
+  .qtext{
+    font-size:clamp(20px,5.6vw,24px);font-weight:700;line-height:1.45;
+    margin:12px 0 24px;letter-spacing:-.01em;
+  }
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    display:flex;align-items:flex-start;gap:13px;text-align:left;
+    width:100%;padding:15px 16px;border-radius:14px;
+    background:var(--surface);border:1px solid var(--line);
+    font:inherit;font-size:15.5px;color:var(--ink);cursor:pointer;
+    transition:border-color .18s ease, background .18s ease, transform .12s ease;
+  }
+  .opt:hover{border-color:#cbc3b5;background:#fbfaf7}
+  .opt:active{transform:scale(.99)}
+  .opt .mk{
+    flex:none;width:24px;height:24px;border-radius:50%;
+    border:1.5px solid var(--line);color:var(--muted);
+    font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;
+    margin-top:1px;transition:all .18s ease;
+  }
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt.sel .mk{background:var(--accent);border-color:var(--accent);color:#fff}
+  .opt .tx{flex:1;min-width:0;overflow-wrap:anywhere}
+
+  /* ---- result ---- */
+  .res{text-align:center}
+  .res .badge{
+    width:74px;height:74px;border-radius:50%;margin:0 auto;
+    background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:34px;font-weight:700;letter-spacing:.01em;
+    box-shadow:0 10px 30px -12px rgba(176,73,60,.6);
+  }
+  .res .rkicker{margin-top:18px;font-size:12.5px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+  .res h2{font-size:clamp(26px,7vw,32px);font-weight:700;margin:6px 0 0;letter-spacing:-.02em}
+  .res .tagline{color:var(--accent-ink);font-size:15.5px;margin:12px 0 0;font-weight:500}
+  .res .desc{color:var(--muted);font-size:15px;margin:16px auto 0;max-width:30em;text-align:left}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:20px 0 0}
+  .chip{font-size:12.5px;color:var(--accent-ink);background:var(--accent-soft);border-radius:99px;padding:5px 12px;font-weight:500}
+
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin:22px 0 0;text-align:left;
+  }
+  .card h3{font-size:13px;letter-spacing:.04em;color:var(--muted);margin:0 0 12px;font-weight:600}
+  .kv{display:flex;gap:10px;font-size:14.5px;margin:0 0 10px}
+  .kv:last-child{margin:0}
+  .kv .k{flex:none;color:var(--accent);font-weight:600;width:74px}
+  .kv .v{flex:1;min-width:0;color:var(--ink)}
+
+  .bars{display:flex;flex-direction:column;gap:11px}
+  .bar{display:grid;grid-template-columns:96px 1fr 34px;align-items:center;gap:10px;font-size:13px}
+  .bar .bl{color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bar .bt{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar .bt > i{display:block;height:100%;background:var(--accent);border-radius:99px;width:0;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+  .bar.dim .bl{color:var(--muted)}
+  .bar.dim .bt > i{background:#cfc7ba}
+  .bar .bp{color:var(--muted);text-align:right}
+
+  .actions{margin:26px 0 0}
+  .footnote{margin:30px 0 8px;text-align:center;font-size:12px;color:var(--muted)}
+  .footnote a{color:var(--muted)}
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;font-size:13.5px;padding:11px 18px;border-radius:99px;
+    opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;z-index:20;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar" id="topbar" hidden>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="progress-meta">
+      <button class="back" id="back" disabled>← 이전</button>
+      <span id="counter"></span>
+    </div>
+  </div>
+  <main id="app"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS = [
+  {id:1,q:"연애에서 가장 중요한 건?",o:[
+    {l:"A",t:"매일 꾸준히 표현해주는 안정감",y:"A"},
+    {l:"B",t:"서로의 생각을 깊게 나눌 수 있는 대화",y:"B"},
+    {l:"C",t:"각자의 시간을 존중하는 자유로움",y:"C"},
+    {l:"D",t:"같이 있을 때 편하고 자연스러운 분위기",y:"D"},
+    {l:"E",t:"현실적인 미래 계획과 책임감",y:"E"}]},
+  {id:2,q:"좋아하는 사람이 생기면 나는?",o:[
+    {l:"A",t:"티가 많이 난다. 자주 연락하고 표현한다",y:"A"},
+    {l:"B",t:"티는 잘 안 나지만 머릿속으로 계속 분석한다",y:"B"},
+    {l:"C",t:"상대가 나를 좋아하는지 먼저 확인하려 한다",y:"C"},
+    {l:"D",t:"자연스럽게 친해지는 흐름을 기다린다",y:"D"},
+    {l:"E",t:"감정보다 관계 가능성을 먼저 생각한다",y:"E"}]},
+  {id:3,q:"이상적인 연애 텐션은?",o:[
+    {l:"A",t:"매일 붙어 있고 싶은 달달한 연애",y:"A"},
+    {l:"B",t:"각자 할 일 하다가 만나면 깊게 연결되는 연애",y:"C"},
+    {l:"C",t:"친구처럼 편하고 장난 많은 연애",y:"D"},
+    {l:"D",t:"서로 성장 자극을 주는 지적인 연애",y:"B"},
+    {l:"E",t:"안정적이고 예측 가능한 연애",y:"E"}]},
+  {id:4,q:"연인과 대화할 때 가장 끌리는 순간은?",o:[
+    {l:"A",t:"내 감정을 세심하게 알아줄 때",y:"A"},
+    {l:"B",t:"별것 아닌 주제로도 깊은 토론이 될 때",y:"B"},
+    {l:"C",t:"내 취향이나 관심사를 기억해줄 때",y:"C"},
+    {l:"D",t:"웃음 코드가 잘 맞을 때",y:"D"},
+    {l:"E",t:"현실적인 문제를 같이 해결해줄 때",y:"E"}]},
+  {id:5,q:"연애 초반 연락 빈도는 어느 정도가 좋다?",o:[
+    {l:"A",t:"하루 종일 자주 연락하고 싶다",y:"A"},
+    {l:"B",t:"아침/저녁 정도만 꾸준하면 좋다",y:"E"},
+    {l:"C",t:"할 말 있을 때 자연스럽게 하는 게 좋다",y:"D"},
+    {l:"D",t:"서로 바쁘면 하루 정도 없어도 괜찮다",y:"C"},
+    {l:"E",t:"빈도보다 대화의 질이 더 중요하다",y:"B"}]},
+  {id:6,q:"상대가 내게 서운하다고 말하면?",o:[
+    {l:"A",t:"바로 미안하다고 하고 달래준다",y:"A"},
+    {l:"B",t:"왜 서운했는지 원인을 먼저 이해하려 한다",y:"B"},
+    {l:"C",t:"내가 뭘 잘못했는지 구체적으로 물어본다",y:"D"},
+    {l:"D",t:"잠깐 생각할 시간이 필요하다",y:"C"},
+    {l:"E",t:"감정은 공감하되 해결책도 같이 찾고 싶다",y:"E"}]},
+  {id:7,q:"가장 부담스러운 연애 방식은?",o:[
+    {l:"A",t:"하루 종일 연락을 강요하는 관계",y:"C"},
+    {l:"B",t:"감정 표현을 계속 확인받으려는 관계",y:"B"},
+    {l:"C",t:"내 개인 시간을 인정하지 않는 관계",y:"C"},
+    {l:"D",t:"갈등이 생기면 대화 없이 삐지는 관계",y:"D"},
+    {l:"E",t:"미래 계획 없이 감정만 앞서는 관계",y:"E"}]},
+  {id:8,q:"데이트로 가장 좋은 것은?",o:[
+    {l:"A",t:"분위기 좋은 카페나 맛집",y:"A"},
+    {l:"B",t:"전시, 서점, 영화, 강연 같은 취향 데이트",y:"B"},
+    {l:"C",t:"집에서 같이 쉬면서 각자 할 일 하기",y:"C"},
+    {l:"D",t:"즉흥적으로 걷고 이야기하기",y:"D"},
+    {l:"E",t:"새로운 장소나 활동을 같이 경험하기",y:"E"}]},
+  {id:9,q:"연인에게 가장 듣고 싶은 말은?",o:[
+    {l:"A",t:"“보고 싶어.”",y:"A"},
+    {l:"B",t:"“네 생각이 궁금해.”",y:"B"},
+    {l:"C",t:"“너답게 해도 괜찮아.”",y:"C"},
+    {l:"D",t:"“같이 있으면 편해.”",y:"D"},
+    {l:"E",t:"“너랑 미래를 생각하고 있어.”",y:"E"}]},
+  {id:10,q:"썸에서 가장 헷갈리는 순간은?",o:[
+    {l:"A",t:"연락은 자주 하는데 확신을 안 줄 때",y:"A"},
+    {l:"B",t:"대화는 잘 통하는데 감정 표현이 없을 때",y:"B"},
+    {l:"C",t:"관심 있는 것 같은데 만나자는 말을 안 할 때",y:"E"},
+    {l:"D",t:"친절한 건지 호감인지 구분이 안 될 때",y:"D"},
+    {l:"E",t:"상대가 나를 좋아하는 이유가 명확하지 않을 때",y:"B"}]},
+  {id:11,q:"내가 사랑에 빠졌다고 느끼는 순간은?",o:[
+    {l:"A",t:"계속 보고 싶고 연락하고 싶을 때",y:"A"},
+    {l:"B",t:"상대의 생각이 궁금해질 때",y:"B"},
+    {l:"C",t:"내 일상에 자연스럽게 들어왔을 때",y:"D"},
+    {l:"D",t:"혼자 있는 시간이 줄어도 불편하지 않을 때",y:"C"},
+    {l:"E",t:"이 사람과 오래 갈 수 있겠다고 느낄 때",y:"E"}]},
+  {id:12,q:"갈등이 생겼을 때 선호하는 방식은?",o:[
+    {l:"A",t:"바로 대화해서 풀기",y:"A"},
+    {l:"B",t:"감정을 가라앉힌 뒤 차분히 이야기하기",y:"E"},
+    {l:"C",t:"문제의 원인을 정리해서 해결하기",y:"B"},
+    {l:"D",t:"서로 시간을 가진 뒤 다시 이야기하기",y:"C"},
+    {l:"E",t:"각자의 입장을 글로 정리해보기",y:"B"}]},
+  {id:13,q:"연애에서 가장 설레는 포인트는?",o:[
+    {l:"A",t:"적극적인 애정 표현",y:"A"},
+    {l:"B",t:"나만 알아볼 수 있는 세심한 배려",y:"D"},
+    {l:"C",t:"똑똑하고 독립적인 모습",y:"C"},
+    {l:"D",t:"엉뚱한 생각이나 독특한 취향",y:"B"},
+    {l:"E",t:"말하지 않아도 편한 안정감",y:"E"}]},
+  {id:14,q:"상대가 나를 좋아한다고 느끼는 기준은?",o:[
+    {l:"A",t:"자주 연락하고 표현해줄 때",y:"A"},
+    {l:"B",t:"내 이야기를 진심으로 궁금해할 때",y:"B"},
+    {l:"C",t:"내 시간을 존중하면서도 꾸준히 찾아줄 때",y:"C"},
+    {l:"D",t:"사소한 약속을 지킬 때",y:"D"},
+    {l:"E",t:"나와 미래 계획을 자연스럽게 말할 때",y:"E"}]},
+  {id:15,q:"연애에서 나에게 필요한 공간은?",o:[
+    {l:"A",t:"거의 필요 없다. 함께하는 게 좋다",y:"A"},
+    {l:"B",t:"가끔 혼자 쉬는 시간이 필요하다",y:"D"},
+    {l:"C",t:"취미나 일에 몰입할 시간이 꼭 필요하다",y:"C"},
+    {l:"D",t:"감정이 복잡할 때는 혼자 정리해야 한다",y:"B"},
+    {l:"E",t:"관계가 안정적일수록 개인 시간이 더 중요하다",y:"E"}]},
+  {id:16,q:"상대에게 가장 매력적으로 느끼는 능력은?",o:[
+    {l:"A",t:"감정 표현을 잘하는 능력",y:"A"},
+    {l:"B",t:"대화를 깊게 이어가는 능력",y:"B"},
+    {l:"C",t:"혼자서도 잘 사는 독립성",y:"C"},
+    {l:"D",t:"문제를 논리적으로 해결하는 능력",y:"E"},
+    {l:"E",t:"분위기를 편하게 만드는 능력",y:"D"}]},
+  {id:17,q:"이런 사람에게 가장 끌린다",o:[
+    {l:"A",t:"다정하고 표현이 많은 사람",y:"A"},
+    {l:"B",t:"지적이고 대화가 잘 통하는 사람",y:"B"},
+    {l:"C",t:"자기 세계가 확실한 사람",y:"C"},
+    {l:"D",t:"유머 있고 엉뚱한 사람",y:"D"},
+    {l:"E",t:"안정적이고 책임감 있는 사람",y:"E"}]},
+  {id:18,q:"관계가 오래가려면 가장 필요한 것은?",o:[
+    {l:"A",t:"꾸준한 애정 표현",y:"A"},
+    {l:"B",t:"솔직하고 깊은 대화",y:"B"},
+    {l:"C",t:"서로의 자유와 경계 존중",y:"C"},
+    {l:"D",t:"갈등을 회피하지 않는 태도",y:"D"},
+    {l:"E",t:"현실적인 신뢰와 책임감",y:"E"}]},
+  {id:19,q:"연인이 내 취미를 잘 모를 때 좋다고 느끼는 반응은?",o:[
+    {l:"A",t:"“나도 같이 해볼래.”",y:"A"},
+    {l:"B",t:"“왜 좋아하는지 설명해줘.”",y:"B"},
+    {l:"C",t:"“네가 좋아하는 거니까 존중할게.”",y:"C"},
+    {l:"D",t:"“오, 신기하다. 더 알려줘.”",y:"D"},
+    {l:"E",t:"“그 시간은 네가 충분히 즐겨.”",y:"C"}]},
+  {id:20,q:"내가 가장 피하고 싶은 연애는?",o:[
+    {l:"A",t:"감정 기복이 너무 큰 연애",y:"E"},
+    {l:"B",t:"대화가 얕고 반복되는 연애",y:"B"},
+    {l:"C",t:"사생활이 사라지는 연애",y:"C"},
+    {l:"D",t:"갈등 때마다 감정싸움이 되는 연애",y:"D"},
+    {l:"E",t:"방향성 없이 흘러가는 연애",y:"E"}]}
+];
+
+const RESULTS = {
+  A:{name:"다정한 안정형",tag:"사랑받고 있다는 감각이 관계를 움직인다",
+     desc:"표현과 확신을 중요하게 생각하는 타입. 꾸준한 애정과 ‘우리는 괜찮다’는 신호가 있을 때 가장 안정적입니다.",
+     keys:["표현","확신","다정함","꾸준함"],
+     good:"감정을 자주 말로 표현해주는 상대",
+     caution:"확신이 없으면 혼자 불안을 키우기 쉬워요",
+     fit:"지적 교감형(B) · 현실 안정형(E)"},
+  B:{name:"지적 교감형",tag:"말이 통한다는 건, 세계가 통한다는 것",
+     desc:"대화의 깊이와 사고방식, 세계관의 호환성을 중요하게 생각하는 타입. INTP가 가장 흥미를 느끼기 쉬운 유형입니다.",
+     keys:["대화","사고방식","호기심","깊이"],
+     good:"사소한 주제도 깊게 파고드는 대화",
+     caution:"감정 표현을 분석으로 대체하지 않도록",
+     fit:"지적 교감형(B) · 자유 존중형(C)"},
+  C:{name:"자유 존중형",tag:"사랑해도, 각자의 세계는 필요하다",
+     desc:"서로의 개인 시간과 독립성을 중요하게 생각하는 타입. 거리감을 지켜줄 때 오히려 더 가까워집니다.",
+     keys:["독립성","개인 시간","경계","존중"],
+     good:"내 시간을 존중하면서도 꾸준한 상대",
+     caution:"거리를 두다 표현이 부족해 보일 수 있어요",
+     fit:"자유 존중형(C) · 지적 교감형(B)"},
+  D:{name:"편안한 친구형",tag:"부담이 없을 때, 관계는 깊어진다",
+     desc:"장난과 자연스러움, 일상의 편안함을 중요하게 생각하는 타입. 무리하지 않는 관계에서 가장 자기다워집니다.",
+     keys:["편안함","유머","자연스러움","일상"],
+     good:"웃음 코드와 리듬이 맞는 상대",
+     caution:"편안함에 기대 진지한 대화를 미루지 않기",
+     fit:"편안한 친구형(D) · 다정한 안정형(A)"},
+  E:{name:"현실 안정형",tag:"감정보다 오래갈 구조를 본다",
+     desc:"책임감과 미래 계획, 신뢰를 중요하게 생각하는 타입. 감정의 높낮이보다 지속 가능한 방향을 봅니다.",
+     keys:["신뢰","책임감","미래","안정"],
+     good:"약속을 지키고 방향이 분명한 상대",
+     caution:"계획이 앞서 감정 표현이 뒤로 밀릴 수 있어요",
+     fit:"다정한 안정형(A) · 현실 안정형(E)"}
+};
+const ORDER = ["A","B","C","D","E"];
+
+const app = document.getElementById('app');
+const topbar = document.getElementById('topbar');
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+const backBtn = document.getElementById('back');
+const toastEl = document.getElementById('toast');
+
+let answers = []; // type per question, index-aligned
+let idx = 0;      // current question index
+
+function setProgress(){
+  const done = answers.filter(Boolean).length;
+  bar.style.width = (idx / QUESTIONS.length * 100) + '%';
+  counter.textContent = (idx+1) + ' / ' + QUESTIONS.length;
+  backBtn.disabled = idx === 0;
+}
+
+function renderIntro(){
+  topbar.hidden = true;
+  app.className = '';
+  app.innerHTML = `
+    <section class="intro fade">
+      <div class="kicker">love3.kr · 연애 질문지</div>
+      <h1>너는 사랑을<br/>어떻게 이해하는<br/>사람일까?</h1>
+      <p class="lead">20개의 질문으로 들여다보는, 내가 연애에서 진짜 중요하게 보는 것. 감정만 묻지 않고 가치관·거리감·갈등 방식까지 살펴봅니다.</p>
+      <div class="specs">
+        <span class="spec">20문항</span>
+        <span class="spec">약 3분</span>
+        <span class="spec">결과 5유형</span>
+        <span class="spec">INTP도 끝까지 OK</span>
+      </div>
+      <div class="start"><button class="btn" id="startBtn">시작하기</button></div>
+    </section>`;
+  document.getElementById('startBtn').onclick = ()=>{ idx=0; answers=[]; renderQuestion(); };
+}
+
+function renderQuestion(){
+  topbar.hidden = false;
+  setProgress();
+  const Q = QUESTIONS[idx];
+  const chosen = answers[idx];
+  app.className = '';
+  app.innerHTML = `
+    <section class="q fade" key="${Q.id}">
+      <div class="qnum">Q${idx+1}</div>
+      <h2 class="qtext">${Q.q}</h2>
+      <div class="opts">
+        ${Q.o.map((o,i)=>`
+          <button class="opt${chosen===o.y && answers._lbl?.[idx]===o.l?' sel':''}" data-i="${i}">
+            <span class="mk">${o.l}</span>
+            <span class="tx">${o.t}</span>
+          </button>`).join('')}
+      </div>
+    </section>`;
+  app.querySelectorAll('.opt').forEach(el=>{
+    el.onclick = ()=> choose(parseInt(el.dataset.i,10), el);
+  });
+}
+
+function choose(i, el){
+  const Q = QUESTIONS[idx];
+  answers[idx] = Q.o[i].y;
+  (answers._lbl ||= [])[idx] = Q.o[i].l;
+  app.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  setTimeout(()=>{
+    if(idx < QUESTIONS.length-1){ idx++; renderQuestion(); }
+    else { bar.style.width='100%'; renderResult(); }
+  }, 240);
+}
+
+backBtn.onclick = ()=>{ if(idx>0){ idx--; renderQuestion(); } };
+
+function score(){
+  const cnt = {A:0,B:0,C:0,D:0,E:0};
+  answers.forEach(y=>{ if(y) cnt[y]++; });
+  let max = -1;
+  ORDER.forEach(t=>{ if(cnt[t]>max) max=cnt[t]; });
+  const tied = ORDER.filter(t=>cnt[t]===max);
+  // tie-break: whichever tied type the user picked earliest
+  let winner = tied[0], best = Infinity;
+  tied.forEach(t=>{
+    const first = answers.indexOf(t);
+    if(first>-1 && first<best){ best=first; winner=t; }
+  });
+  return {winner, cnt};
+}
+
+function renderResult(){
+  topbar.hidden = true;
+  const {winner, cnt} = score();
+  const R = RESULTS[winner];
+  const total = QUESTIONS.length;
+  const rows = ORDER.map(t=>({t, n:cnt[t], pct:Math.round(cnt[t]/total*100)}))
+                    .sort((a,b)=> b.n-a.n);
+  app.className = '';
+  app.innerHTML = `
+    <section class="res fade">
+      <div class="badge">${winner}</div>
+      <div class="rkicker">나의 연애 유형</div>
+      <h2>${R.name}</h2>
+      <p class="tagline">“${R.tag}”</p>
+      <p class="desc">${R.desc}</p>
+      <div class="chips">${R.keys.map(k=>`<span class="chip">${k}</span>`).join('')}</div>
+
+      <div class="card">
+        <h3>이 유형은</h3>
+        <div class="kv"><span class="k">잘 맞아요</span><span class="v">${R.good}</span></div>
+        <div class="kv"><span class="k">조심할 점</span><span class="v">${R.caution}</span></div>
+        <div class="kv"><span class="k">결이 맞는</span><span class="v">${R.fit}</span></div>
+      </div>
+
+      <div class="card">
+        <h3>내 응답 분포</h3>
+        <div class="bars">
+          ${rows.map((r,i)=>`
+            <div class="bar${i===0?'':' dim'}">
+              <span class="bl">${r.t} ${RESULTS[r.t].name}</span>
+              <span class="bt"><i data-w="${r.pct}"></i></span>
+              <span class="bp">${r.pct}%</span>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="shareBtn">결과 공유하기</button>
+        <div class="btn-row">
+          <button class="btn ghost" id="copyBtn">링크 복사</button>
+          <button class="btn ghost" id="retryBtn">다시 하기</button>
+        </div>
+      </div>
+      <p class="footnote">love3.kr · 너는 사랑을 어떻게 이해하는 사람일까?</p>
+    </section>`;
+
+  requestAnimationFrame(()=>{
+    setTimeout(()=> app.querySelectorAll('.bar .bt > i').forEach(i=> i.style.width = i.dataset.w + '%'), 60);
+  });
+
+  const shareText = `나는 ‘${R.name}’. ${R.tag}\n너는 사랑을 어떻게 이해하는 사람일까?`;
+  document.getElementById('shareBtn').onclick = async ()=>{
+    const data = {title:"INTP 연애 질문지", text:shareText, url:"https://love3.kr/"};
+    if(navigator.share){ try{ await navigator.share(data); }catch(e){} }
+    else { copy("https://love3.kr/"); }
+  };
+  document.getElementById('copyBtn').onclick = ()=> copy("https://love3.kr/");
+  document.getElementById('retryBtn').onclick = ()=> renderIntro();
+}
+
+function copy(text){
+  navigator.clipboard?.writeText(text).then(()=>toast("링크를 복사했어요"))
+    .catch(()=>toast("복사에 실패했어요"));
+}
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toastEl.classList.remove('show'), 1800);
+}
+
+renderIntro();
+</script>
+</body>
+</html>

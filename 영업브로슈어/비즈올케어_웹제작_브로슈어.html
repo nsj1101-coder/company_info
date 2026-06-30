@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>비즈올케어 · 홈페이지 제작·상위노출·마케팅 브로슈어</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  :root{
+    --navy:#232952; --navy2:#2d3566; --ink:#1f2440;
+    --blue:#5566b5; --teal:#33a99c; --teal-d:#2b8f84; --coral:#e8503a;
+    --sub:#5d6275; --card:#eef1f8; --card2:#e7ebf6; --line:#e3e7f1;
+    --dot:#d8def0;
+  }
+  html,body{ font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif; color:var(--ink); background:#525659; line-height:1.6; }
+  .page{ width:794px; height:1123px; margin:0 auto; background:#fff; position:relative; overflow:hidden; page-break-after:always; }
+  .page:last-child{ page-break-after:auto; }
+
+  .dots{ position:absolute; background-image:radial-gradient(var(--dot) 1.7px, transparent 1.8px); background-size:21px 21px; pointer-events:none; }
+  .dots-l{ left:0; top:120px; width:120px; height:880px; -webkit-mask-image:linear-gradient(90deg,#000 40%,transparent); }
+  .tri{ position:absolute; right:54px; top:300px; width:110px; height:120px; pointer-events:none;
+        background:radial-gradient(var(--blue) 2.4px, transparent 2.6px); background-size:22px 22px;
+        -webkit-mask-image:linear-gradient(135deg,#000 0 42%,transparent 60%); }
+
+  .eyeshape{ position:absolute; top:0; right:0; width:360px; height:138px; background:var(--teal);
+             border-bottom-left-radius:120px 90px; display:flex; align-items:center; justify-content:flex-end;
+             gap:16px; padding:0 46px 18px 0; }
+  .eyeshape b{ color:#fff; font-size:16px; font-weight:700; letter-spacing:.04em; }
+  .eyeshape i{ width:46px; height:3px; background:#fff; border-radius:2px; display:block; }
+
+  .head{ position:relative; padding:60px 60px 0; }
+  h2.t{ font-size:35px; font-weight:800; color:var(--ink); letter-spacing:-.035em; line-height:1.22; }
+  h2.t em{ font-style:normal; color:var(--teal); }
+  .ubar{ display:flex; gap:6px; margin-top:18px; }
+  .ubar span{ height:8px; border-radius:3px; background:var(--navy); }
+  .ubar span:first-child{ width:60px; } .ubar span:last-child{ width:26px; background:var(--blue); }
+  .desc{ margin-top:20px; font-size:14.5px; color:var(--sub); line-height:1.75; }
+
+  .ctitle{ text-align:center; font-size:24px; font-weight:800; color:var(--ink); letter-spacing:-.02em; }
+  .ctitle em{ font-style:normal; color:var(--teal); }
+
+  .banner{ background:var(--navy); border-radius:8px; color:#fff; text-align:center; padding:26px 30px; }
+  .banner .b1{ font-size:21px; font-weight:700; letter-spacing:-.02em; }
+  .banner .b2{ font-size:22px; font-weight:800; letter-spacing:-.02em; margin-top:6px; }
+  .banner .b2 em{ font-style:normal; color:var(--coral); }
+
+  .foot{ position:absolute; left:60px; right:60px; bottom:42px; display:flex; align-items:center; justify-content:space-between; }
+  .flogo{ display:flex; align-items:center; gap:11px; }
+  .flogo img{ height:34px; }
+  .flogo .ft b{ display:block; font-size:13px; font-weight:800; color:var(--ink); letter-spacing:.01em; }
+  .flogo .ft span{ font-size:11px; color:#9aa0b5; }
+  .fpage{ display:flex; align-items:center; gap:12px; font-size:20px; font-weight:700; color:#aab; }
+  .fpage i{ width:46px; height:5px; border-radius:3px; background:linear-gradient(90deg,var(--teal) 0 55%,var(--navy) 55%); display:block; }
+
+  .lock{ display:flex; align-items:center; gap:13px; }
+  .lock img{ height:46px; }
+  .lock .ko{ font-size:21px; font-weight:800; color:var(--navy); letter-spacing:-.01em; line-height:1; }
+  .lock .en{ font-size:10.5px; font-weight:700; color:#9aa0b5; letter-spacing:.32em; margin-top:4px; }
+
+  /* COVER */
+  .cv-hero{ position:relative; height:556px; background:linear-gradient(160deg,#2a3160 0%,var(--navy) 55%,#1c2146 100%); overflow:hidden; }
+  .cv-hero .blob{ position:absolute; top:-90px; left:-70px; width:300px; height:300px; background:var(--teal); border-radius:48% 52% 60% 40%/55% 45% 55% 45%; opacity:.92; }
+  .cv-hero .blob2{ position:absolute; bottom:-70px; right:-50px; width:220px; height:220px; border:18px solid rgba(255,255,255,.06); border-radius:50%; }
+  .cv-hero .hdots{ position:absolute; right:46px; top:60px; width:150px; height:150px; background:radial-gradient(rgba(255,255,255,.22) 2.2px,transparent 2.4px); background-size:22px 22px; -webkit-mask-image:linear-gradient(135deg,#000 0 45%,transparent 65%); }
+  .cv-hero .center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; }
+  .cv-hero .mark{ width:118px; height:118px; }
+  .cv-hero .wm{ text-align:center; }
+  .cv-hero .wm .ko{ font-size:46px; font-weight:800; color:#fff; letter-spacing:.02em; }
+  .cv-hero .wm .en{ font-size:15px; font-weight:700; color:#b9c0db; letter-spacing:.42em; margin-top:8px; }
+  .cv-hero .tagpill{ margin-top:6px; border:1px solid rgba(255,255,255,.28); color:#dfe3f3; font-size:14px; font-weight:600; padding:9px 22px; border-radius:40px; letter-spacing:.02em; }
+
+  .cv-mid{ position:relative; padding:42px 60px 0; }
+  .cv-eye{ display:inline-block; background:var(--teal); color:#fff; font-size:12px; font-weight:800; letter-spacing:.22em; padding:7px 16px; border-radius:30px; }
+  .cv-mid h1{ font-size:42px; font-weight:800; color:var(--ink); letter-spacing:-.04em; line-height:1.2; margin-top:18px; }
+  .cv-mid h1 em{ font-style:normal; color:var(--teal); }
+  .cv-mid p{ font-size:15px; color:var(--sub); margin-top:16px; line-height:1.7; }
+
+  .cv-bar{ position:absolute; left:0; right:0; bottom:0; background:var(--navy); padding:24px 60px 22px; }
+  .cv-bar .en{ font-size:12px; font-weight:800; letter-spacing:.24em; color:var(--teal); }
+  .cv-bar .vals{ display:flex; gap:14px; margin-top:16px; }
+  .cv-bar .v{ flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:13px 14px; }
+  .cv-bar .v b{ display:block; color:#fff; font-size:15px; font-weight:800; letter-spacing:-.01em; }
+  .cv-bar .v span{ font-size:11px; color:#aab1cf; }
+  .cv-bar .cvfoot{ margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; font-size:11px; color:#9aa0c0; letter-spacing:.08em; }
+  .cv-bar .cvfoot b{ color:#cfd4ea; }
+
+  /* checklist */
+  .checks{ margin-top:30px; display:flex; flex-direction:column; gap:22px; }
+  .chk{ display:flex; gap:18px; align-items:flex-start; }
+  .chk .box{ flex:none; width:26px; height:26px; border:2.4px solid var(--teal); border-radius:6px; margin-top:2px; }
+  .chk .tx h4{ font-size:18.5px; font-weight:800; color:var(--ink); letter-spacing:-.02em; }
+  .chk .tx p{ font-size:13.5px; color:var(--sub); margin-top:5px; line-height:1.6; }
+
+  /* solution cards */
+  .scards{ margin-top:26px; display:flex; flex-direction:column; gap:16px; }
+  .scard{ background:var(--card); border-radius:16px; padding:24px 26px; position:relative; }
+  .scard .badge{ position:absolute; top:-11px; left:26px; background:var(--navy); color:#fff; font-size:11.5px; font-weight:800; letter-spacing:.08em; padding:5px 13px; border-radius:20px; }
+  .scard h3{ font-size:21px; font-weight:800; color:var(--ink); letter-spacing:-.02em; }
+  .scard h3 span{ font-size:13px; font-weight:700; color:var(--teal); margin-left:8px; }
+  .scard ul{ list-style:none; margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:9px 24px; }
+  .scard li{ position:relative; padding-left:20px; font-size:13.5px; color:#3a3f57; line-height:1.5; }
+  .scard li::before{ content:''; position:absolute; left:2px; top:8px; width:7px; height:7px; border-radius:2px; background:var(--teal); }
+
+  /* deliverable grid */
+  .grid4{ margin-top:26px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .gcard{ background:var(--card); border-radius:14px; padding:22px 24px; }
+  .gcard .ic{ width:46px; height:46px; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(35,41,82,.08); }
+  .gcard .ic svg{ width:24px; height:24px; stroke:var(--navy); fill:none; stroke-width:1.7; }
+  .gcard h4{ font-size:16.5px; font-weight:800; color:var(--ink); margin-top:14px; letter-spacing:-.02em; }
+  .gcard p{ font-size:12.8px; color:var(--sub); margin-top:7px; line-height:1.55; }
+
+  /* steps */
+  .steps{ margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr); gap:13px; }
+  .step{ background:var(--card); border-radius:13px; padding:18px 14px; text-align:center; }
+  .step .sn{ width:34px; height:34px; margin:0 auto; border-radius:50%; background:var(--navy); color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .step h4{ font-size:15px; font-weight:800; margin-top:11px; letter-spacing:-.01em; }
+  .step p{ font-size:11.5px; color:var(--sub); margin-top:6px; line-height:1.5; }
+
+  /* why cards */
+  .why{ margin-top:26px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .wcard{ background:var(--card); border-radius:14px; padding:24px 26px; }
+  .wcard .wn{ font-size:13px; font-weight:800; color:var(--teal); letter-spacing:.1em; }
+  .wcard h4{ font-size:18px; font-weight:800; color:var(--ink); margin-top:8px; letter-spacing:-.02em; }
+  .wcard p{ font-size:13px; color:var(--sub); margin-top:9px; line-height:1.6; }
+
+  /* package table */
+  table.pkg{ width:100%; border-collapse:separate; border-spacing:0; margin-top:24px; font-size:13px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  table.pkg th, table.pkg td{ border-bottom:1px solid var(--line); border-right:1px solid var(--line); padding:12px 10px; text-align:center; }
+  table.pkg tr td:last-child, table.pkg tr th:last-child{ border-right:0; }
+  table.pkg tbody tr:last-child td{ border-bottom:0; }
+  table.pkg thead th{ background:var(--navy); color:#fff; font-weight:800; font-size:14px; }
+  table.pkg thead th:first-child{ background:var(--navy2); }
+  table.pkg tbody td:first-child{ text-align:left; font-weight:700; background:var(--card); color:#2a2f47; }
+  table.pkg .yes{ color:var(--teal-d); font-weight:800; }
+  table.pkg .no{ color:#c4cad9; }
+  table.pkg .opt{ color:var(--sub); font-weight:600; }
+
+  /* BACK COVER */
+  .back{ background:linear-gradient(165deg,#2a3160,var(--navy) 60%,#1b2044); height:1123px; position:relative; overflow:hidden; }
+  .back .halftone{ position:absolute; top:-40px; right:-40px; width:360px; height:300px; background:radial-gradient(rgba(255,255,255,.5) 30%,transparent 32%); background-size:26px 26px; -webkit-mask-image:radial-gradient(circle at 80% 10%,#000,transparent 70%); }
+  .back .cut{ position:absolute; left:0; bottom:0; width:100%; height:430px; background:#fff; border-top-right-radius:160px 120px; }
+  .back .close{ position:relative; padding:150px 70px 0; text-align:center; color:#fff; }
+  .back .close .ce{ font-size:13px; font-weight:800; letter-spacing:.26em; color:var(--teal); }
+  .back .close h2{ font-size:32px; font-weight:800; letter-spacing:-.03em; line-height:1.35; margin-top:18px; }
+  .back .close h2 em{ font-style:normal; color:#9fe3da; }
+  .back .info{ position:absolute; left:70px; bottom:160px; color:var(--ink); }
+  .back .info .row{ display:flex; gap:20px; margin-bottom:13px; font-size:14.5px; align-items:baseline; }
+  .back .info .k{ width:78px; font-weight:800; color:var(--blue); letter-spacing:.02em; font-size:12.5px; }
+  .back .info .v{ font-weight:600; letter-spacing:.01em; color:#2a2f47; }
+  .back .qrbox{ position:absolute; right:70px; bottom:150px; width:188px; text-align:center; }
+  .back .qrbox .qrc{ background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:14px; box-shadow:0 12px 30px rgba(0,0,0,.12); }
+  .back .qrbox img{ width:160px; height:160px; display:block; }
+  .back .qrbox p{ margin-top:11px; font-size:13px; font-weight:800; color:var(--navy); }
+  .back .blogo{ position:absolute; left:70px; bottom:66px; }
+
+  @media print{
+    html,body{ background:#fff; }
+    .page{ margin:0; box-shadow:none; }
+    @page{ size:A4 portrait; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ PAGE 1 · COVER ════ -->
+<section class="page">
+  <div class="cv-hero">
+    <div class="blob"></div>
+    <div class="blob2"></div>
+    <div class="hdots"></div>
+    <div class="center">
+      <img class="mark" src="assets/bac_mark.png" style="filter:brightness(0) invert(1)" alt="BAC">
+      <div class="wm">
+        <div class="ko">비즈올케어</div>
+        <div class="en">BIZ ALL CARE</div>
+      </div>
+      <div class="tagpill">홈페이지 제작 · 상위노출 · 마케팅</div>
+    </div>
+  </div>
+
+  <div class="cv-mid">
+    <span class="cv-eye">WEB · SEO · MARKETING</span>
+    <h1>노후화된 홈페이지,<br><em>매출이 안 나오죠?</em></h1>
+    <p>보기 좋은 사이트를 넘어, <b style="color:var(--ink)">검색에서 발견되고 매출로 이어지는</b> 홈페이지를 만듭니다. 제작부터 상위노출, 마케팅까지 한 팀이 끝까지 함께합니다.</p>
+  </div>
+
+  <div class="cv-bar">
+    <div class="en">BUILD · RANK · GROW — ALL IN ONE</div>
+    <div class="vals">
+      <div class="v"><b>홈페이지 제작</b><span>반응형 · 리뉴얼</span></div>
+      <div class="v"><b>상위노출</b><span>구글 · 네이버 SEO</span></div>
+      <div class="v"><b>마케팅 대행</b><span>광고 · 콘텐츠</span></div>
+      <div class="v"><b>빠른 오픈</b><span>합리적 비용</span></div>
+    </div>
+    <div class="cvfoot"><span>2026 · COMPANY BROCHURE</span><span><b>BIZ ALL CARE</b> · bizallcare.com</span></div>
+  </div>
+</section>
+
+<!-- ════ PAGE 2 · CHECKLIST ════ -->
+<section class="page">
+  <div class="eyeshape"><b>Check List</b><i></i></div>
+  <div class="dots dots-l"></div>
+  <div class="head">
+    <h2 class="t">이런 고민,<br><em>있으신가요?</em></h2>
+    <div class="ubar"><span></span><span></span></div>
+    <p class="desc">홈페이지는 매출의 첫 접점입니다. 아래 항목 중 <b style="color:var(--ink)">하나라도 해당</b>된다면,<br>지금 홈페이지가 매출을 막고 있다는 신호입니다.</p>
+  </div>
+
+  <div style="padding:0 60px;">
+    <div class="checks">
+      <div class="chk"><div class="box"></div><div class="tx"><h4>홈페이지가 몇 년째 그대로다.</h4><p>디자인이 낡아 신뢰가 가지 않고, 경쟁사보다 뒤처져 보입니다.</p></div></div>
+      <div class="chk"><div class="box"></div><div class="tx"><h4>모바일에서 깨지거나 느리다.</h4><p>손님이 들어왔다 그냥 나갑니다 — 첫 접점부터 손해입니다.</p></div></div>
+      <div class="chk"><div class="box"></div><div class="tx"><h4>검색해도 우리 회사가 안 나온다.</h4><p>구글·네이버에서 보이지 않으면, 있어도 없는 것과 같습니다.</p></div></div>
+      <div class="chk"><div class="box"></div><div class="tx"><h4>사이트는 있는데 문의·매출이 없다.</h4><p>방문자가 행동(문의·예약·구매)으로 이어지지 않습니다.</p></div></div>
+      <div class="chk"><div class="box"></div><div class="tx"><h4>광고비만 나가고 효과가 없다.</h4><p>돈은 쓰는데 성과가 안 보이고, 관리할 사람도 없어 방치 중입니다.</p></div></div>
+    </div>
+
+    <div class="banner" style="margin-top:38px;">
+      <div class="b1">한 번에 다 바꿀 필요 없습니다.</div>
+      <div class="b2">하나라도 해당된다면, <em>지금이 바꿀 때</em>입니다.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="flogo"><img src="assets/bac_mark.png" alt=""><div class="ft"><b>BIZ ALL CARE</b><span>비즈올케어 · 홈페이지 · 마케팅</span></div></div>
+    <div class="fpage">02 <i></i></div>
+  </div>
+</section>
+
+<!-- ════ PAGE 3 · SOLUTION ════ -->
+<section class="page">
+  <div class="eyeshape"><b>Solution</b><i></i></div>
+  <div class="dots dots-l"></div>
+  <div class="tri"></div>
+  <div class="head">
+    <h2 class="t">우리가 해결합니다<br><em>— 3가지</em></h2>
+    <div class="ubar"><span></span><span></span></div>
+    <p class="desc">제작·상위노출·마케팅을 따로 맡기지 마세요.<br>한 팀이 처음부터 끝까지 책임집니다.</p>
+  </div>
+
+  <div style="padding:0 60px;">
+    <div class="scards">
+      <div class="scard">
+        <span class="badge">SERVICE 01</span>
+        <h3>홈페이지 제작 · 리뉴얼 <span>WEB</span></h3>
+        <ul>
+          <li>모바일·PC 완벽 대응 반응형 디자인</li>
+          <li>빠른 로딩 속도와 최신 트렌드 디자인</li>
+          <li>문의·예약·상담 유도 전환 설계</li>
+          <li>검색 최적화(SEO) 구조 기본 내장</li>
+        </ul>
+      </div>
+      <div class="scard">
+        <span class="badge">SERVICE 02</span>
+        <h3>구글 · 네이버 상위노출 <span>SEO</span></h3>
+        <ul>
+          <li>핵심 키워드 분석과 상위노출 전략</li>
+          <li>네이버 플레이스·블로그·지도 최적화</li>
+          <li>구글 검색·기술 SEO(속도·구조·색인)</li>
+          <li>매월 순위·유입 리포트 제공</li>
+        </ul>
+      </div>
+      <div class="scard">
+        <span class="badge">SERVICE 03</span>
+        <h3>마케팅 대행 <span>MARKETING</span></h3>
+        <ul>
+          <li>키워드 광고·SNS 광고 운영</li>
+          <li>콘텐츠·상세페이지·이벤트 기획</li>
+          <li>데이터 기반 성과 분석과 개선</li>
+          <li>예산 맞춤 운영 — 작게 시작해 키움</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="banner" style="margin-top:34px;">
+      <div class="b1">제작 따로, 마케팅 따로는 그만.</div>
+      <div class="b2">유입부터 매출까지, <em>하나로 연결</em>합니다.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="flogo"><img src="assets/bac_mark.png" alt=""><div class="ft"><b>BIZ ALL CARE</b><span>비즈올케어 · 홈페이지 · 마케팅</span></div></div>
+    <div class="fpage">03 <i></i></div>
+  </div>
+</section>
+
+<!-- ════ PAGE 4 · PROCESS + 제공 내역 ════ -->
+<section class="page">
+  <div class="eyeshape"><b>How It Works</b><i></i></div>
+  <div class="dots dots-l"></div>
+  <div class="head">
+    <h2 class="t">진행 과정은<br><em>간단</em>합니다.</h2>
+    <div class="ubar"><span></span><span></span></div>
+    <p class="desc">복잡한 절차 없이, 상담 한 번이면 시작됩니다.<br>최단 기간·합리적 비용으로 오픈하고, 오픈 후 운영까지 이어갑니다.</p>
+  </div>
+
+  <div style="padding:0 60px;">
+    <div class="ctitle" style="margin-top:6px;">진행 과정</div>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div><h4>무료 상담·견적</h4><p>24시간 내 회신, 현황 진단.</p></div>
+      <div class="step"><div class="sn">2</div><h4>기획·디자인</h4><p>시안 확정, 콘텐츠 정리.</p></div>
+      <div class="step"><div class="sn">3</div><h4>제작·검수</h4><p>빠른 제작, 실시간 확인.</p></div>
+      <div class="step"><div class="sn">4</div><h4>오픈·운영</h4><p>상위노출·마케팅 운영.</p></div>
+    </div>
+
+    <div class="ctitle" style="margin-top:42px;">기본 제공 내역</div>
+    <div class="grid4">
+      <div class="gcard">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4" stroke-linecap="round"/></svg></div>
+        <h4>반응형 웹사이트</h4>
+        <p>PC·태블릿·모바일 어디서나 깨지지 않는 반응형 디자인으로 제작합니다.</p>
+      </div>
+      <div class="gcard">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4" stroke-linecap="round"/></svg></div>
+        <h4>검색 최적화(SEO)</h4>
+        <p>속도·구조·색인까지 검색 친화적으로 설계해 상위노출의 기반을 만듭니다.</p>
+      </div>
+      <div class="gcard">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-3" stroke-linecap="round"/></svg></div>
+        <h4>월간 성과 리포트</h4>
+        <p>순위·유입·전환을 데이터로 정리해 매달 무엇이 나아졌는지 확인합니다.</p>
+      </div>
+      <div class="gcard">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.6 1-5.5-4-3.9 5.5-.8z" stroke-linejoin="round"/></svg></div>
+        <h4>오픈 후 운영 지원</h4>
+        <p>제작으로 끝이 아닙니다. 상위노출·마케팅 운영까지 한 팀이 이어갑니다.</p>
+      </div>
+    </div>
+
+    <div class="banner" style="margin-top:34px;">
+      <div class="b1">예쁜 사이트가 아니라,</div>
+      <div class="b2"><em>매출 나는 사이트</em>를 만듭니다.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="flogo"><img src="assets/bac_mark.png" alt=""><div class="ft"><b>BIZ ALL CARE</b><span>비즈올케어 · 홈페이지 · 마케팅</span></div></div>
+    <div class="fpage">04 <i></i></div>
+  </div>
+</section>
+
+<!-- ════ PAGE 5 · WHY + 패키지 ════ -->
+<section class="page">
+  <div class="eyeshape"><b>Why & Package</b><i></i></div>
+  <div class="dots dots-l"></div>
+  <div class="tri"></div>
+  <div class="head">
+    <h2 class="t">왜 <em>비즈올케어</em><br>인가요?</h2>
+    <div class="ubar"><span></span><span></span></div>
+    <p class="desc">제작·상위노출·마케팅을 한 곳에서. 필요한 만큼 골라 시작할 수 있습니다.</p>
+  </div>
+
+  <div style="padding:0 60px;">
+    <div class="why">
+      <div class="wcard"><div class="wn">01</div><h4>한 팀이 끝까지</h4><p>제작부터 상위노출·마케팅·운영까지 한 곳에서 책임집니다.</p></div>
+      <div class="wcard"><div class="wn">02</div><h4>검증된 실력</h4><p>50+ 프로젝트 경험과 전문 인력이 빠르고 안정적으로 구현합니다.</p></div>
+      <div class="wcard"><div class="wn">03</div><h4>빠른 응답</h4><p>평균 24시간 내 견적 회신. 기다리게 하지 않습니다.</p></div>
+      <div class="wcard"><div class="wn">04</div><h4>결과 중심</h4><p>예쁜 사이트가 아니라, 문의와 매출이 나는 사이트를 만듭니다.</p></div>
+    </div>
+
+    <div class="ctitle" style="margin-top:38px;">패키지</div>
+    <table class="pkg">
+      <thead><tr><th>구분</th><th>라이트</th><th>스탠다드</th><th>프리미엄</th></tr></thead>
+      <tbody>
+        <tr><td>홈페이지 제작</td><td class="yes">핵심</td><td class="yes">풀</td><td class="yes">맞춤</td></tr>
+        <tr><td>모바일 반응형 · 기본 SEO</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>상위노출 운영</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>마케팅 대행</td><td class="no">—</td><td class="opt">선택</td><td class="yes">✓</td></tr>
+        <tr><td>리포트</td><td class="no">—</td><td class="opt">월간</td><td class="yes">월간+컨설팅</td></tr>
+      </tbody>
+    </table>
+    <p class="desc" style="margin-top:14px; font-size:12px;">※ 정확한 비용은 현황에 맞춰 <b style="color:var(--ink)">무료 견적</b>으로 안내드립니다. 작게 시작해 단계적으로 확장할 수 있습니다.</p>
+  </div>
+
+  <div class="foot">
+    <div class="flogo"><img src="assets/bac_mark.png" alt=""><div class="ft"><b>BIZ ALL CARE</b><span>비즈올케어 · 홈페이지 · 마케팅</span></div></div>
+    <div class="fpage">05 <i></i></div>
+  </div>
+</section>
+
+<!-- ════ PAGE 6 · BACK COVER ════ -->
+<section class="page back">
+  <div class="halftone"></div>
+  <div class="cut"></div>
+
+  <div class="close">
+    <div class="ce">GET IN TOUCH</div>
+    <h2>지금 문의하세요.<br><em>무료 상담 · 무료 견적</em>,<br>24시간 내 회신해 드립니다.</h2>
+  </div>
+
+  <div class="qrbox">
+    <div class="qrc"><img src="assets/qr_web.png" alt="QR"></div>
+    <p>QR로 홈페이지 바로가기</p>
+  </div>
+
+  <div class="info">
+    <div class="row"><span class="k">전화·문자</span><span class="v">010-6551-3593</span></div>
+    <div class="row"><span class="k">카카오톡</span><span class="v">max-impact</span></div>
+    <div class="row"><span class="k">이메일</span><span class="v">maximpact.it@gmail.com</span></div>
+    <div class="row"><span class="k">홈페이지</span><span class="v">bizallcare.com</span></div>
+    <div class="row"><span class="k">상담 시간</span><span class="v">평일 09:00 – 19:00</span></div>
+  </div>
+
+  <div class="blogo">
+    <div class="lock"><img src="assets/bac_mark.png" alt=""><div><div class="ko">비즈올케어</div><div class="en">BIZ ALL CARE</div></div></div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>MaxImpact 홈페이지 제작·상위노출·마케팅 브로슈어</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  :root{
+    --ink:#141414; --sub:#5c5c5c; --line:#e3e3e3; --soft:#f6f6f6;
+    --black:#0f0f0f; --accent:#1f5eff;
+  }
+  html,body{ font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif; color:var(--ink); background:#525659; line-height:1.6; }
+  .page{
+    width:794px; height:1123px; margin:0 auto; background:#fff; position:relative;
+    overflow:hidden; page-break-after:always;
+  }
+  .page:last-child{ page-break-after:auto; }
+  .pad{ padding:64px 60px; height:100%; display:flex; flex-direction:column; }
+
+  /* running header / footer */
+  .rh{ display:flex; justify-content:space-between; align-items:center; font-size:11px; letter-spacing:.14em; color:#9a9a9a; text-transform:uppercase; font-weight:700; }
+  .rh .brand{ color:var(--ink); }
+  .rf{ margin-top:auto; padding-top:22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:10.5px; color:#9a9a9a; letter-spacing:.06em; }
+
+  .eyebrow{ font-size:12px; font-weight:800; letter-spacing:.26em; text-transform:uppercase; color:var(--accent); }
+  h2.sec{ font-size:33px; font-weight:800; letter-spacing:-.03em; line-height:1.2; margin-top:14px; }
+  h2.sec .dim{ color:#bdbdbd; }
+  .lead{ font-size:14px; color:var(--sub); margin-top:12px; max-width:560px; }
+
+  /* ───── COVER ───── */
+  .cover{ background:var(--black); color:#fff; }
+  .cover .pad{ padding:70px 64px; }
+  .cover .top{ display:flex; justify-content:space-between; align-items:center; font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:#8a8a8a; font-weight:700; }
+  .cover .top b{ color:#fff; letter-spacing:.05em; }
+  .cover .mid{ margin-top:auto; }
+  .cover .kick{ font-size:13px; font-weight:800; letter-spacing:.2em; color:var(--accent); text-transform:uppercase; }
+  .cover h1{ font-size:62px; font-weight:800; letter-spacing:-.045em; line-height:1.12; margin-top:22px; }
+  .cover h1 u{ text-decoration:none; border-bottom:6px solid var(--accent); padding-bottom:2px; }
+  .cover .sub{ font-size:16.5px; color:#c4c4c4; margin-top:26px; max-width:600px; line-height:1.65; }
+  .cover .chips{ display:flex; gap:10px; margin-top:34px; flex-wrap:wrap; }
+  .cover .chip{ border:1px solid #3a3a3a; border-radius:40px; padding:9px 18px; font-size:13px; font-weight:700; color:#e8e8e8; }
+  .cover .chip b{ color:var(--accent); }
+  .cover .pillars{ display:flex; gap:30px; margin-top:54px; padding-top:30px; border-top:1px solid #2a2a2a; }
+  .cover .pillars div{ font-size:13px; color:#9a9a9a; font-weight:600; }
+  .cover .pillars b{ display:block; color:#fff; font-size:15px; font-weight:800; margin-bottom:3px; }
+  .cover .foot{ margin-top:40px; display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#bdbdbd; }
+  .cover .foot b{ color:#fff; font-size:15px; letter-spacing:.02em; }
+
+  /* ───── PAIN ───── */
+  .pains{ margin-top:34px; display:grid; gap:0; border-top:2px solid var(--ink); }
+  .pain{ display:flex; align-items:flex-start; gap:18px; padding:21px 4px; border-bottom:1px solid var(--line); }
+  .pain .no{ font-size:13px; font-weight:800; color:var(--accent); font-family:'Pretendard Variable'; min-width:30px; padding-top:3px; }
+  .pain .tx{ font-size:18px; font-weight:600; letter-spacing:-.01em; }
+  .pain .tx span{ color:var(--sub); font-weight:500; font-size:15px; }
+  .callout{ margin-top:30px; background:var(--black); color:#fff; border-radius:14px; padding:26px 30px; display:flex; align-items:center; justify-content:space-between; }
+  .callout .t{ font-size:20px; font-weight:800; letter-spacing:-.02em; }
+  .callout .t b{ color:var(--accent); }
+  .callout .ar{ font-size:30px; color:var(--accent); }
+
+  /* ───── SOLUTIONS ───── */
+  .sols{ margin-top:30px; display:flex; flex-direction:column; gap:16px; }
+  .sol{ border:1px solid var(--line); border-radius:14px; padding:24px 26px; position:relative; }
+  .sol .hd{ display:flex; align-items:baseline; gap:14px; }
+  .sol .n{ font-size:13px; font-weight:800; letter-spacing:.1em; color:#fff; background:var(--black); border-radius:6px; padding:5px 10px; }
+  .sol h3{ font-size:21px; font-weight:800; letter-spacing:-.02em; }
+  .sol ul{ list-style:none; margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:9px 26px; }
+  .sol li{ position:relative; padding-left:20px; font-size:13.5px; color:#3f3f3f; line-height:1.5; }
+  .sol li::before{ content:''; position:absolute; left:2px; top:8px; width:7px; height:7px; border-radius:2px; background:var(--accent); }
+
+  /* ───── PROCESS / WHY ───── */
+  .steps{ margin-top:30px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .step{ border:1px solid var(--line); border-radius:12px; padding:20px 16px; position:relative; }
+  .step .sn{ font-size:12px; font-weight:800; letter-spacing:.12em; color:var(--accent); }
+  .step h4{ font-size:16px; font-weight:800; margin-top:10px; letter-spacing:-.01em; }
+  .step p{ font-size:11.8px; color:var(--sub); margin-top:7px; line-height:1.55; }
+  .banner{ margin-top:24px; background:var(--soft); border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:10px; padding:20px 26px; font-size:17px; font-weight:700; letter-spacing:-.01em; }
+  .banner b{ color:var(--accent); font-weight:800; }
+
+  .why{ margin-top:30px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .wcard{ border:1px solid var(--line); border-radius:12px; padding:22px 24px; }
+  .wcard .wn{ font-size:24px; font-weight:800; color:#e0e0e0; font-family:'Pretendard Variable'; letter-spacing:-.02em; }
+  .wcard h4{ font-size:17px; font-weight:800; margin-top:4px; letter-spacing:-.02em; }
+  .wcard p{ font-size:12.8px; color:var(--sub); margin-top:8px; line-height:1.55; }
+
+  /* ───── PACKAGE TABLE ───── */
+  table.pkg{ width:100%; border-collapse:collapse; margin-top:26px; font-size:13px; }
+  table.pkg th, table.pkg td{ border:1px solid var(--line); padding:12px 10px; text-align:center; }
+  table.pkg thead th{ background:var(--black); color:#fff; font-weight:800; font-size:14px; letter-spacing:.02em; }
+  table.pkg thead th:first-child{ background:#2a2a2a; }
+  table.pkg tbody td:first-child{ text-align:left; font-weight:700; background:var(--soft); color:#2a2a2a; }
+  table.pkg .yes{ color:var(--accent); font-weight:800; }
+  table.pkg .no{ color:#cfcfcf; }
+  table.pkg .opt{ color:var(--sub); font-weight:600; }
+  .note{ margin-top:14px; font-size:12px; color:var(--sub); }
+  .note b{ color:var(--ink); }
+
+  /* ───── CTA ───── */
+  .cta{ margin-top:26px; background:var(--black); color:#fff; border-radius:16px; padding:34px 38px; }
+  .cta .ce{ font-size:12px; font-weight:800; letter-spacing:.24em; color:var(--accent); text-transform:uppercase; }
+  .cta h3{ font-size:30px; font-weight:800; letter-spacing:-.03em; margin-top:12px; line-height:1.2; }
+  .cta .grid{ margin-top:26px; display:grid; grid-template-columns:1fr 1fr; gap:16px 30px; }
+  .cta .ci .l{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#7f7f7f; font-weight:700; }
+  .cta .ci .v{ font-size:21px; font-weight:800; margin-top:5px; letter-spacing:.01em; }
+  .cta .pill{ margin-top:28px; display:inline-flex; gap:8px; align-items:center; background:var(--accent); color:#fff; font-weight:800; font-size:15px; padding:13px 24px; border-radius:40px; letter-spacing:.01em; }
+
+  @media print{
+    html,body{ background:#fff; }
+    .page{ margin:0; box-shadow:none; }
+    @page{ size:A4 portrait; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ PAGE 1 · COVER ════════ -->
+<section class="page cover">
+  <div class="pad">
+    <div class="top"><span>Company Brochure</span><span><b>MaxImpact</b> · maximpact.co.kr</span></div>
+
+    <div class="mid">
+      <div class="kick">Web · SEO · Marketing</div>
+      <h1>노후화된 홈페이지,<br><u>매출이 안 나오죠?</u></h1>
+      <p class="sub">보기 좋은 사이트를 넘어, <b style="color:#fff">검색에서 발견되고 매출로 이어지는</b> 홈페이지를 만듭니다. 제작부터 상위노출, 마케팅까지 한 팀이 끝까지 함께합니다.</p>
+
+      <div class="chips">
+        <div class="chip"><b>#</b> 홈페이지 제작 · 리뉴얼</div>
+        <div class="chip"><b>#</b> 구글 · 네이버 상위노출</div>
+        <div class="chip"><b>#</b> 마케팅 대행</div>
+      </div>
+
+      <div class="pillars">
+        <div><b>빠르게</b>최단 기간 오픈</div>
+        <div><b>합리적 가격</b>예산 맞춤 견적</div>
+        <div><b>한 팀이 끝까지</b>제작·운영 일괄</div>
+        <div><b>결과 중심</b>매출 나는 사이트</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span>무료 상담 · 무료 견적 · 24시간 내 회신</span>
+      <span><b>010-6551-3593</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PAGE 2 · PAIN ════════ -->
+<section class="page">
+  <div class="pad">
+    <div class="rh"><span class="brand">MaxImpact</span><span>01 — Problem</span></div>
+    <div style="margin-top:36px">
+      <span class="eyebrow">Check List</span>
+      <h2 class="sec">이런 고민, <span class="dim">있으신가요?</span></h2>
+      <p class="lead">아래 항목 중 하나라도 해당된다면, 지금 홈페이지가 매출을 막고 있다는 신호입니다.</p>
+    </div>
+
+    <div class="pains">
+      <div class="pain"><div class="no">01</div><div class="tx">홈페이지가 몇 년째 그대로다 — <span>디자인이 낡아 신뢰가 안 간다.</span></div></div>
+      <div class="pain"><div class="no">02</div><div class="tx">모바일에서 깨지거나 느리다 — <span>손님이 들어왔다 그냥 나간다.</span></div></div>
+      <div class="pain"><div class="no">03</div><div class="tx">검색해도 우리 회사가 안 나온다 — <span>구글·네이버에서 안 보인다.</span></div></div>
+      <div class="pain"><div class="no">04</div><div class="tx">사이트는 있는데 문의·매출이 없다 — <span>방문자가 행동하지 않는다.</span></div></div>
+      <div class="pain"><div class="no">05</div><div class="tx">광고비만 나가고 효과가 없다 — <span>돈은 쓰는데 성과가 안 보인다.</span></div></div>
+      <div class="pain"><div class="no">06</div><div class="tx">관리할 사람이 없어 방치 중이다 — <span>업데이트가 멈춰 있다.</span></div></div>
+    </div>
+
+    <div class="callout">
+      <div class="t">하나라도 해당된다면, <b>지금이 바꿀 때</b>입니다.</div>
+      <div class="ar">→</div>
+    </div>
+
+    <div class="rf"><span>MaxImpact · 홈페이지 제작 · 상위노출 · 마케팅</span><span>maximpact.co.kr</span></div>
+  </div>
+</section>
+
+<!-- ════════ PAGE 3 · SOLUTION ════════ -->
+<section class="page">
+  <div class="pad">
+    <div class="rh"><span class="brand">MaxImpact</span><span>02 — Solution</span></div>
+    <div style="margin-top:36px">
+      <span class="eyebrow">What We Do</span>
+      <h2 class="sec">우리가 해결합니다 <span class="dim">— 3가지</span></h2>
+      <p class="lead">제작·상위노출·마케팅을 따로 맡기지 마세요. 한 팀이 처음부터 끝까지 책임집니다.</p>
+    </div>
+
+    <div class="sols">
+      <div class="sol">
+        <div class="hd"><span class="n">01</span><h3>홈페이지 제작 · 리뉴얼</h3></div>
+        <ul>
+          <li>모바일·PC 완벽 대응 반응형 디자인</li>
+          <li>빠른 로딩 속도와 최신 트렌드 디자인</li>
+          <li>문의·예약·상담을 유도하는 전환 설계</li>
+          <li>검색 최적화(SEO) 구조 기본 내장</li>
+        </ul>
+      </div>
+      <div class="sol">
+        <div class="hd"><span class="n">02</span><h3>구글 · 네이버 상위노출 (SEO)</h3></div>
+        <ul>
+          <li>핵심 키워드 분석과 상위노출 전략 수립</li>
+          <li>네이버 플레이스·블로그·지도 최적화</li>
+          <li>구글 검색·기술 SEO (속도·구조·색인)</li>
+          <li>매월 순위·유입 리포트 제공</li>
+        </ul>
+      </div>
+      <div class="sol">
+        <div class="hd"><span class="n">03</span><h3>마케팅 대행</h3></div>
+        <ul>
+          <li>키워드 광고·SNS 광고 운영</li>
+          <li>콘텐츠·상세페이지·이벤트 기획</li>
+          <li>데이터 기반 성과 분석과 개선</li>
+          <li>예산 맞춤 운영 — 작게 시작해 키웁니다</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rf"><span>MaxImpact · 홈페이지 제작 · 상위노출 · 마케팅</span><span>maximpact.co.kr</span></div>
+  </div>
+</section>
+
+<!-- ════════ PAGE 4 · PROCESS + WHY ════════ -->
+<section class="page">
+  <div class="pad">
+    <div class="rh"><span class="brand">MaxImpact</span><span>03 — Process</span></div>
+    <div style="margin-top:36px">
+      <span class="eyebrow">How It Works</span>
+      <h2 class="sec">진행 과정은 <span class="dim">간단합니다</span></h2>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="sn">STEP 01</div><h4>무료 상담·견적</h4><p>24시간 내 회신, 현황 진단과 방향 제안.</p></div>
+      <div class="step"><div class="sn">STEP 02</div><h4>기획·디자인</h4><p>시안 확정과 콘텐츠 정리. 방향을 함께 맞춥니다.</p></div>
+      <div class="step"><div class="sn">STEP 03</div><h4>제작·검수</h4><p>빠른 제작과 실시간 확인으로 완성도를 높입니다.</p></div>
+      <div class="step"><div class="sn">STEP 04</div><h4>오픈·운영</h4><p>배포 후 상위노출과 마케팅까지 이어서 운영.</p></div>
+    </div>
+
+    <div class="banner"><b>최단 기간</b> · <b>합리적 비용</b>으로 시작하세요. 부담 없이 무료 견적부터.</div>
+
+    <div style="margin-top:46px">
+      <span class="eyebrow">Why MaxImpact</span>
+      <h2 class="sec">왜 <span class="dim">맥스임팩트인가</span></h2>
+    </div>
+    <div class="why">
+      <div class="wcard"><div class="wn">01</div><h4>한 팀이 끝까지</h4><p>제작부터 상위노출·마케팅·운영까지 한 곳에서 책임집니다.</p></div>
+      <div class="wcard"><div class="wn">02</div><h4>검증된 실력</h4><p>50+ 프로젝트 경험, 20명 규모 인하우스 전문 팀.</p></div>
+      <div class="wcard"><div class="wn">03</div><h4>빠른 응답</h4><p>평균 24시간 내 견적 회신. 기다리게 하지 않습니다.</p></div>
+      <div class="wcard"><div class="wn">04</div><h4>결과 중심</h4><p>예쁜 사이트가 아니라, 문의와 매출이 나는 사이트.</p></div>
+    </div>
+
+    <div class="rf"><span>MaxImpact · 홈페이지 제작 · 상위노출 · 마케팅</span><span>maximpact.co.kr</span></div>
+  </div>
+</section>
+
+<!-- ════════ PAGE 5 · PACKAGE + CTA ════════ -->
+<section class="page">
+  <div class="pad">
+    <div class="rh"><span class="brand">MaxImpact</span><span>04 — Package & Contact</span></div>
+    <div style="margin-top:36px">
+      <span class="eyebrow">Package</span>
+      <h2 class="sec">필요한 만큼 <span class="dim">골라보세요</span></h2>
+    </div>
+
+    <table class="pkg">
+      <thead>
+        <tr><th>구분</th><th>라이트</th><th>스탠다드</th><th>프리미엄</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>홈페이지 제작</td><td class="yes">핵심 페이지</td><td class="yes">풀 페이지</td><td class="yes">맞춤 설계</td></tr>
+        <tr><td>모바일 반응형</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>기본 SEO</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>상위노출 운영</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><td>마케팅 대행</td><td class="no">—</td><td class="opt">선택</td><td class="yes">✓</td></tr>
+        <tr><td>리포트</td><td class="no">—</td><td class="opt">월간</td><td class="yes">월간 + 컨설팅</td></tr>
+      </tbody>
+    </table>
+    <p class="note">정확한 비용은 현황에 맞춰 <b>무료 견적</b>으로 안내드립니다. 작게 시작해 단계적으로 확장할 수 있습니다.</p>
+
+    <div class="cta">
+      <div class="ce">Get in touch</div>
+      <h3>지금 문의하세요.<br>무료 상담 · 무료 견적.</h3>
+      <div class="grid">
+        <div class="ci"><div class="l">전화 · 문자</div><div class="v">010-6551-3593</div></div>
+        <div class="ci"><div class="l">카카오톡</div><div class="v">max-impact</div></div>
+        <div class="ci"><div class="l">이메일</div><div class="v">maximpact.it@gmail.com</div></div>
+        <div class="ci"><div class="l">홈페이지</div><div class="v">maximpact.co.kr</div></div>
+      </div>
+      <div class="pill">24시간 내 회신해 드립니다 →</div>
+    </div>
+
+    <div class="rf"><span>MaxImpact · 홈페이지 제작 · 상위노출 · 마케팅</span><span>maximpact.co.kr</span></div>
+  </div>
+</section>
+
+</body>
+</html>

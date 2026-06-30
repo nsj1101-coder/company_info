@@ -1,0 +1,113 @@
+.wrap {
+  background: #fff;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 14px 0 6px;
+}
+.nav button {
+  font-size: 22px;
+  color: var(--sub);
+  padding: 4px 12px;
+}
+.ym {
+  font-size: 17px;
+  font-weight: 800;
+  min-width: 130px;
+  text-align: center;
+}
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 8px;
+}
+.wd {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sub);
+  padding: 6px 0;
+}
+.sun {
+  color: #d22;
+}
+.sat {
+  color: #555;
+}
+.swipe {
+  overflow: hidden;
+  /* 세로 스크롤은 허용, 가로 제스처는 캘린더가 처리 */
+  touch-action: pan-y;
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 4px 8px 12px;
+  will-change: transform;
+}
+.cell {
+  min-height: 62px;
+  border-radius: 10px;
+  padding: 5px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+}
+.dim .dnum {
+  color: #cfcfcf;
+}
+.dnum {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  border-radius: 50%;
+}
+.sunCell .dnum {
+  color: #d22;
+}
+.satCell .dnum {
+  color: #555;
+}
+.today .dnum {
+  border: 1.5px solid var(--ink);
+}
+.sel {
+  box-shadow: 0 0 0 1.5px var(--ink) inset;
+  background: #fff;
+}
+.sel .dnum {
+  background: var(--ink);
+  color: #fff;
+}
+.previews {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+.chip {
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 13px;
+  border-radius: 3px;
+  padding: 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+.more {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--sub);
+  text-align: center;
+}

@@ -19,3 +19,16 @@ dist
 # IDE
 .vscode
 .idea
+
+# 서버 접속 정보(비번 평문 포함) — 커밋 금지
+maximpact_서버접속정보.md
+_maxserver.ps1
+**/_ssh.ps1
+**/_poller.ps1
+**/_DEPLOY_PLAN.md
+
+# 배포 아카이브(빌드 산출물·민감정보 가능)
+*.tar.gz
+
+# raw 스크린샷 중간 산출물(대용량·재생성 가능)
+*.ppm

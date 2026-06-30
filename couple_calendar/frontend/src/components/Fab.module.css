@@ -1,0 +1,23 @@
+.fab {
+  position: fixed;
+  right: calc(50% - 230px + 18px);
+  bottom: calc(82px + var(--safe-b));
+  z-index: 30;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fab:active {
+  transform: scale(0.94);
+}
+@media (max-width: 460px) {
+  .fab {
+    right: 18px;
+  }
+}

@@ -1,0 +1,68 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 19px;
+  font-weight: 800;
+  padding: 4px 0 14px;
+}
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: flex-start;
+}
+.row > :global(svg) {
+  color: var(--ink-2);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--sub);
+  margin-bottom: 2px;
+}
+.value {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  word-break: break-all;
+}
+.link {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  color: var(--ink-2);
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 16px;
+}
+.primary {
+  flex: 2;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 800;
+  padding: 14px;
+  border-radius: 11px;
+  font-size: 15px;
+}
+.ghost {
+  flex: 1;
+  background: #f0f0f0;
+  color: var(--ink-2);
+  font-weight: 800;
+  border-radius: 11px;
+  font-size: 15px;
+}
