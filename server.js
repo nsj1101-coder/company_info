@@ -3,8 +3,13 @@ const path = require('path');
 const Database = require('better-sqlite3');
 
 const PORT = process.env.PORT || 3001;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'wlq3593545@';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'submissions.db');
+
+if (!ADMIN_PASSWORD) {
+  console.error('ADMIN_PASSWORD 환경변수가 설정되지 않았습니다.');
+  process.exit(1);
+}
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
