@@ -10,10 +10,12 @@ import Cta from "@/components/Cta";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import Intro from "@/components/Intro";
 
 export default function HomePage() {
   return (
     <>
+      <Intro />
       <Nav />
       <h1 className="sr-only">
         MaxImpact — 웹 개발 외주 · 쇼핑몰 제작 · AI SaaS 개발 전문 팀 | 홈페이지 제작, ERP·CRM, 모바일 앱 개발 외주 업체
