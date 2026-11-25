@@ -179,7 +179,7 @@ nav.scrolled { border-color: var(--line); background: rgba(255,255,255,0.9); }
 }
 .metrics-grid {
   max-width: 1240px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 48px;
 }
 .metric { display: flex; flex-direction: column; gap: 6px; }
@@ -677,7 +677,7 @@ footer { border-top: 1px solid var(--line); padding: 80px 32px 40px; background:
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
 }
 @media (max-width: 780px) {
-  .metrics-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .metrics-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .process-grid { grid-template-columns: 1fr 1fr; }
   .process-step:nth-child(2) { border-right: none; }
   .process-step:nth-child(1), .process-step:nth-child(2) { border-bottom: 1px solid var(--line); }

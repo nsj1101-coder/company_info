@@ -164,7 +164,6 @@ export const metrics: Metric[] = [
   { value: 50, unit: "+", label: "완료 프로젝트" },
   { value: 10, unit: "+", label: "진행중 유지보수" },
   { value: 15, unit: "+", label: "전문 개발 인력" },
-  { value: 24, unit: "h", label: "평균 견적 응답" },
 ];
 
 export const projectTypes = [
