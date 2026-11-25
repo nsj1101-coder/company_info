@@ -663,7 +663,7 @@ footer { border-top: 1px solid var(--line); padding: 80px 32px 40px; background:
 .stagger.in > *:nth-child(10) { transition-delay: .54s; }
 
 
-.b-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--ink); border-bottom: 1px solid currentColor; padding-bottom: 1px; position: relative; z-index: 1; }
+.b-link { margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; position: relative; z-index: 1; white-space: nowrap; }
 .b-link:hover { color: var(--accent); }
 
 /* ====== RESPONSIVE ====== */

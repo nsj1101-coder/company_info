@@ -34,6 +34,11 @@ export default function Portfolio() {
                 <div className="b-meta">
                   {p.category} <span className="dot-sep" /> {p.year}
                   <span className={statusClass(p.status)}>{p.status}</span>
+                  {p.link && (
+                    <a className="b-link" href={p.link} target="_blank" rel="noopener">
+                      데모 보기 →
+                    </a>
+                  )}
                 </div>
                 <h3 style={p.size.h === 1 ? { fontSize: 20 } : undefined}>{p.title}</h3>
                 {p.desc && <p>{p.desc}</p>}
@@ -41,11 +46,6 @@ export default function Portfolio() {
                   <ul className="b-feat-list">
                     {p.features.map((f) => <li key={f}>{f}</li>)}
                   </ul>
-                )}
-                {p.link && (
-                  <a className="b-link" href={p.link} target="_blank" rel="noopener">
-                    데모 보기 →
-                  </a>
                 )}
                 {p.tags.length > 0 && (
                   <div className="b-tags">
