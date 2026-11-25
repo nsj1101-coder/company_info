@@ -35,7 +35,7 @@ export const portfolios: Portfolio[] = [
     features: ["채널별 주문 엑셀 업로드 · 통합 주문", "생산 · 발주 · 재고 · 반품 관리", "상품/SKU · 고객 · 정산 분석"],
     tags: ["Next.js 16", "Prisma", "Excel 연동"],
     link: "/lalune-erp/manual",
-    size: { w: 4, h: 2 }, tone: "slate",
+    size: { w: 4, h: 3 }, tone: "slate",
   },
   {
     category: "E-Commerce", year: "2026", status: "완료",
@@ -44,7 +44,7 @@ export const portfolios: Portfolio[] = [
     features: ["카테고리 · 베스트 · 장바구니 · 주문", "사업자 회원 승인 · 포인트 · 정산", "주문 · 반품 · 세금계산서 관리자"],
     tags: ["Next.js 16", "Prisma", "관리자 페이지"],
     link: "/cozycare",
-    size: { w: 4, h: 2 }, tone: "green",
+    size: { w: 4, h: 3 }, tone: "green",
   },
   {
     category: "Hospitality", year: "2026", status: "완료",
@@ -53,7 +53,7 @@ export const portfolios: Portfolio[] = [
     features: ["객실 · 체험 · 부대시설 소개", "예약 검색 · 상담 신청", "한국어 · 영어 · 중국어 전환"],
     tags: ["반응형", "다국어", "예약 동선 설계"],
     link: "/3spension/",
-    size: { w: 4, h: 2 }, tone: "amber",
+    size: { w: 4, h: 3 }, tone: "amber",
   },
   {
     category: "Enterprise SaaS", year: "2026", status: "LIVE",
