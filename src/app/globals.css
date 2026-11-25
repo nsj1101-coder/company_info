@@ -662,14 +662,9 @@ footer { border-top: 1px solid var(--line); padding: 80px 32px 40px; background:
 .stagger.in > *:nth-child(9) { transition-delay: .48s; }
 .stagger.in > *:nth-child(10) { transition-delay: .54s; }
 
-/* ====== INTRO (조립 연출) ====== */
-html.intro-on :is(nav, .hero-inner > *, .hero-wave, .metric, .reveal, .stagger > *, footer > *):not(.intro-in) {
-  opacity: 0 !important;
-}
-html.intro-on .intro-atom:not(.intro-in) { opacity: 0 !important; }
-html.intro-on :is(.reveal, .stagger > *).intro-in { opacity: 1; transform: none; transition: none; }
-html.intro-on .hero-inner > *,
-html.intro-done .hero-inner > * { animation: none; }
+
+.b-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--ink); border-bottom: 1px solid currentColor; padding-bottom: 1px; position: relative; z-index: 1; }
+.b-link:hover { color: var(--accent); }
 
 /* ====== RESPONSIVE ====== */
 @media (max-width: 1080px) {

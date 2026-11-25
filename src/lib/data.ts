@@ -22,11 +22,39 @@ export type Portfolio = {
   desc?: string;
   features?: string[];
   tags: string[];
+  link?: string;
   size: { w: 4 | 6 | 8 | 12; h: 1 | 2 | 3 };
   tone: "amber" | "violet" | "blue" | "indigo" | "orange" | "green" | "pink" | "cyan" | "slate";
 };
 
 export const portfolios: Portfolio[] = [
+  {
+    category: "ERP", year: "2026", status: "완료",
+    title: "라린느 통합 ERP",
+    desc: "Cafe24 · 스마트스토어 · 자사몰 3개 채널 주문을 한곳에서 처리하는 의류 제조·유통 통합 업무 시스템. 시트 24개짜리 엑셀 ERP를 웹 시스템으로 전환.",
+    features: ["채널별 주문 엑셀 업로드 · 통합 주문", "생산 · 발주 · 재고 · 반품 관리", "상품/SKU · 고객 · 정산 분석"],
+    tags: ["Next.js 16", "Prisma", "Excel 연동"],
+    link: "/lalune-erp/manual",
+    size: { w: 4, h: 2 }, tone: "slate",
+  },
+  {
+    category: "E-Commerce", year: "2026", status: "완료",
+    title: "코지케어 복지용구 쇼핑몰",
+    desc: "어르신 복지용구 본사 직영몰. 장기요양 인정자 본인부담금 가격 표시, 일반 · 사업자 회원 분리, 입점사 모집까지 갖춘 B2C · B2B 커머스.",
+    features: ["카테고리 · 베스트 · 장바구니 · 주문", "사업자 회원 승인 · 포인트 · 정산", "주문 · 반품 · 세금계산서 관리자"],
+    tags: ["Next.js 16", "Prisma", "관리자 페이지"],
+    link: "/cozycare",
+    size: { w: 4, h: 2 }, tone: "green",
+  },
+  {
+    category: "Hospitality", year: "2026", status: "완료",
+    title: "하늘별바다 힐링스테이",
+    desc: "무안 황토갯벌 웰니스 숙박 플랫폼. 객실 · 체험 · 렌트카 · 굿즈를 한 사이트에서 소개하고 예약 상담으로 연결하는 반응형 숙박 사이트.",
+    features: ["객실 · 체험 · 부대시설 소개", "예약 검색 · 상담 신청", "한국어 · 영어 · 중국어 전환"],
+    tags: ["반응형", "다국어", "예약 동선 설계"],
+    link: "/3spension/",
+    size: { w: 4, h: 2 }, tone: "amber",
+  },
   {
     category: "Enterprise SaaS", year: "2026", status: "LIVE",
     title: "세무 종합 플랫폼",
@@ -82,13 +110,6 @@ export const portfolios: Portfolio[] = [
     desc: "외모가 아닌 가치관 · 라이프스타일 · MBTI 기반의 정교한 매칭 알고리즘. iOS / Android 네이티브 앱.",
     tags: ["React Native", "NestJS", "Socket.IO", "FCM · APNs"],
     size: { w: 6, h: 2 }, tone: "pink",
-  },
-  {
-    category: "B2B E-Commerce", year: "2026", status: "제안중",
-    title: "DentBiz — 치과 의료기기 B2B 쇼핑몰",
-    desc: "치과 전용 의료기기·소모품 B2B 온라인 쇼핑몰. 9개 워크스트림, 38개 작업, 1,076h 공수 규모로 제안 진행중인 풀스택 프로젝트.",
-    tags: ["PHP / Next.js", "MariaDB", "9 Work Streams", "1,076h"],
-    size: { w: 12, h: 2 }, tone: "slate",
   },
 ];
 

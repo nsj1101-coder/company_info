@@ -23,7 +23,7 @@ export default function Portfolio() {
             Real projects,<br />
             <span className="italic">real impact.</span>
           </h2>
-          <p>SaaS · 매칭 플랫폼 · 의료 · 핀테크 · AI · 네이티브 앱 — 다양한 분야에서 성과를 만들어 왔습니다.</p>
+          <p>ERP · 쇼핑몰 · 숙박 · SaaS · 매칭 플랫폼 · 의료 · AI · 네이티브 앱 — 다양한 분야에서 성과를 만들어 왔습니다.</p>
         </div>
 
         <div className="bento stagger">
@@ -41,6 +41,11 @@ export default function Portfolio() {
                   <ul className="b-feat-list">
                     {p.features.map((f) => <li key={f}>{f}</li>)}
                   </ul>
+                )}
+                {p.link && (
+                  <a className="b-link" href={p.link} target="_blank" rel="noopener">
+                    데모 보기 →
+                  </a>
                 )}
                 {p.tags.length > 0 && (
                   <div className="b-tags">
