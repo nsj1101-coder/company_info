@@ -5,8 +5,6 @@ import {
   jsonLdOrganization,
   jsonLdProfessionalService,
   jsonLdWebSite,
-  jsonLdFaq,
-  jsonLdBreadcrumb,
 } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 
@@ -36,8 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={jsonLdOrganization} />
         <JsonLd data={jsonLdProfessionalService} />
         <JsonLd data={jsonLdWebSite} />
-        <JsonLd data={jsonLdFaq} />
-        <JsonLd data={jsonLdBreadcrumb} />
       </head>
       <body>{children}</body>
     </html>

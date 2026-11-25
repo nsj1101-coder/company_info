@@ -1,4 +1,37 @@
-import { portfolios, type Portfolio as P } from "@/lib/data";
+import { portfolios, teamExperiences, portfolioNotice, type Portfolio as P } from "@/lib/data";
+
+export function TeamExperience() {
+  return (
+    <div className="pf-group">
+      <div className="pf-sub reveal">
+        <h3>Team Experience</h3>
+        <p>핵심 구성원의 이전 소속 기업 재직 당시 프로젝트 참여 이력</p>
+      </div>
+      <div className="te-grid">
+        {teamExperiences.map((t) => (
+          <article className="te" key={t.title}>
+            <div className="b-meta">
+              {t.category}
+              <span className="status status-team">참여 이력</span>
+              {t.link && (
+                <a className="b-link" href={t.link} target="_blank" rel="noopener nofollow">
+                  사이트 보기 →
+                </a>
+              )}
+            </div>
+            <h4>{t.title}</h4>
+            <dl className="te-dl">
+              <div><dt>고객</dt><dd>{t.client}</dd></div>
+              <div><dt>담당 역할</dt><dd>{t.role}</dd></div>
+              <div><dt>수행 범위</dt><dd><ul>{t.scope.map((s) => <li key={s}>{s}</li>)}</ul></dd></div>
+            </dl>
+            <p className="te-note">본 프로젝트는 당사 구성원이 이전 소속 기업 재직 당시 수행한 프로젝트이며, 당사의 직접 수주 실적이 아닙니다.</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function statusClass(s: P["status"]) {
   if (s === "LIVE") return "status status-live";
@@ -26,6 +59,10 @@ export default function Portfolio() {
           <p>ERP · 쇼핑몰 · 숙박 · SaaS · 매칭 플랫폼 · 의료 · AI · 네이티브 앱 — 다양한 분야에서 성과를 만들어 왔습니다.</p>
         </div>
 
+        <div className="pf-sub reveal">
+          <h3>Company Projects</h3>
+          <p>MaxImpact가 직접 수주하고 구축한 프로젝트</p>
+        </div>
         <div className="bento stagger">
           {portfolios.map((p, idx) => {
             const style = p.size.w === 12 ? { gridColumn: "span 12" } : p.size.w === 6 && p.size.h === 1 ? { gridColumn: "span 6" } : undefined;
@@ -58,6 +95,10 @@ export default function Portfolio() {
             );
           })}
         </div>
+
+        <TeamExperience />
+
+        <p className="pf-notice">{portfolioNotice}</p>
       </div>
     </section>
   );

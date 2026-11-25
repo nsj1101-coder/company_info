@@ -11,7 +11,7 @@ export const services: Service[] = [
   { num: "03 / AI · SaaS", title: ["AI 기반", "SaaS 플랫폼"], desc: "OpenAI · Claude API 활용 멀티 LLM 서비스, 구독 결제 모델까지.", tags: ["OpenAI", "Claude", "Subscription"] },
   { num: "04 / Data Engine", title: ["데이터 분석 ·", "처리 엔진"], desc: "PDF 파싱, 수식 엔진, 재무 분석 등 복잡한 데이터 처리 전문.", tags: ["PDF 파싱", "수식 엔진", "리포트"] },
   { num: "05 / Native App", title: ["iOS · Android", "네이티브 앱"], desc: "React Native 기반 크로스 플랫폼 또는 풀 네이티브 앱 개발.", tags: ["React Native", "FCM", "Socket.IO"] },
-  { num: "06 / Web", title: ["반응형", "웹사이트"], desc: "회사 소개, 랜딩, 포트폴리오 등 세련된 디자인의 반응형 웹.", tags: ["Next.js", "SEO", "Modern"] },
+  { num: "06 / Web", title: ["반응형", "웹사이트"], desc: "병의원 · 기업 소개, 랜딩, 포트폴리오 등 검색에 잘 걸리는 반응형 웹.", tags: ["병의원 홈페이지", "SEO", "CMS"] },
 ];
 
 export type Portfolio = {
@@ -161,12 +161,76 @@ export const teamItems: TeamItem[] = [
 
 export type Metric = { value: number; unit: string; label: string };
 export const metrics: Metric[] = [
-  { value: 50, unit: "+", label: "완료 프로젝트" },
+  { value: 50, unit: "+", label: "구성원 누적 프로젝트" },
   { value: 10, unit: "+", label: "진행중 유지보수" },
   { value: 15, unit: "+", label: "전문 개발 인력" },
 ];
 
+export type TeamExperience = {
+  category: string;
+  title: string;
+  client: string;
+  role: string;
+  scope: string[];
+  link?: string;
+};
+
+// 구성원이 이전 소속 기업 재직 당시 참여한 프로젝트 (당사 직접 수주 실적 아님)
+export const teamExperiences: TeamExperience[] = [
+  {
+    category: "Medical · 피부과",
+    title: "리파인의원 홈페이지 · CMS",
+    client: "강남 압구정 피부과",
+    role: "기획 · 구축 · CMS 설계",
+    scope: [
+      "시술 · 가격 · 이벤트 · 배너를 병원 직원이 직접 수정하는 CMS",
+      "의료광고 기준을 고려한 카피 · 노출 정책 정의",
+      "반응형 화면 · 상담 예약 동선 설계",
+    ],
+    link: "https://refine-clinic.com",
+  },
+];
+
+export const portfolioNotice =
+  "본 포트폴리오에는 당사가 직접 수행한 프로젝트와 당사 구성원이 이전 소속 기업에서 수행한 프로젝트 참여 이력이 포함되어 있습니다. 구성원의 이전 프로젝트 참여 이력은 당사의 직접 수주 및 납품 실적과 구분하여 제공하며, 각 프로젝트의 저작권 및 지식재산권은 해당 권리자에게 귀속됩니다.";
+
+export type MedicalFeature = { title: string; desc: string };
+export const medicalFeatures: MedicalFeature[] = [
+  { title: "진료 · 의료진 · 시술 안내", desc: "진료과목, 의료진 약력, 시술별 안내 페이지를 환자가 찾기 쉬운 구조로 설계합니다." },
+  { title: "직원이 직접 수정하는 CMS", desc: "시술 가격, 이벤트, 배너, 공지를 개발자 없이 병원 직원이 바로 바꿀 수 있습니다." },
+  { title: "상담 · 예약 연결", desc: "상담 신청 폼, 카카오톡 채널, 네이버 예약 등 병원 운영 방식에 맞춰 연결합니다." },
+  { title: "의료광고 기준 고려", desc: "의료법 제56조 금지 광고 유형(치료 경험담, 과장 · 비교 표현 등)을 피하는 카피와 노출 정책을 함께 잡습니다." },
+  { title: "검색 노출 (SEO · AEO)", desc: "네이버 · 구글 등록, 병원 구조화 데이터, 진료과목별 검색어에 맞춘 페이지 구성을 기본으로 합니다." },
+  { title: "개인정보 · 보안", desc: "상담 신청 개인정보 수집 동의, 개인정보 처리방침, SSL 적용까지 오픈 전에 점검합니다." },
+  { title: "외국인 환자 다국어", desc: "영어 · 중국어 · 일본어 페이지로 외국인 환자 상담까지 받을 수 있습니다." },
+  { title: "오픈 후 운영", desc: "개원 일정에 맞춘 오픈, 오픈 후 콘텐츠 업데이트와 유지보수를 이어서 맡습니다." },
+];
+
+export const medicalTargets = ["피부과", "성형외과", "치과", "한의원", "안과", "정형외과", "내과 · 소아과", "검진센터"];
+
+export type Faq = { q: string; a: string };
+
+export const medicalFaqs: Faq[] = [
+  { q: "병원 홈페이지 제작 비용은 얼마인가요?", a: "페이지 수, 관리자(CMS) 범위, 예약 연동, 다국어 여부에 따라 달라집니다. 상담 후 기능 목록과 단계별 일정이 적힌 견적서를 무료로 드립니다." },
+  { q: "개원 전인데 홈페이지를 미리 준비할 수 있나요?", a: "네. 개원일을 기준으로 오픈 일정을 역산해 기획, 디자인, 개발, 검색 등록 순서로 진행합니다. 인테리어나 촬영 일정이 늦어지면 임시 페이지를 먼저 열 수도 있습니다." },
+  { q: "병원 홈페이지도 의료광고 규정을 지켜야 하나요?", a: "의료기관 홈페이지에 싣는 광고성 내용도 의료법 제56조의 금지 광고 기준을 지켜야 합니다. 사전심의 대상 여부는 매체와 이용자 수에 따라 달라지므로, 제작 단계에서 카피와 이미지 노출 방식을 함께 점검합니다." },
+  { q: "시술 가격이나 이벤트를 병원에서 직접 바꿀 수 있나요?", a: "네. 시술 가격, 이벤트, 배너, 공지, 의료진 정보를 직원이 직접 수정하는 관리자(CMS)를 함께 만들어 드립니다." },
+  { q: "온라인 예약이나 상담 신청도 연동되나요?", a: "상담 신청 폼, 카카오톡 채널, 네이버 예약 링크 등 병원에서 이미 쓰는 예약 방식에 맞춰 연결합니다." },
+  { q: "기존 병원 홈페이지 리뉴얼도 가능한가요?", a: "네. 기존 콘텐츠와 검색 노출을 유지하면서 디자인과 구조를 새로 만들고, 기존 주소에서 새 주소로 연결(리다이렉트)까지 처리합니다." },
+];
+
+export const generalFaqs: Faq[] = [
+  { q: "MaxImpact는 어떤 외주 개발팀인가요?", a: "MaxImpact는 AI · 웹 개발을 전문으로 하는 외주 개발팀입니다. 기획, 디자인, 풀스택 개발, 배포, 유지보수까지 한 팀이 끝까지 맡습니다." },
+  { q: "어떤 종류의 프로젝트를 개발하나요?", a: "병의원 · 기업 홈페이지, 쇼핑몰, ERP · CRM · CMS, 숙박 · 예약 사이트, AI 기반 SaaS, 데이터 분석 엔진, iOS · Android 앱을 개발합니다." },
+  { q: "프리랜서와 비교했을 때 어떤 장점이 있나요?", a: "기획 · 디자인 · 프론트엔드 · 백엔드 · 인프라 담당이 나뉘어 협업하므로, 한 사람에게 모든 영역을 맡길 때 생기는 공백과 중도 이탈 위험이 적습니다." },
+  { q: "쇼핑몰 제작도 가능한가요?", a: "네. PG 결제 연동, 회원 등급 · 사업자 회원, 포인트 · 쿠폰, 주문 · 반품 관리자까지 갖춘 쇼핑몰을 만듭니다." },
+  { q: "AI 서비스 개발도 가능한가요?", a: "OpenAI, Anthropic Claude API 등을 활용한 SaaS, 챗봇, RAG 검색, 구독 결제 모델까지 풀스택으로 구축합니다." },
+  { q: "유지보수도 진행하나요?", a: "네. 현재 10건 이상의 프로젝트를 유지보수하고 있으며, 납품 후 운영 단계까지 함께합니다." },
+  { q: "견적은 어떻게 받나요?", a: "사이트 하단 문의 폼이나 maximpact.it@gmail.com 으로 만들고 싶은 서비스와 참고 사이트를 보내 주시면 검토 후 기능 목록과 일정이 적힌 견적서를 드립니다." },
+];
+
 export const projectTypes = [
+  "병의원 홈페이지",
   "ERP / CRM / CMS",
   "쇼핑몰 / 마켓플레이스",
   "AI · SaaS",

@@ -11,7 +11,7 @@ Disallow: /*.db$
 Disallow: /node_modules/
 Disallow: /.playwright-mcp/
 
-# Major search engines - explicit allow
+# Major search engines
 User-agent: Googlebot
 Allow: /
 
@@ -24,26 +24,44 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
-# AI crawlers (GEO/AEO)
+# AI search / answer engines (GEO · AEO)
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: PerplexityBot
+User-agent: Claude-SearchBot
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
-
-User-agent: CCBot
+User-agent: Claude-User
 Allow: /
 
 User-agent: anthropic-ai
 Allow: /
 
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://maximpact.co.kr/sitemap.xml

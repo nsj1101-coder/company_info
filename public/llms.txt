@@ -1,0 +1,27 @@
+# MaxImpact
+
+> MaxImpact(맥스임팩트)는 서울 기반 AI · 웹 개발 외주팀입니다. 병의원 홈페이지, 기업 홈페이지, 쇼핑몰, ERP/CRM/CMS, 숙박 예약 사이트, AI SaaS, iOS/Android 앱을 기획부터 디자인, 개발, 배포, 유지보수까지 한 팀이 맡습니다.
+
+## 서비스
+- [병원 홈페이지 제작](https://maximpact.co.kr/hospital-homepage): 피부과, 성형외과, 치과, 한의원, 안과 등 의원급 의료기관의 개원 홈페이지 개설과 리뉴얼. 진료·의료진·시술 안내, 직원이 직접 수정하는 CMS(시술 가격, 이벤트, 배너), 상담·예약 연결(카카오톡 채널, 네이버 예약), 의료법 제56조 광고 기준을 고려한 카피, SEO, 개인정보 처리방침, 외국인 환자용 다국어 페이지.
+- 기업용 ERP · CRM · CMS: 채널별 주문 통합, 생산·재고·정산, 대시보드, 권한 관리.
+- 쇼핑몰 · 마켓플레이스: PG 결제, 사업자 회원, 포인트, 주문·반품 관리자.
+- AI · SaaS: OpenAI, Anthropic Claude API 기반 서비스, 구독 결제.
+- 네이티브 앱: React Native 기반 iOS · Android.
+- 반응형 웹사이트: 기업 소개, 랜딩페이지, 숙박·예약 사이트.
+
+## 직접 수행 프로젝트 (Company Projects)
+- 라린느 통합 ERP (2026): Cafe24·스마트스토어·자사몰 주문 통합 의류 제조·유통 ERP. 데모 https://maximpact.co.kr/lalune-erp/manual
+- 코지케어 복지용구 쇼핑몰 (2026): 장기요양 본인부담금 가격 표시, 일반·사업자 회원 분리 B2C·B2B 커머스. 데모 https://maximpact.co.kr/cozycare
+- 하늘별바다 힐링스테이 (2026): 객실·체험·렌트카·굿즈 소개와 예약 상담, 한·영·중 다국어 숙박 사이트. 데모 https://maximpact.co.kr/3spension/
+- 세무 종합 플랫폼, 인테리어 중개 매칭 플랫폼, B2B 영업 CRM, AI 마케팅 SaaS, 안과 EMR·CRM, 전문가 매칭 플랫폼, 가치관 소개팅 앱 등
+
+## 구성원 참여 이력 (Team Experience)
+- 리파인의원 홈페이지 · CMS (https://refine-clinic.com): 강남 압구정 피부과. 기획·구축·CMS 설계 참여. 당사 구성원이 이전 소속 기업 재직 당시 수행한 프로젝트이며, MaxImpact의 직접 수주 실적이 아닙니다.
+
+## 진행 방식
+상담 → 견적서(기능 목록·일정) → 화면 확정(시안) → 개발(단계별 공유) → 검수·배포(매뉴얼 제공) → 유지보수
+
+## 문의
+- 이메일: maximpact.it@gmail.com
+- 문의 폼: https://maximpact.co.kr/#contact
